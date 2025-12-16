@@ -372,7 +372,7 @@
         <p><strong>Passiva – Cura su uccisione</strong>: ogni nemico ucciso a distanza ravvicinata cura Kouvagia.</p>
         <p><strong>Super</strong>: cura completa e genera un’onda che respinge i nemici.</p>
         <p><strong>Stile consigliato</strong>: usare spesso il dash e restare nel caos.</p>
-        <p><strong>Sblocco</strong>: 51.000 punti con Voltryx.</p>
+        <p><strong>Sblocco</strong>: 55.000 punti con Voltryx.</p>
       </div>
 
       <div id="guide-salsy-locked" style="margin-top:10px;padding:10px;border:2px dashed rgba(255,255,255,0.35);background:rgba(255,255,255,0.05);">
@@ -589,8 +589,8 @@ const levelConfigs=[
   {enemyType:'boss3',enemyHP:666,enemyDamage:33,enemySpeed:2.4*0.75,time:100,enemyCount:1}
   ,{enemyType:'veleno',enemyHP:60,enemyDamage:13,enemySpeed:3.1*0.75,time:50,enemyCount:7} // Level 16
   ,{enemyType:'veleno',enemyHP:70,enemyDamage:15,enemySpeed:3.3*0.75,time:50,enemyCount:9} // Level 17
-  ,{enemyType:'oneyes',enemyHP:60,enemyDamage:8,enemySpeed:2.2*0.75,time:55,enemyCount:6} // Level 18
-  ,{enemyType:'oneyes',enemyHP:65,enemyDamage:10,enemySpeed:2.4*0.75,time:55,enemyCount:7} // Level 19
+  ,{enemyType:'oneyes',enemyHP:50,enemyDamage:8,enemySpeed:2.0*0.75,time:55,enemyCount:4} // Level 18
+  ,{enemyType:'oneyes',enemyHP:55,enemyDamage:9,enemySpeed:2.1*0.75,time:55,enemyCount:5} // Level 19
   ,{enemyType:'boss4',enemyHP:800,enemyDamage:35,enemySpeed:2.2*0.75,time:120,enemyCount:1} // Level 20
 
 ];
@@ -647,7 +647,7 @@ function updateVoltryxUnlockUI(){
 
 
 function voltryxAbove51k(){
-  return (records.voltryx||0) >= 51000;
+  return (records.voltryx||0) >= 55000;
 }
 
 function updateKouvagiaUnlockUI(){
@@ -665,7 +665,7 @@ function updateKouvagiaUnlockUI(){
     badge.textContent='LOCKED';
     badge.style.color='#f39c12';
     badge.style.borderColor='#f39c12';
-    card.title='Sblocca facendo 51.000 punti con Voltryx';
+    card.title='Sblocca facendo 55.000 punti con Voltryx';
   }
 }
 
