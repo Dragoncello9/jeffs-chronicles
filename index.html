@@ -501,7 +501,7 @@ enemyImages.boss3.src='https://i.postimg.cc/P5S3wXPJ/boss3.png';
 
 enemyImages.veleno.src='https://i.postimg.cc/3xNWGRWY/veleno.png';
 enemyImages.oneyes.src='https://i.postimg.cc/g2xkJTBG/oneyes.png';
-enemyImages.boss4.src='https://i.postimg.cc/2n4Q7r0B/boss4.png';
+enemyImages.boss4.src='https://i.postimg.cc/Px6d8kgr/boss4.png';
 const characterStats={
   jimmy:{
     hp:255,
@@ -589,9 +589,9 @@ const levelConfigs=[
   {enemyType:'boss3',enemyHP:666,enemyDamage:33,enemySpeed:2.4*0.75,time:100,enemyCount:1}
   ,{enemyType:'veleno',enemyHP:60,enemyDamage:13,enemySpeed:3.1*0.75,time:50,enemyCount:7} // Level 16
   ,{enemyType:'veleno',enemyHP:70,enemyDamage:15,enemySpeed:3.3*0.75,time:50,enemyCount:9} // Level 17
-  ,{enemyType:'oneyes',enemyHP:50,enemyDamage:8,enemySpeed:2.0*0.75,time:55,enemyCount:4} // Level 18
-  ,{enemyType:'oneyes',enemyHP:55,enemyDamage:9,enemySpeed:2.1*0.75,time:55,enemyCount:5} // Level 19
-  ,{enemyType:'boss4',enemyHP:800,enemyDamage:35,enemySpeed:2.2*0.75,time:120,enemyCount:1} // Level 20
+  ,{enemyType:'oneyes',enemyHP:55,enemyDamage:8,enemySpeed:2.1*0.75,time:55,enemyCount:4} // Level 18
+  ,{enemyType:'oneyes',enemyHP:60,enemyDamage:9,enemySpeed:2.3*0.75,time:55,enemyCount:5} // Level 19
+  ,{enemyType:'boss4',enemyHP:999,enemyDamage:35,enemySpeed:2.2*0.75,time:180,enemyCount:1} // Level 20
 
 ];
 
@@ -1585,7 +1585,7 @@ class Player{
           while(angleDiff>Math.PI)angleDiff-=Math.PI*2;
           while(angleDiff<-Math.PI)angleDiff+=Math.PI*2;
           if(dist<this.range && Math.abs(angleDiff)<arcWidth/2+0.15){
-            const base=25*this.attackBuffMultiplier;
+            const base=33*this.attackBuffMultiplier;
             const dmg=applyEnemyDamage(enemy, base);
             createParticles(enemy.x,enemy.y,'#f1c40f',10,4);
             showDamageNumber(enemy.x,enemy.y,dmg);
@@ -2002,8 +2002,8 @@ class Enemy{
       this.preferRange=520;
     }
     if(this.type==='boss4'){
-      this.width=Math.round(78*1.2);
-      this.height=Math.round(78*1.2);
+      this.width=Math.round(215*1.2);
+      this.height=Math.round(220*1.2);
       this.attackCooldown=950;
       this.beamCooldown=12000;
       this.lastBeam=Date.now()-this.beamCooldown;
@@ -2053,7 +2053,7 @@ class Enemy{
           length:650,
           width:18,
           ttl:1000,
-          damage:18,
+          damage:15,
           kind:'oneyes',
           chargeMs:0
         });
@@ -2091,7 +2091,7 @@ class Enemy{
           x:cx, y:cy,
           angle,
           length:760,
-          width:28,
+          width:45,
           ttl:1000,
           damage:50,
           kind:'photon',
