@@ -53,6 +53,30 @@
     .level-indicator{position:absolute;top:60px;left:50%;transform:translateX(-50%);font-size:18px;z-index:10}
     .super-cooldown{position:absolute;top:100px;left:18px;font-size:14px;color:#f39c12;z-index:10}
 
+    .evo-banner{
+      position:absolute;left:50%;top:45%;
+      transform:translate(-50%,-50%);
+      z-index:50;
+      padding:18px 24px;
+      border:4px solid #fff;
+      background:rgba(0,0,0,0.85);
+      font-family:'Press Start 2P', cursive;
+      text-align:center;
+      pointer-events:none;
+      box-shadow:0 0 28px rgba(255,255,255,0.35);
+      opacity:0;
+    }
+    .evo-banner.show{
+      display:block !important;
+      animation:evoPop 520ms ease forwards;
+    }
+    @keyframes evoPop{
+      0%{opacity:0;transform:translate(-50%,-50%) scale(0.85)}
+      25%{opacity:1;transform:translate(-50%,-50%) scale(1.08)}
+      100%{opacity:0;transform:translate(-50%,-50%) scale(1.00)}
+    }
+
+
     .menu,.end-screen{
       position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
       background:rgba(0,0,0,0.9);padding:30px;border:4px solid #fff;
@@ -64,7 +88,22 @@
       font-size:38;color:#e74c3c;text-shadow:3px 3px 6px #000;margin-bottom:12px
     }
 
-    .character-select{display:flex;gap:16px;justify-content:center;margin:18px 0;flex-wrap:wrap}
+    .character-select{
+      display:flex;
+      gap:16px;
+      justify-content:center;
+      margin:18px 0;
+      flex-wrap:wrap;
+
+      /* NEW: scrollable character list (extra slots) */
+      max-height:360px;
+      overflow-y:auto;
+      overflow-x:hidden;
+      padding:8px 6px;
+    }
+    .character-select::-webkit-scrollbar{width:10px}
+    .character-select::-webkit-scrollbar-thumb{background:#555;border:2px solid #111;border-radius:10px}
+    .character-select::-webkit-scrollbar-track{background:#111}
 
     /* Ridotte leggermente le card personaggio per evitare sovrapposizioni */
     .character-card{
@@ -76,6 +115,14 @@
     .character-card:hover{transform:scale(1.03);border-color:#e74c3c}
     .character-card.selected{border-color:#f39c12;background:#333}
     .character-card.disabled{ filter:grayscale(1); opacity:0.55; cursor:not-allowed; }
+.character-card.disabled:hover{ transform:none; border-color:#555; }
+
+/* Coming soon (grey, not clickable) */
+.character-card.coming-soon{
+  background:#3a3a3a;
+  border-color:#777;
+}
+.character-card.coming-soon .menu-stats{color:#cfcfcf}
 
     /* Immagine personaggio più piccola per evitare sovrapposizioni */
     .character-card img{
@@ -170,6 +217,90 @@
 }
 .guide-body h3{color:#f39c12;margin-top:12px}
 .guide-body p, .guide-body ul{font-size:14px;line-height:1.45;color:#ddd}
+
+/* === Bestiario (nemici + boss) === */
+.enemy-guide-content{max-width:1020px;}
+.enemy-guide-body{margin-top:10px}
+.enemy-guide-wrap{
+  display:flex;gap:16px;align-items:stretch;
+  min-height:420px;
+}
+.enemy-guide-list{
+  width:260px;flex:0 0 260px;
+  border:2px solid rgba(255,255,255,0.18);
+  background:rgba(255,255,255,0.03);
+  padding:10px;overflow:auto;max-height:62vh;
+}
+.enemy-guide-list button{
+  width:100%;
+  background:rgba(0,0,0,0.35);
+  border:2px solid rgba(255,255,255,0.18);
+  color:#fff;
+  padding:10px 10px;
+  margin:0 0 10px 0;
+  cursor:pointer;
+  font-family:'Press Start 2P', cursive;
+  font-size:11px;
+  text-align:left;
+  display:flex;gap:10px;align-items:center;
+}
+.enemy-guide-list button:hover{border-color:#f39c12;transform:translateY(-1px)}
+.enemy-guide-list button.active{border-color:#e74c3c;background:rgba(231,76,60,0.12)}
+.enemy-guide-list .enemy-mini{
+  width:44px;height:44px;image-rendering:pixelated;
+  border:2px solid rgba(255,255,255,0.7);
+  border-radius:6px;flex:0 0 auto;background:#000;
+}
+.enemy-guide-detail{
+  flex:1;
+  border:2px solid rgba(255,255,255,0.18);
+  background:rgba(255,255,255,0.03);
+  padding:14px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+.enemy-guide-detail-inner{
+  width:100%;
+  display:flex;
+  gap:16px;
+  align-items:flex-start;
+}
+.enemy-guide-detail-inner img{
+  width:240px;height:240px;object-fit:contain;
+  image-rendering:pixelated;
+  border:3px solid #fff;border-radius:10px;
+  background:rgba(0,0,0,0.35);
+  flex:0 0 auto;
+}
+.enemy-guide-detail-inner h3{
+  margin:0 0 10px 0;
+  color:#f39c12;
+  font-family:'Press Start 2P', cursive;
+  font-size:14px;
+  line-height:1.35;
+}
+.enemy-guide-detail-inner p{
+  margin:0;
+  font-size:15px;
+  color:#ddd;
+  line-height:1.55;
+  font-family:'VT323', monospace;
+}
+.enemy-guide-hint{
+  margin:14px 0 0 0;
+  font-size:13px;
+  color:#cfcfcf;
+  font-family:'VT323', monospace;
+}
+@media (max-width:900px){
+  .enemy-guide-wrap{flex-direction:column}
+  .enemy-guide-list{width:100%;flex:0 0 auto;max-height:30vh}
+  .enemy-guide-detail-inner{flex-direction:column;align-items:center}
+  .enemy-guide-detail-inner img{width:220px;height:220px}
+}
+
+
 .guide-body ul{margin-left:18px}
 @media (max-width:900px){
   .guide-modal-content{max-width:calc(100% - 20px);padding:14px}
@@ -194,6 +325,10 @@
   <div class="timer" id="timerDisplay" style="display:none;">45</div>
   <div class="level-indicator" id="levelDisplay" style="display:none;">Level 1</div>
   <div class="super-cooldown" id="superCooldown" style="display:none;">Super: Ready</div>
+
+  <div class="evo-banner" id="evoBanner" style="display:none;">
+    <div id="evoBannerText">EVOLUTO!</div>
+  </div>
 
   <div class="menu" id="mainMenu">
     <h1>⚔️ JEFF’S CHRONICLES⚔️</h1>
@@ -222,7 +357,7 @@
       </div>
 
       <!-- Voltryx card (locked until all three records > 50000) -->
-      <div class="character-card disabled" data-char="voltryx" id="card-voltryx" title="Sblocca completando 50.000 punti con ogni personaggio">
+      <div class="character-card disabled" data-char="voltryx" id="card-voltryx" title="Sblocca completando 45.000 punti con ogni personaggio">
         <h3>VOLTRYX</h3>
         <p>"🦊"</p>
         <div class="menu-stats">HP: <span id="menu-hp-voltryx">-</span> Danno: <span id="menu-dmg-voltryx">-</span></div>
@@ -240,8 +375,8 @@
         <div class="lock-badge" id="kouvagiaLockBadge">LOCKED</div>
       </div>
 
-      <!-- Salsy card (locked until 70.000 score with Jimmy, Rooney, Jeff, Voltryx and Kouvagia) -->
-      <div class="character-card disabled" data-char="salsy" id="card-salsy" title="Sblocca facendo 70.000 punti con Jimmy, Rooney, Jeff, Voltryx e Kouvagia">
+      <!-- Salsy card (locked until 60.000 score with Jimmy, Rooney, Jeff, Voltryx and Kouvagia) -->
+      <div class="character-card disabled" data-char="salsy" id="card-salsy" title="Sblocca facendo 60.000 punti con Jimmy, Rooney, Jeff, Voltryx e Kouvagia">
         <h3>SALSY</h3>
         <p>"⚜️"</p>
         <div class="menu-stats">HP: <span id="menu-hp-salsy">-</span> Danno: <span id="menu-dmg-salsy">-</span></div>
@@ -249,13 +384,25 @@
         <div class="lock-badge" id="salsyLockBadge">LOCKED</div>
       </div>
 
-    
+<!-- Tempostorm card (locked until 70.000 score with ALL previous characters) -->
+<div class="character-card disabled" data-char="tempostorm" id="card-tempostorm" title="Sblocca facendo 70.000 punti con tutti i personaggi precedenti (Jimmy, Rooney, Jeff, Voltryx, Kouvagia e Salsy)">
+  <h3>TEMPOSTORM</h3>
+  <p>"🔋"</p>
+  <div class="menu-stats">HP: <span id="menu-hp-tempostorm">-</span> Danno: <span id="menu-dmg-tempostorm">-</span></div>
+  <div class="record-badge" id="record-tempostorm">Record: 0</div>
+  <div class="lock-badge" id="tempostormLockBadge">LOCKED</div>
+</div>
+
     </div>
 
     <button class="btn" id="startBtn">INIZIA BATTAGLIA</button>
 <!-- Pulsante immagine per aprire la guida -->
 <button id="guideImgBtn" class="img-btn" aria-label="Apri guida" title="Apri guida" type="button" style="display:inline-block;">
-  <img id="guideImg" src="https://i.postimg.cc/JztT9fJH/bea.png " alt="Guida" />
+  <img id="guideImg" src="https://i.postimg.cc/JztT9fJH/bea.png" alt="Guida" />
+</button>
+<!-- Pulsante immagine per aprire il bestiario (nemici + boss) -->
+<button id="enemyGuideImgBtn" class="img-btn" aria-label="Apri bestiario" title="Bestiario (Nemici & Boss)" type="button" style="display:inline-block;">
+  <img id="enemyGuideImg" src="https://i.postimg.cc/NFVhJNLC/pixelcut-export-(2).png" alt="Bestiario" />
 </button>
     <p style="margin-top:12px;font-size:15px;color:#ddd">Controlli: WASD - Muovi | J - Attacco | K - Super Mossa | Spazio - Schivata</p>
   </div>
@@ -276,7 +423,6 @@
     <h2 id="guideTitle">Guida completa a Jeff’s Chronicles</h2>
     <div class="guide-body">
 
-      <h3>📘 GUIDA COMPLETA – JEFF’S CHRONICLES</h3>
 
       <h3>1) PANORAMICA GENERALE</h3>
       <p><strong>Jeff’s Chronicles</strong> è un arena-fighter a schermo fisso. Il giocatore sceglie un combattente e affronta ondate di nemici e boss all’interno di un’arena chiusa, cercando di ottenere il punteggio più alto possibile prima della fine del tempo.</p>
@@ -322,7 +468,10 @@
         <li><strong>Shield</strong>: invulnerabilità temporanea.</li>
         <li><strong>Gold</strong>: cura totale + grande aumento del danno + super pronta.</li>
         <li><strong>Malus</strong>: applica poison.</li>
-      </ul>
+      
+        <li><strong>Furia</strong>: emana 3 grandi onde ad area (sempre più grandi) che infliggono <strong>20 danni</strong> ciascuna; inoltre cura <strong>+10 HP/s</strong> per <strong>10s</strong>.</li>
+        <li><strong>Ice</strong>: rallenta drasticamente <strong>tutti i nemici presenti</strong> (effetto permanente fino alla loro morte) e infligge <strong>2 danni/s</strong> per <strong>17s</strong>.</li>
+</ul>
       <p>Usare correttamente i pickup può ribaltare completamente una partita.</p>
 
       <h3>10) PERSONAGGI – FUNZIONALITÀ E MECCANICHE</h3>
@@ -338,7 +487,7 @@
       <h4>🐱 ROONEY</h4>
       <p><strong>Ruolo</strong>: resistenza e danni ravvicinati.</p>
       <p><strong>Attacco base</strong>: serie di pugni potenti a corto raggio. Ottimo contro nemici lenti o raggruppati.</p>
-      <p><strong>Super</strong>: colpo ad area intorno a Rooney. Danni elevati distribuiti su più nemici. Ideale contro ondate numerose.</p>
+      <p><strong>Super</strong>: colpo ad area intorno a Rooney. Danni elevati distribuiti su più nemici, e danni che aumentano se i nemici si trovano a distanza più ravvicinata da Rooney. Versatile su ondate di tanti nemici e devstante su singolo nemico.</p>
       <p><strong>Stile consigliato</strong>: restare vicino ai nemici e controllare lo spazio.</p>
 
       <h4>🗡️ JEFF </h4>
@@ -349,7 +498,7 @@
 
       <div id="guide-voltryx-locked" style="margin-top:10px;padding:10px;border:2px dashed rgba(255,255,255,0.35);background:rgba(255,255,255,0.05);">
         <h4>🦊 VOLTRYX </h4>
-        <p><em>Questo personaggio si sblocca facendo oltre 50.000 punti con Jimmy, Rooney e Jeff.. La descrizione apparirà automaticamente appena lo sblocchi.</em></p>
+        <p><em>Questo personaggio si sblocca facendo oltre 45.000 punti con Jimmy, Rooney e Jeff.. La descrizione apparirà automaticamente appena lo sblocchi.</em></p>
       </div>
       <div id="guide-voltryx" style="display:none;">
         <h4>🦊 VOLTRYX </h4>
@@ -357,12 +506,12 @@
         <p><strong>Attacco base</strong>: da lontano spara un proiettile energetico ad area; da vicino esegue due pugni rapidi.</p>
         <p><strong>Super</strong>: genera una sfera energetica che rilascia impulsi di danno ad area, colpendo ripetutamente i nemici nel raggio.</p>
         <p><strong>Stile consigliato</strong>: alternare distanza e mischia.</p>
-        <p><strong>Sblocco</strong>: oltre 50.000 punti con Jimmy, Rooney e Jeff.</p>
+        <p><strong>Sblocco</strong>: oltre 45.000 punti con Jimmy, Rooney e Jeff.</p>
       </div>
 
       <div id="guide-kouvagia-locked" style="margin-top:10px;padding:10px;border:2px dashed rgba(255,255,255,0.35);background:rgba(255,255,255,0.05);">
         <h4>🦉 KOUVAGIA </h4>
-        <p><em>Questo personaggio si sblocca facendo 55.000 punti con Voltryx. La descrizione apparirà automaticamente appena lo sblocchi.</em></p>
+        <p><em>Questo personaggio si sblocca facendo 50.000 punti con Voltryx. La descrizione apparirà automaticamente appena lo sblocchi.</em></p>
       </div>
       <div id="guide-kouvagia" style="display:none;">
         <h4>🦉 KOUVAGIA </h4>
@@ -372,12 +521,12 @@
         <p><strong>Passiva – Cura su uccisione</strong>: ogni nemico ucciso a distanza ravvicinata cura Kouvagia.</p>
         <p><strong>Super</strong>: cura completa e genera un’onda che respinge i nemici.</p>
         <p><strong>Stile consigliato</strong>: usare spesso il dash e restare nel caos.</p>
-        <p><strong>Sblocco</strong>: 55.000 punti con Voltryx.</p>
+        <p><strong>Sblocco</strong>: 50.000 punti con Voltryx.</p>
       </div>
 
       <div id="guide-salsy-locked" style="margin-top:10px;padding:10px;border:2px dashed rgba(255,255,255,0.35);background:rgba(255,255,255,0.05);">
         <h4>⚜️ SALSY </h4>
-        <p><em>Questo personaggio si sblocca facendo 70.000 punti con tutti gli altri personaggi.. La descrizione apparirà automaticamente appena lo sblocchi.</em></p>
+        <p><em>Questo personaggio si sblocca facendo 60.000 punti con tutti gli altri personaggi.. La descrizione apparirà automaticamente appena lo sblocchi.</em></p>
       </div>
       <div id="guide-salsy" style="display:none;">
         <h4>⚜️ SALSY </h4>
@@ -386,10 +535,25 @@
         <p><strong>Super – Marchio</strong>: marchia fino a 3 nemici. I nemici marchiati subiscono danni raddoppiati per alcuni secondi.</p>
         <p><strong>Passiva – Boost velocità</strong>: periodicamente ottiene un aumento temporaneo di velocità, perfetto per entrare e uscire dai combattimenti.</p>
         <p><strong>Stile consigliato</strong>: colpisci, marchia e ritirati.</p>
-        <p><strong>Sblocco</strong>: 70.000 punti con tutti gli altri personaggi.</p>
+        <p><strong>Sblocco</strong>: 60.000 punti con tutti gli altri personaggi.</p>
       </div>
 
-      <h3>11) NEMICI E PERICOLI</h3>
+      
+<div id="guide-tempostorm-locked" style="margin-top:10px;padding:10px;border:2px dashed rgba(255,255,255,0.35);background:rgba(255,255,255,0.05);">
+  <h4>🔋 TEMPOSTORM</h4>
+  <p><em>Questo personaggio si sblocca facendo <strong>70.000 punti</strong> con tutti i personaggi precedenti (Jimmy, Rooney, Jeff, Voltryx, Kouvagia e Salsy). La descrizione completa apparirà automaticamente appena lo sblocchi.</em></p>
+</div>
+
+<div id="guide-tempostorm" style="display:none;">
+  <h4>🔋 TEMPOSTORM</h4>
+  <p><strong>Ruolo</strong>: controllo di zona + sustain tramite Super.</p>
+  <p><strong>Statistiche</strong>: 300 HP, velocità leggermente superiore a Rooney.</p>
+  <p><strong>Attacco base</strong>: fasci di energia blu (laser). Infligge <strong>40</strong> danni al primo impatto e altri <strong>30</strong> se il nemico resta dentro il fascio dopo essere stato colpito.</p>
+  <p><strong>Super – Tempesta Centrale</strong>: raggruppa tutti i nemici esattamente al centro dell’arena, dimezza la loro vita e converte la somma della vita sottratta in una <strong>cura personale</strong> tramite un effetto speciale blu.</p>
+  <p><strong>Sblocco</strong>: 70.000 punti con tutti i personaggi precedenti.</p>
+</div>
+
+<h3>11) NEMICI E PERICOLI</h3>
       <p>Nemici melee, veloci, resistenti e a distanza. Nemici con poison. Nemici con laser che richiedono schivata precisa. Boss con attacchi speciali e grandi quantità di HP.</p>
 
       <h3>12) CONSIGLI FINALI</h3>
@@ -400,13 +564,37 @@
         <li>Ogni personaggio è forte se usato nel modo giusto.</li>
       </ul>
 
-      <h3>🏁 CONCLUSIONE</h3>
-      <p><strong>Jeff’s Chronicles</strong> premia abilità, strategia e conoscenza dei personaggi. Impara i loro meccanismi, sfrutta i pickup e punta al record massimo.</p>
+      
+<h3>✴️ EVOLUZIONI </h3> 
+<p>rappresentano una fase avanzata del combattimento e si attivano automaticamente durante la partita. Non sono potenziamenti temporanei, ma un vero e proprio cambiamento nello stile di gioco del personaggio.</p> <p><strong>Quando avvengono</strong>: dopo aver superato un boss avanzato (oltre metà progressione), il personaggio entra nello stato <em>Evoluto</em>. L’evoluzione viene annunciata a schermo con un banner dedicato.</p> <p><strong>Filosofia delle evoluzioni</strong>: le evoluzioni <u>non aumentano direttamente HP, velocità o danno base</u>. Al contrario, sbloccano <strong>passive speciali</strong> che premiano l’uso intelligente delle meccaniche del personaggio. Questo mantiene il gioco bilanciato e strategico.</p> <h4>Effetti generali</h4> <ul> <li>L’evoluzione dura per il resto della partita.</li> <li>Ogni personaggio ottiene un <strong>vantaggio unico</strong>, coerente con il suo ruolo.</li> <li>Le evoluzioni premiano precisione, timing e gestione dei nemici.</li> </ul> <h4>⚙️ Evoluzioni attuali</h4> <p><strong>🔫 Jimmy – Cacciatore Evoluto</strong><br> Alla sua prima interazione offensiva con un nemico, Jimmy risulta più efficace. Questo lo rende devastante negli ingaggi iniziali e perfetto per eliminare rapidamente bersagli chiave.</p> <p><strong>🐱 Rooney – Impatto Brutale</strong><br> Il primo colpo inflitto a ogni nemico causa danni aumentati. Rooney diventa ancora più letale nei combattimenti ravvicinati e contro nemici con molti HP.</p> <p><strong>🗡️ Jeff – Controllo Totale</strong><br> L’evoluzione rafforza il suo ruolo di dominatore dell’arena, rendendolo estremamente affidabile nel mantenere pressione costante su gruppi di nemici.</p> <p><em>Nota:</em> i personaggi sbloccabili avanzati potrebbero ottenere evoluzioni dedicate in futuro.</p> <h4> Consigli strategici</h4> <ul> <li>Sfrutta l’evoluzione per cambiare approccio: da difensivo a aggressivo (o viceversa).</li> <li>Dopo l’evoluzione, eliminare i nemici velocemente diventa ancora più importante per massimizzare punteggio e controllo.</li> <li>Le evoluzioni non rendono invincibili: il posizionamento resta fondamentale.</li> </ul> <p><strong>Le evoluzioni sono il momento in cui Jeff’s Chronicles premia davvero la padronanza del personaggio.</strong></p>
 
+<h3>🏁 CONCLUSIONE</h3>
+      <p><strong>Jeff’s Chronicles</strong> premia abilità, strategia e conoscenza dei personaggi. Impara i loro meccanismi, sfrutta i pickup e punta al record massimo.</p>
     </div>
   </div>
 </div>
       
+
+<!-- Modale bestiario (nemici e boss) -->
+<div id="enemyGuideModal" class="guide-modal enemy-guide-modal" aria-hidden="true" role="dialog" aria-labelledby="enemyGuideTitle" style="display:none;">
+  <div class="guide-modal-content enemy-guide-content" role="document">
+    <button class="guide-close" id="enemyGuideClose" aria-label="Chiudi bestiario">✕</button>
+    <h2 id="enemyGuideTitle">Bestiario – Nemici & Boss</h2>
+    <div class="enemy-guide-body">
+      <div class="enemy-guide-wrap">
+        <div class="enemy-guide-list" id="enemyGuideList" aria-label="Lista nemici sbloccati"></div>
+        <div class="enemy-guide-detail" id="enemyGuideDetail" aria-live="polite">
+          <div class="enemy-guide-empty">
+            <h3 style="margin:0 0 8px 0;color:#f39c12;">Nessun nemico sbloccato</h3>
+            <p style="margin:0;color:#ddd;">Affronta un nemico o un boss almeno una volta per sbloccarlo qui.</p>
+          </div>
+        </div>
+      </div>
+      <p class="enemy-guide-hint">Nota: nel Bestiario compaiono solo i nemici/boss che hai già sfidato almeno una volta (vale per tutti i personaggi).</p>
+    </div>
+  </div>
+</div>
+
 <script>
 const HP_MULT=1.40;
 const DAMAGE_MULT=0.85;
@@ -422,13 +610,14 @@ const URL_DARK='https://i.postimg.cc/JhpWH3jJ/Copilot-20251209-232827.png';
 
 
 const URL_FINAL='https://i.postimg.cc/pTHFKHgz/Progetto-senza-titolo-(2).png';
+const URL_ICE='https://i.postimg.cc/K8pgVhTx/icebiome1.png';
 const canvas=document.getElementById('gameCanvas');
 const ctx=canvas.getContext('2d');
 
 const bgDefault=document.getElementById('bgDefault');
 const bgDark=document.getElementById('bgDark');
 const fadeOverlay=document.getElementById('fadeOverlay');
-let _bgTier=0; // 0=default,1=dark,2=final
+let _bgTier=0; // 0=default,1=dark,2=final,3=ice
 
 bgDefault.style.backgroundImage=`url('${URL_DEFAULT}')`;
 bgDark.style.backgroundImage=`url('${URL_DARK}')`;
@@ -444,21 +633,54 @@ let timer=45;
 let enemies=[];
 let particles=[];
 let pickups=[];
+
+// --- Pickup hitbox tuning ---
+// Bigger pickup hitbox (bonuses easier to collect), malus stays tighter.
+const BONUS_HIT_RADIUS = 26; // was ~18
+const MALUS_HIT_RADIUS = 18;
+
+// Lower malus probability (weighted pick)
+function pickRandomPickupType(){
+  const weighted = [
+    ['heal', 1],
+    ['atk', 1],
+    ['super', 1],
+    ['speed', 1],
+    ['shieldPickup', 1],
+    ['furia', 1],
+    ['ice', 1],
+    ['malus', 0.25], // nerfed
+  ];
+  let sum = 0;
+  for (const [,w] of weighted) sum += w;
+  let r = Math.random() * sum;
+  for (const [t,w] of weighted){
+    r -= w;
+    if (r <= 0) return t;
+  }
+  return 'heal';
+}
 let projectiles=[];
 
 let lasers=[];
+let tempBeams=[]; // Tempostorm lasers (friendly beams)
 let keys={};
 let lastSecondTick=Date.now();
 let levelAdvanceLock=false;
 let shakeAmount=0;
 
-const images={rooney:new Image(),jimmy:new Image(),jeff:new Image(),voltryx:new Image(),kouvagia:new Image(),salsy:new Image()};
-images.rooney.src='https://i.postimg.cc/d3C41cds/pixelcut-export.png';
-images.jimmy.src='https://i.postimg.cc/7LD8rXpW/pixelcut-export-(1).png';
-images.jeff.src='https://i.postimg.cc/26GB7cDQ/image.png';
-images.voltryx.src='https://i.postimg.cc/6Qhqq2Mv/Voltryx.png';
-images.kouvagia.src='https://i.postimg.cc/26DT9cQH/Kouvagia.png';
+const images={rooney:new Image(),jimmy:new Image(),jeff:new Image(),voltryx:new Image(),kouvagia:new Image(),salsy:new Image(),tempostorm:new Image()};
+images.rooney.src='https://i.postimg.cc/Vs0G7ZPV/rooneyy.png';
+images.jimmy.src='https://i.postimg.cc/13Qzjdn4/jimmyy.png';
+images.jeff.src='https://i.postimg.cc/gkQN3v7R/jeff-(1).png';
+images.voltryx.src='https://i.postimg.cc/GhjK4WCy/Voltryxx.png';
+images.kouvagia.src='https://i.postimg.cc/gj1xjk0G/kouvagiaa-(1).png';
 images.salsy.src='https://i.ibb.co/20zSkjsB/salsy.png';
+images.tempostorm.src='https://i.postimg.cc/mkzj763m/tempostorm.png';
+const imagesEvo={jimmy:new Image(),rooney:new Image(),jeff:new Image()};
+imagesEvo.jimmy.src='https://i.postimg.cc/g26ZX0n9/jimmyevo.png';
+imagesEvo.rooney.src='https://i.postimg.cc/x8Ck0fWs/rooneyevo.png';
+imagesEvo.jeff.src='https://i.postimg.cc/FsYf8KbV/jeffevo.png';
 // --- Pickup images (keep pickup size small; same dimensions already used) ---
 const pickupImgs={
   heal: new Image(),
@@ -476,6 +698,8 @@ pickupImgs.atk.src='https://i.postimg.cc/cHjVcxsS/ATK.png';
 pickupImgs.super.src='https://i.postimg.cc/3rss4xSD/Super.png';
 pickupImgs.gold.src='https://i.postimg.cc/wjVZGc6h/gold.png';
 pickupImgs.malus.src='https://i.postimg.cc/tT1cJKFm/malus.png';
+pickupImgs.furia = new Image(); pickupImgs.furia.src='https://i.postimg.cc/BvCsTjYD/furia.png';
+pickupImgs.ice = new Image(); pickupImgs.ice.src='https://i.postimg.cc/GmF1RB1k/ice.png';
 
 function getPickupImage(type){
   // internal type names
@@ -486,25 +710,125 @@ function getPickupImage(type){
 const enemyImages={
   slime:new Image(),drone:new Image(),boss1:new Image(),mech:new Image(),
   shadow:new Image(),boss2:new Image(),shooter:new Image(),attacker:new Image(),boss3:new Image(),
-  veleno:new Image(),oneyes:new Image(),boss4:new Image()
+  veleno:new Image(),oneyes:new Image(),boss4:new Image(),archer:new Image(),glacial:new Image()
 };
 enemyImages.slime.src='https://i.postimg.cc/NFVhJNLC/pixelcut-export-(2).png';
 enemyImages.drone.src='https://i.postimg.cc/13x9HtxZ/image-(1).png';
-enemyImages.boss1.src='https://i.postimg.cc/gj2Ycc5Z/boss1.png';
-enemyImages.mech.src='https://i.postimg.cc/zvyGSXkT/mech.png';
-enemyImages.shadow.src='https://i.postimg.cc/zGvYyP0s/shadow.png';
-enemyImages.boss2.src='https://i.postimg.cc/htLT7pv1/boss2.png';
-enemyImages.shooter.src='https://i.postimg.cc/ZnmCZhPN/shooter.png';
-enemyImages.attacker.src='https://i.postimg.cc/pdtNsXPz/attacker.png';
-enemyImages.boss3.src='https://i.postimg.cc/P5S3wXPJ/boss3.png';
+enemyImages.boss1.src='https://i.postimg.cc/B6bmxMJt/boss1-(1).png';
+enemyImages.mech.src='https://i.postimg.cc/qqkys7cT/mech-(1).png';
+enemyImages.shadow.src='https://i.postimg.cc/tgWx86Dv/shadow-(1).png';
+enemyImages.boss2.src='https://i.postimg.cc/Bvpq8QnR/boss2-(1).png';
+enemyImages.shooter.src='https://i.postimg.cc/yNxVZC3D/shooter-(1).png';
+enemyImages.attacker.src='https://i.postimg.cc/sxVHMs1H/attacker.png';
+enemyImages.boss3.src='https://i.postimg.cc/xjzKWcTs/boss3-(1).png';
 
 
 enemyImages.veleno.src='https://i.postimg.cc/3xNWGRWY/veleno.png';
 enemyImages.oneyes.src='https://i.postimg.cc/g2xkJTBG/oneyes.png';
 enemyImages.boss4.src='https://i.postimg.cc/Px6d8kgr/boss4.png';
+enemyImages.archer.src='https://i.postimg.cc/VLSg4gpV/archer.png';
+enemyImages.glacial.src='https://i.postimg.cc/W1LG8vMN/glacial.png';
+
+// ===== Bestiario (Nemici & Boss) - sblocco globale (tutti i personaggi) =====
+const ENEMY_SEEN_KEY='jeffsChronicles_enemySeen_v1';
+function loadEnemySeen(){
+  try{
+    const raw=localStorage.getItem(ENEMY_SEEN_KEY);
+    return raw ? JSON.parse(raw) : {};
+  }catch(e){ return {}; }
+}
+function saveEnemySeen(map){
+  try{ localStorage.setItem(ENEMY_SEEN_KEY, JSON.stringify(map||{})); }catch(e){}
+}
+let enemySeen = loadEnemySeen();
+function markEnemySeen(type){
+  if(!type) return;
+  if(!enemySeen[type]){
+    enemySeen[type]=true;
+    saveEnemySeen(enemySeen);
+  }
+}
+
+// Dati descrittivi (nome + descrizione + chiave immagine)
+const enemyGuideData={
+  slime:{ name:'SLIME', imgKey:'slime', desc:'Creatura base. Si muove lentamente e ti insegue: perfetta per imparare posizionamento e tempo del dash.'},
+  drone:{ name:'DRONE', imgKey:'drone', desc:'Nemico veloce e imprevedibile. Ti punisce se resti fermo: muoviti a zig-zag e non sprecare dash.'},
+  mech:{ name:'MECH', imgKey:'mech', desc:'Corazzato e resistente. Richiede pazienza: colpisci e riposizionati, specialmente se sei un personaggio melee.'},
+  shadow:{ name:'SHADOW', imgKey:'shadow', desc:'Molto rapido e aggressivo. Mantieni distanza di sicurezza e usa il dash per evitare contatti ravvicinati.'},
+  shooter:{ name:'SHOOTER', imgKey:'shooter', desc:'Attaccante a distanza. Schiva i proiettili con dash laterali e prova a eliminare prima gli shooter quando sono in gruppo.'},
+  attacker:{ name:'ATTACKER', imgKey:'attacker', desc:'Nemico con ritorno aggressivo: entra, colpisce e riparte. Anticipa la traiettoria e non inseguirlo in linea retta.'},
+  archer:{ name:'ARCHER', imgKey:'archer', desc:'Tiratore preciso. Se resti esposto ti colpisce: cambia spesso direzione e usa i momenti di ricarica per avvicinarti.'},
+  glacial:{ name:'GLACIAL', imgKey:'glacial', desc:'Nemico glaciale: tende a rallentare e rendere più pericoloso il controllo degli spazi. Non farti chiudere: riposizionati in anticipo.'},
+  veleno:{ name:'VELENO', imgKey:'veleno', desc:'Applica Poison: subisci danni nel tempo. Priorità alta: eliminalo in fretta o gestisci i pickup cura.'},
+  oneyes:{ name:'ONE-EYE', imgKey:'oneyes', desc:'Nemico che mantiene distanza e ti punisce se lo insegui male. Avanza a scatti e usa dash per accorciare senza esporti.'},
+  boss1:{ name:'BOSS I', imgKey:'boss1', desc:'Primo boss. Molti HP e pressione costante: sfrutta la super nel momento giusto e non prendere danni inutili.'},
+  boss2:{ name:'BOSS II', imgKey:'boss2', desc:'Boss più aggressivo e resistente. Controlla il cooldown della super e cerca finestre sicure per colpire.'},
+  boss3:{ name:'BOSS III', imgKey:'boss3', desc:'Boss avanzato: richiede gestione perfetta di dash e super. È lo spartiacque verso la fase finale.'},
+  boss4:{ name:'BOSS IV', imgKey:'boss4', desc:'Boss speciale con attacchi più “telegraph” e colpi potenti. Leggi i segnali e schiva con precisione.'}
+};
+
+// Ordine consigliato nella lista
+const enemyGuideOrder=['slime','drone','mech','shadow','shooter','attacker','archer','glacial','veleno','oneyes','boss1','boss2','boss3','boss4'];
+
+function buildEnemyGuideUI(){
+  const listEl=document.getElementById('enemyGuideList');
+  const detailEl=document.getElementById('enemyGuideDetail');
+  if(!listEl || !detailEl) return;
+
+  listEl.innerHTML='';
+  const unlocked = enemyGuideOrder.filter(k=>enemySeen && enemySeen[k] && enemyGuideData[k]);
+
+  // empty state
+  if(unlocked.length===0){
+    // keep existing empty panel text
+    detailEl.innerHTML = `<div class="enemy-guide-empty">
+      <h3 style="margin:0 0 8px 0;color:#f39c12;">Nessun nemico sbloccato</h3>
+      <p style="margin:0;color:#ddd;">Affronta un nemico o un boss almeno una volta per sbloccarlo qui.</p>
+    </div>`;
+    return;
+  }
+
+  function selectKey(key){
+    const data=enemyGuideData[key];
+    if(!data) return;
+
+    // active state
+    listEl.querySelectorAll('button').forEach(b=>b.classList.toggle('active', b.dataset.key===key));
+
+    const img = enemyImages[data.imgKey];
+    const src = (img && img.src) ? img.src : '';
+    detailEl.innerHTML = `
+      <div class="enemy-guide-detail-inner">
+        <img src="${src}" alt="${data.name}">
+        <div>
+          <h3>${data.name}</h3>
+          <p>${data.desc}</p>
+        </div>
+      </div>
+    `;
+  }
+
+  for(const key of unlocked){
+    const data=enemyGuideData[key];
+    const btn=document.createElement('button');
+    btn.type='button';
+    btn.dataset.key=key;
+
+    const img = enemyImages[data.imgKey];
+    const src = (img && img.src) ? img.src : '';
+
+    btn.innerHTML = `<img class="enemy-mini" src="${src}" alt="${data.name}"><span>${data.name}</span>`;
+    btn.addEventListener('click', ()=>selectKey(key));
+    listEl.appendChild(btn);
+  }
+
+  // default selection: first unlocked
+  selectKey(unlocked[0]);
+}
+
 const characterStats={
   jimmy:{
-    hp:255,
+    hp:305,
     speed:8*0.75,
     damage:47,
     range:600,
@@ -515,7 +839,7 @@ const characterStats={
     superDuration:3000
   },
   rooney:{
-    hp:360,
+    hp:410,
     speed:6*0.75,
     damage:Math.round(80*DAMAGE_MULT),
     range:150,
@@ -526,7 +850,7 @@ const characterStats={
     superDuration:750
   },
   jeff:{
-    hp:270, 
+    hp:330, 
     speed:7.5*0.75,
     damage:Math.round(57*DAMAGE_MULT), // 38
     range:Math.round(320*JEFF_ATTACK_RANGE_MULT),
@@ -537,7 +861,7 @@ const characterStats={
     superDuration:2800
   },
   voltryx:{
-    hp:280, 
+    hp:340, 
     speed:9*0.75,               
     damage:Math.round(55*DAMAGE_MULT),
     range:Math.round(600), 
@@ -548,7 +872,7 @@ const characterStats={
     superDuration:1500 
   },
   kouvagia:{
-    hp:310,
+    hp:350,
     speed:7*0.75,
     damage:55,
     range:220,
@@ -559,16 +883,27 @@ const characterStats={
     superDuration:600
   },
   salsy:{
-    hp:270,
+    hp:330,
     speed:7.8*0.75,  // leggermente più veloce di prima
     damage:33,       // per colpo (x2)
     range:280,       // medio ravvicinata
     cooldown:770,
     name:'Salsy',
     attackType:'salsySword',
-    superCooldown:8000,
+    superCooldown:6000,
     superDuration:400
-  }
+  },
+  tempostorm:{
+  hp:360,
+  speed:6.1*0.75, // leggermente piu di Rooney
+  damage:40,      // hit iniziale (extra +30 se il nemico resta nel fascio)
+  range:400,
+  cooldown:850,
+  name:'Tempostorm',
+  attackType:'tempostormLaser',
+  superCooldown:50000,
+  superDuration:500
+}
 };
 
 const levelConfigs=[
@@ -585,28 +920,48 @@ const levelConfigs=[
   {enemyType:'shooter',enemyHP:45,enemyDamage:20,enemySpeed:2.5*0.75,time:45,enemyCount:5},
   {enemyType:'shooter',enemyHP:45,enemyDamage:21,enemySpeed:2.7*0.75,time:45,enemyCount:7},
   {enemyType:'attacker',enemyHP:90,enemyDamage:17,enemySpeed:3.2*0.75,time:50,enemyCount:5},
-  {enemyType:'attacker',enemyHP:99,enemyDamage:19,enemySpeed:3.4*0.75,time:50,enemyCount:6},
+  {enemyType:'attacker',enemyHP:99,enemyDamage:19,enemySpeed:3.4*0.75,time:60,enemyCount:6},
   {enemyType:'boss3',enemyHP:666,enemyDamage:33,enemySpeed:2.4*0.75,time:100,enemyCount:1}
   ,{enemyType:'veleno',enemyHP:60,enemyDamage:13,enemySpeed:3.1*0.75,time:50,enemyCount:7} // Level 16
   ,{enemyType:'veleno',enemyHP:70,enemyDamage:15,enemySpeed:3.3*0.75,time:50,enemyCount:9} // Level 17
   ,{enemyType:'oneyes',enemyHP:55,enemyDamage:8,enemySpeed:2.1*0.75,time:55,enemyCount:4} // Level 18
   ,{enemyType:'oneyes',enemyHP:60,enemyDamage:9,enemySpeed:2.3*0.75,time:55,enemyCount:5} // Level 19
   ,{enemyType:'boss4',enemyHP:999,enemyDamage:35,enemySpeed:2.2*0.75,time:180,enemyCount:1} // Level 20
+  ,{enemyType:'archer',enemyHP:78,enemyDamage:14,enemySpeed:2.6*0.75,time:65,enemyCount:4} // Level 21 (Ice)
+  ,{enemyType:'archer',enemyHP:86,enemyDamage:15,enemySpeed:2.8*0.75,time:65,enemyCount:5} // Level 22 (Ice)
+  ,{enemyType:'glacial',enemyHP:150,enemyDamage:22,enemySpeed:2.3*0.75,time:70,enemyCount:2} // Level 23 (Ice)
+  ,{enemyType:'glacial',enemyHP:165,enemyDamage:24,enemySpeed:2.4*0.75,time:80,enemyCount:3} // Level 24 (Ice)
 
 ];
 
-const RECORDS_KEY='pf_records_v17'; // bumped key to include salsy + new unlock rules // bumped key to include voltryx
+const RECORDS_KEY='pf_records_v18'; 
+// Backward compatibility: try older keys used by previous versions
+const LEGACY_RECORDS_KEYS = ['pf_records_v17','pf_records_v16','pf_records_v15','pf_records'];
+// bumped key to include tempostormnclude salsy + new unlock rules // bumped key to include voltryx
 let records=loadRecords();
 
 function loadRecords(){
+  const base={jimmy:0,rooney:0,jeff:0,voltryx:0,kouvagia:0,salsy:0,tempostorm:0};
   try{
+    // Primary key (current version)
     const r=localStorage.getItem(RECORDS_KEY);
     if(r){
       const obj=JSON.parse(r);
-      return Object.assign({jimmy:0,rooney:0,jeff:0,voltryx:0,kouvagia:0,salsy:0}, obj);
+      return Object.assign({}, base, obj);
+    }
+    // Migration: older versions may have used a different key
+    for(const k of (typeof LEGACY_RECORDS_KEYS!=='undefined'?LEGACY_RECORDS_KEYS:[])){
+      const old=localStorage.getItem(k);
+      if(old){
+        const obj=JSON.parse(old);
+        const merged=Object.assign({}, base, obj);
+        // persist into the current key so future loads are stable
+        try{localStorage.setItem(RECORDS_KEY, JSON.stringify(merged));}catch(e){}
+        return merged;
+      }
     }
   }catch(e){}
-  return {jimmy:0,rooney:0,jeff:0,voltryx:0,kouvagia:0,salsy:0};
+  return base;
 }
 function saveRecords(){
   try{localStorage.setItem(RECORDS_KEY,JSON.stringify(records))}catch(e){}
@@ -618,28 +973,43 @@ function updateMenuRecordsDisplay(){
   document.getElementById('record-voltryx').textContent=`Record: ${records.voltryx||0}`;
   document.getElementById('record-kouvagia').textContent=`Record: ${records.kouvagia||0}`;
   document.getElementById('record-salsy').textContent=`Record: ${records.salsy||0}`;
+  document.getElementById('record-tempostorm').textContent=`Record: ${records.tempostorm||0}`;
   updateVoltryxUnlockUI();
   updateKouvagiaUnlockUI();
   updateSalsyUnlockUI();
+  updateTempostormUnlockUI();
   updateGuideUnlockUI();
 }
 function allThreeAbove50k(){
-  return (records.jimmy||0)>50000 && (records.rooney||0)>50000 && (records.jeff||0)>50000;
+  return (records.jimmy||0)>45000 && (records.rooney||0)>45000 && (records.jeff||0)>45000;
 }
+
+function setLockBadgeState(badge, isLocked){
+  if(!badge) return;
+  if(isLocked){
+    badge.style.display = 'block';
+    badge.textContent = 'LOCKED';
+    badge.style.color = '#f39c12';
+    badge.style.borderColor = '#f39c12';
+  } else {
+    // When unlocked we want the card to look "normal": no extra UNLOCKED label.
+    badge.style.display = 'none';
+  }
+}
+
 function updateVoltryxUnlockUI(){
   const card=document.getElementById('card-voltryx');
   const badge=document.getElementById('voltryxLockBadge');
-  if(allThreeAbove50k()){
+  if(!card||!badge) return;
+
+  const unlocked = allThreeAbove50k();
+  if(unlocked){
     card.classList.remove('disabled');
-    badge.textContent='UNLOCKED';
-    badge.style.color='#2ecc71';
-    badge.style.borderColor='#2ecc71';
+    setLockBadgeState(badge, false);
     card.title='Voltryx sbloccata!';
   }else{
     card.classList.add('disabled');
-    badge.textContent='LOCKED';
-    badge.style.color='#f39c12';
-    badge.style.borderColor='#f39c12';
+    setLockBadgeState(badge, true);
     card.title='Sblocca completando 50.000 punti con Jimmy, Rooney e Jeff';
   }
 }
@@ -647,56 +1017,80 @@ function updateVoltryxUnlockUI(){
 
 
 function voltryxAbove51k(){
-  return (records.voltryx||0) >= 55000;
+  return (records.voltryx||0) >= 50000;
 }
 
 function updateKouvagiaUnlockUI(){
   const card=document.getElementById('card-kouvagia');
   const badge=document.getElementById('kouvagiaLockBadge');
   if(!card||!badge) return;
-  if(voltryxAbove51k()){
+
+  const unlocked = voltryxAbove51k();
+  if(unlocked){
     card.classList.remove('disabled');
-    badge.textContent='UNLOCKED';
-    badge.style.color='#2ecc71';
-    badge.style.borderColor='#2ecc71';
+    setLockBadgeState(badge, false);
     card.title='Kouvagia sbloccato!';
   }else{
     card.classList.add('disabled');
-    badge.textContent='LOCKED';
-    badge.style.color='#f39c12';
-    badge.style.borderColor='#f39c12';
-    card.title='Sblocca facendo 55.000 punti con Voltryx';
+    setLockBadgeState(badge, true);
+    card.title='Sblocca facendo 50.000 punti con Voltryx';
   }
 }
 
 
 function allPrevAbove70k(){
-  return (records.jimmy||0)>=70000 && (records.rooney||0)>=70000 && (records.jeff||0)>=70000 && (records.voltryx||0)>=70000 && (records.kouvagia||0)>=70000;
+  return (records.jimmy||0)>=60000 && (records.rooney||0)>=60000 && (records.jeff||0)>=60000 && (records.voltryx||0)>=60000 && (records.kouvagia||0)>=60000;
 }
 function updateSalsyUnlockUI(){
   const card=document.getElementById('card-salsy');
   const badge=document.getElementById('salsyLockBadge');
   if(!card||!badge) return;
-  if(allPrevAbove70k()){
+
+  const unlocked = allPrevAbove70k();
+  if(unlocked){
     card.classList.remove('disabled');
-    badge.textContent='UNLOCKED';
-    badge.style.color='#2ecc71';
-    badge.style.borderColor='#2ecc71';
+    setLockBadgeState(badge, false);
     card.title='Salsy sbloccata!';
   }else{
     card.classList.add('disabled');
-    badge.textContent='LOCKED';
-    badge.style.color='#f39c12';
-    badge.style.borderColor='#f39c12';
-    card.title='Sblocca facendo 70.000 punti con Jimmy, Rooney, Jeff, Voltryx e Kouvagia';
+    setLockBadgeState(badge, true);
+    card.title='Sblocca facendo 60.000 punti con Jimmy, Rooney, Jeff, Voltryx e Kouvagia';
   }
 }
 
+
+
+function allPrevAbove85k(){
+  return (records.jimmy||0) >= 70000 &&
+         (records.rooney||0) >= 70000 &&
+         (records.jeff||0) >= 70000 &&
+         (records.voltryx||0) >= 70000 &&
+         (records.kouvagia||0) >= 70000 &&
+         (records.salsy||0) >= 70000;
+}
+function updateTempostormUnlockUI(){
+  const card=document.getElementById('card-tempostorm');
+  const badge=document.getElementById('tempostormLockBadge');
+  if(!card||!badge) return;
+
+  const unlocked = allPrevAbove85k();
+  if(unlocked){
+    card.classList.remove('disabled');
+    card.classList.remove('coming-soon');
+    setLockBadgeState(badge, false);
+    card.title='Tempostorm sbloccato!';
+  }else{
+    card.classList.add('disabled');
+    setLockBadgeState(badge, true);
+    card.title='Sblocca facendo 70.000 punti con tutti i personaggi precedenti (Jimmy, Rooney, Jeff, Voltryx, Kouvagia e Salsy)';
+  }
+}
 
 function updateGuideUnlockUI(){
   const vUnlocked = allThreeAbove50k();
   const kUnlocked = voltryxAbove51k();
   const sUnlocked = allPrevAbove70k();
+  const tUnlocked = allPrevAbove85k();
 
   const vBox=document.getElementById('guide-voltryx');
   const vLock=document.getElementById('guide-voltryx-locked');
@@ -709,6 +1103,10 @@ function updateGuideUnlockUI(){
   const sBox=document.getElementById('guide-salsy');
   const sLock=document.getElementById('guide-salsy-locked');
   if(sBox&&sLock){ sBox.style.display = sUnlocked ? 'block' : 'none'; sLock.style.display = sUnlocked ? 'none' : 'block'; }
+
+  const tBox=document.getElementById('guide-tempostorm');
+  const tLock=document.getElementById('guide-tempostorm-locked');
+  if(tBox&&tLock){ tBox.style.display = tUnlocked ? 'block' : 'none'; tLock.style.display = tUnlocked ? 'none' : 'block'; }
 }
 
 
@@ -753,7 +1151,14 @@ function markMult(enemy){
   return (enemy && enemy.salsyMarkUntil && Date.now() < enemy.salsyMarkUntil) ? 2 : 1;
 }
 function applyEnemyDamage(enemy, baseDmg){
-  const finalDmg = Math.max(0, Math.round(baseDmg * markMult(enemy)));
+  // Rooney EVO passive: first hit on a given enemy deals +15% damage (doesn't change stats)
+  let mult=1;
+  if(typeof player!=='undefined' && player && player.type==='rooney' && player.evolved && enemy && !enemy._rooneyFirstHit){
+    mult=1.15;
+    enemy._rooneyFirstHit=true;
+  }
+  const finalDmg = Math.max(0, Math.round(baseDmg * mult * markMult(enemy)));
+  enemy._lastHitAt = Date.now();
   enemy.hp -= finalDmg;
   return finalDmg;
 }
@@ -762,7 +1167,7 @@ function shakeScreen(){shakeAmount=8}
 
 // Extended projectile to support friendly, AoE, homing, pulse damage
 function spawnProjectile(opts){
-  // opts: {x,y,vx,vy,damage,ttl,color,radius,friendly,aoeRadius,aoeFullDamage,homing,speed,isVoltryxSuper,pulseInterval,lastPulse,targetRef}
+  // opts: {x,y,vx,vy,damage,ttl,color,radius,friendly,aoeRadius,aoeFullDamage,homing,speed,isVoltryxSuper,pulseInterval,lastPulse,targetRef,explodeOnExpire}
   const p={
     x:opts.x,y:opts.y,vx:opts.vx||0,vy:opts.vy||0,
     damage:opts.damage||10,created:Date.now(),
@@ -773,7 +1178,13 @@ function spawnProjectile(opts){
     isVoltryxSuper:!!opts.isVoltryxSuper,
     pulseInterval:opts.pulseInterval||0,
     lastPulse:opts.lastPulse||0,
-  targetRef:opts.targetRef||null
+  targetRef:opts.targetRef||null,
+    explodeOnExpire:!!opts.explodeOnExpire,
+    shape:opts.shape||'circle',
+    w:opts.w||0,
+    h:opts.h||0,
+    angle:typeof opts.angle==='number'?opts.angle:null,
+    onHitPlayer:opts.onHitPlayer||null
   };
   projectiles.push(p);
 }
@@ -889,23 +1300,68 @@ function updateProjectiles(){
     }else{
       // enemy projectiles hit player
       if(player && p.x>player.x && p.x<player.x+player.width && p.y>player.y && p.y<player.y+player.height){
+        if(typeof p.onHitPlayer==='function'){ try{ p.onHitPlayer(player); }catch(e){} }
         player.takeDamage(p.damage);
         return false;
       }
     }
 
-    return (now-p.created)<p.ttl && aliveInBounds;
+    const aliveTime = (now-p.created)<p.ttl;
+    const alive = aliveTime && aliveInBounds;
+
+    // Optional AoE explosion when the projectile stops (ttl end / out of bounds)
+    if(!alive && p.explodeOnExpire && p.friendly && p.aoeRadius>0){
+      // apply AoE at last position
+      for(let j=enemies.length-1;j>=0;j--){
+        const ee=enemies[j];
+        const dx=(ee.x+ee.width/2)-p.x;
+        const dy=(ee.y+ee.height/2)-p.y;
+        const d=Math.hypot(dx,dy);
+        if(d<=p.aoeRadius){
+          const dmg=Math.round(p.damage);
+          const _dmg=dmg; const _final=applyEnemyDamage(ee,_dmg);
+          createParticles(ee.x,ee.y,'#ffb74d',8,4);
+          showDamageNumber(ee.x,ee.y, _final);
+          if(ee.hp<=0){
+            createParticles(ee.x,ee.y,'#fff176',30,6);
+            enemies.splice(j,1);
+            score+=100*currentLevel;
+          }
+        }
+      }
+      createParticles(p.x,p.y,'#ffa726',18,5);
+    }
+
+    return alive;
   });
 }
 
 function drawProjectiles(){
   projectiles.forEach(p=>{
+    ctx.globalAlpha = p.isVoltryxSuper ? 0.8 : 1;
+
+    // Archer arrows (small elongated hits)
+    if(p.shape==='rect'){
+      const ang = (p.angle!==null && !Number.isNaN(p.angle)) ? p.angle : Math.atan2(p.vy||0, p.vx||0);
+      const w = p.w || 16;
+      const h = p.h || 4;
+      ctx.save();
+      ctx.translate(p.x, p.y);
+      ctx.rotate(ang);
+      ctx.fillStyle=p.color;
+      ctx.fillRect(-w/2, -h/2, w, h);
+      ctx.restore();
+      ctx.globalAlpha = 1;
+      return;
+    }
+
+    // Default circular bullets
     ctx.fillStyle=p.color;
     ctx.beginPath();
-    ctx.globalAlpha = p.isVoltryxSuper ? 0.8 : 1;
     ctx.arc(p.x,p.y,p.isVoltryxSuper ? 18 : p.radius,0,Math.PI*2);
     ctx.fill();
     ctx.globalAlpha = 1;
+
     if(p.isVoltryxSuper){
       // draw a soft aura
       ctx.strokeStyle='rgba(243,156,18,0.5)';
@@ -916,6 +1372,7 @@ function drawProjectiles(){
     }
   });
 }
+
 
 // Laser hazards (OneEyes + Boss4)
 function spawnLaser(opts){
@@ -1012,20 +1469,123 @@ function drawLasers(){
   });
 }
 
+
+function spawnTempBeam(opts){
+  // opts: {x1,y1,x2,y2,width,ttl,damage1,damageStay,friendly}
+  tempBeams.push({
+    x1:opts.x1,y1:opts.y1,x2:opts.x2,y2:opts.y2,
+    width:opts.width||18,
+    created:Date.now(),
+    ttl:opts.ttl||260,
+    damage1:opts.damage1||40,
+    damageStay:opts.damageStay||30,
+    hitMap:new Map() // enemy -> {firstHit, left, extraDone}
+  });
+}
+
+// distance from point to segment
+function _distPointToSeg(px,py,x1,y1,x2,y2){
+  const vx=x2-x1, vy=y2-y1;
+  const wx=px-x1, wy=py-y1;
+  const c1=wx*vx+wy*vy;
+  if(c1<=0) return Math.hypot(px-x1,py-y1);
+  const c2=vx*vx+vy*vy;
+  if(c2<=c1) return Math.hypot(px-x2,py-y2);
+  const b=c1/c2;
+  const bx=x1+b*vx, by=y1+b*vy;
+  return Math.hypot(px-bx,py-by);
+}
+
+function updateTempBeams(){
+  const now=Date.now();
+  for(let i=tempBeams.length-1;i>=0;i--){
+    const B=tempBeams[i];
+    const age=now-B.created;
+    if(age>B.ttl){ tempBeams.splice(i,1); continue; }
+
+    // collisions with enemies
+    enemies.forEach(e=>{
+      const ex=e.x+e.width/2, ey=e.y+e.height/2;
+      const dist=_distPointToSeg(ex,ey,B.x1,B.y1,B.x2,B.y2);
+      const inside = dist <= (B.width*0.55 + Math.max(e.width,e.height)*0.18);
+
+      const state = B.hitMap.get(e);
+      if(inside){
+        if(!state){
+          // first hit
+          const dmg = B.damage1;
+          const final = applyEnemyDamage(e, dmg);
+          showDamageNumber(e.x,e.y, final);
+          createParticles(e.x+e.width/2,e.y+e.height/2,'#4fc3f7',10,4);
+          B.hitMap.set(e,{firstHit:now,left:false,extraDone:false});
+        } else {
+          // check linger bonus only if stayed inside continuously
+          if(!state.extraDone && !state.left && (now - state.firstHit) >= 180){
+            const dmg2=B.damageStay;
+            const final2 = applyEnemyDamage(e, dmg2);
+            showDamageNumber(e.x,e.y, final2);
+            createParticles(e.x+e.width/2,e.y+e.height/2,'#81d4fa',12,4);
+            state.extraDone=true;
+          }
+        }
+      } else {
+        if(state && !state.extraDone){
+          state.left=true;
+        }
+      }
+    });
+  }
+}
+
+function drawTempBeams(){
+  tempBeams.forEach(B=>{
+    const x1=B.x1, y1=B.y1, x2=B.x2, y2=B.y2;
+    ctx.save();
+    ctx.lineCap='round';
+
+    // glow
+    ctx.globalAlpha=0.22;
+    ctx.strokeStyle='#00b0ff';
+    ctx.lineWidth=B.width*2.4;
+    ctx.beginPath(); ctx.moveTo(x1,y1); ctx.lineTo(x2,y2); ctx.stroke();
+
+    // core
+    ctx.globalAlpha=0.85;
+    ctx.strokeStyle='#4fc3f7';
+    ctx.lineWidth=B.width;
+    ctx.beginPath(); ctx.moveTo(x1,y1); ctx.lineTo(x2,y2); ctx.stroke();
+
+    // white highlight
+    ctx.globalAlpha=0.65;
+    ctx.strokeStyle='rgba(255,255,255,0.9)';
+    ctx.lineWidth=Math.max(2, B.width*0.22);
+    ctx.beginPath(); ctx.moveTo(x1,y1); ctx.lineTo(x2,y2); ctx.stroke();
+
+    ctx.restore();
+  });
+}
+
 function spawnPickup(x,y,type,value=0){
-  pickups.push({x,y,type,value,created:Date.now(),ttl:20000,w:28,h:28});
+  // Small collectible pickup (compatible with updatePickups / drawPickups)
+  const hitR = (type==='malus') ? MALUS_HIT_RADIUS : BONUS_HIT_RADIUS;
+  pickups.push({x,y,type,value,created:Date.now(),ttl:20000,radius:18,hitRadius:hitR,w:28,h:28});
 }
 function spawnPickupsForLevel(level){
-  pickups=[];
+  // IMPORTANT: do NOT clear existing pickups here.
+  // Bonus pickups remain on the field when the level ends.
   if(level<4) return;
+
   const count=1+Math.floor(Math.random()*2);
   for(let i=0;i<count;i++){
-    const types=['heal','atk','super','speed','shieldPickup','malus'];
     const isGold=Math.random()<GOLD_PROB;
-    const type=isGold?'gold':types[Math.floor(Math.random()*types.length)];
+    const type=isGold ? 'gold' : pickRandomPickupType();
+
     const x=60+Math.random()*(canvas.width-120);
     const y=60+Math.random()*(canvas.height-180);
-    pickups.push({type,x,y,radius:18,created:Date.now()});
+
+    const hitR = (type==='malus') ? MALUS_HIT_RADIUS : BONUS_HIT_RADIUS;
+    // keep visual size small (radius:18) but increase hitbox via hitRadius
+    pickups.push({type,x,y,radius:18,hitRadius:hitR,created:Date.now(),ttl:20000});
   }
 }
 function drawPickups(){
@@ -1062,7 +1622,8 @@ function updatePickups(playerRef){
   pickups=pickups.filter(p=>{
     if(Date.now()-p.created>p.ttl) return false;
     const dist=Math.hypot((p.x-playerRef.x),(p.y-playerRef.y));
-    if(dist<p.radius+Math.max(playerRef.width,playerRef.height)/2){
+    const pr = (p.hitRadius!=null) ? p.hitRadius : (p.radius!=null ? p.radius : 18);
+    if(dist<pr+Math.max(playerRef.width,playerRef.height)/2){
       applyPickupEffect(playerRef,p.type);
       return false;
     }
@@ -1096,6 +1657,27 @@ function applyPickupEffect(playerRef,type){
     playerRef.pickupShieldUntil=Date.now()+6000;
     playerRef.invulnerable=true;
     createParticles(playerRef.x,playerRef.y,'#7fdbff',30);
+
+    } else if(type==='furia'){
+    // Cura nel tempo: +10 HP/s per 10s
+    playerRef.furiaHealUntil = Date.now()+10000;
+    playerRef.furiaLastHeal = Date.now();
+
+    // Onde di danno (3 aree visibili che si allargano)
+    const cx = playerRef.x + playerRef.width/2;
+    const cy = playerRef.y + playerRef.height/2;
+    spawnFuriaWaves(cx, cy);
+
+    // Extra feedback visivo
+    createParticles(cx,cy,'#ff00ff',70,6);
+  } else if(type==='ice'){
+    enemies.forEach(e=>{
+      e.speed *= 0.4;
+      e.iceUntil = Date.now()+17000;
+      e.iceDps = 2;
+      e.iceLastTick = Date.now();
+    });
+    createParticles(playerRef.x,playerRef.y,'#ffffff',40);
   } else if(type==='malus'){
     playerRef.poisonUntil=Date.now()+10000;
     playerRef.poisonTickLast=Date.now();
@@ -1109,10 +1691,13 @@ class Player{
     const s=characterStats[type];
     this.type=type;
     this.x=canvas.width/2;this.y=canvas.height/2;
-    this.width=80;this.height=90;
+    this.width=130;this.height=135;
     this.vx=0;this.vy=0;
     this.maxHP=s.hp;this.hp=s.hp;
     this.speed=s.speed;this._baseSpeed=s.speed;
+    // Archer slow (temporary): stacks up to -15% total
+    this._slowPct=0;
+    this._slowUntil=0;
     this.damage=s.damage;this.range=s.range;
     this.cooldown=s.cooldown;this.attackType=s.attackType;
     this.lastAttack=0;this.facingRight=true;
@@ -1147,6 +1732,18 @@ class Player{
     this.poisonUntil=0;
     this.poisonTickLast=0;
     this.poisonTickDamage=1;
+
+    // --- Evolution (after Boss level 15) ---
+    this.evolved=false;
+    this._evoFxUntil=0;
+    this._jimmyNextGrappleCdMult=1;
+  }
+
+  evolve(){
+    if(this.evolved) return;
+    this.evolved=true;
+    this._evoFxUntil=Date.now()+650;
+    // passive is enabled by this.evolved flag, no stat changes
   }
 
   findClosestEnemy(radius=this.aimAssistRadius){
@@ -1167,10 +1764,24 @@ class Player{
       this.shieldBroken=false;this.shieldDurability=this.shieldMaxDurability
     }
     if(this.attackBuffUntil && now>this.attackBuffUntil){this.attackBuffMultiplier=1;this.attackBuffUntil=0}
+    if(this._slowUntil && now>this._slowUntil){ this._slowUntil=0; this._slowPct=0; }
     if(this.speedBuffUntil && now>this.speedBuffUntil){
       this.speed=this._baseSpeed;this.speedBuffUntil=0;this.isJetpacking=false;this.invulnerable=false
     }
     if(this.pickupShieldUntil && now>this.pickupShieldUntil){this.pickupShieldUntil=0;this.invulnerable=false}
+
+    // Furia heal-over-time (+10 HP/s for 10s)
+    if(this.furiaHealUntil && now < this.furiaHealUntil){
+      if(!this.furiaLastHeal) this.furiaLastHeal = now;
+      if(now - this.furiaLastHeal >= 1000){
+        this.furiaLastHeal = now;
+        this.hp = Math.min(this.maxHP, this.hp + 10);
+        createParticles(this.x+this.width/2, this.y+this.height/2, '#ff00ff', 8, 3);
+      }
+    } else {
+      this.furiaLastHeal = 0;
+      this.furiaHealUntil = 0;
+    }
 
     // Jimmy jetpack passive
     if(this.type==='jimmy'){
@@ -1189,28 +1800,38 @@ class Player{
     }
 
 
-    // Salsy passive: speed boost every 12s for 2s (slightly faster bursts)
+    // Salsy passive: speed boost every 12s for 2s (DOUBLES BASE SPEED ONLY)
     if(this.type==='salsy'){
-      if(!this._salsyBoostCooldown){ this._salsyBoostCooldown=12000; this._salsyBoostDuration=2000; this.lastSalsyBoost=now-this._salsyBoostCooldown; this.salsyBoostUntil=0; }
+      if(!this._salsyBoostCooldown){
+        this._salsyBoostCooldown = 12000;
+        this._salsyBoostDuration = 2000;
+        this.lastSalsyBoost = now - this._salsyBoostCooldown;
+        this.salsyBoostUntil = 0;
+      }
+
       if(!this.isDoingSuper && now - this.lastSalsyBoost >= this._salsyBoostCooldown){
         this.lastSalsyBoost = now;
         this.salsyBoostUntil = now + this._salsyBoostDuration;
-        // don't overwrite other speed buffs permanently; apply multiplicative while active
       }
+
       if(this.salsyBoostUntil && now < this.salsyBoostUntil){
-        // base speed plus temporary boost (stacking with pickup speed buff by multiplying current speed floor)
-        const base = this._baseSpeed;
-        // if pickup speed buff is active, this.speed is already > base; keep that and add a small extra
-        const current = Math.max(this.speed, base);
-        this.speed = current * 1.25;
-      }else if(this.salsyBoostUntil && now >= this.salsyBoostUntil){
+        // SOLO velocità base raddoppiata
+        this.speed = this._baseSpeed * 2;
+      }
+      else if(this.salsyBoostUntil && now >= this.salsyBoostUntil){
         this.salsyBoostUntil = 0;
-        // restore to pickup/buff or base
-        this.speed = (this.speedBuffUntil && now < this.speedBuffUntil) ? this.speed : this._baseSpeed;
+
+        // Ripristino corretto
+        if(this.speedBuffUntil && now < this.speedBuffUntil){
+          this.speed = this._baseSpeed * 1.5;
+        } else {
+          this.speed = this._baseSpeed;
+        }
       }
     }
 
     // Poison
+
     if(this.poisonUntil && now < this.poisonUntil){
       if(!this.poisonTickLast) this.poisonTickLast = now;
       if(now - this.poisonTickLast >= 1000){
@@ -1232,7 +1853,8 @@ class Player{
     if(moveX!==0&&moveY!==0){moveX*=0.707;moveY*=0.707}
 
     if(this.isDashing){
-      const dashSpeed=this.speed*(this._dashSpeedMult||3);
+      const speedNow=this.speed*(1-(this._slowPct||0));
+      const dashSpeed=speedNow*(this._dashSpeedMult||3);
       this.vx=(this.facingRight?1:-1)*dashSpeed;
       if(this.type==='kouvagia' && this._kouvagiaDashActive){this.vy=0;}
 
@@ -1287,8 +1909,9 @@ class Player{
 
       }
     } else if(!this.isGrappling){
-      this.vx=moveX*this.speed+this.vx*0.1;
-      this.vy=moveY*this.speed+this.vy*0.1;
+      const speedNow=this.speed*(1-(this._slowPct||0));
+      this.vx=moveX*speedNow+this.vx*0.1;
+            this.vy=moveY*speedNow+this.vy*0.1;
     }
 
     // Grapple chase
@@ -1312,6 +1935,8 @@ class Player{
               createParticles(this.grappleTarget.x,this.grappleTarget.y,'#fff176',30,6);
               enemies.splice(idx,1);score+=100*currentLevel
             }
+            // Jimmy EVO passive: next grapple has -20% cooldown after a grappled target dies
+            if(this.type==='jimmy' && this.evolved){ this._jimmyNextGrappleCdMult=0.8; }
           }
           this.isGrappling=false;this.grappleTarget=null;this.vx=0;this.vy=0;
           this.grappleStartTime=0;
@@ -1328,20 +1953,44 @@ class Player{
         if(!this._superHitDone&&elapsed>=300){
           this._superHitDone=true;
           if(this.type==='rooney'){
-            const hitList=[];
-            enemies.forEach((enemy)=>{const dist=Math.hypot(enemy.x-this.x,enemy.y-this.y);if(dist<350)hitList.push(enemy)});
-            const n=hitList.length||1;
-            const baseRooney=200;
-            const multiplier = 0.75 + (4 - n)*0.25;
-            const perEnemy = Math.max(8, Math.round(baseRooney * SUPER_DAMAGE_MULT * multiplier * this.attackBuffMultiplier));
-            for(let i=hitList.length-1;i>=0;i--){
-              const enemy=hitList[i];
-              const _dmg=perEnemy; const _final=applyEnemyDamage(enemy,_dmg);
-              createParticles(enemy.x,enemy.y,'#f39c12',18,6);
-              showDamageNumber(enemy.x,enemy.y, _final);
-              if(enemy.hp<=0){
-                const idx=enemies.indexOf(enemy);
-                if(idx>-1){createParticles(enemy.x,enemy.y,'#fff176',30,6);enemies.splice(idx,1);score+=100*currentLevel}
+            // Rooney SUPER:
+            // - Colpisce TUTTI i nemici nel raggio.
+            // - Il danno totale si "spalma" (più nemici => meno danno a testa).
+            // - Più un nemico è vicino al centro, più prende danno.
+            // In condizioni ottimali (1 solo nemico super ravvicinato) infligge 220 danni.
+            const R=200;
+            const px=this.x+this.width/2, py=this.y+this.height/2;
+            const hits=[];
+            for(const enemy of enemies){
+              const ex=enemy.x+enemy.width/2, ey=enemy.y+enemy.height/2;
+              const dist=Math.hypot(ex-px, ey-py);
+              if(dist<=R){
+                // peso: 1 al centro, ~0 al bordo (con minimo per non azzerare del tutto)
+                const w=Math.max(0.05, 1 - (dist/R));
+                hits.push({enemy,w});
+              }
+            }
+            if(hits.length>0){
+              // Compensiamo SUPER_DAMAGE_MULT così che 1 bersaglio ravvicinato prenda 220 (senza buff)
+              const totalBase=Math.round(220 / SUPER_DAMAGE_MULT);
+              const sumW=hits.reduce((a,h)=>a+h.w,0) || 1;
+
+              for(const h of hits){
+                const share=h.w/sumW;
+                const raw=totalBase*share;
+                const dmg=Math.max(6, Math.round(raw * SUPER_DAMAGE_MULT * this.attackBuffMultiplier));
+                const _final=applyEnemyDamage(h.enemy, dmg);
+                createParticles(h.enemy.x,h.enemy.y,'#f39c12',18,6);
+                showDamageNumber(h.enemy.x,h.enemy.y, _final);
+              }
+
+              // rimuovi i morti (e assegna score) subito, come per le altre super
+              for(let i=enemies.length-1;i>=0;i--){
+                if(enemies[i].hp<=0){
+                  createParticles(enemies[i].x,enemies[i].y,'#fff176',30,6);
+                  enemies.splice(i,1);
+                  score+=100*currentLevel;
+                }
               }
             }
           } else {
@@ -1418,8 +2067,13 @@ class Player{
       } else if(this.attackType==='kouvagia'){
         if(elapsed>=this.superDuration) this.endSuper();
 } else if(this.attackType==='hybrid'){
-        
+
         if(now - this.superStartTime >= this.superDuration){
+          this.endSuper();
+        }
+      } else if(this.attackType==='tempostormLaser'){
+        // Tempostorm SUPER is applied instantly in superAttack(); keep VFX only for superDuration.
+        if(elapsed>=this.superDuration){
           this.endSuper();
         }
       }
@@ -1483,7 +2137,15 @@ class Player{
   attack(){
     const now=Date.now();
     if(now-this.lastAttack<this.cooldown||this.isDoingSuper)return false;
-    this.lastAttack=now;this.attacking=true;this.attackTime=now;
+    // Jimmy EVO passive: if unlocked, the next grapple gets -20% cooldown (only for that next grapple)
+    if(this.type==='jimmy' && this.evolved && this.attackType==='grapple' && this._jimmyNextGrappleCdMult && this._jimmyNextGrappleCdMult<1){
+      const mult=this._jimmyNextGrappleCdMult;
+      this.lastAttack = now - Math.round(this.cooldown*(1-mult));
+      this._jimmyNextGrappleCdMult=1;
+    } else {
+      this.lastAttack=now;
+    }
+    this.attacking=true;this.attackTime=now;
 
     if(this.type==='jimmy'&&!this.shieldBroken){this.shieldActive=true;}
 
@@ -1585,7 +2247,7 @@ class Player{
           while(angleDiff>Math.PI)angleDiff-=Math.PI*2;
           while(angleDiff<-Math.PI)angleDiff+=Math.PI*2;
           if(dist<this.range && Math.abs(angleDiff)<arcWidth/2+0.15){
-            const base=33*this.attackBuffMultiplier;
+            const base=37*this.attackBuffMultiplier;
             const dmg=applyEnemyDamage(enemy, base);
             createParticles(enemy.x,enemy.y,'#f1c40f',10,4);
             showDamageNumber(enemy.x,enemy.y,dmg);
@@ -1602,6 +2264,7 @@ class Player{
 
     } else if(this.attackType==='sword'){
       const attackAngle=this.facingRight?0:Math.PI;const arcWidth=Math.PI*1.6;
+      let __jeffHitCount=0;
       enemies.forEach(enemy=>{
         const dx=enemy.x-this.x;const dy=enemy.y-this.y;const dist=Math.hypot(dx,dy);
         const angle=Math.atan2(dy,dx);
@@ -1620,6 +2283,12 @@ class Player{
           }
         }
       });
+      // Jeff EVO passive: if a single attack hits 2+ enemies, heal 1% max HP
+      if(this.type==='jeff' && this.evolved && __jeffHitCount>=2){
+        const heal = Math.max(1, Math.round(this.maxHP*0.01));
+        this.hp = Math.min(this.maxHP, this.hp + heal);
+        createParticles(this.x+this.width/2,this.y+this.height/2,'#2ecc71',10,4);
+      }
       if(assistTarget){
         const distAssist=Math.hypot((assistTarget.x-this.x),(assistTarget.y-this.y));
         if(distAssist<this.range+60){
@@ -1662,12 +2331,13 @@ class Player{
         const speed=9;
         const vx=(dx/len)*speed;
         const vy=(dy/len)*speed;
-        const baseAoeDmg = Math.round(50 * this.attackBuffMultiplier);
+        const baseAoeDmg = Math.round(45* this.attackBuffMultiplier);
         spawnProjectile({
           x:this.x+this.width/2, y:this.y+this.height/2,
           vx, vy, speed,
           damage:baseAoeDmg, ttl:2000, color:'#ffb74d',
-          radius:7, friendly:true, aoeRadius:60, aoeFullDamage:true, homing:false
+          radius:9, friendly:true, aoeRadius:110, aoeFullDamage:true, homing:false,
+          explodeOnExpire:true
         });
         createParticles(this.x+this.width/2,this.y+this.height/2,'#ffa726',8,3);
       } else {
@@ -1695,6 +2365,31 @@ class Player{
         setTimeout(punch, 120);
       }
     }
+else if(this.attackType==='tempostormLaser'){
+  const assistTarget=this.findClosestEnemy(900);
+  const sx=this.x+this.width/2;
+  const sy=this.y+this.height/2;
+
+  let dx,dy,len;
+  if(assistTarget){
+    dx=(assistTarget.x+assistTarget.width/2)-sx;
+    dy=(assistTarget.y+assistTarget.height/2)-sy;
+  }else{
+    dx=this.facingRight?1:-1; dy=0;
+  }
+  len=Math.hypot(dx,dy)||1;
+  const ex=sx+(dx/len)*this.range;
+  const ey=sy+(dy/len)*this.range;
+
+  spawnTempBeam({
+    x1:sx,y1:sy,x2:ex,y2:ey,
+    width:18,ttl:260,
+    damage1:Math.round(40*this.attackBuffMultiplier),
+    damageStay:Math.round(30*this.attackBuffMultiplier)
+  });
+  createParticles(sx,sy,'#4fc3f7',14,4);
+}
+
 
     return true;
   }
@@ -1779,6 +2474,34 @@ else if(this.attackType==='hybrid'){
       shakeScreen();
     }
 
+else if(this.attackType==='tempostormLaser'){
+  const cx=canvas.width/2;
+  const cy=(canvas.height-50)/2;
+  let stolen=0;
+
+  enemies.forEach(e=>{
+    // group to exact center
+    e.x = cx - e.width/2;
+    e.y = cy - e.height/2;
+
+    const removed = Math.max(0, Math.floor(e.hp/2));
+    e.hp = Math.max(0, e.hp - removed);
+    stolen += removed;
+
+    if(removed>0){
+      showDamageNumber(e.x,e.y, removed);
+      createParticles(e.x+e.width/2,e.y+e.height/2,'#00b0ff',18,5);
+    }
+  });
+
+  if(stolen>0){
+    this.hp = Math.min(this.maxHP, this.hp + stolen);
+    createParticles(this.x+this.width/2,this.y+this.height/2,'#00b0ff',30,6);
+  }
+  createParticles(cx,cy,'#4fc3f7',60,7);
+  shakeScreen();
+}
+
     return true;
   }
 
@@ -1809,12 +2532,25 @@ else if(this.attackType==='hybrid'){
   }
 
   draw(){
-    if(images[this.type]&&images[this.type].complete){
+    const baseImg = images[this.type];
+    const evoImg = (this.evolved && imagesEvo && imagesEvo[this.type]) ? imagesEvo[this.type] : null;
+    const activeImg = (evoImg && evoImg.complete) ? evoImg : baseImg;
+
+    if(activeImg && activeImg.complete){
       ctx.save();
+      // evolution visual (brief glow + scale)
+      const evoT = (this._evoFxUntil && Date.now() < this._evoFxUntil) ? (1 - ((this._evoFxUntil - Date.now())/650)) : 1;
+      const evoScale = (this._evoFxUntil && Date.now() < this._evoFxUntil) ? (1 + 0.18*(1-evoT)) : 1;
+      const evoAlpha = (this._evoFxUntil && Date.now() < this._evoFxUntil) ? (0.75 + 0.25*Math.sin(Date.now()/45)) : 1;
+      ctx.globalAlpha = evoAlpha;
+      const cx=this.x+this.width/2, cy=this.y+this.height/2;
+      ctx.translate(cx,cy);
+      ctx.scale(evoScale,evoScale);
+      ctx.translate(-cx,-cy);
       if(!this.facingRight){
         ctx.scale(-1,1);
-        ctx.drawImage(images[this.type],-this.x-this.width,this.y,this.width,this.height)
-      }else ctx.drawImage(images[this.type],this.x,this.y,this.width,this.height);
+        ctx.drawImage(activeImg,-this.x-this.width,this.y,this.width,this.height)
+      }else ctx.drawImage(activeImg,this.x,this.y,this.width,this.height);
       ctx.restore()
     } else {
       ctx.fillStyle='#3498db';ctx.fillRect(this.x,this.y,this.width,this.height)
@@ -1864,8 +2600,15 @@ else if(this.attackType==='hybrid'){
       }else if(this.attackType==='hybrid'){
         ctx.strokeStyle='rgba(243,156,18,0.6)';ctx.lineWidth=6;
         ctx.beginPath();
-        ctx.arc(this.x+this.width/2,this.y+this.height/2,60,0,Math.PI*2);
+        ctx.arc(this.x+this.width/2,this.y+this.height/2,110,0,Math.PI*2);
         ctx.stroke();
+      }
+      else if(this.attackType==='tempostormLaser'){
+        const sx=this.x+this.width/2, sy=this.y+this.height/2;
+        const tx = sx + (this.facingRight?1:-1)*this.range;
+        const ty = sy;
+        ctx.strokeStyle='rgba(79,195,247,0.75)';ctx.lineWidth=7;
+        ctx.beginPath();ctx.moveTo(sx,sy);ctx.lineTo(tx,ty);ctx.stroke();
       }
       ctx.restore()
     }
@@ -1889,7 +2632,16 @@ else if(this.attackType==='hybrid'){
         ctx.save();ctx.strokeStyle='rgba(243,156,18,0.35)';ctx.lineWidth=8;
         ctx.beginPath();ctx.arc(this.x+this.width/2,this.y+this.height/2,140,0,Math.PI*2);ctx.stroke();ctx.restore()
       }
-      else if(this.attackType==='salsySword'){
+            else if(this.attackType==='tempostormLaser'){
+        ctx.save();
+        ctx.strokeStyle='rgba(0,176,255,0.45)';
+        ctx.lineWidth=10;
+        ctx.beginPath();
+        ctx.arc(canvas.width/2,(canvas.height-50)/2,180,0,Math.PI*2);
+        ctx.stroke();
+        ctx.restore();
+      }
+else if(this.attackType==='salsySword'){
         // Show 1-3 target reticles + launch lines during Salsy super
         ctx.save();
         ctx.strokeStyle='rgba(241,196,15,0.75)';
@@ -1979,8 +2731,8 @@ class Enemy{
     this.type=type;
     this.x=Math.random()*(canvas.width-100)+50;
     this.y=Math.random()*(canvas.height-150)+50;
-    this.width=Math.round(40*1.2);
-    this.height=Math.round(40*1.2);
+    this.width=Math.round(56*1.2);
+    this.height=Math.round(56*1.2);
     this.vx=(Math.random()-0.5)*cfg.enemySpeed*mult;
     this.vy=(Math.random()-0.5)*cfg.enemySpeed*mult;
     this.maxHP=Math.round(cfg.enemyHP*(1+0.25*level));
@@ -2002,8 +2754,8 @@ class Enemy{
       this.preferRange=520;
     }
     if(this.type==='boss4'){
-      this.width=Math.round(215*1.2);
-      this.height=Math.round(220*1.2);
+      this.width=Math.round(225*1.2);
+      this.height=Math.round(230*1.2);
       this.attackCooldown=950;
       this.beamCooldown=12000;
       this.lastBeam=Date.now()-this.beamCooldown;
@@ -2091,11 +2843,11 @@ class Enemy{
           x:cx, y:cy,
           angle,
           length:760,
-          width:45,
+          width:75,
           ttl:1000,
-          damage:50,
+          damage:70,
           kind:'photon',
-          chargeMs:750
+          chargeMs:500
         });
         // visual charge
         createParticles(cx,cy,'#f1c40f',40,6);
@@ -2186,6 +2938,204 @@ class ShooterEnemy extends Enemy{
   }
 }
 
+
+class ArcherEnemy extends Enemy{
+  constructor(type,level){
+    super(type,level);
+    this.shootCooldown=Math.max(650, 1250 - level*18);
+    this.lastShoot=0;
+    this.arrowSpeed=9.2 + level*0.10;
+    this.keepMin=520; // very far
+    this.keepMax=700;
+  }
+  update(player){
+    if(Date.now()<this.spawnFreezeUntil)return;
+    const now=Date.now();
+    const dx=(player.x+player.width/2)-(this.x+this.width/2);
+    const dy=(player.y+player.height/2)-(this.y+this.height/2);
+    const dist=Math.hypot(dx,dy)||1;
+
+    // Keep far distance
+    if(dist < this.keepMin){
+      const nx=dx/dist, ny=dy/dist;
+      this.vx = -nx*this.speed*1.05;
+      this.vy = -ny*this.speed*1.05;
+    } else if(dist > this.keepMax){
+      const nx=dx/dist, ny=dy/dist;
+      this.vx = nx*this.speed*0.95;
+      this.vy = ny*this.speed*0.95;
+    } else {
+      this.vx*=0.90; this.vy*=0.90;
+    }
+
+    this.x+=this.vx; this.y+=this.vy;
+    if(this.x<0)this.x=0;if(this.x+this.width>canvas.width)this.x=canvas.width-this.width;
+    if(this.y<0)this.y=0;if(this.y+this.height>canvas.height-50)this.y=canvas.height-50-this.height;
+
+    if(now-this.lastShoot>this.shootCooldown){
+      this.lastShoot=now;
+      const nx=dx/dist, ny=dy/dist;
+      const vx=nx*this.arrowSpeed;
+      const vy=ny*this.arrowSpeed;
+      spawnProjectile({
+        x:this.x+this.width/2,
+        y:this.y+this.height/2,
+        vx, vy,
+        damage:Math.max(8, Math.round(this.damage*0.85)),
+        ttl:3200,
+        color:'#e0e0e0',
+        radius:4,
+        shape:'rect',
+        w:18,
+        h:4,
+        angle:Math.atan2(vy,vx),
+        onHitPlayer:(pl)=>{ if(pl && typeof pl.applySlow==='function') pl.applySlow(0.10, 2500); }
+      });
+    }
+  }
+  draw(){
+    const img = enemyImages['archer'];
+    if(img && img.complete) ctx.drawImage(img,this.x,this.y,this.width,this.height);
+    else super.draw();
+    const hpPercent=this.hp/this.maxHP;
+    ctx.fillStyle='#333';ctx.fillRect(this.x,this.y-10,this.width,5);
+    ctx.fillStyle=hpPercent>0.5?'#2ecc71':hpPercent>0.25?'#f39c12':'#e74c3c';
+    ctx.fillRect(this.x,this.y-10,this.width*hpPercent,5);
+  }
+}
+
+class GlacialEnemy extends Enemy{
+  constructor(type,level){
+    super(type,level);
+    this.attackCooldown=Math.max(2100, 3400 - level*35);
+    this.lastAttack=0;
+    this.coneDuration=2000;
+    this.coneRange=430;
+    this.coneAngle=Math.PI/6; // 30° total
+    this.coneActiveUntil=0;
+    this.coneDir=0;
+    this._coneInsideMs=0;
+    this._coneLastCheck=0;
+    this._coneLastTick=0;
+    this._lastRegenAt=0;
+    this.keepMin=280;
+    this.keepMax=440;
+  }
+  update(player){
+    if(Date.now()<this.spawnFreezeUntil)return;
+    const now=Date.now();
+
+    // Regen: if not hit for 5s, heal 15 (can repeat every 5s)
+    const lastHit=this._lastHitAt||0;
+    if(now-lastHit>=5000 && now-(this._lastRegenAt||0)>=5000 && this.hp<this.maxHP){
+      this.hp=Math.min(this.maxHP, this.hp+15);
+      this._lastRegenAt=now;
+      createParticles(this.x+this.width/2,this.y+this.height/2,'#74b9ff',12,4);
+    }
+
+    const dx=(player.x+player.width/2)-(this.x+this.width/2);
+    const dy=(player.y+player.height/2)-(this.y+this.height/2);
+    const dist=Math.hypot(dx,dy)||1;
+
+    // Keep mid distance
+    if(dist < this.keepMin){
+      const nx=dx/dist, ny=dy/dist;
+      this.vx = -nx*this.speed*1.08;
+      this.vy = -ny*this.speed*1.08;
+    } else if(dist > this.keepMax){
+      const nx=dx/dist, ny=dy/dist;
+      this.vx = nx*this.speed*0.92;
+      this.vy = ny*this.speed*0.92;
+    } else {
+      this.vx*=0.92; this.vy*=0.92;
+    }
+
+    this.x+=this.vx; this.y+=this.vy;
+    if(this.x<0)this.x=0;if(this.x+this.width>canvas.width)this.x=canvas.width-this.width;
+    if(this.y<0)this.y=0;if(this.y+this.height>canvas.height-50)this.y=canvas.height-50-this.height;
+
+    // Start cone attack
+    if(now-this.lastAttack>this.attackCooldown){
+      this.lastAttack=now;
+      this.coneActiveUntil=now+this.coneDuration;
+      this.coneDir=Math.atan2(dy,dx);
+      this._coneInsideMs=0;
+      this._coneLastCheck=now;
+      this._coneLastTick=0;
+    }
+
+    // Cone damage while active
+    if(this.coneActiveUntil && now < this.coneActiveUntil){
+      const dt = now - (this._coneLastCheck || now);
+      this._coneLastCheck = now;
+
+      // check player inside cone
+      const px=player.x+player.width/2, py=player.y+player.height/2;
+      const ex=this.x+this.width/2, ey=this.y+this.height/2;
+      const vx=px-ex, vy=py-ey;
+      const pdist=Math.hypot(vx,vy)||1;
+      const ang=Math.atan2(vy,vx);
+      let diff=Math.abs(ang-this.coneDir);
+      if(diff>Math.PI) diff=2*Math.PI-diff;
+
+      const inside = (pdist<=this.coneRange) && (diff <= (this.coneAngle/2));
+
+      if(inside){
+        this._coneInsideMs += dt;
+        // damage ticks every 250ms, increasing while inside
+        if(!this._coneLastTick) this._coneLastTick = now;
+        if(now - this._coneLastTick >= 250){
+          this._coneLastTick = now;
+          const insideSec = this._coneInsideMs/1000;
+          const base = Math.max(3, Math.round(this.damage*0.20));
+          const ramp = Math.round(insideSec * 2.2); // gradual increase
+          const dmg = Math.min(22, base + ramp);
+          player.takeDamage(dmg);
+          createParticles(player.x,player.y,'#b2bec3',8,3);
+        }
+      } else {
+        this._coneInsideMs = 0;
+      }
+    }
+  }
+  draw(){
+    const img = enemyImages['glacial'];
+    if(img && img.complete) ctx.drawImage(img,this.x,this.y,this.width*1.5,this.height*1.5);
+    else super.draw();
+
+    // Cone visual
+    const now=Date.now();
+    if(this.coneActiveUntil && now < this.coneActiveUntil){
+      const cx=this.x+this.width/2, cy=this.y+this.height/2;
+      const a0=this.coneDir - this.coneAngle/2;
+      const a1=this.coneDir + this.coneAngle/2;
+      ctx.save();
+      ctx.globalAlpha=0.28;
+      ctx.fillStyle='rgba(180,220,255,0.9)';
+      ctx.beginPath();
+      ctx.moveTo(cx,cy);
+      ctx.arc(cx,cy,this.coneRange,a0,a1,false);
+      ctx.closePath();
+      ctx.fill();
+      ctx.globalAlpha=0.12;
+      ctx.strokeStyle='rgba(180,220,255,0.9)';
+      ctx.lineWidth=4;
+      ctx.beginPath();
+      ctx.moveTo(cx,cy);
+      ctx.arc(cx,cy,this.coneRange,a0,a1,false);
+      ctx.closePath();
+      ctx.stroke();
+      ctx.restore();
+    }
+
+    const hpPercent=this.hp/this.maxHP;
+    ctx.fillStyle='#333';ctx.fillRect(this.x,this.y-10,this.width,5);
+    ctx.fillStyle=hpPercent>0.5?'#2ecc71':hpPercent>0.25?'#f39c12':'#e74c3c';
+    ctx.fillRect(this.x,this.y-10,this.width*hpPercent,5);
+  }
+}
+
+
 class AttackReturnEnemy extends Enemy{
   constructor(type,level){super(type,level);this.homeX=this.x;this.homeY=this.y;this.state='idle';this.attackRange=60;this.attackCooldown=2200;this.lastAttackTime=0;this.attackSpeed=this.speed*2.5}
   update(player){
@@ -2237,8 +3187,8 @@ class BossEnemy extends Enemy{
     this.bulletTimer=0;
     this.attackCooldown=1800;
     this.lastAttack=0;
-    this.width=Math.round(120*1.2);
-    this.height=Math.round(120*1.2);
+    this.width=Math.round(200*1.2);
+    this.height=Math.round(200*1.2);
   }
   update(player){
     if(Date.now()<this.spawnFreezeUntil)return;
@@ -2278,11 +3228,16 @@ function spawnEnemiesForLevel(level){
   enemies.length=0;
   const lvl = Math.max(1, Math.min(level, levelConfigs.length));
   const cfg=levelConfigs[lvl-1];
+  // Bestiario: segna il tipo di nemico/boss come già sfidato (sblocco globale)
+  markEnemySeen(cfg.enemyType);
+
   const count=cfg.enemyCount;
   for(let i=0;i<count;i++){
     let e;
     if(cfg.enemyType==='shooter') e=new ShooterEnemy(cfg.enemyType,lvl);
     else if(cfg.enemyType==='attacker') e=new AttackReturnEnemy(cfg.enemyType,lvl);
+    else if(cfg.enemyType==='archer') e=new ArcherEnemy(cfg.enemyType,lvl);
+    else if(cfg.enemyType==='glacial') e=new GlacialEnemy(cfg.enemyType,lvl);
     else if(cfg.enemyType==='boss1' || cfg.enemyType==='boss2' || cfg.enemyType==='boss3') e=new BossEnemy(cfg.enemyType,lvl);
     else e=new Enemy(cfg.enemyType,lvl);
     enemies.push(e);
@@ -2291,13 +3246,19 @@ function spawnEnemiesForLevel(level){
 }
 
 function updateBackgroundForLevel(level){
-  // Levels 1-6: default bg, Levels 7-15: dark bg, Levels 16-20: final bg
+  // Levels 1-6: default bg, Levels 7-15: dark bg, Levels 16-20: final bg, Levels 21+: ice bg
   let tier=0;
-  if(level>=16) tier=2;
+  if(level>=21) tier=3;
+  else if(level>=16) tier=2;
   else if(level>=7) tier=1;
 
   const applyTier=()=>{
-    if(tier===2){
+    if(tier===3){
+      bgDark.style.backgroundImage=`url('${URL_ICE}')`;
+      bgDefault.style.opacity='0';
+      bgDark.style.opacity='1';
+    }
+    else if(tier===2){
       bgDark.style.backgroundImage=`url('${URL_FINAL}')`;
       bgDefault.style.opacity='0';
       bgDark.style.opacity='1';
@@ -2327,7 +3288,7 @@ function updateBackgroundForLevel(level){
 function startGame(){
   currentLevel=1;score=0;timer=levelConfigs[0].time;
   player=new Player(selectedCharacter||'jimmy');
-  enemies=[];particles=[];projectiles=[];lasers=[];pickups=[];
+  enemies=[];particles=[];projectiles=[];lasers=[];tempBeams=[];pickups=[];
   spawnEnemiesForLevel(currentLevel);
   updateBackgroundForLevel(currentLevel);
   document.getElementById('mainMenu').style.display='none';
@@ -2382,6 +3343,8 @@ return;
   updateParticles();
   updateProjectiles();
   updateLasers();
+  updateTempBeams();
+  updateFuriaWaves();
   if(player) updatePickups(player);
 
   for(let i=enemies.length-1;i>=0;i--){
@@ -2389,20 +3352,23 @@ return;
       const dead=enemies.splice(i,1)[0];
       score+=100*currentLevel;
       createParticles(dead.x,dead.y,'#fff176',30,6);
-      if(Math.random()<0.25) spawnPickup(dead.x+20,dead.y+20,'heal',Math.round(dead.maxHP*0.25));
-      if(Math.random()<0.18) spawnPickup(dead.x+20,dead.y+20,'speed',0);
-      if(Math.random()<0.12) spawnPickup(dead.x+20,dead.y+20,'shieldPickup',0);
-      if(Math.random()<GOLD_PROB) spawnPickup(dead.x+20,dead.y+20,'gold',10);
     }
   }
 
   if(enemies.length===0){
     if(!levelAdvanceLock){
       levelAdvanceLock=true;
-      setTimeout(()=>{
-        if(gameState==='playing') nextLevel();
-        levelAdvanceLock=false;
-      }, 200);
+
+      // Evolution trigger: after defeating Boss at Level 15 (boss3), only Jimmy/Rooney/Jeff evolve permanently from Level 16 onward
+      const canEvolve = player && (player.type==='jimmy' || player.type==='rooney' || player.type==='jeff');
+      if(gameState==='playing' && currentLevel===15 && canEvolve && !player.evolved){
+        triggerEvolutionThenNextLevel(player.type);
+      } else {
+        setTimeout(()=>{
+          if(gameState==='playing') nextLevel();
+          levelAdvanceLock=false;
+        }, 200);
+      }
     }
   }
 
@@ -2416,6 +3382,8 @@ return;
   if(player) player.draw();
   drawProjectiles();
   drawLasers();
+  drawTempBeams();
+  drawFuriaWaves();
   drawParticles();
   drawPickups();
 
@@ -2438,6 +3406,35 @@ return;
   else document.getElementById('atkBuffDisplay').textContent='0s';
 }
 
+
+function showEvoBanner(name){
+  const el=document.getElementById('evoBanner');
+  const txt=document.getElementById('evoBannerText');
+  if(!el||!txt) return;
+  txt.textContent = `${name.toUpperCase()} EVOLUTO!`;
+  el.classList.remove('show');
+  // force reflow to restart animation
+  void el.offsetWidth;
+  el.style.display='block';
+  el.classList.add('show');
+  setTimeout(()=>{ el.classList.remove('show'); el.style.display='none'; }, 980);
+}
+
+function triggerEvolutionThenNextLevel(charType){
+  if(!player) return;
+  // evolve + FX
+  player.evolve();
+  showEvoBanner(player.type);
+  createParticles(player.x+player.width/2, player.y+player.height/2, '#fff176', 50, 6);
+  shakeScreen();
+
+  // delay a bit so the player sees the evolution, then go to next level
+  setTimeout(()=>{
+    if(gameState==='playing') nextLevel();
+    levelAdvanceLock=false;
+  }, 620);
+}
+
 window.addEventListener('keydown',e=>{
   const k=e.key.toLowerCase();
   keys[k]=true;
@@ -2450,6 +3447,10 @@ window.addEventListener('keyup',e=>{keys[e.key.toLowerCase()]=false;});
 document.querySelectorAll('.character-card').forEach(card=>{
   card.addEventListener('click',()=>{
     const char=card.getAttribute('data-char');
+    if(char==='tempostorm' && !allPrevAbove85k()){
+      updateTempostormUnlockUI();
+      return;
+    }
     if(char==='voltryx' && !allThreeAbove50k()){
       // keep disabled
       updateVoltryxUnlockUI();
@@ -2475,7 +3476,10 @@ function updateMenuStatsDisplay(char){
   if(!s)return;
   document.getElementById(`menu-hp-${char}`).textContent=s.hp;
   document.getElementById(`menu-dmg-${char}`).textContent=
-    char==='voltryx' ? `${Math.round(34*SUPER_DAMAGE_MULT)} (ranged AoE), ${50}x2 (melee)` : (char==='salsy' ? '25x2' : s.damage);
+    char==='voltryx' ? `${Math.round(34*SUPER_DAMAGE_MULT)} (ranged AoE), ${50}x2 (melee)` :
+    (char==='salsy' ? '33x2' :
+     (char==='tempostorm' ? '40 (+30 se resta nel laser)' : s.damage));
+
 }
 
 document.getElementById('startBtn').addEventListener('click',()=>{
@@ -2501,6 +3505,8 @@ function populateMenuStatsAll(){
   updateMenuStatsDisplay('jeff');
   updateMenuStatsDisplay('voltryx');
 updateMenuStatsDisplay('kouvagia');
+  updateMenuStatsDisplay('salsy');
+  updateMenuStatsDisplay('tempostorm');
 }
 populateMenuStatsAll();
 updateMenuRecordsDisplay();
@@ -2539,6 +3545,173 @@ gameLoop();
   const guideImg = document.getElementById('guideImg');
   if(guideImg) guideImg.addEventListener('dragstart', function(ev){ ev.preventDefault(); });
 })();
+
+// --- Bestiario: apertura/chiusura e gestione stato di gioco ---
+(function(){
+  const btn = document.getElementById('enemyGuideImgBtn');
+  const modal = document.getElementById('enemyGuideModal');
+  const close = document.getElementById('enemyGuideClose');
+  if(!btn || !modal || !close) return;
+
+  let gameStateBefore = undefined;
+
+  function show(){
+    // aggiorna sbloccati e costruisci UI
+    try{ enemySeen = loadEnemySeen(); }catch(e){}
+    buildEnemyGuideUI();
+
+    modal.style.display='flex';
+    modal.setAttribute('aria-hidden','false');
+    if(typeof gameState !== 'undefined') gameStateBefore = gameState;
+    gameState='menu';
+    close.focus();
+    window._enemyGuideOpen = true;
+  }
+  function hide(){
+    modal.style.display='none';
+    modal.setAttribute('aria-hidden','true');
+    if(typeof gameStateBefore !== 'undefined') gameState = gameStateBefore;
+    btn.focus();
+    window._enemyGuideOpen = false;
+  }
+
+  btn.addEventListener('click', function(e){ e.preventDefault(); show(); });
+  close.addEventListener('click', function(e){ e.preventDefault(); hide(); });
+  modal.addEventListener('click', function(e){ if(e.target === modal) hide(); });
+  document.addEventListener('keydown', function(e){
+    if(e.key === 'Escape' && modal.style.display === 'flex') hide();
+  });
+
+  const img = document.getElementById('enemyGuideImg');
+  if(img) img.addEventListener('dragstart', function(ev){ ev.preventDefault(); });
+})();
+
+function spawnFuriaWaves(x,y){
+  const radii=[120,200,300];
+  radii.forEach((r,i)=>{
+    setTimeout(()=>{
+      enemies.forEach((e,idx)=>{
+        const d=Math.hypot((e.x+e.width/2)-x,(e.y+e.height/2)-y);
+        if(d<=r){
+          e.hp-=20;
+          showDamageNumber(e.x,e.y,20);
+          if(e.hp<=0){
+            enemies.splice(idx,1);
+            score+=100*currentLevel;
+          }
+        }
+      });
+    }, i*400);
+  });
+}
+
+
+// ===== FURIA WAVES (visual + damage) =====
+let furiaWaves=[];
+// A wave is: {x,y,start,delay,duration,maxR,damage,doneDamage}
+function spawnFuriaWaves(x,y){
+  const waves=[
+    {delay:0,   maxR:190, duration:620, damage:20},
+    {delay:420, maxR:300, duration:760, damage:20},
+    {delay:880, maxR:430, duration:920, damage:20},
+  ];
+  const now=Date.now();
+  for(const w of waves){
+    furiaWaves.push({
+      x,y,
+      start: now + w.delay,
+      delay:w.delay,
+      duration:w.duration,
+      maxR:w.maxR,
+      damage:w.damage,
+      doneDamage:false
+    });
+  }
+  // extra punch
+  shakeAmount = Math.max(shakeAmount, 10);
+  for(let i=0;i<3;i++) createParticles(x+(Math.random()-0.5)*30,y+(Math.random()-0.5)*30,'#ff00ff',22,5);
+}
+
+function updateFuriaWaves(){
+  const now=Date.now();
+  furiaWaves = furiaWaves.filter(w=>{
+    // not started yet
+    if(now < w.start) return true;
+
+    const t = (now - w.start);
+    const prog = Math.max(0, Math.min(1, t / w.duration));
+    const r = w.maxR * prog;
+
+    // Apply damage once, early in the wave (so it feels immediate)
+    if(!w.doneDamage && prog >= 0.15){
+      w.doneDamage=true;
+
+      // strong particles ring
+      for(let i=0;i<26;i++){
+        const a = (Math.PI*2)*(i/26);
+        createParticles(w.x + Math.cos(a)*Math.min(r+18, w.maxR), w.y + Math.sin(a)*Math.min(r+18, w.maxR), '#ff00ff', 2, 4);
+      }
+
+      for(let i=enemies.length-1;i>=0;i--){
+        const e=enemies[i];
+        const d=Math.hypot((e.x+e.width/2)-w.x,(e.y+e.height/2)-w.y);
+        if(d<=w.maxR){
+          const _final=applyEnemyDamage(e, w.damage);
+          showDamageNumber(e.x,e.y,_final);
+          createParticles(e.x,e.y,'#ff4dff',14,5);
+          if(e.hp<=0){
+            createParticles(e.x,e.y,'#fff176',30,6);
+            enemies.splice(i,1);
+            score+=100*currentLevel;
+          }
+        }
+      }
+    }
+
+    // keep until finished
+    return t <= w.duration;
+  });
+}
+
+function drawFuriaWaves(){
+  const now=Date.now();
+  for(const w of furiaWaves){
+    if(now < w.start) continue;
+    const t = (now - w.start);
+    const prog = Math.max(0, Math.min(1, t / w.duration));
+    const r = w.maxR * prog;
+
+    // fade out near end
+    const fade = (prog < 0.75) ? 1 : Math.max(0, 1 - ((prog-0.75)/0.25));
+    const alpha = 0.55 * fade;
+
+    // Outer ring
+    ctx.save();
+    ctx.globalAlpha = alpha;
+    ctx.lineWidth = 10;
+    ctx.strokeStyle = 'rgba(255,0,255,0.95)';
+    ctx.beginPath();
+    ctx.arc(w.x, w.y, r, 0, Math.PI*2);
+    ctx.stroke();
+
+    // Glow ring
+    ctx.globalAlpha = alpha*0.35;
+    ctx.lineWidth = 22;
+    ctx.beginPath();
+    ctx.arc(w.x, w.y, r, 0, Math.PI*2);
+    ctx.stroke();
+
+    // Core ripple
+    ctx.globalAlpha = alpha*0.25;
+    ctx.lineWidth = 6;
+    ctx.strokeStyle = 'rgba(255,180,255,0.9)';
+    ctx.beginPath();
+    ctx.arc(w.x, w.y, Math.max(0, r*0.65), 0, Math.PI*2);
+    ctx.stroke();
+    ctx.restore();
+  }
+}
+
 </script>
 </body>
 </html>
