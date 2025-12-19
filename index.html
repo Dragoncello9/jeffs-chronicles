@@ -566,7 +566,9 @@
 
       
 <h3>✴️ EVOLUZIONI </h3> 
-<p>rappresentano una fase avanzata del combattimento e si attivano automaticamente durante la partita. Non sono potenziamenti temporanei, ma un vero e proprio cambiamento nello stile di gioco del personaggio.</p> <p><strong>Quando avvengono</strong>: dopo aver superato un boss avanzato (oltre metà progressione), il personaggio entra nello stato <em>Evoluto</em>. L’evoluzione viene annunciata a schermo con un banner dedicato.</p> <p><strong>Filosofia delle evoluzioni</strong>: le evoluzioni <u>non aumentano direttamente HP, velocità o danno base</u>. Al contrario, sbloccano <strong>passive speciali</strong> che premiano l’uso intelligente delle meccaniche del personaggio. Questo mantiene il gioco bilanciato e strategico.</p> <h4>Effetti generali</h4> <ul> <li>L’evoluzione dura per il resto della partita.</li> <li>Ogni personaggio ottiene un <strong>vantaggio unico</strong>, coerente con il suo ruolo.</li> <li>Le evoluzioni premiano precisione, timing e gestione dei nemici.</li> </ul> <h4>⚙️ Evoluzioni attuali</h4> <p><strong>🔫 Jimmy – Cacciatore Evoluto</strong><br> Alla sua prima interazione offensiva con un nemico, Jimmy risulta più efficace. Questo lo rende devastante negli ingaggi iniziali e perfetto per eliminare rapidamente bersagli chiave.</p> <p><strong>🐱 Rooney – Impatto Brutale</strong><br> Il primo colpo inflitto a ogni nemico causa danni aumentati. Rooney diventa ancora più letale nei combattimenti ravvicinati e contro nemici con molti HP.</p> <p><strong>🗡️ Jeff – Controllo Totale</strong><br> L’evoluzione rafforza il suo ruolo di dominatore dell’arena, rendendolo estremamente affidabile nel mantenere pressione costante su gruppi di nemici.</p> <p><em>Nota:</em> i personaggi sbloccabili avanzati potrebbero ottenere evoluzioni dedicate in futuro.</p> <h4> Consigli strategici</h4> <ul> <li>Sfrutta l’evoluzione per cambiare approccio: da difensivo a aggressivo (o viceversa).</li> <li>Dopo l’evoluzione, eliminare i nemici velocemente diventa ancora più importante per massimizzare punteggio e controllo.</li> <li>Le evoluzioni non rendono invincibili: il posizionamento resta fondamentale.</li> </ul> <p><strong>Le evoluzioni sono il momento in cui Jeff’s Chronicles premia davvero la padronanza del personaggio.</strong></p>
+<p>rappresentano una fase avanzata del combattimento e si attivano automaticamente durante la partita. Non sono potenziamenti temporanei, ma un vero e proprio cambiamento nello stile di gioco del personaggio.</p> <p><strong>Quando avvengono</strong>: dopo aver superato un boss avanzato (oltre metà progressione), il personaggio entra nello stato <em>Evoluto</em>. L’evoluzione viene annunciata a schermo con un banner dedicato.</p> <p><strong>Filosofia delle evoluzioni</strong>: le evoluzioni <u>non aumentano direttamente HP, velocità o danno base</u>. Al contrario, sbloccano <strong>passive speciali</strong> che premiano l’uso intelligente delle meccaniche del personaggio. Questo mantiene il gioco bilanciato e strategico.</p> <h4>Effetti generali</h4> <ul> <li>L’evoluzione dura per il resto della partita.</li> <li>Ogni personaggio ottiene un <strong>vantaggio unico</strong>, coerente con il suo ruolo.</li> <li>Le evoluzioni premiano precisione, timing e gestione dei nemici.</li> </ul> <h4>⚙️ Evoluzioni attuali</h4> <p><strong>🔫 Jimmy – Predatore Evoluto</strong><br> Jimmy carica la <strong>Super più velocemente (+25%)</strong> e il <strong>cooldown dell’attacco base è ridotto del 15%</strong>.</p>
+<p><strong>🐱 Rooney – Impatto Brutale</strong><br> Il <strong>primo colpo</strong> inflitto a ogni nemico infligge <strong>+50% danni</strong>.</p>
+<p><strong>🗡️ Jeff – Rigenerazione da Combattimento</strong><br> Ogni nemico ucciso cura Jeff di <strong>5 HP</strong>.</p> <p><em>Nota:</em> i personaggi sbloccabili avanzati potrebbero ottenere evoluzioni dedicate in futuro.</p> <h4> Consigli strategici</h4> <ul> <li>Sfrutta l’evoluzione per cambiare approccio: da difensivo a aggressivo (o viceversa).</li> <li>Dopo l’evoluzione, eliminare i nemici velocemente diventa ancora più importante per massimizzare punteggio e controllo.</li> <li>Le evoluzioni non rendono invincibili: il posizionamento resta fondamentale.</li> </ul> <p><strong>Le evoluzioni sono il momento in cui Jeff’s Chronicles premia davvero la padronanza del personaggio.</strong></p>
 
 <h3>🏁 CONCLUSIONE</h3>
       <p><strong>Jeff’s Chronicles</strong> premia abilità, strategia e conoscenza dei personaggi. Impara i loro meccanismi, sfrutta i pickup e punta al record massimo.</p>
@@ -1154,7 +1156,7 @@ function applyEnemyDamage(enemy, baseDmg){
   // Rooney EVO passive: first hit on a given enemy deals +15% damage (doesn't change stats)
   let mult=1;
   if(typeof player!=='undefined' && player && player.type==='rooney' && player.evolved && enemy && !enemy._rooneyFirstHit){
-    mult=1.15;
+    mult=1.5; // EVO: Rooney first hit +50% damage
     enemy._rooneyFirstHit=true;
   }
   const finalDmg = Math.max(0, Math.round(baseDmg * mult * markMult(enemy)));
@@ -2005,6 +2007,9 @@ class Player{
                 createParticles(enemy.x,enemy.y,'#f39c12',30,6);
                 showDamageNumber(enemy.x,enemy.y, _final);
                 if(enemy.hp<=0){
+  if(player && player.type==='jeff' && player.evolved){
+    player.hp = Math.min(player.maxHp, player.hp + 5);
+  }
                   createParticles(enemy.x,enemy.y,'#fff176',30,6);
                   enemies.splice(idx,1);
                   score+=100*currentLevel
@@ -2051,6 +2056,9 @@ class Player{
                 createParticles(enemy.x,enemy.y,'#9b59b6',8,4);
                 showDamageNumber(enemy.x,enemy.y, _final);
                 if(enemy.hp<=0){
+  if(player && player.type==='jeff' && player.evolved){
+    player.hp = Math.min(player.maxHp, player.hp + 5);
+  }
                   createParticles(enemy.x,enemy.y,'#fff176',30,6);
                   enemies.splice(idx,1);
                   score+=100*currentLevel
@@ -2252,6 +2260,9 @@ class Player{
             createParticles(enemy.x,enemy.y,'#f1c40f',10,4);
             showDamageNumber(enemy.x,enemy.y,dmg);
             if(enemy.hp<=0){
+  if(player && player.type==='jeff' && player.evolved){
+    player.hp = Math.min(player.maxHp, player.hp + 5);
+  }
               createParticles(enemy.x,enemy.y,'#fff176',30,6);
               enemies.splice(enemies.indexOf(enemy),1);
               score+=100*currentLevel;
@@ -2277,6 +2288,9 @@ class Player{
           createParticles(enemy.x,enemy.y,'#9b59b6',10,4);
           showDamageNumber(enemy.x,enemy.y, _final);
           if(enemy.hp<=0){
+  if(player && player.type==='jeff' && player.evolved){
+    player.hp = Math.min(player.maxHp, player.hp + 5);
+  }
             createParticles(enemy.x,enemy.y,'#fff176',30,6);
             enemies.splice(enemies.indexOf(enemy),1);
             score+=100*currentLevel
