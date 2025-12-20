@@ -1,12 +1,13 @@
 <!DOCTYPE html>
+
 <html lang="it">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Platform Fighter - Complete</title>
-  <!-- Link ai font da Google Fonts -->
-  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap" rel="stylesheet">
-  <style>
+<meta charset="utf-8"/>
+<meta content="width=device-width,initial-scale=1" name="viewport"/>
+<title>Platform Fighter - Complete</title>
+<!-- Link ai font da Google Fonts -->
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&amp;family=VT323&amp;display=swap" rel="stylesheet"/>
+<style>
     *{margin:0;padding:0;box-sizing:border-box}
     html,body{height:100%}
     body{
@@ -179,6 +180,12 @@
 
     .btn{ background:#e74c3c;color:#fff;border:none;padding:10px 22px; font-size:16px;cursor:pointer;margin:8px; font-family:'Press Start 2P', cursive; /* Bottoni in stile menu */ }
 
+    /* Extra character button + layout */
+    .start-row{display:flex;gap:10px;align-items:center;justify-content:center;margin-top:10px;}
+    .mini-btn{padding:8px 14px;font-size:22px;line-height:1;min-width:46px;max-width:60px;}
+    .extra-characters{margin-top:14px;}
+
+
     .damage-number{position:absolute;font-size:20px;font-weight:bold;color:#e74c3c;text-shadow:2px 2px 4px #000;pointer-events:none;animation:floatUp 1s ease-out forwards;z-index:200}
     @keyframes floatUp{to{transform:translateY(-50px);opacity:0}}
 
@@ -313,290 +320,281 @@
 <div id="bgDark"></div>
 <div id="fadeOverlay"></div>
 <div id="gameContainer">
-  <canvas id="gameCanvas" width="1200" height="700"></canvas>
-
-  <div class="ui-overlay" id="uiOverlay" style="display:none;">
-    <div>HP: <span id="hpText">100</span></div>
-    <div class="hp-bar"><div id="hpFill" class="hp-fill" style="width:100%"></div></div>
-    <div style="margin-top:6px;">Buff Attacco: <span id="atkBuffDisplay">0s</span></div>
-  </div>
-
-  <div class="score" id="scoreDisplay" style="display:none;">Score: 0</div>
-  <div class="timer" id="timerDisplay" style="display:none;">45</div>
-  <div class="level-indicator" id="levelDisplay" style="display:none;">Level 1</div>
-  <div class="super-cooldown" id="superCooldown" style="display:none;">Super: Ready</div>
-
-  <div class="evo-banner" id="evoBanner" style="display:none;">
-    <div id="evoBannerText">EVOLUTO!</div>
-  </div>
-
-  <div class="menu" id="mainMenu">
-    <h1>⚔️ JEFF’S CHRONICLES⚔️</h1>
-    <h2>Seleziona il tuo combattente</h2>
-
-    <div class="character-select">
-      <div class="character-card" data-char="jimmy" id="card-jimmy">
-        <h3>JIMMY</h3>
-        <p>"🔫"</p>
-        <div class="menu-stats">HP: <span id="menu-hp-jimmy">-</span> Danno: <span id="menu-dmg-jimmy">-</span></div>
-        <div class="record-badge" id="record-jimmy">Record: 0</div>
-      </div>
-
-      <div class="character-card" data-char="rooney" id="card-rooney">
-        <h3>ROONEY</h3>
-        <p>"🐱"</p>
-        <div class="menu-stats">HP: <span id="menu-hp-rooney">-</span> Danno: <span id="menu-dmg-rooney">-</span></div>
-        <div class="record-badge" id="record-rooney">Record: 0</div>
-      </div>
-
-      <div class="character-card" data-char="jeff" id="card-jeff">
-        <h3>JEFF</h3>
-        <p>"🗡️"</p>
-        <div class="menu-stats">HP: <span id="menu-hp-jeff">-</span> Danno: <span id="menu-dmg-jeff">-</span></div>
-        <div class="record-badge" id="record-jeff">Record: 0</div>
-      </div>
-
-      <!-- Voltryx card (locked until all three records > 50000) -->
-      <div class="character-card disabled" data-char="voltryx" id="card-voltryx" title="Sblocca completando 45.000 punti con ogni personaggio">
-        <h3>VOLTRYX</h3>
-        <p>"🦊"</p>
-        <div class="menu-stats">HP: <span id="menu-hp-voltryx">-</span> Danno: <span id="menu-dmg-voltryx">-</span></div>
-        <div class="record-badge" id="record-voltryx">Record: 0</div>
-        <div class="lock-badge" id="voltryxLockBadge">LOCKED</div>
-      </div>
-
-
-      <!-- Kouvagia card (locked until 51.000 score with Voltryx) -->
-      <div class="character-card disabled" data-char="kouvagia" id="card-kouvagia" title="Sblocca facendo 51.000 punti con Voltryx">
-        <h3>KOUVAGIA</h3>
-        <p>"🦉"</p>
-        <div class="menu-stats">HP: <span id="menu-hp-kouvagia">-</span> Danno: <span id="menu-dmg-kouvagia">-</span></div>
-        <div class="record-badge" id="record-kouvagia">Record: 0</div>
-        <div class="lock-badge" id="kouvagiaLockBadge">LOCKED</div>
-      </div>
-
-      <!-- Salsy card (locked until 60.000 score with Jimmy, Rooney, Jeff, Voltryx and Kouvagia) -->
-      <div class="character-card disabled" data-char="salsy" id="card-salsy" title="Sblocca facendo 60.000 punti con Jimmy, Rooney, Jeff, Voltryx e Kouvagia">
-        <h3>SALSY</h3>
-        <p>"⚜️"</p>
-        <div class="menu-stats">HP: <span id="menu-hp-salsy">-</span> Danno: <span id="menu-dmg-salsy">-</span></div>
-        <div class="record-badge" id="record-salsy">Record: 0</div>
-        <div class="lock-badge" id="salsyLockBadge">LOCKED</div>
-      </div>
-
-<!-- Tempostorm card (locked until 70.000 score with ALL previous characters) -->
-<div class="character-card disabled" data-char="tempostorm" id="card-tempostorm" title="Sblocca facendo 70.000 punti con tutti i personaggi precedenti (Jimmy, Rooney, Jeff, Voltryx, Kouvagia e Salsy)">
-  <h3>TEMPOSTORM</h3>
-  <p>"🔋"</p>
-  <div class="menu-stats">HP: <span id="menu-hp-tempostorm">-</span> Danno: <span id="menu-dmg-tempostorm">-</span></div>
-  <div class="record-badge" id="record-tempostorm">Record: 0</div>
-  <div class="lock-badge" id="tempostormLockBadge">LOCKED</div>
+<canvas height="700" id="gameCanvas" width="1200"></canvas>
+<div class="ui-overlay" id="uiOverlay" style="display:none;">
+<div>HP: <span id="hpText">100</span></div>
+<div class="hp-bar"><div class="hp-fill" id="hpFill" style="width:100%"></div></div>
+<div style="margin-top:6px;">Buff Attacco: <span id="atkBuffDisplay">0s</span></div>
 </div>
-
-    </div>
-
-    <button class="btn" id="startBtn">INIZIA BATTAGLIA</button>
+<div class="score" id="scoreDisplay" style="display:none;">Score: 0</div>
+<div class="timer" id="timerDisplay" style="display:none;">45</div>
+<div class="level-indicator" id="levelDisplay" style="display:none;">Level 1</div>
+<div class="super-cooldown" id="superCooldown" style="display:none;">Super: Ready</div>
+<div class="evo-banner" id="evoBanner" style="display:none;">
+<div id="evoBannerText">EVOLUTO!</div>
+</div>
+<div class="menu" id="mainMenu">
+<h1>⚔️ JEFF’S CHRONICLES⚔️</h1>
+<h2>Seleziona il tuo combattente</h2>
+<div class="character-select">
+<div class="character-card" data-char="jimmy" id="card-jimmy">
+<h3>JIMMY</h3>
+<p>"🔫"</p>
+<div class="menu-stats">HP: <span id="menu-hp-jimmy">-</span> Danno: <span id="menu-dmg-jimmy">-</span></div>
+<div class="record-badge" id="record-jimmy">Record: 0</div>
+</div>
+<div class="character-card" data-char="rooney" id="card-rooney">
+<h3>ROONEY</h3>
+<p>"🐱"</p>
+<div class="menu-stats">HP: <span id="menu-hp-rooney">-</span> Danno: <span id="menu-dmg-rooney">-</span></div>
+<div class="record-badge" id="record-rooney">Record: 0</div>
+</div>
+<div class="character-card" data-char="jeff" id="card-jeff">
+<h3>JEFF</h3>
+<p>"🗡️"</p>
+<div class="menu-stats">HP: <span id="menu-hp-jeff">-</span> Danno: <span id="menu-dmg-jeff">-</span></div>
+<div class="record-badge" id="record-jeff">Record: 0</div>
+</div>
+<!-- Voltryx card (locked until all three records > 50000) -->
+<div class="character-card disabled" data-char="voltryx" id="card-voltryx" title="Sblocca completando 45.000 punti con ogni personaggio">
+<h3>VOLTRYX</h3>
+<p>"🦊"</p>
+<div class="menu-stats">HP: <span id="menu-hp-voltryx">-</span> Danno: <span id="menu-dmg-voltryx">-</span></div>
+<div class="record-badge" id="record-voltryx">Record: 0</div>
+<div class="lock-badge" id="voltryxLockBadge">LOCKED</div>
+</div>
+<!-- Kouvagia card (locked until 51.000 score with Voltryx) -->
+<div class="character-card disabled" data-char="kouvagia" id="card-kouvagia" title="Sblocca facendo 51.000 punti con Voltryx">
+<h3>KOUVAGIA</h3>
+<p>"🦉"</p>
+<div class="menu-stats">HP: <span id="menu-hp-kouvagia">-</span> Danno: <span id="menu-dmg-kouvagia">-</span></div>
+<div class="record-badge" id="record-kouvagia">Record: 0</div>
+<div class="lock-badge" id="kouvagiaLockBadge">LOCKED</div>
+</div>
+<!-- Salsy card (locked until 60.000 score with Jimmy, Rooney, Jeff, Voltryx and Kouvagia) -->
+<div class="character-card disabled" data-char="salsy" id="card-salsy" title="Sblocca facendo 60.000 punti con Jimmy, Rooney, Jeff, Voltryx e Kouvagia">
+<h3>SALSY</h3>
+<p>"⚜️"</p>
+<div class="menu-stats">HP: <span id="menu-hp-salsy">-</span> Danno: <span id="menu-dmg-salsy">-</span></div>
+<div class="record-badge" id="record-salsy">Record: 0</div>
+<div class="lock-badge" id="salsyLockBadge">LOCKED</div>
+</div>
+<!-- Altri personaggi (aperti con +) -->
+<div class="character-select extra-characters" id="extraCharacterSelect" style="display:none;">
+<!-- Tempostorm card (moved here as FIRST extra character) -->
+<div class="character-card disabled" data-char="tempostorm" id="card-tempostorm" style="margin-right:8px;" title="Sblocca facendo 70.000 punti con tutti i personaggi precedenti (Jimmy, Rooney, Jeff, Voltryx, Kouvagia e Salsy)">
+<h3>TEMPOSTORM</h3>
+<p>"🔋"</p>
+<div class="menu-stats">HP: <span id="menu-hp-tempostorm">-</span> Danno: <span id="menu-dmg-tempostorm">-</span></div>
+<div class="record-badge" id="record-tempostorm">Record: 0</div>
+<div class="lock-badge" id="tempostormLockBadge">LOCKED</div>
+</div>
+<!-- Marz card (SECOND, to the right) -->
+<div class="character-card disabled" data-char="marz" id="card-marz" title="Sblocca facendo 80.000 punti con tutti i personaggi precedenti (Jimmy, Rooney, Jeff, Voltryx, Kouvagia, Salsy e Tempostorm)">
+<h3>MARZ</h3>
+<p>"🪄"</p>
+<div class="menu-stats">HP: <span id="menu-hp-marz">-</span> Danno: <span id="menu-dmg-marz">-</span></div>
+<div class="record-badge" id="record-marz">Record: 0</div>
+<div class="lock-badge" id="marzLockBadge">LOCKED</div>
+</div>
+<!-- Placeholder character (non cliccabile) -->
+<div class="character-card coming-soon disabled" data-char="placeholder" id="card-placeholder" title="Personaggio in arrivo">
+<h3>PERSONAGGIO</h3>
+<p>"❔"</p>
+<div class="menu-stats">HP: 0 Danno: 0</div>
+<div class="record-badge">Record: 0</div>
+<div class="lock-badge">COMING SOON</div>
+</div>
+</div>
+<div class="start-row">
+<button class="btn mini-btn" id="extraCharsBtn" title="Altri personaggi" type="button">+</button>
+<button class="btn" id="startBtn">INIZIA BATTAGLIA</button>
+</div>
 <!-- Pulsante immagine per aprire la guida -->
-<button id="guideImgBtn" class="img-btn" aria-label="Apri guida" title="Apri guida" type="button" style="display:inline-block;">
-  <img id="guideImg" src="https://i.postimg.cc/JztT9fJH/bea.png" alt="Guida" />
+<button aria-label="Apri guida" class="img-btn" id="guideImgBtn" style="display:inline-block;" title="Apri guida" type="button">
+<img alt="Guida" id="guideImg" src="https://i.postimg.cc/JztT9fJH/bea.png"/>
 </button>
 <!-- Pulsante immagine per aprire il bestiario (nemici + boss) -->
-<button id="enemyGuideImgBtn" class="img-btn" aria-label="Apri bestiario" title="Bestiario (Nemici & Boss)" type="button" style="display:inline-block;">
-  <img id="enemyGuideImg" src="https://i.postimg.cc/NFVhJNLC/pixelcut-export-(2).png" alt="Bestiario" />
+<button aria-label="Apri bestiario" class="img-btn" id="enemyGuideImgBtn" style="display:inline-block;" title="Bestiario (Nemici &amp; Boss)" type="button">
+<img alt="Bestiario" id="enemyGuideImg" src="https://i.postimg.cc/NFVhJNLC/pixelcut-export-(2).png"/>
 </button>
-    <p style="margin-top:12px;font-size:15px;color:#ddd">Controlli: WASD - Muovi | J - Attacco | K - Super Mossa | Spazio - Schivata</p>
-  </div>
-
-  <div class="end-screen" id="endScreen" style="display:none;">
-    <h1 id="endTitle">GAME OVER</h1>
-    <p id="endMessage">Score Finale: 0</p>
-    <p id="endSub">Hai raggiunto il Livello 1</p>
-    <p id="recordMessage">Record Personaggio: 0</p>
-    <button class="btn" id="restartBtn">RIPROVA</button>
-    <button class="btn" id="menuBtn">TORNA AL MENU</button>
-  </div>
+<p style="margin-top:12px;font-size:15px;color:#ddd">Controlli: WASD - Muovi | J - Attacco | K - Super Mossa | Spazio - Schivata</p>
 </div>
+
+</div>
+<div class="end-screen" id="endScreen" style="display:none;">
+<h1 id="endTitle">GAME OVER</h1>
+<p id="endMessage">Score Finale: 0</p>
+<p id="endSub">Hai raggiunto il Livello 1</p>
+<p id="recordMessage">Record Personaggio: 0</p>
+<button class="btn" id="restartBtn">RIPROVA</button>
+<button class="btn" id="menuBtn">TORNA AL MENU</button>
+</div>
+
 <!-- Modale guida -->
-<div id="guideModal" class="guide-modal" aria-hidden="true" role="dialog" aria-labelledby="guideTitle" style="display:none;">
-  <div class="guide-modal-content" role="document">
-    <button class="guide-close" id="guideClose" aria-label="Chiudi guida">✕</button>
-    <h2 id="guideTitle">Guida completa a Jeff’s Chronicles</h2>
-    <div class="guide-body">
-
-
-      <h3>1) PANORAMICA GENERALE</h3>
-      <p><strong>Jeff’s Chronicles</strong> è un arena-fighter a schermo fisso. Il giocatore sceglie un combattente e affronta ondate di nemici e boss all’interno di un’arena chiusa, cercando di ottenere il punteggio più alto possibile prima della fine del tempo.</p>
-      <p>Il gioco combina: azione rapida, gestione dei cooldown, uso intelligente di dash, super e pickup, progressione tramite record personali. Ogni partita è diversa grazie alla varietà di nemici, livelli e potenziamenti.</p>
-
-      <h3>2) OBIETTIVO, LIVELLI E PUNTEGGIO</h3>
-      <p><strong>Obiettivo del livello</strong>: eliminare tutti i nemici presenti nell’arena e sopravvivere fino allo scadere del tempo.</p>
-      <p><strong>Livelli</strong>: cambiano per tipo di nemici, numero di avversari, tempo disponibile e presenza di boss. La difficoltà aumenta progressivamente.</p>
-      <p><strong>Punteggio</strong>: ogni nemico ucciso fornisce <strong>+100 × livello corrente</strong>. Subire danno comporta <strong>−50 punti</strong> (il punteggio non scende mai sotto zero). I livelli avanzati permettono di ottenere score molto più elevati.</p>
-
-      <h3>3) CONTROLLI</h3>
-      <ul>
-        <li><strong>W A S D</strong> → Movimento</li>
-        <li><strong>J</strong> → Attacco base</li>
-        <li><strong>K</strong> → Super mossa</li>
-        <li><strong>Spazio</strong> → Dash / Schivata</li>
-      </ul>
-
-      <h3>4) INTERFACCIA (HUD)</h3>
-      <p>Durante la partita sono sempre visibili: HP e barra della vita, timer del livello, livello corrente, cooldown della super, punteggio totale e indicatori di buff attivi. Tenere d’occhio il timer e la super è fondamentale per sopravvivere nei livelli avanzati.</p>
-
-      <h3>5) MOVIMENTO E DASH</h3>
-      <p>Il movimento è libero in 8 direzioni.</p>
-      <p><strong>Dash / Schivata</strong>: è uno scatto rapido che rende più difficile essere colpiti. Ha un cooldown breve. Serve per evitare attacchi corpo a corpo, schivare proiettili e laser e riposizionarsi rapidamente. Alcuni personaggi hanno dash più lunghi o più veloci rispetto ad altri.</p>
-
-      <h3>6) ATTACCO BASE</h3>
-      <p>Ogni personaggio ha: un tipo di attacco unico, un range specifico e un cooldown personale. Il gioco utilizza un aim-assist leggero: quando attacchi, il personaggio tende a orientarsi verso il nemico più vicino per rendere i colpi più fluidi.</p>
-
-      <h3>7) SUPER MOSSA</h3>
-      <p>Ogni personaggio possiede una super unica. Le super hanno cooldown lunghi. Possono colpire più nemici, marchiare bersagli o creare zone di danno. Usarle nel momento giusto è la chiave per superare i livelli più difficili.</p>
-
-      <h3>8) DIFESA, SCUDI E STATUS</h3>
-      <p><strong>Scudi</strong>: alcuni personaggi possiedono scudi con durabilità. Esistono pickup che forniscono invulnerabilità temporanea.</p>
-      <p><strong>Status negativi</strong>: <strong>Poison</strong> (perdita di HP nel tempo). I danni da status possono uccidere se non gestiti.</p>
-
-      <h3>9) PICKUP E POTENZIAMENTI</h3>
-      <p>I pickup iniziano a comparire nei livelli avanzati.</p>
-      <ul>
-        <li><strong>Heal</strong>: cura il 25% degli HP massimi.</li>
-        <li><strong>Atk</strong>: aumenta il danno per alcuni secondi.</li>
-        <li><strong>Super</strong>: ricarica immediatamente la super.</li>
-        <li><strong>Speed</strong>: aumenta la velocità di movimento.</li>
-        <li><strong>Shield</strong>: invulnerabilità temporanea.</li>
-        <li><strong>Gold</strong>: cura totale + grande aumento del danno + super pronta.</li>
-        <li><strong>Malus</strong>: applica poison.</li>
-      
-        <li><strong>Furia</strong>: emana 3 grandi onde ad area (sempre più grandi) che infliggono <strong>20 danni</strong> ciascuna; inoltre cura <strong>+10 HP/s</strong> per <strong>10s</strong>.</li>
-        <li><strong>Ice</strong>: rallenta drasticamente <strong>tutti i nemici presenti</strong> (effetto permanente fino alla loro morte) e infligge <strong>2 danni/s</strong> per <strong>17s</strong>.</li>
+<div aria-hidden="true" aria-labelledby="guideTitle" class="guide-modal" id="guideModal" role="dialog" style="display:none;">
+<div class="guide-modal-content" role="document">
+<button aria-label="Chiudi guida" class="guide-close" id="guideClose">✕</button>
+<h2 id="guideTitle">Guida completa a Jeff’s Chronicles</h2>
+<div class="guide-body">
+<h3>1) PANORAMICA GENERALE</h3>
+<p><strong>Jeff’s Chronicles</strong> è un arena-fighter a schermo fisso. Il giocatore sceglie un combattente e affronta ondate di nemici e boss all’interno di un’arena chiusa, cercando di ottenere il punteggio più alto possibile prima della fine del tempo.</p>
+<p>Il gioco combina: azione rapida, gestione dei cooldown, uso intelligente di dash, super e pickup, progressione tramite record personali. Ogni partita è diversa grazie alla varietà di nemici, livelli e potenziamenti.</p>
+<h3>2) OBIETTIVO, LIVELLI E PUNTEGGIO</h3>
+<p><strong>Obiettivo del livello</strong>: eliminare tutti i nemici presenti nell’arena e sopravvivere fino allo scadere del tempo.</p>
+<p><strong>Livelli</strong>: cambiano per tipo di nemici, numero di avversari, tempo disponibile e presenza di boss. La difficoltà aumenta progressivamente.</p>
+<p><strong>Punteggio</strong>: ogni nemico ucciso fornisce <strong>+100 × livello corrente</strong>. Subire danno comporta <strong>−50 punti</strong> (il punteggio non scende mai sotto zero). I livelli avanzati permettono di ottenere score molto più elevati.</p>
+<h3>3) CONTROLLI</h3>
+<ul>
+<li><strong>W A S D</strong> → Movimento</li>
+<li><strong>J</strong> → Attacco base</li>
+<li><strong>K</strong> → Super mossa</li>
+<li><strong>Spazio</strong> → Dash / Schivata</li>
 </ul>
-      <p>Usare correttamente i pickup può ribaltare completamente una partita.</p>
-
-      <h3>10) PERSONAGGI – FUNZIONALITÀ E MECCANICHE</h3>
-
-      <h4>🔫 JIMMY </h4>
-      <p><strong>Ruolo</strong>: inseguimento e eliminazione rapida di bersagli.</p>
-      <p><strong>Attacco base (Grapple)</strong>: Jimmy aggancia automaticamente un nemico vicino. Finché è agganciato, lo insegue in modo automatico. Quando lo raggiunge, infligge danni elevati. Se il bersaglio muore o scompare, il grapple termina.</p>
-      <p><strong>Scudo a durabilità</strong>: durante gli attacchi Jimmy attiva uno scudo. Ogni colpo assorbito consuma 1 punto di durabilità. Quando la durabilità è zero, lo scudo si rompe e smette di funzionare temporaneamente.</p>
-      <p><strong>Super</strong>: seleziona più bersagli. Jimmy li insegue uno dopo l’altro colpendoli con danni potenziati. Durante la super è molto più difficile da fermare.</p>
-      <p><strong>Passiva – Jetpack</strong>: ogni tot secondi si attiva automaticamente. Fornisce aumento di velocità e garantisce maggiore sicurezza nei movimenti.</p>
-      <p><strong>Stile consigliato</strong>: aggressivo e mobile.</p>
-
-      <h4>🐱 ROONEY</h4>
-      <p><strong>Ruolo</strong>: resistenza e danni ravvicinati.</p>
-      <p><strong>Attacco base</strong>: serie di pugni potenti a corto raggio. Ottimo contro nemici lenti o raggruppati.</p>
-      <p><strong>Super</strong>: colpo ad area intorno a Rooney. Danni elevati distribuiti su più nemici, e danni che aumentano se i nemici si trovano a distanza più ravvicinata da Rooney. Versatile su ondate di tanti nemici e devstante su singolo nemico.</p>
-      <p><strong>Stile consigliato</strong>: restare vicino ai nemici e controllare lo spazio.</p>
-
-      <h4>🗡️ JEFF </h4>
-      <p><strong>Ruolo</strong>: controllo dell’arena.</p>
-      <p><strong>Attacco base</strong>: fendente ad arco con la spada. Buona velocità e affidabilità.</p>
-      <p><strong>Super</strong>: crea una grande area intorno a Jeff. Infligge danni periodici a tutti i nemici all’interno. Molto efficace contro boss e gruppi.</p>
-      <p><strong>Stile consigliato</strong>: posizionamento intelligente.</p>
-
-      <div id="guide-voltryx-locked" style="margin-top:10px;padding:10px;border:2px dashed rgba(255,255,255,0.35);background:rgba(255,255,255,0.05);">
-        <h4>🦊 VOLTRYX </h4>
-        <p><em>Questo personaggio si sblocca facendo oltre 45.000 punti con Jimmy, Rooney e Jeff.. La descrizione apparirà automaticamente appena lo sblocchi.</em></p>
-      </div>
-      <div id="guide-voltryx" style="display:none;">
-        <h4>🦊 VOLTRYX </h4>
-        <p><strong>Ruolo</strong>: versatilità totale.</p>
-        <p><strong>Attacco base</strong>: da lontano spara un proiettile energetico ad area; da vicino esegue due pugni rapidi.</p>
-        <p><strong>Super</strong>: genera una sfera energetica che rilascia impulsi di danno ad area, colpendo ripetutamente i nemici nel raggio.</p>
-        <p><strong>Stile consigliato</strong>: alternare distanza e mischia.</p>
-        <p><strong>Sblocco</strong>: oltre 45.000 punti con Jimmy, Rooney e Jeff.</p>
-      </div>
-
-      <div id="guide-kouvagia-locked" style="margin-top:10px;padding:10px;border:2px dashed rgba(255,255,255,0.35);background:rgba(255,255,255,0.05);">
-        <h4>🦉 KOUVAGIA </h4>
-        <p><em>Questo personaggio si sblocca facendo 50.000 punti con Voltryx. La descrizione apparirà automaticamente appena lo sblocchi.</em></p>
-      </div>
-      <div id="guide-kouvagia" style="display:none;">
-        <h4>🦉 KOUVAGIA </h4>
-        <p><strong>Ruolo</strong>: sopravvivenza e danni da contatto.</p>
-        <p><strong>Attacco base</strong>: dash offensivo che infligge danni ai nemici attraversati. Al termine del dash esplode infliggendo danni ad area.</p>
-        <p><strong>Passiva – Dash offensivo</strong>: ogni schivata infligge danni ai nemici vicini.</p>
-        <p><strong>Passiva – Cura su uccisione</strong>: ogni nemico ucciso a distanza ravvicinata cura Kouvagia.</p>
-        <p><strong>Super</strong>: cura completa e genera un’onda che respinge i nemici.</p>
-        <p><strong>Stile consigliato</strong>: usare spesso il dash e restare nel caos.</p>
-        <p><strong>Sblocco</strong>: 50.000 punti con Voltryx.</p>
-      </div>
-
-      <div id="guide-salsy-locked" style="margin-top:10px;padding:10px;border:2px dashed rgba(255,255,255,0.35);background:rgba(255,255,255,0.05);">
-        <h4>⚜️ SALSY </h4>
-        <p><em>Questo personaggio si sblocca facendo 60.000 punti con tutti gli altri personaggi.. La descrizione apparirà automaticamente appena lo sblocchi.</em></p>
-      </div>
-      <div id="guide-salsy" style="display:none;">
-        <h4>⚜️ SALSY </h4>
-        <p><strong>Ruolo</strong>: burst damage e controllo dei bersagli.</p>
-        <p><strong>Attacco base</strong>: doppio fendente consecutivo. Può colpire lo stesso nemico due volte con un singolo attacco.</p>
-        <p><strong>Super – Marchio</strong>: marchia fino a 3 nemici. I nemici marchiati subiscono danni raddoppiati per alcuni secondi.</p>
-        <p><strong>Passiva – Boost velocità</strong>: periodicamente ottiene un aumento temporaneo di velocità, perfetto per entrare e uscire dai combattimenti.</p>
-        <p><strong>Stile consigliato</strong>: colpisci, marchia e ritirati.</p>
-        <p><strong>Sblocco</strong>: 60.000 punti con tutti gli altri personaggi.</p>
-      </div>
-
-      
+<h3>4) INTERFACCIA (HUD)</h3>
+<p>Durante la partita sono sempre visibili: HP e barra della vita, timer del livello, livello corrente, cooldown della super, punteggio totale e indicatori di buff attivi. Tenere d’occhio il timer e la super è fondamentale per sopravvivere nei livelli avanzati.</p>
+<h3>5) MOVIMENTO E DASH</h3>
+<p>Il movimento è libero in 8 direzioni.</p>
+<p><strong>Dash / Schivata</strong>: è uno scatto rapido che rende più difficile essere colpiti. Ha un cooldown breve. Serve per evitare attacchi corpo a corpo, schivare proiettili e laser e riposizionarsi rapidamente. Alcuni personaggi hanno dash più lunghi o più veloci rispetto ad altri.</p>
+<h3>6) ATTACCO BASE</h3>
+<p>Ogni personaggio ha: un tipo di attacco unico, un range specifico e un cooldown personale. Il gioco utilizza un aim-assist leggero: quando attacchi, il personaggio tende a orientarsi verso il nemico più vicino per rendere i colpi più fluidi.</p>
+<h3>7) SUPER MOSSA</h3>
+<p>Ogni personaggio possiede una super unica. Le super hanno cooldown lunghi. Possono colpire più nemici, marchiare bersagli o creare zone di danno. Usarle nel momento giusto è la chiave per superare i livelli più difficili.</p>
+<h3>8) DIFESA, SCUDI E STATUS</h3>
+<p><strong>Scudi</strong>: alcuni personaggi possiedono scudi con durabilità. Esistono pickup che forniscono invulnerabilità temporanea.</p>
+<p><strong>Status negativi</strong>: <strong>Poison</strong> (perdita di HP nel tempo). I danni da status possono uccidere se non gestiti.</p>
+<h3>9) PICKUP E POTENZIAMENTI</h3>
+<p>I pickup iniziano a comparire nei livelli avanzati.</p>
+<ul>
+<li><strong>Heal</strong>: cura il 25% degli HP massimi.</li>
+<li><strong>Atk</strong>: aumenta il danno per alcuni secondi.</li>
+<li><strong>Super</strong>: ricarica immediatamente la super.</li>
+<li><strong>Speed</strong>: aumenta la velocità di movimento.</li>
+<li><strong>Shield</strong>: invulnerabilità temporanea.</li>
+<li><strong>Gold</strong>: cura totale + grande aumento del danno + super pronta.</li>
+<li><strong>Malus</strong>: applica poison.</li>
+<li><strong>Furia</strong>: emana 3 grandi onde ad area (sempre più grandi) che infliggono <strong>20 danni</strong> ciascuna; inoltre cura <strong>+10 HP/s</strong> per <strong>10s</strong>.</li>
+<li><strong>Ice</strong>: rallenta drasticamente <strong>tutti i nemici presenti</strong> (effetto permanente fino alla loro morte) e infligge <strong>2 danni/s</strong> per <strong>17s</strong>.</li>
+</ul>
+<p>Usare correttamente i pickup può ribaltare completamente una partita.</p>
+<h3>10) PERSONAGGI – FUNZIONALITÀ E MECCANICHE</h3>
+<h4>🔫 JIMMY </h4>
+<p><strong>Ruolo</strong>: inseguimento e eliminazione rapida di bersagli.</p>
+<p><strong>Attacco base (Grapple)</strong>: Jimmy aggancia automaticamente un nemico vicino. Finché è agganciato, lo insegue in modo automatico. Quando lo raggiunge, infligge danni elevati. Se il bersaglio muore o scompare, il grapple termina.</p>
+<p><strong>Scudo a durabilità</strong>: durante gli attacchi Jimmy attiva uno scudo. Ogni colpo assorbito consuma 1 punto di durabilità. Quando la durabilità è zero, lo scudo si rompe e smette di funzionare temporaneamente.</p>
+<p><strong>Super</strong>: seleziona più bersagli. Jimmy li insegue uno dopo l’altro colpendoli con danni potenziati. Durante la super è molto più difficile da fermare.</p>
+<p><strong>Passiva – Jetpack</strong>: ogni tot secondi si attiva automaticamente. Fornisce aumento di velocità e garantisce maggiore sicurezza nei movimenti.</p>
+<p><strong>Stile consigliato</strong>: aggressivo e mobile.</p>
+<h4>🐱 ROONEY</h4>
+<p><strong>Ruolo</strong>: resistenza e danni ravvicinati.</p>
+<p><strong>Attacco base</strong>: serie di pugni potenti a corto raggio. Ottimo contro nemici lenti o raggruppati.</p>
+<p><strong>Super</strong>: colpo ad area intorno a Rooney. Danni elevati distribuiti su più nemici, e danni che aumentano se i nemici si trovano a distanza più ravvicinata da Rooney. Versatile su ondate di tanti nemici e devstante su singolo nemico.</p>
+<p><strong>Stile consigliato</strong>: restare vicino ai nemici e controllare lo spazio.</p>
+<h4>🗡️ JEFF </h4>
+<p><strong>Ruolo</strong>: controllo dell’arena.</p>
+<p><strong>Attacco base</strong>: fendente ad arco con la spada. Buona velocità e affidabilità.</p>
+<p><strong>Super</strong>: crea una grande area intorno a Jeff. Infligge danni periodici a tutti i nemici all’interno. Molto efficace contro boss e gruppi.</p>
+<p><strong>Stile consigliato</strong>: posizionamento intelligente.</p>
+<div id="guide-voltryx-locked" style="margin-top:10px;padding:10px;border:2px dashed rgba(255,255,255,0.35);background:rgba(255,255,255,0.05);">
+<h4>🦊 VOLTRYX </h4>
+<p><em>Questo personaggio si sblocca facendo oltre 45.000 punti con Jimmy, Rooney e Jeff.. La descrizione apparirà automaticamente appena lo sblocchi.</em></p>
+</div>
+<div id="guide-voltryx" style="display:none;">
+<h4>🦊 VOLTRYX </h4>
+<p><strong>Ruolo</strong>: versatilità totale.</p>
+<p><strong>Attacco base</strong>: da lontano spara un proiettile energetico ad area; da vicino esegue due pugni rapidi.</p>
+<p><strong>Super</strong>: genera una sfera energetica che rilascia impulsi di danno ad area, colpendo ripetutamente i nemici nel raggio.</p>
+<p><strong>Stile consigliato</strong>: alternare distanza e mischia.</p>
+<p><strong>Sblocco</strong>: oltre 45.000 punti con Jimmy, Rooney e Jeff.</p>
+</div>
+<div id="guide-kouvagia-locked" style="margin-top:10px;padding:10px;border:2px dashed rgba(255,255,255,0.35);background:rgba(255,255,255,0.05);">
+<h4>🦉 KOUVAGIA </h4>
+<p><em>Questo personaggio si sblocca facendo 50.000 punti con Voltryx. La descrizione apparirà automaticamente appena lo sblocchi.</em></p>
+</div>
+<div id="guide-kouvagia" style="display:none;">
+<h4>🦉 KOUVAGIA </h4>
+<p><strong>Ruolo</strong>: sopravvivenza e danni da contatto.</p>
+<p><strong>Attacco base</strong>: dash offensivo che infligge danni ai nemici attraversati. Al termine del dash esplode infliggendo danni ad area.</p>
+<p><strong>Passiva – Dash offensivo</strong>: ogni schivata infligge danni ai nemici vicini.</p>
+<p><strong>Passiva – Cura su uccisione</strong>: ogni nemico ucciso a distanza ravvicinata cura Kouvagia.</p>
+<p><strong>Super</strong>: cura completa e genera un’onda che respinge i nemici.</p>
+<p><strong>Stile consigliato</strong>: usare spesso il dash e restare nel caos.</p>
+<p><strong>Sblocco</strong>: 50.000 punti con Voltryx.</p>
+</div>
+<div id="guide-salsy-locked" style="margin-top:10px;padding:10px;border:2px dashed rgba(255,255,255,0.35);background:rgba(255,255,255,0.05);">
+<h4>⚜️ SALSY </h4>
+<p><em>Questo personaggio si sblocca facendo 60.000 punti con tutti gli altri personaggi.. La descrizione apparirà automaticamente appena lo sblocchi.</em></p>
+</div>
+<div id="guide-salsy" style="display:none;">
+<h4>⚜️ SALSY </h4>
+<p><strong>Ruolo</strong>: burst damage e controllo dei bersagli.</p>
+<p><strong>Attacco base</strong>: doppio fendente consecutivo. Può colpire lo stesso nemico due volte con un singolo attacco.</p>
+<p><strong>Super – Marchio</strong>: marchia fino a 3 nemici. I nemici marchiati subiscono danni raddoppiati per alcuni secondi.</p>
+<p><strong>Passiva – Boost velocità</strong>: periodicamente ottiene un aumento temporaneo di velocità, perfetto per entrare e uscire dai combattimenti.</p>
+<p><strong>Stile consigliato</strong>: colpisci, marchia e ritirati.</p>
+<p><strong>Sblocco</strong>: 60.000 punti con tutti gli altri personaggi.</p>
+</div>
 <div id="guide-tempostorm-locked" style="margin-top:10px;padding:10px;border:2px dashed rgba(255,255,255,0.35);background:rgba(255,255,255,0.05);">
-  <h4>🔋 TEMPOSTORM</h4>
-  <p><em>Questo personaggio si sblocca facendo <strong>70.000 punti</strong> con tutti i personaggi precedenti (Jimmy, Rooney, Jeff, Voltryx, Kouvagia e Salsy). La descrizione completa apparirà automaticamente appena lo sblocchi.</em></p>
+<h4>🔋 TEMPOSTORM</h4>
+<p><em>Questo personaggio si sblocca facendo <strong>70.000 punti</strong> con tutti i personaggi precedenti (Jimmy, Rooney, Jeff, Voltryx, Kouvagia e Salsy). La descrizione completa apparirà automaticamente appena lo sblocchi.</em></p>
 </div>
-
 <div id="guide-tempostorm" style="display:none;">
-  <h4>🔋 TEMPOSTORM</h4>
-  <p><strong>Ruolo</strong>: controllo di zona + sustain tramite Super.</p>
-  <p><strong>Statistiche</strong>: 300 HP, velocità leggermente superiore a Rooney.</p>
-  <p><strong>Attacco base</strong>: fasci di energia blu (laser). Infligge <strong>40</strong> danni al primo impatto e altri <strong>30</strong> se il nemico resta dentro il fascio dopo essere stato colpito.</p>
-  <p><strong>Super – Tempesta Centrale</strong>: raggruppa tutti i nemici esattamente al centro dell’arena, dimezza la loro vita e converte la somma della vita sottratta in una <strong>cura personale</strong> tramite un effetto speciale blu.</p>
-  <p><strong>Sblocco</strong>: 70.000 punti con tutti i personaggi precedenti.</p>
+<h4>🔋 TEMPOSTORM</h4>
+<p><strong>Ruolo</strong>: controllo di zona + sustain tramite Super.</p>
+<p><strong>Statistiche</strong>: 300 HP, velocità leggermente superiore a Rooney.</p>
+<p><strong>Attacco base</strong>: fasci di energia blu (laser). Infligge <strong>40</strong> danni al primo impatto e altri <strong>30</strong> se il nemico resta dentro il fascio dopo essere stato colpito.</p>
+<p><strong>Super – Tempesta Centrale</strong>: raggruppa tutti i nemici esattamente al centro dell’arena, dimezza la loro vita e converte la somma della vita sottratta in una <strong>cura personale</strong> tramite un effetto speciale blu.</p>
+<p><strong>Sblocco</strong>: 70.000 punti con tutti i personaggi precedenti.</p>
 </div>
-
+<div id="guide-marz-locked" style="margin-top:10px;padding:10px;border:2px dashed rgba(255,255,255,0.35);background:rgba(255,255,255,0.05);">
+<h4>🪄 MARZ</h4>
+<p><em>Questo personaggio si sblocca facendo <strong>80.000 punti</strong> con tutti i personaggi precedenti (Jimmy, Rooney, Jeff, Voltryx, Kouvagia, Salsy e Tempostorm). La descrizione completa apparirà automaticamente appena lo sblocchi.</em></p>
+</div>
+<div id="guide-marz" style="display:none;">
+<h4>🪄 MARZ</h4>
+<p><strong>Ruolo</strong>: mago da controllo e danno a bersagli multipli.</p>
+<p><strong>Statistiche</strong>: 320 HP, velocità 7.2.</p>
+<p><strong>Attacco base</strong>: spara <strong>tre fasci magici</strong> (corti) con danni diversi: <strong>40</strong>, <strong>50</strong>, <strong>60</strong>. Se ci sono almeno 3 nemici, colpisce fino a 3 bersagli differenti; se i nemici sono meno, i fasci si concentrano sugli stessi bersagli disponibili.</p>
+<p><strong>Super – Sigillo Arcano</strong>: crea esattamentte al centro della mappa un <strong>cerchi arcano </strong> che si espande molto lentamente causando molti danni ai nemici presenti all'interno inoltre Marz all'interno dell'area del sigillo ottiene <strong>un aumento del 50% della velocità</strong> finche la super resta attiva quindi per <strong>10 secondi</strong>.</p>
+<p><strong>Sblocco</strong>: 80.000 punti con tutti i personaggi precedenti.</p>
+</div>
 <h3>11) NEMICI E PERICOLI</h3>
-      <p>Nemici melee, veloci, resistenti e a distanza. Nemici con poison. Nemici con laser che richiedono schivata precisa. Boss con attacchi speciali e grandi quantità di HP.</p>
-
-      <h3>12) CONSIGLI FINALI</h3>
-      <ul>
-        <li>Usa il dash più spesso di quanto pensi.</li>
-        <li>Le super vanno usate nei momenti critici.</li>
-        <li>Evitare danni è importante anche per il punteggio.</li>
-        <li>Ogni personaggio è forte se usato nel modo giusto.</li>
-      </ul>
-
-      
-<h3>✴️ EVOLUZIONI </h3> 
-<p>rappresentano una fase avanzata del combattimento e si attivano automaticamente durante la partita. Non sono potenziamenti temporanei, ma un vero e proprio cambiamento nello stile di gioco del personaggio.</p> <p><strong>Quando avvengono</strong>: dopo aver superato un boss avanzato (oltre metà progressione), il personaggio entra nello stato <em>Evoluto</em>. L’evoluzione viene annunciata a schermo con un banner dedicato.</p> <p><strong>Filosofia delle evoluzioni</strong>: le evoluzioni <u>non aumentano direttamente HP, velocità o danno base</u>. Al contrario, sbloccano <strong>passive speciali</strong> che premiano l’uso intelligente delle meccaniche del personaggio. Questo mantiene il gioco bilanciato e strategico.</p> <h4>Effetti generali</h4> <ul> <li>L’evoluzione dura per il resto della partita.</li> <li>Ogni personaggio ottiene un <strong>vantaggio unico</strong>, coerente con il suo ruolo.</li> <li>Le evoluzioni premiano precisione, timing e gestione dei nemici.</li> </ul> <h4>⚙️ Evoluzioni attuali</h4> <p><strong>🔫 Jimmy – Predatore Evoluto</strong><br> Jimmy carica la <strong>Super più velocemente (+25%)</strong> e il <strong>cooldown dell’attacco base è ridotto del 15%</strong>.</p>
-<p><strong>🐱 Rooney – Impatto Brutale</strong><br> Il <strong>primo colpo</strong> inflitto a ogni nemico infligge <strong>+50% danni</strong>.</p>
-<p><strong>🗡️ Jeff – Rigenerazione da Combattimento</strong><br> Ogni nemico ucciso cura Jeff di <strong>5 HP</strong>.</p> <p><em>Nota:</em> i personaggi sbloccabili avanzati potrebbero ottenere evoluzioni dedicate in futuro.</p> <h4> Consigli strategici</h4> <ul> <li>Sfrutta l’evoluzione per cambiare approccio: da difensivo a aggressivo (o viceversa).</li> <li>Dopo l’evoluzione, eliminare i nemici velocemente diventa ancora più importante per massimizzare punteggio e controllo.</li> <li>Le evoluzioni non rendono invincibili: il posizionamento resta fondamentale.</li> </ul> <p><strong>Le evoluzioni sono il momento in cui Jeff’s Chronicles premia davvero la padronanza del personaggio.</strong></p>
-
+<p>Nemici melee, veloci, resistenti e a distanza. Nemici con poison. Nemici con laser che richiedono schivata precisa. Boss con attacchi speciali e grandi quantità di HP.</p>
+<h3>12) CONSIGLI FINALI</h3>
+<ul>
+<li>Usa il dash più spesso di quanto pensi.</li>
+<li>Le super vanno usate nei momenti critici.</li>
+<li>Evitare danni è importante anche per il punteggio.</li>
+<li>Ogni personaggio è forte se usato nel modo giusto.</li>
+</ul>
+<h3>✴️ EVOLUZIONI </h3>
+<p>rappresentano una fase avanzata del combattimento e si attivano automaticamente durante la partita. Non sono potenziamenti temporanei, ma un vero e proprio cambiamento nello stile di gioco del personaggio.</p> <p><strong>Quando avvengono</strong>: dopo aver superato un boss avanzato (oltre metà progressione), il personaggio entra nello stato <em>Evoluto</em>. L’evoluzione viene annunciata a schermo con un banner dedicato.</p> <p><strong>Filosofia delle evoluzioni</strong>: le evoluzioni <u>non aumentano direttamente HP, velocità o danno base</u>. Al contrario, sbloccano <strong>passive speciali</strong> che premiano l’uso intelligente delle meccaniche del personaggio. Questo mantiene il gioco bilanciato e strategico.</p> <h4>Effetti generali</h4> <ul> <li>L’evoluzione dura per il resto della partita.</li> <li>Ogni personaggio ottiene un <strong>vantaggio unico</strong>, coerente con il suo ruolo.</li> <li>Le evoluzioni premiano precisione, timing e gestione dei nemici.</li> </ul> <h4>⚙️ Evoluzioni attuali</h4> <p><strong>🔫 Jimmy – Predatore Evoluto</strong><br/> Jimmy carica la <strong>Super più velocemente (+25%)</strong> e il <strong>cooldown dell’attacco base è ridotto del 15%</strong>.</p>
+<p><strong>🐱 Rooney – Impatto Brutale</strong><br/> Il <strong>primo colpo</strong> inflitto a ogni nemico infligge <strong>+50% danni</strong>.</p>
+<p><strong>🗡️ Jeff – Rigenerazione da Combattimento</strong><br/> Ogni nemico ucciso cura Jeff di <strong>5 HP</strong>.</p> <p><em>Nota:</em> i personaggi sbloccabili avanzati potrebbero ottenere evoluzioni dedicate in futuro.</p> <h4> Consigli strategici</h4> <ul> <li>Sfrutta l’evoluzione per cambiare approccio: da difensivo a aggressivo (o viceversa).</li> <li>Dopo l’evoluzione, eliminare i nemici velocemente diventa ancora più importante per massimizzare punteggio e controllo.</li> <li>Le evoluzioni non rendono invincibili: il posizionamento resta fondamentale.</li> </ul> <p><strong>Le evoluzioni sono il momento in cui Jeff’s Chronicles premia davvero la padronanza del personaggio.</strong></p>
 <h3>🏁 CONCLUSIONE</h3>
-      <p><strong>Jeff’s Chronicles</strong> premia abilità, strategia e conoscenza dei personaggi. Impara i loro meccanismi, sfrutta i pickup e punta al record massimo.</p>
-    </div>
-  </div>
+<p><strong>Jeff’s Chronicles</strong> premia abilità, strategia e conoscenza dei personaggi. Impara i loro meccanismi, sfrutta i pickup e punta al record massimo.</p>
 </div>
-      
-
+</div>
+</div>
 <!-- Modale bestiario (nemici e boss) -->
-<div id="enemyGuideModal" class="guide-modal enemy-guide-modal" aria-hidden="true" role="dialog" aria-labelledby="enemyGuideTitle" style="display:none;">
-  <div class="guide-modal-content enemy-guide-content" role="document">
-    <button class="guide-close" id="enemyGuideClose" aria-label="Chiudi bestiario">✕</button>
-    <h2 id="enemyGuideTitle">Bestiario – Nemici & Boss</h2>
-    <div class="enemy-guide-body">
-      <div class="enemy-guide-wrap">
-        <div class="enemy-guide-list" id="enemyGuideList" aria-label="Lista nemici sbloccati"></div>
-        <div class="enemy-guide-detail" id="enemyGuideDetail" aria-live="polite">
-          <div class="enemy-guide-empty">
-            <h3 style="margin:0 0 8px 0;color:#f39c12;">Nessun nemico sbloccato</h3>
-            <p style="margin:0;color:#ddd;">Affronta un nemico o un boss almeno una volta per sbloccarlo qui.</p>
-          </div>
-        </div>
-      </div>
-      <p class="enemy-guide-hint">Nota: nel Bestiario compaiono solo i nemici/boss che hai già sfidato almeno una volta (vale per tutti i personaggi).</p>
-    </div>
-  </div>
+<div aria-hidden="true" aria-labelledby="enemyGuideTitle" class="guide-modal enemy-guide-modal" id="enemyGuideModal" role="dialog" style="display:none;">
+<div class="guide-modal-content enemy-guide-content" role="document">
+<button aria-label="Chiudi bestiario" class="guide-close" id="enemyGuideClose">✕</button>
+<h2 id="enemyGuideTitle">Bestiario – Nemici &amp; Boss</h2>
+<div class="enemy-guide-body">
+<div class="enemy-guide-wrap">
+<div aria-label="Lista nemici sbloccati" class="enemy-guide-list" id="enemyGuideList"></div>
+<div aria-live="polite" class="enemy-guide-detail" id="enemyGuideDetail">
+<div class="enemy-guide-empty">
+<h3 style="margin:0 0 8px 0;color:#f39c12;">Nessun nemico sbloccato</h3>
+<p style="margin:0;color:#ddd;">Affronta un nemico o un boss almeno una volta per sbloccarlo qui.</p>
 </div>
-
+</div>
+</div>
+<p class="enemy-guide-hint">Nota: nel Bestiario compaiono solo i nemici/boss che hai già sfidato almeno una volta (vale per tutti i personaggi).</p>
+</div>
+</div>
+</div>
 <script>
 const HP_MULT=1.40;
 const DAMAGE_MULT=0.85;
@@ -664,6 +662,80 @@ function pickRandomPickupType(){
 }
 let projectiles=[];
 
+// --- MARZ SUPER: expanding magic zone ---
+// Active only when Marz uses his Super.
+let magicZone=null;
+function updateMagicZone(now){
+  if(!magicZone) return;
+  if(now >= magicZone.endsAt){ magicZone = null; return; }
+
+  // Expand slowly over the full duration
+  const t = Math.max(0, Math.min(1, (now - magicZone.startsAt) / magicZone.durationMs));
+  magicZone.radius = magicZone.startRadius + (magicZone.maxRadius - magicZone.startRadius) * t;
+
+  // Periodic damage to enemies inside
+  if(!magicZone.lastTick) magicZone.lastTick = now;
+  if(now - magicZone.lastTick >= magicZone.tickMs){
+    magicZone.lastTick = now;
+    for(let i=enemies.length-1;i>=0;i--){
+      const e=enemies[i];
+      const ex=e.x+e.width/2, ey=e.y+e.height/2;
+      const d=Math.hypot(ex-magicZone.x, ey-magicZone.y);
+      if(d <= magicZone.radius){
+        const dmg=Math.round(magicZone.damagePerTick);
+        const _dmg=dmg; const _final=applyEnemyDamage(e,_dmg);
+        showDamageNumber(e.x,e.y,_final);
+        // colorful hit FX
+        createParticles(ex,ey, magicZone.colors[(magicZone.colorIdx++)%magicZone.colors.length], 10, 4);
+        if(e.hp<=0){
+          createParticles(e.x,e.y,'#fff176',30,6);
+          enemies.splice(i,1);
+          score+=100*currentLevel;
+        }
+      }
+    }
+
+    // ambient zone particles (center swirl)
+    createParticles(magicZone.x, magicZone.y, magicZone.colors[(magicZone.colorIdx++)%magicZone.colors.length], 18, 4);
+  }
+}
+
+function drawMagicZone(now){
+  if(!magicZone) return;
+  const t = Math.max(0, Math.min(1, (now - magicZone.startsAt) / magicZone.durationMs));
+  const pulse = 0.5 + 0.5*Math.sin(now/120);
+
+  ctx.save();
+  ctx.globalAlpha = 0.18 + 0.18*(1-t);
+  const grad = ctx.createRadialGradient(magicZone.x, magicZone.y, 10, magicZone.x, magicZone.y, magicZone.radius);
+  grad.addColorStop(0, 'rgba(255,0,255,0.55)');
+  grad.addColorStop(0.5, 'rgba(0,229,255,0.35)');
+  grad.addColorStop(1, 'rgba(255,241,118,0.08)');
+  ctx.fillStyle = grad;
+  ctx.beginPath();
+  ctx.arc(magicZone.x, magicZone.y, magicZone.radius, 0, Math.PI*2);
+  ctx.fill();
+
+  // rings
+  ctx.globalAlpha = 0.55;
+  ctx.lineWidth = 6 + 6*pulse;
+  ctx.strokeStyle = 'rgba(255,0,255,0.55)';
+  ctx.beginPath(); ctx.arc(magicZone.x, magicZone.y, magicZone.radius*(0.35+0.05*pulse), 0, Math.PI*2); ctx.stroke();
+  ctx.strokeStyle = 'rgba(0,229,255,0.55)';
+  ctx.beginPath(); ctx.arc(magicZone.x, magicZone.y, magicZone.radius*(0.65+0.06*(1-pulse)), 0, Math.PI*2); ctx.stroke();
+  ctx.strokeStyle = 'rgba(255,241,118,0.55)';
+  ctx.beginPath(); ctx.arc(magicZone.x, magicZone.y, magicZone.radius, 0, Math.PI*2); ctx.stroke();
+
+  ctx.restore();
+}
+
+function isPointInsideMagicZone(x,y){
+  if(!magicZone) return false;
+  const now=Date.now();
+  if(now >= magicZone.endsAt) return false;
+  return Math.hypot(x-magicZone.x, y-magicZone.y) <= magicZone.radius;
+}
+
 let lasers=[];
 let tempBeams=[]; // Tempostorm lasers (friendly beams)
 let keys={};
@@ -671,7 +743,7 @@ let lastSecondTick=Date.now();
 let levelAdvanceLock=false;
 let shakeAmount=0;
 
-const images={rooney:new Image(),jimmy:new Image(),jeff:new Image(),voltryx:new Image(),kouvagia:new Image(),salsy:new Image(),tempostorm:new Image()};
+const images={rooney:new Image(),jimmy:new Image(),jeff:new Image(),voltryx:new Image(),kouvagia:new Image(),salsy:new Image(),tempostorm:new Image() ,marz:new Image()};
 images.rooney.src='https://i.postimg.cc/Vs0G7ZPV/rooneyy.png';
 images.jimmy.src='https://i.postimg.cc/13Qzjdn4/jimmyy.png';
 images.jeff.src='https://i.postimg.cc/gkQN3v7R/jeff-(1).png';
@@ -679,6 +751,7 @@ images.voltryx.src='https://i.postimg.cc/GhjK4WCy/Voltryxx.png';
 images.kouvagia.src='https://i.postimg.cc/gj1xjk0G/kouvagiaa-(1).png';
 images.salsy.src='https://i.ibb.co/20zSkjsB/salsy.png';
 images.tempostorm.src='https://i.postimg.cc/mkzj763m/tempostorm.png';
+images.marz.src='https://i.postimg.cc/j5WJZL5X/marz.png';
 const imagesEvo={jimmy:new Image(),rooney:new Image(),jeff:new Image()};
 imagesEvo.jimmy.src='https://i.postimg.cc/g26ZX0n9/jimmyevo.png';
 imagesEvo.rooney.src='https://i.postimg.cc/x8Ck0fWs/rooneyevo.png';
@@ -712,7 +785,7 @@ function getPickupImage(type){
 const enemyImages={
   slime:new Image(),drone:new Image(),boss1:new Image(),mech:new Image(),
   shadow:new Image(),boss2:new Image(),shooter:new Image(),attacker:new Image(),boss3:new Image(),
-  veleno:new Image(),oneyes:new Image(),boss4:new Image(),archer:new Image(),glacial:new Image()
+  veleno:new Image(),oneyes:new Image(),boss4:new Image(),boss5:new Image(),archer:new Image(),glacial:new Image()
 };
 enemyImages.slime.src='https://i.postimg.cc/NFVhJNLC/pixelcut-export-(2).png';
 enemyImages.drone.src='https://i.postimg.cc/13x9HtxZ/image-(1).png';
@@ -728,6 +801,7 @@ enemyImages.boss3.src='https://i.postimg.cc/xjzKWcTs/boss3-(1).png';
 enemyImages.veleno.src='https://i.postimg.cc/3xNWGRWY/veleno.png';
 enemyImages.oneyes.src='https://i.postimg.cc/g2xkJTBG/oneyes.png';
 enemyImages.boss4.src='https://i.postimg.cc/Px6d8kgr/boss4.png';
+enemyImages.boss5.src='https://i.postimg.cc/wvGJm86S/boss5.png';
 enemyImages.archer.src='https://i.postimg.cc/VLSg4gpV/archer.png';
 enemyImages.glacial.src='https://i.postimg.cc/W1LG8vMN/glacial.png';
 
@@ -766,11 +840,12 @@ const enemyGuideData={
   boss1:{ name:'BOSS I', imgKey:'boss1', desc:'Primo boss. Molti HP e pressione costante: sfrutta la super nel momento giusto e non prendere danni inutili.'},
   boss2:{ name:'BOSS II', imgKey:'boss2', desc:'Boss più aggressivo e resistente. Controlla il cooldown della super e cerca finestre sicure per colpire.'},
   boss3:{ name:'BOSS III', imgKey:'boss3', desc:'Boss avanzato: richiede gestione perfetta di dash e super. È lo spartiacque verso la fase finale.'},
-  boss4:{ name:'BOSS IV', imgKey:'boss4', desc:'Boss speciale con attacchi più “telegraph” e colpi potenti. Leggi i segnali e schiva con precisione.'}
+  boss4:{ name:'BOSS IV', imgKey:'boss4', desc:'Boss speciale con attacchi più “telegraph” e colpi potenti. Leggi i segnali e schiva con precisione.'},
+  boss5:{ name:'BOSS V', imgKey:'boss5', desc:'Boss finale: colpo ad ascia a ventaglio (80°) con sweep lento. Passiva ogni 28s: rigenera HP e, se sei nel raggio, ti respinge e ti rallenta del 50% per 2s.'}
 };
 
 // Ordine consigliato nella lista
-const enemyGuideOrder=['slime','drone','mech','shadow','shooter','attacker','archer','glacial','veleno','oneyes','boss1','boss2','boss3','boss4'];
+const enemyGuideOrder=['slime','drone','mech','shadow','shooter','attacker','archer','glacial','veleno','oneyes','boss1','boss2','boss3','boss4','boss5'];
 
 function buildEnemyGuideUI(){
   const listEl=document.getElementById('enemyGuideList');
@@ -905,7 +980,19 @@ const characterStats={
   attackType:'tempostormLaser',
   superCooldown:50000,
   superDuration:500
-}
+},
+  marz:{
+    hp:320,
+    speed:6.5*0.75,
+    damage:40,
+    tripleDamage:[40,50,60],
+    range:480,
+    cooldown:820,
+    name:'Marz',
+    attackType:'magic',
+    superCooldown:20000,
+    superDuration:2200
+  }
 };
 
 const levelConfigs=[
@@ -934,6 +1021,7 @@ const levelConfigs=[
   ,{enemyType:'glacial',enemyHP:150,enemyDamage:22,enemySpeed:2.3*0.75,time:70,enemyCount:2} // Level 23 (Ice)
   ,{enemyType:'glacial',enemyHP:165,enemyDamage:24,enemySpeed:2.4*0.75,time:80,enemyCount:3} // Level 24 (Ice)
 
+  ,{enemyType:'boss5',enemyHP:800,enemyDamage:32,enemySpeed:2.2*0.75,time:200,enemyCount:1} // Level 25 (Boss V)
 ];
 
 const RECORDS_KEY='pf_records_v18'; 
@@ -976,10 +1064,12 @@ function updateMenuRecordsDisplay(){
   document.getElementById('record-kouvagia').textContent=`Record: ${records.kouvagia||0}`;
   document.getElementById('record-salsy').textContent=`Record: ${records.salsy||0}`;
   document.getElementById('record-tempostorm').textContent=`Record: ${records.tempostorm||0}`;
+  document.getElementById('record-marz').textContent=`Record: ${records.marz||0}`;
   updateVoltryxUnlockUI();
   updateKouvagiaUnlockUI();
   updateSalsyUnlockUI();
   updateTempostormUnlockUI();
+  updateMarzUnlockUI();
   updateGuideUnlockUI();
 }
 function allThreeAbove50k(){
@@ -1088,11 +1178,39 @@ function updateTempostormUnlockUI(){
   }
 }
 
+
+
+function allPrevAboveMarz80k(){
+  return (records.jimmy||0) >= 80000 &&
+         (records.rooney||0) >= 80000 &&
+         (records.jeff||0) >= 80000 &&
+         (records.voltryx||0) >= 80000 &&
+         (records.kouvagia||0) >= 80000 &&
+         (records.salsy||0) >= 80000 &&
+         (records.tempostorm||0) >= 80000 ;
+}
+function updateMarzUnlockUI(){
+  const card=document.getElementById('card-marz');
+  const badge=document.getElementById('marzLockBadge');
+  if(!card||!badge) return;
+
+  const unlocked = allPrevAboveMarz80k();
+  if(unlocked){
+    card.classList.remove('disabled');
+    setLockBadgeState(badge, false);
+    card.title='Marz sbloccato!';
+  }else{
+    card.classList.add('disabled');
+    setLockBadgeState(badge, true);
+    card.title='Sblocca facendo 80.000 punti con tutti i personaggi precedenti';
+  }
+}
 function updateGuideUnlockUI(){
   const vUnlocked = allThreeAbove50k();
   const kUnlocked = voltryxAbove51k();
   const sUnlocked = allPrevAbove70k();
   const tUnlocked = allPrevAbove85k();
+  const mUnlocked = allPrevAboveMarz80k();
 
   const vBox=document.getElementById('guide-voltryx');
   const vLock=document.getElementById('guide-voltryx-locked');
@@ -1109,6 +1227,10 @@ function updateGuideUnlockUI(){
   const tBox=document.getElementById('guide-tempostorm');
   const tLock=document.getElementById('guide-tempostorm-locked');
   if(tBox&&tLock){ tBox.style.display = tUnlocked ? 'block' : 'none'; tLock.style.display = tUnlocked ? 'none' : 'block'; }
+
+  const mBox=document.getElementById('guide-marz');
+  const mLock=document.getElementById('guide-marz-locked');
+  if(mBox&&mLock){ mBox.style.display = mUnlocked ? 'block' : 'none'; mLock.style.display = mUnlocked ? 'none' : 'block'; }
 }
 
 
@@ -1194,6 +1316,10 @@ function spawnProjectile(opts){
 function updateProjectiles(){
   const now=Date.now();
 
+  // NOTE: Player/enemy freeze logic used to live here (Marz old super).
+  // updateProjectiles runs in global scope; player state is handled in Player.update().
+
+
     // Grapple safety: prevent rare stuck state (e.g., Jimmy vs shooter)
     if(this.isGrappling){
       if(!this.grappleTarget || !enemies.includes(this.grappleTarget) || (this.grappleStartTime && now-this.grappleStartTime>1400)){
@@ -1205,19 +1331,26 @@ function updateProjectiles(){
     }
 
   projectiles=projectiles.filter(p=>{
-    // homing behavior towards nearest enemy (for friendly projectiles)
+    // homing behavior (friendly):
+    // - if targetRef exists and is still alive, home on it
+    // - otherwise fall back to nearest enemy
     if(p.homing && p.friendly && enemies.length>0){
-      // find nearest enemy
-      let closest=null, best=Infinity;
-      for(const e of enemies){
-        const dx=(e.x+e.width/2)-p.x;
-        const dy=(e.y+e.height/2)-p.y;
-        const d=Math.hypot(dx,dy);
-        if(d<best){best=d;closest=e}
+      let target = (p.targetRef && enemies.includes(p.targetRef)) ? p.targetRef : null;
+
+      if(!target){
+        let closest=null, best=Infinity;
+        for(const e of enemies){
+          const dx=(e.x+e.width/2)-p.x;
+          const dy=(e.y+e.height/2)-p.y;
+          const d=Math.hypot(dx,dy);
+          if(d<best){best=d;closest=e}
+        }
+        target = closest;
       }
-      if(closest){
-        const dx=(closest.x+closest.width/2)-p.x;
-        const dy=(closest.y+closest.height/2)-p.y;
+
+      if(target){
+        const dx=(target.x+target.width/2)-p.x;
+        const dy=(target.y+target.height/2)-p.y;
         const len=Math.hypot(dx,dy)||1;
         const steerX=(dx/len)*p.speed;
         const steerY=(dy/len)*p.speed;
@@ -1748,6 +1881,16 @@ class Player{
     // passive is enabled by this.evolved flag, no stat changes
   }
 
+
+  // Rallentamento temporaneo (usato da alcuni nemici/boss)
+  // pct: 0.10 = -10% velocità. durationMs in millisecondi.
+  applySlow(pct, durationMs){
+    const now=Date.now();
+    const p=Math.max(0, Math.min(0.60, pct||0)); // cap 60% (Boss5 usa 50%)
+    this._slowPct = Math.min(0.60, Math.max(this._slowPct||0, p));
+    this._slowUntil = Math.max(this._slowUntil||0, now + (durationMs||0));
+  }
+
   findClosestEnemy(radius=this.aimAssistRadius){
     let closest=null;let best=radius;
     enemies.forEach(e=>{
@@ -1854,8 +1997,11 @@ class Player{
     }
     if(moveX!==0&&moveY!==0){moveX*=0.707;moveY*=0.707}
 
+    // Marz super bonus: +50% speed while inside the magic zone
+    const marzZoneMult = (this.type==='marz' && isPointInsideMagicZone(this.x+this.width/2, this.y+this.height/2)) ? 1.5 : 1;
+
     if(this.isDashing){
-      const speedNow=this.speed*(1-(this._slowPct||0));
+      const speedNow=this.speed*marzZoneMult*(1-(this._slowPct||0));
       const dashSpeed=speedNow*(this._dashSpeedMult||3);
       this.vx=(this.facingRight?1:-1)*dashSpeed;
       if(this.type==='kouvagia' && this._kouvagiaDashActive){this.vy=0;}
@@ -1911,7 +2057,7 @@ class Player{
 
       }
     } else if(!this.isGrappling){
-      const speedNow=this.speed*(1-(this._slowPct||0));
+      const speedNow=this.speed*marzZoneMult*(1-(this._slowPct||0));
       this.vx=moveX*speedNow+this.vx*0.1;
             this.vy=moveY*speedNow+this.vy*0.1;
     }
@@ -1924,8 +2070,8 @@ class Player{
         const dx=this.grappleTarget.x-this.x;const dy=this.grappleTarget.y-this.y;
         const dist=Math.hypot(dx,dy);const speedMult=5;
         if(dist>48){
-          this.vx=(dx/(dist||1))*this.speed*speedMult;
-          this.vy=(dy/(dist||1))*this.speed*speedMult
+          this.vx=(dx/(dist||1))*this.speed*marzZoneMult*speedMult;
+          this.vy=(dy/(dist||1))*this.speed*marzZoneMult*speedMult
         } else {
           const dmg=Math.round(this.damage*this.attackBuffMultiplier);
           const _dmg=dmg; const _final=applyEnemyDamage(this.grappleTarget,_dmg);
@@ -1939,6 +2085,19 @@ class Player{
             }
             // Jimmy EVO passive: next grapple has -20% cooldown after a grappled target dies
             if(this.type==='jimmy' && this.evolved){ this._jimmyNextGrappleCdMult=0.8; }
+          }
+          // Anti-sticking: after a grapple hit, step back a few pixels so Jimmy doesn't stay glued
+          if(this.type==='jimmy' && this.attackType==='grapple'){
+            const pcx=this.x+this.width/2, pcy=this.y+this.height/2;
+            const tcx=this.grappleTarget.x+this.grappleTarget.width/2, tcy=this.grappleTarget.y+this.grappleTarget.height/2;
+            let rdx=pcx-tcx, rdy=pcy-tcy;
+            let rdist=Math.hypot(rdx,rdy);
+            if(rdist<1){ rdx=1; rdy=0; rdist=1; }
+            const recoil=10;
+            this.x += (rdx/rdist)*recoil;
+            this.y += (rdy/rdist)*recoil;
+            this.x = Math.max(0, Math.min(canvas.width-this.width, this.x));
+            this.y = Math.max(0, Math.min(canvas.height-this.height, this.y));
           }
           this.isGrappling=false;this.grappleTarget=null;this.vx=0;this.vy=0;
           this.grappleStartTime=0;
@@ -2081,6 +2240,11 @@ class Player{
         }
       } else if(this.attackType==='tempostormLaser'){
         // Tempostorm SUPER is applied instantly in superAttack(); keep VFX only for superDuration.
+        if(elapsed>=this.superDuration){
+          this.endSuper();
+        }
+      } else if(this.attackType==='magic'){
+        // Freeze is applied instantly in superAttack(); keep VFX only for superDuration.
         if(elapsed>=this.superDuration){
           this.endSuper();
         }
@@ -2404,6 +2568,52 @@ else if(this.attackType==='tempostormLaser'){
   createParticles(sx,sy,'#4fc3f7',14,4);
 }
 
+else if(this.attackType==='magic'){
+  const damages = (characterStats.marz && characterStats.marz.tripleDamage) ? characterStats.marz.tripleDamage : [40,50,60];
+  const colors = ['#ff00ff','#00e5ff','#fff176'];
+
+  // Choose up to 3 distinct targets; if fewer, stack on available targets
+  const sorted=enemies.slice().sort((a,b)=>{
+    const da=Math.hypot((a.x+a.width/2)-(this.x+this.width/2),(a.y+a.height/2)-(this.y+this.height/2));
+    const db=Math.hypot((b.x+b.width/2)-(this.x+this.width/2),(b.y+b.height/2)-(this.y+this.height/2));
+    return da-db;
+  });
+  const targets = sorted.slice(0,3);
+  const fallback = targets[0] || this.findClosestEnemy(this.range);
+
+  for(let i=0;i<3;i++){
+    const t = targets[i] || fallback;
+    if(!t) continue;
+
+    const sx=this.x+this.width/2;
+    const sy=this.y+this.height/2;
+    const tx=t.x+t.width/2;
+    const ty=t.y+t.height/2;
+    const dx=tx-sx, dy=ty-sy;
+    const len=Math.hypot(dx,dy)||1;
+
+    const speed=11;
+    const vx=(dx/len)*speed;
+    const vy=(dy/len)*speed;
+
+    spawnProjectile({
+      x:sx,y:sy,
+      vx,vy,speed,
+      damage:Math.round(damages[i]*this.attackBuffMultiplier),
+      ttl:520,
+      color:colors[i%colors.length],
+      radius:7,
+      friendly:true,
+      aoeRadius:0,
+      homing:true,
+      // IMPORTANT: lock each beam to its chosen target (3 different enemies if available)
+      targetRef:t
+    });
+    createParticles(sx,sy,colors[i%colors.length],10,4);
+  }
+}
+
+
 
     return true;
   }
@@ -2515,6 +2725,38 @@ else if(this.attackType==='tempostormLaser'){
   createParticles(cx,cy,'#4fc3f7',60,7);
   shakeScreen();
 }
+
+    else if(this.attackType==='magic'){
+      // Super: create a huge colorful magic zone at map center.
+      // - Expands slowly for 10s
+      // - Deals heavy periodic damage to enemies inside
+      // - If Marz stays inside, he gains +50% movement speed
+      const cx=canvas.width/2;
+      const cy=(canvas.height-50)/2;
+
+      magicZone = {
+        x:cx,
+        y:cy,
+        startsAt:now,
+        endsAt:now+10000,
+        durationMs:10000,
+        startRadius:90,
+        maxRadius:560,
+        radius:90,
+        tickMs:180,
+        damagePerTick:Math.round(16*this.attackBuffMultiplier),
+        lastTick:0,
+        colors:['#ff00ff','#00e5ff','#fff176','#7c4dff','#18ffff'],
+        colorIdx:0
+      };
+
+      // burst FX
+      createParticles(cx,cy,'#ff00ff',50,7);
+      createParticles(cx,cy,'#00e5ff',50,7);
+      createParticles(cx,cy,'#fff176',50,7);
+      shakeScreen();
+    }
+
 
     return true;
   }
@@ -3237,6 +3479,261 @@ class BossEnemy extends Enemy{
     ctx.fillRect(this.x,this.y-10,this.width*hpPercent,5);
   }
 }
+class Boss5Enemy extends Enemy{
+  constructor(type,level){
+    super(type,level);
+
+    // Dimensioni boss
+    this.width=Math.round(245*1.2);
+    this.height=Math.round(245*1.2);
+
+    // Stat fisse richieste
+    this.maxHP=800;
+    this.hp=800;
+
+    // "Non troppo veloce"
+    this.speed=2.99*0.75; // ~1.69 (leggermente più veloce)
+
+    // Danno base (usato solo per eventuale contatto)
+    this.damage=50;
+
+    // --- Attacco: colpo ad ascia a ventaglio 80° (sweep sinistra->destra) ---
+    this.fanRange=470;                 // raggio del ventaglio
+    this.fanAngleDeg=142;               // ampiezza ventaglio
+    this.swingDuration=1000;           // sweep lento (ms)
+    this.swingCooldown=1000;           // cooldown un po' più corto
+    this.lastSwing=Date.now()-1800;    // piccolo offset
+    this.swingActive=false;
+    this.swingStart=0;
+    this.swingCenterAngle=0;
+    this.swingStartAngle=0;
+    this.swingEndAngle=0;
+    this.lastSwingTick=0;
+
+    // --- Passiva: ogni 28s respinge + cura 50 ---
+    this.passiveInterval=20000;
+    this.nextPassive=Date.now()+this.passiveInterval;
+    this.passiveFxUntil=0;
+
+    // Area della passiva/super (raggio)
+    this.passiveRadius=750; // aumentata
+  }
+
+  startSwingTowards(player){
+    const cx=this.x+this.width/2, cy=this.y+this.height/2;
+    const px=player.x+player.width/2, py=player.y+player.height/2;
+    const baseAng=Math.atan2(py-cy, px-cx);
+
+    const half=(this.fanAngleDeg*Math.PI/180)/2;
+    this.swingCenterAngle=baseAng;
+    // parte dall'estremità sinistra del ventaglio e arriva a destra
+    this.swingStartAngle=baseAng-half;
+    this.swingEndAngle=baseAng+half;
+
+    this.swingActive=true;
+    this.swingStart=Date.now();
+    this.lastSwingTick=0;
+
+    // piccolo telegraph: particelle
+    createParticles(cx,cy,'#e74c3c',26,6);
+  }
+
+  doPassive(player){
+    const now=Date.now();
+    this.nextPassive = now + this.passiveInterval;
+
+    // FX visivo
+    const cx=this.x+this.width/2, cy=this.y+this.height/2;
+    this.passiveFxUntil = now + 650;
+    createParticles(cx,cy,'#00e5ff',55,8);
+    shakeScreen();
+
+    // Cura boss
+    this.hp = Math.min(this.maxHP, this.hp + 80);
+
+    // Effetto sul player SOLO se dentro l'area della super/passiva
+    const px=player.x+player.width/2, py=player.y+player.height/2;
+    const dx=px-cx, dy=py-cy;
+    const dist=Math.hypot(dx,dy)||1;
+
+    if(dist <= (this.passiveRadius||420)){
+      // Knockback player (senza danno)
+      const nx=dx/dist, ny=dy/dist;
+      const pushDist=240; // "tanti pixel"
+      player.x += nx*pushDist;
+      player.y += ny*pushDist;
+
+      // Slow: -50% velocità per 2s
+      if(player && typeof player.applySlow==='function'){
+        player.applySlow(0.60, 3200);
+      }
+
+      // clamp in arena
+      player.x=Math.max(0, Math.min(canvas.width-player.width, player.x));
+      player.y=Math.max(0, Math.min(canvas.height-player.height, player.y));
+    }
+  }
+
+  applySwingDamage(player, now){
+    // tick damage durante lo sweep, senza colpire mentre il player è in dash
+    if(player.isDashing) return;
+    if(this.lastSwingTick && (now-this.lastSwingTick)<120) return;
+
+    const cx=this.x+this.width/2, cy=this.y+this.height/2;
+    const px=player.x+player.width/2, py=player.y+player.height/2;
+    const dx=px-cx, dy=py-cy;
+    const dist=Math.hypot(dx,dy);
+
+    if(dist>this.fanRange) return;
+
+    // angolo player
+    const ang=Math.atan2(dy,dx);
+
+    // calcola dove siamo nello sweep
+    const t=Math.max(0, Math.min(1, (now-this.swingStart)/this.swingDuration));
+    const cur=this.swingStartAngle + (this.swingEndAngle-this.swingStartAngle)*t;
+
+    // se lo sweep è verso destra, consideriamo la parte già "coperta" sinistra->cur
+    const minA=Math.min(this.swingStartAngle, cur);
+    const maxA=Math.max(this.swingStartAngle, cur);
+
+    // normalizza per confronto (gestione wrap a -pi/pi)
+    function norm(a){
+      while(a<-Math.PI) a+=Math.PI*2;
+      while(a> Math.PI) a-=Math.PI*2;
+      return a;
+    }
+    const a=norm(ang);
+    const aMin=norm(minA);
+    const aMax=norm(maxA);
+
+    let inside=false;
+    if(aMin<=aMax){
+      inside = (a>=aMin && a<=aMax);
+    }else{
+      // wrap-around
+      inside = (a>=aMin || a<=aMax);
+    }
+
+    if(inside){
+      this.lastSwingTick=now;
+      player.takeDamage(18);
+    }
+  }
+
+  update(player){
+    if(Date.now()<this.spawnFreezeUntil)return;
+
+    const now=Date.now();
+    const cx=this.x+this.width/2, cy=this.y+this.height/2;
+    const px=player.x+player.width/2, py=player.y+player.height/2;
+    const dx=px-cx, dy=py-cy;
+    const dist=Math.hypot(dx,dy)||1;
+
+    // Passiva (ogni 28s)
+    if(now>=this.nextPassive){
+      this.doPassive(player);
+    }
+
+    // Movimento: inseguimento leggero, ma non troppo aggressivo durante lo swing
+    if(!this.swingActive){
+      const nx=dx/dist, ny=dy/dist;
+      const prefer=210; // distanza "comoda"
+      if(dist>prefer){
+        this.vx=nx*this.speed;
+        this.vy=ny*this.speed;
+      }else{
+        // drift lento per non essere statico
+        this.vx*=0.92;
+        this.vy*=0.92;
+      }
+    }else{
+      // durante lo swing resta più "fermo"
+      this.vx*=0.85;
+      this.vy*=0.85;
+    }
+
+    this.x+=this.vx; this.y+=this.vy;
+
+    // clamp arena
+    this.x=Math.max(20, Math.min(canvas.width-this.width-20, this.x));
+    this.y=Math.max(40, Math.min(canvas.height-this.height-20, this.y));
+
+    // Avvia swing se pronto e player in range
+    if(!this.swingActive && dist<=this.fanRange && (now-this.lastSwing)>=this.swingCooldown){
+      this.lastSwing=now;
+      this.startSwingTowards(player);
+    }
+
+    // gestione swing attivo
+    if(this.swingActive){
+      this.applySwingDamage(player, now);
+      if(now-this.swingStart>=this.swingDuration){
+        this.swingActive=false;
+      }
+    }
+
+    // contatto ravvicinato (solo se non in dash) - leggero
+    if(dist<55 && !player.isDashing && !this.swingActive){
+      if(!this._lastTouch) this._lastTouch=0;
+      if(now-this._lastTouch>900){
+        player.takeDamage(14);
+        this._lastTouch=now;
+      }
+    }
+  }
+
+  draw(){
+    const img = enemyImages.boss5;
+    if(img && img.complete) ctx.drawImage(img,this.x,this.y,this.width,this.height);
+    else super.draw();
+
+    // HP bar
+    const hpPercent=this.hp/this.maxHP;
+    ctx.fillStyle='#333';ctx.fillRect(this.x,this.y-10,this.width,5);
+    ctx.fillStyle=hpPercent>0.5?'#2ecc71':hpPercent>0.25?'#f39c12':'#e74c3c';
+    ctx.fillRect(this.x,this.y-10,this.width*hpPercent,5);
+
+    const now=Date.now();
+    const cx=this.x+this.width/2, cy=this.y+this.height/2;
+
+    // FX passiva
+    if(now<this.passiveFxUntil){
+      ctx.save();
+      ctx.globalAlpha=0.45;
+      ctx.lineWidth=6;
+      ctx.strokeStyle='rgba(0,229,255,0.85)';
+      ctx.beginPath();
+      ctx.arc(cx,cy, (this.passiveRadius||this.width*0.75), 0, Math.PI*2);
+      ctx.stroke();
+      ctx.restore();
+    }
+
+    // Disegna il ventaglio durante lo swing (telegraph)
+    if(this.swingActive){
+      const t=Math.max(0, Math.min(1, (now-this.swingStart)/this.swingDuration));
+      const cur=this.swingStartAngle + (this.swingEndAngle-this.swingStartAngle)*t;
+
+      ctx.save();
+      ctx.globalAlpha=0.18;
+      ctx.fillStyle='#e74c3c';
+      ctx.beginPath();
+      ctx.moveTo(cx,cy);
+      ctx.arc(cx,cy, this.fanRange, this.swingStartAngle, cur, false);
+      ctx.closePath();
+      ctx.fill();
+
+      ctx.globalAlpha=0.65;
+      ctx.lineWidth=4;
+      ctx.strokeStyle='rgba(231,76,60,0.9)';
+      ctx.beginPath();
+      ctx.arc(cx,cy, this.fanRange, this.swingStartAngle, this.swingEndAngle, false);
+      ctx.stroke();
+      ctx.restore();
+    }
+  }
+}
+
 
 function spawnEnemiesForLevel(level){
   enemies.length=0;
@@ -3253,6 +3750,7 @@ function spawnEnemiesForLevel(level){
     else if(cfg.enemyType==='archer') e=new ArcherEnemy(cfg.enemyType,lvl);
     else if(cfg.enemyType==='glacial') e=new GlacialEnemy(cfg.enemyType,lvl);
     else if(cfg.enemyType==='boss1' || cfg.enemyType==='boss2' || cfg.enemyType==='boss3') e=new BossEnemy(cfg.enemyType,lvl);
+    else if(cfg.enemyType==='boss5') e=new Boss5Enemy(cfg.enemyType,lvl);
     else e=new Enemy(cfg.enemyType,lvl);
     enemies.push(e);
   }
@@ -3354,6 +3852,8 @@ return;
 
   if(player) player.update();
   enemies.forEach(e=>{e.update(player)});
+  // Marz Super zone tick damage/expansion
+  updateMagicZone(now);
   updateParticles();
   updateProjectiles();
   updateLasers();
@@ -3392,6 +3892,8 @@ return;
     ctx.save();ctx.translate(sx,sy);shakeAmount*=0.9
   } else ctx.save();
 
+  // draw Marz Super zone behind entities
+  drawMagicZone(now);
   enemies.forEach(e=>e.draw());
   if(player) player.draw();
   drawProjectiles();
@@ -3492,7 +3994,7 @@ function updateMenuStatsDisplay(char){
   document.getElementById(`menu-dmg-${char}`).textContent=
     char==='voltryx' ? `${Math.round(34*SUPER_DAMAGE_MULT)} (ranged AoE), ${50}x2 (melee)` :
     (char==='salsy' ? '33x2' :
-     (char==='tempostorm' ? '40 (+30 se resta nel laser)' : s.damage));
+     (char==='tempostorm' ? '40 (+30 se resta nel laser)' : (char==='marz' ? '40 / 50 / 60' : s.damage)));
 
 }
 
@@ -3501,6 +4003,16 @@ document.getElementById('startBtn').addEventListener('click',()=>{
   updateMenuRecordsDisplay();
   startGame();
 });
+
+const extraCharsBtn=document.getElementById('extraCharsBtn');
+const extraCharacterSelect=document.getElementById('extraCharacterSelect');
+if(extraCharsBtn && extraCharacterSelect){
+  extraCharsBtn.addEventListener('click', ()=>{
+    const isOpen = extraCharacterSelect.style.display !== 'none';
+    extraCharacterSelect.style.display = isOpen ? 'none' : 'block';
+  });
+}
+
 
 document.getElementById('restartBtn').addEventListener('click',()=>{
   document.getElementById('endScreen').style.display='none';
@@ -3521,6 +4033,7 @@ function populateMenuStatsAll(){
 updateMenuStatsDisplay('kouvagia');
   updateMenuStatsDisplay('salsy');
   updateMenuStatsDisplay('tempostorm');
+  updateMenuStatsDisplay('marz');
 }
 populateMenuStatsAll();
 updateMenuRecordsDisplay();
@@ -3599,25 +4112,6 @@ gameLoop();
   const img = document.getElementById('enemyGuideImg');
   if(img) img.addEventListener('dragstart', function(ev){ ev.preventDefault(); });
 })();
-
-function spawnFuriaWaves(x,y){
-  const radii=[120,200,300];
-  radii.forEach((r,i)=>{
-    setTimeout(()=>{
-      enemies.forEach((e,idx)=>{
-        const d=Math.hypot((e.x+e.width/2)-x,(e.y+e.height/2)-y);
-        if(d<=r){
-          e.hp-=20;
-          showDamageNumber(e.x,e.y,20);
-          if(e.hp<=0){
-            enemies.splice(idx,1);
-            score+=100*currentLevel;
-          }
-        }
-      });
-    }, i*400);
-  });
-}
 
 
 // ===== FURIA WAVES (visual + damage) =====
@@ -3727,5 +4221,5 @@ function drawFuriaWaves(){
 }
 
 </script>
-</body>
+</div></body>
 </html>
