@@ -333,7 +333,20 @@
 <div class="evo-banner" id="evoBanner" style="display:none;">
 <div id="evoBannerText">EVOLUTO!</div>
 </div>
-<div class="menu" id="mainMenu">
+<div class="menu" id="startScreen">
+  <h1>⚔️ JEFF’S CHRONICLES⚔️</h1>
+  <h2>Scegli la modalità</h2>
+  <p style="margin-top:10px;font-size:15px;color:#ddd;line-height:1.4;">
+    <strong>Difficile</strong>: gioco originale.<br>
+    <strong>Facile</strong>: cure tra i livelli (+25% ogni livello, <em>cura totale</em> ogni 5° livello) ma <em>punteggio dimezzato</em>.
+  </p>
+  <div class="start-row" style="margin-top:18px;flex-wrap:wrap;">
+    <button class="btn" id="modeHardBtn" type="button">MODALITÀ DIFFICILE</button>
+    <button class="btn" id="modeEasyBtn" type="button">MODALITÀ FACILE</button>
+  </div>
+</div>
+
+<div class="menu" id="mainMenu" style="display:none;">
 <h1>⚔️ JEFF’S CHRONICLES⚔️</h1>
 <h2>Seleziona il tuo combattente</h2>
 <div class="character-select">
@@ -624,7 +637,7 @@ bgDark.style.backgroundImage=`url('${URL_DARK}')`;
 bgDefault.style.backgroundSize=bgDark.style.backgroundSize='cover';
 bgDefault.style.backgroundPosition=bgDark.style.backgroundPosition='center';
 
-let gameState='menu';
+let gameState='start';
 let selectedCharacter=null;
 let player=null;
 let currentLevel=0;
@@ -633,6 +646,22 @@ let timer=45;
 let enemies=[];
 let particles=[];
 let pickups=[];
+let difficultyMode='hard'; // 'hard' | 'easy'
+let scoreMultiplier=1;     // easy => 0.5
+
+function setDifficulty(mode){
+  difficultyMode = (mode==='easy') ? 'easy' : 'hard';
+  scoreMultiplier = (difficultyMode==='easy') ? 0.5 : 1;
+}
+
+function applyScore(delta){
+  // In easy mode all score changes are halved (including penalties), and score never goes below 0.
+  const scaled = delta * scoreMultiplier;
+  // keep integers (same feeling as before)
+  const d = (scaled>=0) ? Math.floor(scaled) : Math.ceil(scaled);
+  score = Math.max(0, score + d);
+}
+
 
 // --- Pickup hitbox tuning ---
 // Bigger pickup hitbox (bonuses easier to collect), malus stays tighter.
@@ -690,7 +719,7 @@ function updateMagicZone(now){
         if(e.hp<=0){
           createParticles(e.x,e.y,'#fff176',30,6);
           enemies.splice(i,1);
-          score+=100*currentLevel;
+          applyScore(100*currentLevel);
         }
       }
     }
@@ -963,8 +992,8 @@ const characterStats={
     hp:330,
     speed:7.8*0.75,  // leggermente più veloce di prima
     damage:33,       // per colpo (x2)
-    range:280,       // medio ravvicinata
-    cooldown:770,
+    range:330,       // medio ravvicinata
+    cooldown:750,
     name:'Salsy',
     attackType:'salsySword',
     superCooldown:6000,
@@ -1382,7 +1411,7 @@ function updateProjectiles(){
             if(e.hp<=0){
               createParticles(e.x,e.y,'#fff176',30,6);
               enemies.splice(i,1);
-              score+=100*currentLevel;
+              applyScore(100*currentLevel);
                 if(this.type==='kouvagia'){this.hp=Math.min(this.maxHP,this.hp+3);createParticles(this.x,this.y,'#2ecc71',6,3);}
             }
           }
@@ -1412,7 +1441,7 @@ function updateProjectiles(){
                 if(ee.hp<=0){
                   createParticles(ee.x,ee.y,'#fff176',30,6);
                   enemies.splice(j,1);
-                  score+=100*currentLevel;
+                  applyScore(100*currentLevel);
                 }
               }
             }
@@ -1425,7 +1454,7 @@ function updateProjectiles(){
             if(e.hp<=0){
               createParticles(e.x,e.y,'#fff176',30,6);
               enemies.splice(i,1);
-              score+=100*currentLevel;
+              applyScore(100*currentLevel);
                 if(this.type==='kouvagia'){this.hp=Math.min(this.maxHP,this.hp+3);createParticles(this.x,this.y,'#2ecc71',6,3);}
             }
           }
@@ -1460,7 +1489,7 @@ function updateProjectiles(){
           if(ee.hp<=0){
             createParticles(ee.x,ee.y,'#fff176',30,6);
             enemies.splice(j,1);
-            score+=100*currentLevel;
+            applyScore(100*currentLevel);
           }
         }
       }
@@ -1842,6 +1871,11 @@ class Player{
     this.lastSuper=-s.superCooldown;this.isDoingSuper=false;this.superStartTime=0;
     this.superTargets=[];this.grappleTarget=null;this.isGrappling=false;
     this.grappleStartTime=0; // safety timeout for grapple
+
+    // Jimmy SUPER grapple pass-through helpers (no "grab" interaction)
+    this._superGrapplePassUntil=0;
+    this._superGrappleDirX=1;
+    this._superGrappleDirY=0;
     this.aimAssistRadius=400;this.aimAssistStrength=0.35;
     this._superHitDone=false;this._superPhase=0;
     this.shieldActive=false;this.shieldDurability=4;this.shieldMaxDurability=4;this.shieldBroken=false;this.shieldBrokenTime=0;this.shieldRegenMs=6000;
@@ -2021,7 +2055,7 @@ class Player{
               if(e.hp<=0){
                 createParticles(e.x,e.y,'#fff176',30,6);
                 enemies.splice(i,1);
-                score+=100*currentLevel;
+                applyScore(100*currentLevel);
                 if(this.type==='kouvagia'){this.hp=Math.min(this.maxHP,this.hp+3);createParticles(this.x,this.y,'#2ecc71',6,3);}
               }
             }
@@ -2047,7 +2081,7 @@ class Player{
               if(e.hp<=0){
                 createParticles(e.x,e.y,'#fff176',30,6);
                 enemies.splice(i,1);
-                score+=100*currentLevel;
+                applyScore(100*currentLevel);
                 if(this.type==='kouvagia'){this.hp=Math.min(this.maxHP,this.hp+3);createParticles(this.x,this.y,'#2ecc71',6,3);}
               }
             }
@@ -2063,44 +2097,60 @@ class Player{
     }
 
     // Grapple chase
+    // Jimmy grapple rework:
+    // - L'attacco base NON "si attacca" al bersaglio: Jimmy si avvicina e si ferma a pochi pixel.
+    // - Quando è abbastanza vicino, esegue un colpo a ventaglio (120°) con raggio 90.
     if(this.isGrappling&&this.grappleTarget){
       if(!enemies.includes(this.grappleTarget)){
-        this.isGrappling=false;this.grappleTarget=null
+        this.isGrappling=false;this.grappleTarget=null;this.grappleStartTime=0;
       } else {
-        const dx=this.grappleTarget.x-this.x;const dy=this.grappleTarget.y-this.y;
+        const pcx=this.x+this.width/2, pcy=this.y+this.height/2;
+        const tcx=this.grappleTarget.x+this.grappleTarget.width/2, tcy=this.grappleTarget.y+this.grappleTarget.height/2;
+        const dx=tcx-pcx;const dy=tcy-pcy;
         const dist=Math.hypot(dx,dy);const speedMult=5;
-        if(dist>48){
+
+        const stopDist=62; // "un po' di pixel" dal nemico
+        if(dist>stopDist){
           this.vx=(dx/(dist||1))*this.speed*marzZoneMult*speedMult;
-          this.vy=(dy/(dist||1))*this.speed*marzZoneMult*speedMult
+          this.vy=(dy/(dist||1))*this.speed*marzZoneMult*speedMult;
         } else {
-          const dmg=Math.round(this.damage*this.attackBuffMultiplier);
-          const _dmg=dmg; const _final=applyEnemyDamage(this.grappleTarget,_dmg);
-          createParticles(this.grappleTarget.x,this.grappleTarget.y,'#e74c3c',18,6);
-          showDamageNumber(this.grappleTarget.x,this.grappleTarget.y,_final);
-          if(this.grappleTarget.hp<=0){
-            const idx=enemies.indexOf(this.grappleTarget);
-            if(idx>-1){
-              createParticles(this.grappleTarget.x,this.grappleTarget.y,'#fff176',30,6);
-              enemies.splice(idx,1);score+=100*currentLevel
+          // Fan hit: 120° cone, radius 90 (small hit)
+          const dirAngle=Math.atan2(dy,dx);
+          const arcWidth=Math.PI*(120/180);
+          const radius=90;
+
+          const baseDmg=Math.round(this.damage*0.65*this.attackBuffMultiplier);
+
+          let killedGrappleTarget=false;
+
+          for(let i=enemies.length-1;i>=0;i--){
+            const e=enemies[i];
+            const ex=e.x+e.width/2, ey=e.y+e.height/2;
+            const edx=ex-pcx, edy=ey-pcy;
+            const edist=Math.hypot(edx,edy);
+            if(edist<=radius){
+              const ang=Math.atan2(edy,edx);
+              let diff=ang-dirAngle;
+              while(diff>Math.PI) diff-=Math.PI*2;
+              while(diff<-Math.PI) diff+=Math.PI*2;
+              if(Math.abs(diff)<=arcWidth/2){
+                const _final=applyEnemyDamage(e, baseDmg);
+                createParticles(e.x,e.y,'#e74c3c',14,5);
+                showDamageNumber(e.x,e.y,_final);
+                if(e.hp<=0){
+                  if(e===this.grappleTarget) killedGrappleTarget=true;
+                  createParticles(e.x,e.y,'#fff176',30,6);
+                  enemies.splice(i,1);
+                  applyScore(100*currentLevel);
+                }
+              }
             }
-            // Jimmy EVO passive: next grapple has -20% cooldown after a grappled target dies
-            if(this.type==='jimmy' && this.evolved){ this._jimmyNextGrappleCdMult=0.8; }
           }
-          // Anti-sticking: after a grapple hit, step back a few pixels so Jimmy doesn't stay glued
-          if(this.type==='jimmy' && this.attackType==='grapple'){
-            const pcx=this.x+this.width/2, pcy=this.y+this.height/2;
-            const tcx=this.grappleTarget.x+this.grappleTarget.width/2, tcy=this.grappleTarget.y+this.grappleTarget.height/2;
-            let rdx=pcx-tcx, rdy=pcy-tcy;
-            let rdist=Math.hypot(rdx,rdy);
-            if(rdist<1){ rdx=1; rdy=0; rdist=1; }
-            const recoil=10;
-            this.x += (rdx/rdist)*recoil;
-            this.y += (rdy/rdist)*recoil;
-            this.x = Math.max(0, Math.min(canvas.width-this.width, this.x));
-            this.y = Math.max(0, Math.min(canvas.height-this.height, this.y));
-          }
-          this.isGrappling=false;this.grappleTarget=null;this.vx=0;this.vy=0;
-          this.grappleStartTime=0;
+
+          // Jimmy EVO passive: next grapple has -20% cooldown after a grappled target dies
+          if(this.type==='jimmy' && this.evolved && killedGrappleTarget){ this._jimmyNextGrappleCdMult=0.8; }
+
+          this.isGrappling=false;this.grappleTarget=null;this.vx=0;this.vy=0;this.grappleStartTime=0;
         }
       }
     }
@@ -2150,7 +2200,7 @@ class Player{
                 if(enemies[i].hp<=0){
                   createParticles(enemies[i].x,enemies[i].y,'#fff176',30,6);
                   enemies.splice(i,1);
-                  score+=100*currentLevel;
+                  applyScore(100*currentLevel);
                 }
               }
             }
@@ -2171,8 +2221,7 @@ class Player{
   }
                   createParticles(enemy.x,enemy.y,'#fff176',30,6);
                   enemies.splice(idx,1);
-                  score+=100*currentLevel
-                }
+                  applyScore(100*currentLevel);}
               }
             });
           }
@@ -2180,29 +2229,61 @@ class Player{
         }
         if(elapsed>=this.superDuration)this.endSuper();
 
-      } else if(this.attackType==='grapple'){
-        if(this.superTargets.length>0){
-          const target=this.superTargets[0];
-          if(!enemies.includes(target))this.superTargets.shift();
-          else{
-            const dx=target.x-this.x;const dy=target.y-this.y;const dist=Math.hypot(dx,dy);const chaseSpeed=this.speed*6;
-            if(dist>50){this.vx=(dx/(dist||1))*chaseSpeed;this.vy=(dy/(dist||1))*chaseSpeed}
-            else{
-              const base=120;
-              const mult=(this.type==='jimmy')?(SUPER_DAMAGE_MULT*JIMMY_SUPER_ADDITIONAL_MULT):SUPER_DAMAGE_MULT;
-              const dmg=Math.round(base*mult*this.attackBuffMultiplier*(this.type==='jimmy'?2.0:1));
-              const _dmg=dmg; const _final=applyEnemyDamage(target,_dmg);
-              createParticles(target.x,target.y,'#e74c3c',15,6);
-              showDamageNumber(target.x,target.y, _final);
-              if(target.hp<=0){
-                createParticles(target.x,target.y,'#fff176',30,6);
-                const idx=enemies.indexOf(target);
-                if(idx>-1){enemies.splice(idx,1);score+=100*currentLevel}
+            } else if(this.attackType==='grapple'){
+        // Jimmy SUPER rework:
+        // - NON si aggrappa ai nemici (niente "stop" sul bersaglio).
+        // - Jimmy li attraversa (pass-through) e applica lo stesso colpo/danni quando li raggiunge.
+        const chaseSpeed=this.speed*6;
+
+        // Se siamo nel "pass-through window", continua dritto nella direzione salvata
+        if(this._superGrapplePassUntil && now < this._superGrapplePassUntil){
+          this.vx=this._superGrappleDirX*chaseSpeed;
+          this.vy=this._superGrappleDirY*chaseSpeed;
+        } else {
+          this._superGrapplePassUntil=0;
+
+          if(this.superTargets.length>0){
+            const target=this.superTargets[0];
+            if(!enemies.includes(target)){
+              this.superTargets.shift();
+            } else {
+              const px=this.x+this.width/2, py=this.y+this.height/2;
+              const tx=target.x+target.width/2, ty=target.y+target.height/2;
+              const dx=tx-px;const dy=ty-py;
+              const dist=Math.hypot(dx,dy);
+
+              if(dist>50){
+                this.vx=(dx/(dist||1))*chaseSpeed;
+                this.vy=(dy/(dist||1))*chaseSpeed;
+              } else {
+                // hit once, then keep moving forward briefly (pass-through)
+                const base=120;
+                const mult=(this.type==='jimmy')?(SUPER_DAMAGE_MULT*JIMMY_SUPER_ADDITIONAL_MULT):SUPER_DAMAGE_MULT;
+                const dmg=Math.round(base*mult*this.attackBuffMultiplier*(this.type==='jimmy'?2.0:1));
+                const _final=applyEnemyDamage(target, dmg);
+                createParticles(target.x,target.y,'#e74c3c',15,6);
+                showDamageNumber(target.x,target.y, _final);
+                if(target.hp<=0){
+                  createParticles(target.x,target.y,'#fff176',30,6);
+                  const idx=enemies.indexOf(target);
+                  if(idx>-1){enemies.splice(idx,1);applyScore(100*currentLevel);}
+                }
+
+                // store direction and move through (no interaction/stop)
+                let nx=dx/(dist||1), ny=dy/(dist||1);
+                if(!isFinite(nx) || !isFinite(ny)){ nx=this.facingRight?1:-1; ny=0; }
+                this._superGrappleDirX=nx; this._superGrappleDirY=ny;
+                this._superGrapplePassUntil=now+160;
+
+                // next target
+                this.superTargets.shift();
+                this._superPhase=Date.now();
               }
-              this.superTargets.shift();this._superPhase=Date.now()
             }
+          } else {
+            if(now-this.superStartTime>=Math.min(this.superDuration,1200))this.endSuper();
           }
-        } else {if(now-this.superStartTime>=Math.min(this.superDuration,1200))this.endSuper()}
+        }
       } else if(this.attackType==='sword'){
         if(elapsed>=0&&elapsed<this.superDuration){
           if(!this._lastSwordTick||now-this._lastSwordTick>=180){
@@ -2220,8 +2301,7 @@ class Player{
   }
                   createParticles(enemy.x,enemy.y,'#fff176',30,6);
                   enemies.splice(idx,1);
-                  score+=100*currentLevel
-                }
+                  applyScore(100*currentLevel);}
               }
             });
           }
@@ -2288,7 +2368,7 @@ class Player{
             if(e.hp<=0){
               createParticles(e.x,e.y,'#fff176',30,6);
               enemies.splice(i,1);
-              score+=100*currentLevel;
+              applyScore(100*currentLevel);
                 if(this.type==='kouvagia'){this.hp=Math.min(this.maxHP,this.hp+3);createParticles(this.x,this.y,'#2ecc71',6,3);}
             }
           }
@@ -2355,7 +2435,7 @@ class Player{
                 if(closestEnemy.hp<=0){
                   createParticles(closestEnemy.x,closestEnemy.y,'#fff176',30,6);
                   const idxEnemy=enemies.indexOf(closestEnemy);
-                  if(idxEnemy>-1){enemies.splice(idxEnemy,1);score+=100*currentLevel}
+                  if(idxEnemy>-1){enemies.splice(idxEnemy,1);applyScore(100*currentLevel);}
                 }
               }
             };
@@ -2376,7 +2456,7 @@ class Player{
           if(closestEnemy.hp<=0){
             createParticles(closestEnemy.x,closestEnemy.y,'#fff176',30,6);
             enemies.splice(enemies.indexOf(closestEnemy),1);
-            score+=100*currentLevel;
+            applyScore(100*currentLevel);
           }
         } else if(assistTarget){
           const distA=Math.hypot((assistTarget.x-this.x),(assistTarget.y-this.y));
@@ -2388,7 +2468,7 @@ class Player{
             if(assistTarget.hp<=0){
               createParticles(assistTarget.x,assistTarget.y,'#fff176',30,6);
               enemies.splice(enemies.indexOf(assistTarget),1);
-              score+=100*currentLevel;
+              applyScore(100*currentLevel);
             }
           }
         }
@@ -2429,7 +2509,7 @@ class Player{
   }
               createParticles(enemy.x,enemy.y,'#fff176',30,6);
               enemies.splice(enemies.indexOf(enemy),1);
-              score+=100*currentLevel;
+              applyScore(100*currentLevel);
             }
           }
         });
@@ -2457,8 +2537,7 @@ class Player{
   }
             createParticles(enemy.x,enemy.y,'#fff176',30,6);
             enemies.splice(enemies.indexOf(enemy),1);
-            score+=100*currentLevel
-          }
+            applyScore(100*currentLevel);}
         }
       });
       // Jeff EVO passive: if a single attack hits 2+ enemies, heal 1% max HP
@@ -2477,8 +2556,7 @@ class Player{
           if(assistTarget.hp<=0){
             createParticles(assistTarget.x,assistTarget.y,'#fff176',30,6);
             enemies.splice(enemies.indexOf(assistTarget),1);
-            score+=100*currentLevel
-          }
+            applyScore(100*currentLevel);}
         }
       }
 
@@ -2535,7 +2613,7 @@ class Player{
             if(closest.hp<=0){
               createParticles(closest.x,closest.y,'#fff176',30,6);
               enemies.splice(enemies.indexOf(closest),1);
-              score+=100*currentLevel;
+              applyScore(100*currentLevel);
             }
           }
         };
@@ -2631,7 +2709,12 @@ else if(this.attackType==='magic'){
         const db=Math.hypot(b.x-this.x,b.y-this.y);
         return da-db
       });
-      this.superTargets=sorted.slice(0,6)
+      this.superTargets=sorted.slice(0,6);
+
+      // reset pass-through state
+      this._superGrapplePassUntil=0;
+      this._superGrappleDirX=this.facingRight?1:-1;
+      this._superGrappleDirY=0;
     }
     else if(this.attackType==='punch'){
       createParticles(this.x+this.width/2,this.y+this.height/2,'#f39c12',20,6);
@@ -2781,7 +2864,7 @@ else if(this.attackType==='tempostormLaser'){
     this.hp = Math.max(0, this.hp);
     this.damageTaken++;
     this.combo=0;
-    score=Math.max(0,score-50);
+    applyScore(-50);
     createParticles(this.x,this.y,'#c0392b',12,5);
     shakeScreen();
     if(this.hp<=0 && gameState==='playing') endGame(false);
@@ -3804,6 +3887,8 @@ function startGame(){
   spawnEnemiesForLevel(currentLevel);
   updateBackgroundForLevel(currentLevel);
   document.getElementById('mainMenu').style.display='none';
+  const ss=document.getElementById('startScreen');
+  if(ss) ss.style.display='none';
   document.getElementById('uiOverlay').style.display='block';
   document.getElementById('scoreDisplay').style.display='block';
   document.getElementById('timerDisplay').style.display='block';
@@ -3825,6 +3910,13 @@ function endGame(won){
 }
 
 function nextLevel(){
+
+// Easy mode sustain: after clearing a level, heal between levels
+const clearedLevel = currentLevel;
+if(difficultyMode==='easy' && player){
+  const healAmt = (clearedLevel % 5 === 0) ? (player.maxHP) : (player.maxHP * 0.25);
+  player.hp = Math.min(player.maxHP, (clearedLevel % 5 === 0) ? player.maxHP : (player.hp + healAmt));
+}
   if(currentLevel < levelConfigs.length){
     currentLevel++;
     spawnEnemiesForLevel(currentLevel);
@@ -3864,7 +3956,7 @@ return;
   for(let i=enemies.length-1;i>=0;i--){
     if(enemies[i].hp<=0){
       const dead=enemies.splice(i,1)[0];
-      score+=100*currentLevel;
+      applyScore(100*currentLevel);
       createParticles(dead.x,dead.y,'#fff176',30,6);
     }
   }
@@ -3997,6 +4089,29 @@ function updateMenuStatsDisplay(char){
      (char==='tempostorm' ? '40 (+30 se resta nel laser)' : (char==='marz' ? '40 / 50 / 60' : s.damage)));
 
 }
+
+/* === Start screen: choose difficulty mode === */
+(function(){
+  const startScreen=document.getElementById('startScreen');
+  const mainMenu=document.getElementById('mainMenu');
+  const hardBtn=document.getElementById('modeHardBtn');
+  const easyBtn=document.getElementById('modeEasyBtn');
+  if(startScreen && mainMenu){
+    // default view
+    startScreen.style.display='block';
+    mainMenu.style.display='none';
+    gameState='start';
+  }
+  function goToMenu(mode){
+    setDifficulty(mode);
+    if(startScreen) startScreen.style.display='none';
+    if(mainMenu) mainMenu.style.display='block';
+    gameState='menu';
+    updateMenuRecordsDisplay();
+  }
+  if(hardBtn) hardBtn.addEventListener('click', ()=>goToMenu('hard'));
+  if(easyBtn) easyBtn.addEventListener('click', ()=>goToMenu('easy'));
+})();
 
 document.getElementById('startBtn').addEventListener('click',()=>{
   if(!selectedCharacter)selectedCharacter='jimmy';
@@ -4170,7 +4285,7 @@ function updateFuriaWaves(){
           if(e.hp<=0){
             createParticles(e.x,e.y,'#fff176',30,6);
             enemies.splice(i,1);
-            score+=100*currentLevel;
+            applyScore(100*currentLevel);
           }
         }
       }
