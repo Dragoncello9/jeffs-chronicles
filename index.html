@@ -501,7 +501,7 @@
 <h4>🐱 ROONEY</h4>
 <p><strong>Ruolo</strong>: resistenza e danni ravvicinati.</p>
 <p><strong>Attacco base</strong>: serie di pugni potenti a corto raggio. Ottimo contro nemici lenti o raggruppati.</p>
-<p><strong>Super</strong>: colpo ad area intorno a Rooney. Danni elevati distribuiti su più nemici, e danni che aumentano se i nemici si trovano a distanza più ravvicinata da Rooney. Versatile su ondate di tanti nemici e devstante su singolo nemico.</p>
+<p><strong>Super</strong>: colpo ad area che frantuma il terreno in una <strong>zona quadrata</strong> centrata su Rooney. Il <strong>danno totale massimo è 300</strong> (senza buff) e viene distribuito tra tutti i nemici presenti nell’area: chi è più vicino al centro subisce più danno, chi è verso i bordi ne subisce meno. Perfetta per ripulire ondate e per fare burst se resti vicino al bersaglio principale.</p>
 <p><strong>Stile consigliato</strong>: restare vicino ai nemici e controllare lo spazio.</p>
 <h4>🗡️ JEFF </h4>
 <p><strong>Ruolo</strong>: controllo dell’arena.</p>
@@ -856,25 +856,25 @@ function markEnemySeen(type){
 
 // Dati descrittivi (nome + descrizione + chiave immagine)
 const enemyGuideData={
-  slime:{ name:'SLIME', imgKey:'slime', desc:'Creatura base. Si muove lentamente e ti insegue: perfetta per imparare posizionamento e tempo del dash.'},
-  drone:{ name:'DRONE', imgKey:'drone', desc:'Nemico veloce e imprevedibile. Ti punisce se resti fermo: muoviti a zig-zag e non sprecare dash.'},
-  mech:{ name:'MECH', imgKey:'mech', desc:'Corazzato e resistente. Richiede pazienza: colpisci e riposizionati, specialmente se sei un personaggio melee.'},
-  shadow:{ name:'SHADOW', imgKey:'shadow', desc:'Molto rapido e aggressivo. Mantieni distanza di sicurezza e usa il dash per evitare contatti ravvicinati.'},
-  shooter:{ name:'SHOOTER', imgKey:'shooter', desc:'Attaccante a distanza. Schiva i proiettili con dash laterali e prova a eliminare prima gli shooter quando sono in gruppo.'},
-  attacker:{ name:'ATTACKER', imgKey:'attacker', desc:'Nemico con ritorno aggressivo: entra, colpisce e riparte. Anticipa la traiettoria e non inseguirlo in linea retta.'},
-  archer:{ name:'ARCHER', imgKey:'archer', desc:'Tiratore preciso. Se resti esposto ti colpisce: cambia spesso direzione e usa i momenti di ricarica per avvicinarti.'},
-  glacial:{ name:'GLACIAL', imgKey:'glacial', desc:'Nemico glaciale: tende a rallentare e rendere più pericoloso il controllo degli spazi. Non farti chiudere: riposizionati in anticipo.'},
-  veleno:{ name:'VELENO', imgKey:'veleno', desc:'Applica Poison: subisci danni nel tempo. Priorità alta: eliminalo in fretta o gestisci i pickup cura.'},
-  oneyes:{ name:'ONE-EYE', imgKey:'oneyes', desc:'Nemico che mantiene distanza e ti punisce se lo insegui male. Avanza a scatti e usa dash per accorciare senza esporti.'},
-  boss1:{ name:'BOSS I', imgKey:'boss1', desc:'Primo boss. Molti HP e pressione costante: sfrutta la super nel momento giusto e non prendere danni inutili.'},
-  boss2:{ name:'BOSS II', imgKey:'boss2', desc:'Boss più aggressivo e resistente. Controlla il cooldown della super e cerca finestre sicure per colpire.'},
-  boss3:{ name:'BOSS III', imgKey:'boss3', desc:'Boss avanzato: richiede gestione perfetta di dash e super. È lo spartiacque verso la fase finale.'},
-  boss4:{ name:'BOSS IV', imgKey:'boss4', desc:'Boss speciale con attacchi più “telegraph” e colpi potenti. Leggi i segnali e schiva con precisione.'},
-  boss5:{ name:'BOSS V', imgKey:'boss5', desc:'Boss finale: colpo ad ascia a ventaglio (80°) con sweep lento. Passiva ogni 28s: rigenera HP e, se sei nel raggio, ti respinge e ti rallenta del 50% per 2s.'}
+  slime:{ name:'SLIME', imgKey:'slime', desc:'Creatura base gelatinosa. Lenta, prevedibile, pensata per mettere pressione numerica più che tecnica. Insegue costantemente il giocatore e infligge danno da contatto.  HP: 45–50 ⭐⭐☆☆☆ Danno: 9–10 ⭐⭐☆☆☆ Velocità:   ⭐⭐☆☆☆'},
+  drone:{ name:'DRONE', imgKey:'drone', desc:'Unità volante veloce e nervosa, progettata per punire chi resta fermo.  Movimento rapido e irregolare, attacco da contatto. HP: ~40 ⭐⭐☆☆☆ Danno: 11–12 ⭐⭐⭐☆☆ Velocità: ⭐⭐⭐⭐☆'},
+  mech:{ name:'MECH', imgKey:'mech', desc:'Nemico corazzato e resistente, fa da “tank” nelle ondate.  Avanza lentamente verso il giocatore e colpisce a contatto. HP: 60–65 ⭐⭐⭐⭐☆ Danno:  16-17 ⭐⭐⭐☆☆ Velocità: ⭐⭐☆☆☆'},
+  shadow:{ name:'SHADOW', imgKey:'shadow', desc:'Entità oscura estremamente aggressiva, specializzata nel combattimento ravvicinato. Insegue molto velocemente, attacco immediato a contatto. HP: 50–52 ⭐⭐⭐☆☆ Danno: 17–18 ⭐⭐⭐⭐☆ Velocità: ⭐⭐⭐⭐⭐'},
+  shooter:{ name:'SHOOTER', imgKey:'shooter', desc:'Attaccante a distanza che costringe il giocatore a schivare costantemente. Spara proiettili dalla distanza mantenendo posizione.  HP: 45 ⭐⭐☆☆☆ Danno: 20–21 ⭐⭐⭐⭐☆ Velocità: ⭐⭐⭐☆☆'},
+  attacker:{ name:'ATTACKER', imgKey:'attacker', desc:'Assalitore aggressivo con pattern “hit & run”. Carica, colpisce e si allontana rapidamente. HP: 90–99 ⭐⭐⭐⭐☆ Danno: 17–19 ⭐⭐⭐☆☆ Velocità: ⭐⭐⭐⭐☆'},
+  archer:{ name:'ARCHER', imgKey:'archer', desc:'Tiratore preciso che punisce il posizionamento sbagliato. Spara frecce a distanza, ricarica tra un colpo e l’altro. HP: 78–86 ⭐⭐⭐☆☆ Danno: 14–15 ⭐⭐⭐☆☆ Velocità: ⭐⭐⭐☆☆'},
+  glacial:{ name:'GLACIAL', imgKey:'glacial', desc:'Nemico pesante del bioma ghiaccio, domina il controllo dell’arena. Movimento lento ma pressante, danno da contatto. HP: 150–165 ⭐⭐⭐⭐⭐ Danno: 22–24 ⭐⭐⭐⭐☆ Velocità: ⭐⭐☆☆☆'},
+  veleno:{ name:'VELENO', imgKey:'veleno', desc:'Creatura tossica estremamente pericolosa se ignorata. Attacco a contatto che applica Poison. HP: 60–70 ⭐⭐⭐☆☆ Danno: 13–15 ⭐⭐⭐☆☆ Velocità: ⭐⭐⭐☆☆ Abilità passive: ☠️ Poison – danni nel tempo'},
+  oneyes:{ name:'ONE-EYE', imgKey:'oneyes', desc:'Entità strategica che mantiene distanza e punisce inseguimenti sbagliati. Avanza a scatti, attacca quando il giocatore si espone con attacchi a laser precisi e letali con danni continui se si rimane dentro il raggio del laser. HP: 55–60 ⭐⭐⭐☆☆ Danno: 8–9 ⭐⭐☆☆☆ Velocità: ⭐⭐☆☆☆'},
+  boss1:{ name:'BOSS I', imgKey:'boss1', desc:'HP: 150 ⭐⭐⭐☆☆ Danno: 20 ⭐⭐⭐☆☆ Velocità: ⭐⭐☆☆☆ Passiva: ❌ | Boss introduttivo, pressione costante.'},
+  boss2:{ name:'BOSS II', imgKey:'boss2', desc:'HP: 300 ⭐⭐⭐⭐☆ Danno: 27 ⭐⭐⭐⭐☆ Velocità: ⭐⭐⭐☆☆ Passiva: ❌ | Molto più aggressivo, richiede gestione super.'},
+  boss3:{ name:'BOSS III', imgKey:'boss3', desc:'HP: 666 ⭐⭐⭐⭐⭐ Danno:  33 ⭐⭐⭐⭐☆ Velocità: ⭐⭐☆☆☆ Passiva: ❌ | Spartiacque del gioco, alta difficoltà tecnica.'},
+  boss4:{ name:'BOSS IV', imgKey:'boss4', desc:'HP: 999 ⭐⭐⭐⭐⭐ Danno: 35 ⭐⭐⭐⭐☆ Velocità: ⭐⭐☆☆☆ Passiva: 🧠 Attacchi telegraphed Premia lettura e tempismo.'},
+  boss5:{ name:'BOSS V', imgKey:'boss5', desc:'HP: 800 ⭐⭐⭐⭐⭐ Danno: 32 ⭐⭐⭐⭐☆ Velocità: ⭐⭐☆☆☆ Abilità passive: ♻️ Rigenerazione HP ogni 28s 🌊 Onda di respinta 🧊 Rallentamento 50% per 2s se nel raggio'}
 };
 
 // Ordine consigliato nella lista
-const enemyGuideOrder=['slime','drone','mech','shadow','shooter','attacker','archer','glacial','veleno','oneyes','boss1','boss2','boss3','boss4','boss5'];
+const enemyGuideOrder=['slime','drone','mech','shadow','shooter','attacker','veleno','oneyes','archer','glacial','boss1','boss2','boss3','boss4','boss5'];
 
 function buildEnemyGuideUI(){
   const listEl=document.getElementById('enemyGuideList');
@@ -2164,26 +2164,28 @@ class Player{
         if(!this._superHitDone&&elapsed>=300){
           this._superHitDone=true;
           if(this.type==='rooney'){
-            // Rooney SUPER:
-            // - Colpisce TUTTI i nemici nel raggio.
-            // - Il danno totale si "spalma" (più nemici => meno danno a testa).
-            // - Più un nemico è vicino al centro, più prende danno.
-            // In condizioni ottimali (1 solo nemico super ravvicinato) infligge 220 danni.
-            const R=200;
+            // Rooney SUPER (rework):
+            // - Area QUADRATA centrata su Rooney.
+            // - Danno totale massimo: 300 (senza buff) distribuito tra TUTTI i nemici nell'area.
+            // - Falloff: più un nemico è lontano dal centro, meno danno subisce.
+            const half=200; // mezzo lato del quadrato (lato=400)
             const px=this.x+this.width/2, py=this.y+this.height/2;
             const hits=[];
+            const maxDist=Math.hypot(half,half) || 1;
+
             for(const enemy of enemies){
               const ex=enemy.x+enemy.width/2, ey=enemy.y+enemy.height/2;
-              const dist=Math.hypot(ex-px, ey-py);
-              if(dist<=R){
-                // peso: 1 al centro, ~0 al bordo (con minimo per non azzerare del tutto)
-                const w=Math.max(0.05, 1 - (dist/R));
-                hits.push({enemy,w});
+              const dx=ex-px, dy=ey-py;
+              if(Math.abs(dx)<=half && Math.abs(dy)<=half){
+                const dist=Math.hypot(dx,dy);
+                const w=Math.max(0.10, 1 - (dist/maxDist)); // minimo 10% al bordo
+                hits.push({enemy,w, dist});
               }
             }
+
             if(hits.length>0){
-              // Compensiamo SUPER_DAMAGE_MULT così che 1 bersaglio ravvicinato prenda 220 (senza buff)
-              const totalBase=Math.round(220 / SUPER_DAMAGE_MULT);
+              // Compensiamo SUPER_DAMAGE_MULT così che la SOMMA dei danni (senza buff) sia 300.
+              const totalBase=Math.round(350 / SUPER_DAMAGE_MULT);
               const sumW=hits.reduce((a,h)=>a+h.w,0) || 1;
 
               for(const h of hits){
@@ -2191,8 +2193,19 @@ class Player{
                 const raw=totalBase*share;
                 const dmg=Math.max(6, Math.round(raw * SUPER_DAMAGE_MULT * this.attackBuffMultiplier));
                 const _final=applyEnemyDamage(h.enemy, dmg);
-                createParticles(h.enemy.x,h.enemy.y,'#f39c12',18,6);
+
+                // Hit FX
+                createParticles(h.enemy.x,h.enemy.y,'#f39c12',22,6);
                 showDamageNumber(h.enemy.x,h.enemy.y, _final);
+              }
+
+              // Ground-break FX (debris + dust) nell'area quadrata
+              createParticles(px,py,'#795548',55,8);
+              for(let k=0;k<12;k++){
+                const rx=px + (Math.random()*2-1)*half;
+                const ry=py + (Math.random()*2-1)*half;
+                createParticles(rx,ry,'#6d4c41',14,6);
+                createParticles(rx,ry,'#b0bec5',8,4);
               }
 
               // rimuovi i morti (e assegna score) subito, come per le altre super
@@ -4336,5 +4349,31 @@ function drawFuriaWaves(){
 }
 
 </script>
-</div></body>
+</div>
+<script>
+/* ================================
+   KEYBOARD INPUT (WASD + ARROWS)
+   ================================ */
+function normalizeKey(key) {
+  switch (key) {
+    case 'ArrowUp': return 'w';
+    case 'ArrowDown': return 's';
+    case 'ArrowLeft': return 'a';
+    case 'ArrowRight': return 'd';
+    default: return key.toLowerCase();
+  }
+}
+
+window.addEventListener('keydown', e => {
+  const k = normalizeKey(e.key);
+  keys[k] = true;
+});
+
+window.addEventListener('keyup', e => {
+  const k = normalizeKey(e.key);
+  keys[k] = false;
+});
+</script>
+
+</body>
 </html>
