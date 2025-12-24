@@ -410,13 +410,13 @@
 <div class="record-badge" id="record-marz">Record: 0</div>
 <div class="lock-badge" id="marzLockBadge">LOCKED</div>
 </div>
-<!-- Placeholder character (non cliccabile) -->
-<div class="character-card coming-soon disabled" data-char="placeholder" id="card-placeholder" title="Personaggio in arrivo">
-<h3>PERSONAGGIO</h3>
-<p>"❔"</p>
-<div class="menu-stats">HP: 0 Danno: 0</div>
-<div class="record-badge">Record: 0</div>
-<div class="lock-badge">COMING SOON</div>
+<!-- Hècate card (locked until 85.000 score with all previous characters) -->
+<div class="character-card disabled" data-char="hecate" id="card-hecate" title="Sblocca facendo 85.000 punti con tutti i personaggi precedenti (Jimmy, Rooney, Jeff, Voltryx, Kouvagia, Salsy, Tempostorm e Marz)">
+<h3>HÈCATE</h3>
+<p>"🌘"</p>
+<div class="menu-stats">HP: <span id="menu-hp-hecate">-</span> Danno: <span id="menu-dmg-hecate">-</span></div>
+<div class="record-badge" id="record-hecate">Record: 0</div>
+<div class="lock-badge" id="hecateLockBadge">LOCKED</div>
 </div>
 </div>
 <div class="start-row">
@@ -570,6 +570,19 @@
 <p><strong>Attacco base</strong>: spara <strong>tre fasci magici</strong> (corti) con danni diversi: <strong>40</strong>, <strong>50</strong>, <strong>60</strong>. Se ci sono almeno 3 nemici, colpisce fino a 3 bersagli differenti; se i nemici sono meno, i fasci si concentrano sugli stessi bersagli disponibili.</p>
 <p><strong>Super – Sigillo Arcano</strong>: crea esattamentte al centro della mappa un <strong>cerchi arcano </strong> che si espande molto lentamente causando molti danni ai nemici presenti all'interno inoltre Marz all'interno dell'area del sigillo ottiene <strong>un aumento del 50% della velocità</strong> finche la super resta attiva quindi per <strong>10 secondi</strong>.</p>
 <p><strong>Sblocco</strong>: 80.000 punti con tutti i personaggi precedenti.</p>
+</div>
+
+<div id="guide-hecate-locked" style="margin-top:10px;padding:10px;border:2px dashed rgba(255,255,255,0.35);background:rgba(255,255,255,0.05);">
+<h4>🌘 HÈCATE</h4>
+<p><em>Questo personaggio si sblocca facendo <strong>85.000 punti</strong> con tutti i personaggi precedenti (Jimmy, Rooney, Jeff, Voltryx, Kouvagia, Salsy, Tempostorm e Marz). La descrizione completa apparirà automaticamente appena lo sblocchi.</em></p>
+</div>
+<div id="guide-hecate" style="display:none;">
+<h4>🌘 HÈCATE</h4>
+<p><strong>Ruolo</strong>: tiratrice a lunga distanza + sustain tramite Super.</p>
+<p><strong>Statistiche</strong>: 325 HP, dash identico a Voltryx.</p>
+<p><strong>Attacco base</strong>: scocca una <strong>freccia a lunghissima distanza</strong> che infligge il danno maggiore al <strong>primo nemico colpito</strong>. Nel punto d’impatto la freccia si <strong>divide istantaneamente</strong> (effetto visivo) in <strong>tre frecce</strong> che cercano e colpiscono <strong>altri nemici</strong> (non quello già colpito).</p>
+<p><strong>Super – Richiamo Lunare</strong>: si cura di <strong>5 HP per ogni nemico presente</strong> nell’arena al momento dell’attivazione. Inoltre richiama tre lupi che attaccano i nemici con morsi letali il richiamo puo essere attivato piu volte ma in campo ci possono essere massimo 6 lupi</p>
+<p><strong>Sblocco</strong>: 85.000 punti con tutti i personaggi precedenti.</p>
 </div>
 <h3>11) NEMICI E PERICOLI</h3>
 <p>Nemici melee, veloci, resistenti e a distanza. Nemici con poison. Nemici con laser che richiedono schivata precisa. Boss con attacchi speciali e grandi quantità di HP.</p>
@@ -767,12 +780,13 @@ function isPointInsideMagicZone(x,y){
 
 let lasers=[];
 let tempBeams=[]; // Tempostorm lasers (friendly beams)
+let wolves=[]; // Hècate Super: lupi amichevoli
 let keys={};
 let lastSecondTick=Date.now();
 let levelAdvanceLock=false;
 let shakeAmount=0;
 
-const images={rooney:new Image(),jimmy:new Image(),jeff:new Image(),voltryx:new Image(),kouvagia:new Image(),salsy:new Image(),tempostorm:new Image() ,marz:new Image()};
+const images={rooney:new Image(),jimmy:new Image(),jeff:new Image(),voltryx:new Image(),kouvagia:new Image(),salsy:new Image(),tempostorm:new Image() ,marz:new Image(),hecate:new Image()};
 images.rooney.src='https://i.postimg.cc/Vs0G7ZPV/rooneyy.png';
 images.jimmy.src='https://i.postimg.cc/13Qzjdn4/jimmyy.png';
 images.jeff.src='https://i.postimg.cc/gkQN3v7R/jeff-(1).png';
@@ -781,6 +795,8 @@ images.kouvagia.src='https://i.postimg.cc/gj1xjk0G/kouvagiaa-(1).png';
 images.salsy.src='https://i.ibb.co/20zSkjsB/salsy.png';
 images.tempostorm.src='https://i.postimg.cc/mkzj763m/tempostorm.png';
 images.marz.src='https://i.postimg.cc/j5WJZL5X/marz.png';
+images.hecate.src='https://i.postimg.cc/9QjRg424/hecate.png';
+const wolfImg=new Image(); wolfImg.src='https://i.postimg.cc/4y9yBGFw/lupo.png';
 const imagesEvo={jimmy:new Image(),rooney:new Image(),jeff:new Image()};
 imagesEvo.jimmy.src='https://i.postimg.cc/g26ZX0n9/jimmyevo.png';
 imagesEvo.rooney.src='https://i.postimg.cc/x8Ck0fWs/rooneyevo.png';
@@ -985,12 +1001,12 @@ const characterStats={
     cooldown:760,
     name:'Kouvagia',
     attackType:'kouvagia',
-    superCooldown:20000,
+    superCooldown:25000,
     superDuration:600
   },
   salsy:{
     hp:330,
-    speed:7.8*0.75,  // leggermente più veloce di prima
+    speed:8*0.75,  // leggermente più veloce di prima
     damage:33,       // per colpo (x2)
     range:330,       // medio ravvicinata
     cooldown:750,
@@ -1021,6 +1037,18 @@ const characterStats={
     attackType:'magic',
     superCooldown:20000,
     superDuration:2200
+  }
+
+  ,hecate:{
+    hp:325,
+    speed:9*0.75,
+    damage:52,
+    range:990,
+    cooldown:900,
+    name:'Hècate',
+    attackType:'hecateBow',
+    superCooldown:22000,
+    superDuration:700
   }
 };
 
@@ -1053,14 +1081,30 @@ const levelConfigs=[
   ,{enemyType:'boss5',enemyHP:800,enemyDamage:32,enemySpeed:2.2*0.75,time:200,enemyCount:1} // Level 25 (Boss V)
 ];
 
-const RECORDS_KEY='pf_records_v18'; 
+const RECORDS_KEY='pf_records_v19'; 
 // Backward compatibility: try older keys used by previous versions
-const LEGACY_RECORDS_KEYS = ['pf_records_v17','pf_records_v16','pf_records_v15','pf_records'];
+const LEGACY_RECORDS_KEYS = ['pf_records_v18','pf_records_v17','pf_records_v16','pf_records_v15','pf_records'];
 // bumped key to include tempostormnclude salsy + new unlock rules // bumped key to include voltryx
 let records=loadRecords();
+// === SANITIZZAZIONE RECORD (fix bug Marz -> Hècate) ===
+(function sanitizeRecords(){
+  if(!records) return;
+  // Se Hècate ha un record ma non è ancora realmente sbloccata,
+  // e Marz ha 0, spostiamo il record su Marz.
+  const hecateUnlocked = allPrevAboveHecate85k();
+  if(!hecateUnlocked && records.hecate > 0 && records.marz === 0){
+    records.marz = records.hecate;
+    records.hecate = 0;
+    try{
+      localStorage.setItem(RECORDS_KEY, JSON.stringify(records));
+      console.warn('[SANITIZE] Record spostato da Hècate a Marz');
+    }catch(e){}
+  }
+})();
+
 
 function loadRecords(){
-  const base={jimmy:0,rooney:0,jeff:0,voltryx:0,kouvagia:0,salsy:0,tempostorm:0};
+  const base={jimmy:0,rooney:0,jeff:0,voltryx:0,kouvagia:0,salsy:0,tempostorm:0,marz:0,hecate:0};
   try{
     // Primary key (current version)
     const r=localStorage.getItem(RECORDS_KEY);
@@ -1094,11 +1138,13 @@ function updateMenuRecordsDisplay(){
   document.getElementById('record-salsy').textContent=`Record: ${records.salsy||0}`;
   document.getElementById('record-tempostorm').textContent=`Record: ${records.tempostorm||0}`;
   document.getElementById('record-marz').textContent=`Record: ${records.marz||0}`;
+  document.getElementById('record-hecate').textContent=`Record: ${records.hecate||0}`;
   updateVoltryxUnlockUI();
   updateKouvagiaUnlockUI();
   updateSalsyUnlockUI();
   updateTempostormUnlockUI();
   updateMarzUnlockUI();
+  updateHecateUnlockUI();
   updateGuideUnlockUI();
 }
 function allThreeAbove50k(){
@@ -1234,12 +1280,42 @@ function updateMarzUnlockUI(){
     card.title='Sblocca facendo 80.000 punti con tutti i personaggi precedenti';
   }
 }
+
+
+function allPrevAboveHecate85k(){
+  return (records.jimmy||0) >= 85000 &&
+         (records.rooney||0) >= 85000 &&
+         (records.jeff||0) >= 85000 &&
+         (records.voltryx||0) >= 85000 &&
+         (records.kouvagia||0) >= 85000 &&
+         (records.salsy||0) >= 85000 &&
+         (records.tempostorm||0) >= 85000 &&
+         (records.marz||0) >= 85000;
+}
+function updateHecateUnlockUI(){
+  const card=document.getElementById('card-hecate');
+  const badge=document.getElementById('hecateLockBadge');
+  if(!card||!badge) return;
+
+  const unlocked = allPrevAboveHecate85k();
+  if(unlocked){
+    card.classList.remove('disabled');
+    card.classList.remove('coming-soon');
+    setLockBadgeState(badge, false);
+    card.title='Hècate sbloccata!';
+  }else{
+    card.classList.add('disabled');
+    setLockBadgeState(badge, true);
+    card.title='Sblocca facendo 85.000 punti con tutti i personaggi precedenti';
+  }
+}
 function updateGuideUnlockUI(){
   const vUnlocked = allThreeAbove50k();
   const kUnlocked = voltryxAbove51k();
   const sUnlocked = allPrevAbove70k();
   const tUnlocked = allPrevAbove85k();
   const mUnlocked = allPrevAboveMarz80k();
+  const hUnlocked = allPrevAboveHecate85k();
 
   const vBox=document.getElementById('guide-voltryx');
   const vLock=document.getElementById('guide-voltryx-locked');
@@ -1260,6 +1336,10 @@ function updateGuideUnlockUI(){
   const mBox=document.getElementById('guide-marz');
   const mLock=document.getElementById('guide-marz-locked');
   if(mBox&&mLock){ mBox.style.display = mUnlocked ? 'block' : 'none'; mLock.style.display = mUnlocked ? 'none' : 'block'; }
+
+  const hBox=document.getElementById('guide-hecate');
+  const hLock=document.getElementById('guide-hecate-locked');
+  if(hBox&&hLock){ hBox.style.display = hUnlocked ? 'block' : 'none'; hLock.style.display = hUnlocked ? 'none' : 'block'; }
 }
 
 
@@ -1300,6 +1380,148 @@ function showDamageNumber(x,y,dmg){
   setTimeout(()=>div.remove(),1000)
 }
 
+// ===== Lupi amichevoli (HÈCATE SUPER) =====
+const WOLF_MAX = 6;
+class Wolf{
+  constructor(x,y){
+    this.x=x; this.y=y;
+    this.width=72; this.height=72;
+    this.maxHP=90; this.hp=90;
+    this.speed=3.5; // movimento rapido ma non OP
+    this.damage=30;
+    this.range=70; // morso ravvicinato
+    this.cooldown=700;
+    this.lastAttack=0;
+
+    // per compatibilità con l'AI dei nemici (che si aspetta un "player-like")
+    this.invulnerable=false;
+    this.shieldActive=false;
+  }
+  takeDamage(d){
+    if(this.hp<=0) return;
+    this.hp -= d;
+    createParticles(this.x+this.width/2, this.y+this.height/2, '#90caf9', 14, 4);
+  }
+  _nearestEnemy(){
+    if(!enemies || enemies.length===0) return null;
+    const cx=this.x+this.width/2, cy=this.y+this.height/2;
+    let best=null, bestD=1e9;
+    for(const e of enemies){
+      const ex=e.x+e.width/2, ey=e.y+e.height/2;
+      const d=Math.hypot(ex-cx, ey-cy);
+      if(d<bestD){ bestD=d; best=e; }
+    }
+    return best;
+  }
+  update(){
+    const now=Date.now();
+    const target=this._nearestEnemy();
+    if(!target) return;
+
+    const cx=this.x+this.width/2, cy=this.y+this.height/2;
+    const tx=target.x+target.width/2, ty=target.y+target.height/2;
+    const dx=tx-cx, dy=ty-cy;
+    const dist=Math.hypot(dx,dy) || 1;
+
+    // Move towards target
+    const nx=dx/dist, ny=dy/dist;
+    this.x += nx*this.speed;
+    this.y += ny*this.speed;
+
+    // Clamp arena
+    this.x=Math.max(0, Math.min(canvas.width-this.width, this.x));
+    this.y=Math.max(0, Math.min(canvas.height-this.height, this.y));
+
+    // Bite
+    if(dist <= this.range && (now-this.lastAttack) >= this.cooldown){
+      this.lastAttack=now;
+      const finalDmg = Math.max(0, Math.round(this.damage * markMult(target)));
+      target.hp -= finalDmg;
+      showDamageNumber(target.x, target.y, finalDmg);
+      createParticles(tx, ty, '#b0bec5', 10, 3);
+
+      if(target.hp<=0){
+        // kill credit: same as normal kill
+        createParticles(target.x, target.y, '#fff176', 30, 6);
+        const idx=enemies.indexOf(target);
+        if(idx>=0) enemies.splice(idx,1);
+        applyScore(100*currentLevel);
+      }
+    }
+  }
+  draw(){
+    // sprite
+    if(wolfImg && wolfImg.complete){
+      ctx.drawImage(wolfImg, this.x, this.y, this.width, this.height);
+    }else{
+      ctx.fillStyle='#90caf9';
+      ctx.fillRect(this.x,this.y,this.width,this.height);
+    }
+
+    // mini HP bar
+    const barW=this.width, barH=6;
+    const pct=Math.max(0, Math.min(1, this.hp/this.maxHP));
+    ctx.fillStyle='rgba(0,0,0,0.55)';
+    ctx.fillRect(this.x, this.y-10, barW, barH);
+    ctx.fillStyle='#66bb6a';
+    ctx.fillRect(this.x, this.y-10, barW*pct, barH);
+  }
+}
+
+function spawnWolvesNearPlayer(playerObj, wanted){
+  if(!playerObj) return;
+  const free = Math.max(0, WOLF_MAX - (wolves?.length||0));
+  const n = Math.max(0, Math.min(wanted||0, free));
+  if(n<=0) return;
+
+  const px=playerObj.x+playerObj.width/2;
+  const py=playerObj.y+playerObj.height/2;
+
+  for(let i=0;i<n;i++){
+    const a=Math.random()*Math.PI*2;
+    const r=55 + Math.random()*25;
+    const x=Math.max(0, Math.min(canvas.width-64, px + Math.cos(a)*r - 32));
+    const y=Math.max(0, Math.min(canvas.height-64, py + Math.sin(a)*r - 32));
+    wolves.push(new Wolf(x,y));
+    createParticles(x+32,y+32,'#90caf9',18,4);
+  }
+}
+
+function updateWolves(){
+  if(!wolves || wolves.length===0) return;
+  // remove dead
+  wolves = wolves.filter(w => w && w.hp>0);
+  for(const w of wolves) w.update();
+}
+
+function drawWolves(){
+  if(!wolves || wolves.length===0) return;
+  for(const w of wolves) w.draw();
+}
+
+// I nemici attaccano i lupi se più vicini del player
+function getPreferredTarget(enemy, playerObj){
+  try{
+    if(!wolves || wolves.length===0) return playerObj;
+    if(!enemy || !playerObj) return playerObj;
+
+    const ex=enemy.x+enemy.width/2, ey=enemy.y+enemy.height/2;
+    const px=playerObj.x+playerObj.width/2, py=playerObj.y+playerObj.height/2;
+    const dp=Math.hypot(px-ex, py-ey);
+
+    let best=null, bestD=1e9;
+    for(const w of wolves){
+      if(!w || w.hp<=0) continue;
+      const wx=w.x+w.width/2, wy=w.y+w.height/2;
+      const d=Math.hypot(wx-ex, wy-ey);
+      if(d<bestD){ bestD=d; best=w; }
+    }
+    return (best && bestD < dp) ? best : playerObj;
+  }catch(e){
+    return playerObj;
+  }
+}
+
 function markMult(enemy){
   return (enemy && enemy.salsyMarkUntil && Date.now() < enemy.salsyMarkUntil) ? 2 : 1;
 }
@@ -1337,7 +1559,9 @@ function spawnProjectile(opts){
     w:opts.w||0,
     h:opts.h||0,
     angle:typeof opts.angle==='number'?opts.angle:null,
-    onHitPlayer:opts.onHitPlayer||null
+    onHitPlayer:opts.onHitPlayer||null,
+    meta:opts.meta||null,
+    excludeRef:opts.excludeRef||null
   };
   projectiles.push(p);
 }
@@ -1402,6 +1626,7 @@ function updateProjectiles(){
         // damage all enemies within aoeRadius
         for(let i=enemies.length-1;i>=0;i--){
           const e=enemies[i];
+        if(p.excludeRef && e===p.excludeRef) continue;
           const dist=Math.hypot((e.x+e.width/2)-p.x,(e.y+e.height/2)-p.y);
           if(dist <= p.aoeRadius){
             const dmg = p.aoeFullDamage ? Math.round(p.damage) : Math.round(p.damage*SUPER_DAMAGE_MULT);
@@ -1451,6 +1676,33 @@ function updateProjectiles(){
             const _dmg=dmg; const _final=applyEnemyDamage(e,_dmg);
             createParticles(e.x,e.y,'#ffd54f',8,4);
             showDamageNumber(e.x,e.y, _final);
+            // Hècate: main arrow splits into 3 arrows to OTHER enemies
+            if(p.meta && p.meta.type==='hecateMain'){
+              const impactX=p.x, impactY=p.y;
+              createParticles(impactX, impactY, '#c5cae9', 18, 4);
+              const others = enemies.filter(ee=>ee!==e).sort((a,b)=>{
+                const da=Math.hypot((a.x+a.width/2)-impactX,(a.y+a.height/2)-impactY);
+                const db=Math.hypot((b.x+b.width/2)-impactX,(b.y+b.height/2)-impactY);
+                return da-db;
+              }).slice(0,3);
+              const splitDmg = Math.round((p.meta.splitDamage || Math.round(p.damage * 0.5)));
+              for(const t of others){
+                const dx=(t.x+t.width/2)-impactX;
+                const dy=(t.y+t.height/2)-impactY;
+                const len=Math.hypot(dx,dy)||1;
+                const speed=12;
+                const vx=(dx/len)*speed;
+                const vy=(dy/len)*speed;
+                spawnProjectile({
+                  x:impactX,y:impactY,vx,vy,speed,
+                  damage:splitDmg,ttl:520,color:'#c5cae9',
+                  radius:6,friendly:true,
+                  shape:'rect',w:18,h:4,angle:Math.atan2(vy,vx),
+                  excludeRef:e
+                });
+                createParticles(impactX,impactY,'#c5cae9',6,3);
+              }
+            }
             if(e.hp<=0){
               createParticles(e.x,e.y,'#fff176',30,6);
               enemies.splice(i,1);
@@ -2336,6 +2588,11 @@ class Player{
         if(elapsed>=this.superDuration){
           this.endSuper();
         }
+      } else if(this.attackType==='hecateBow'){
+        // Hècate SUPER: heal happens instantly; keep short FX then end.
+        if(elapsed>=this.superDuration){
+          this.endSuper();
+        }
       } else if(this.attackType==='magic'){
         // Freeze is applied instantly in superAttack(); keep VFX only for superDuration.
         if(elapsed>=this.superDuration){
@@ -2387,7 +2644,7 @@ class Player{
           }
         }
       }
-      if(this.type==='jimmy' || this.type==='voltryx' || this.type==='kouvagia'){
+      if(this.type==='jimmy' || this.type==='voltryx' || this.type==='kouvagia' || this.type==='hecate'){
         this._dashSpeedMult=4;
         this._dashDuration=300;
         this.dashCooldown=90;
@@ -2634,6 +2891,45 @@ class Player{
         setTimeout(punch, 120);
       }
     }
+
+else if(this.attackType==='hecateBow'){
+  // Hècate: long range arrow that splits into 3 arrows hitting other enemies
+  const target = assistTarget || this.findClosestEnemy(this.range);
+  const sx=this.x+this.width/2;
+  const sy=this.y+this.height/2;
+
+  let dx,dy;
+  if(target){
+    dx=(target.x+target.width/2)-sx;
+    dy=(target.y+target.height/2)-sy;
+  } else {
+    dx=this.facingRight?1:-1;
+    dy=0;
+  }
+  const len=Math.hypot(dx,dy)||1;
+  const speed=13;
+  const vx=(dx/len)*speed;
+  const vy=(dy/len)*speed;
+
+  const mainDmg = Math.round(this.damage*1.25*this.attackBuffMultiplier);
+  const splitDmg = Math.round(mainDmg * 0.5); // frecce minori: metà del danno della freccia principale
+
+  spawnProjectile({
+    x:sx,y:sy,
+    vx,vy,speed,
+    damage:mainDmg,
+    ttl:720,
+    color:'#e0e0e0',
+    radius:6,
+    friendly:true,
+    shape:'rect',
+    w:22,
+    h:5,
+    angle:Math.atan2(vy,vx),
+    meta:{type:'hecateMain', splitDamage: splitDmg}
+  });
+  createParticles(sx,sy,'#c5cae9',14,4);
+}
 else if(this.attackType==='tempostormLaser'){
   const assistTarget=this.findClosestEnemy(900);
   const sx=this.x+this.width/2;
@@ -2822,6 +3118,23 @@ else if(this.attackType==='tempostormLaser'){
   shakeScreen();
 }
 
+
+
+    else if(this.attackType==='hecateBow'){
+      // Super: heal 5 HP for each enemy currently present
+      const heal = Math.max(0, enemies.length) * 5;
+      if(heal>0){
+        this.hp = Math.min(this.maxHP, this.hp + heal);
+        createParticles(this.x+this.width/2,this.y+this.height/2,'#c5cae9',28,6);
+      } else {
+        createParticles(this.x+this.width/2,this.y+this.height/2,'#c5cae9',16,5);
+      }
+
+      // NEW: spawn 3 friendly wolves near Hècate (max 6 on field)
+      spawnWolvesNearPlayer(this, 3);
+
+      shakeScreen();
+    }
     else if(this.attackType==='magic'){
       // Super: create a huge colorful magic zone at map center.
       // - Expands slowly for 10s
@@ -3117,6 +3430,7 @@ class Enemy{
   }
   update(player){
     if(Date.now()<this.spawnFreezeUntil)return;
+    player = getPreferredTarget(this, player);
     const now=Date.now();
 
     const cx=this.x+this.width/2;
@@ -3259,6 +3573,7 @@ class ShooterEnemy extends Enemy{
   constructor(type,level){super(type,level);this.shootCooldown=Math.max(600,1800-level*40);this.lastShoot=0;this.bulletSpeed=5+level*0.15}
   update(player){
     if(Date.now()<this.spawnFreezeUntil)return;
+    player = getPreferredTarget(this, player);
     const dx=(player.x+player.width/2)-(this.x+this.width/2);
     const dy=(player.y+player.height/2)-(this.y+this.height/2);
     const dist=Math.hypot(dx,dy);
@@ -3302,6 +3617,7 @@ class ArcherEnemy extends Enemy{
   }
   update(player){
     if(Date.now()<this.spawnFreezeUntil)return;
+    player = getPreferredTarget(this, player);
     const now=Date.now();
     const dx=(player.x+player.width/2)-(this.x+this.width/2);
     const dy=(player.y+player.height/2)-(this.y+this.height/2);
@@ -3375,6 +3691,7 @@ class GlacialEnemy extends Enemy{
   }
   update(player){
     if(Date.now()<this.spawnFreezeUntil)return;
+    player = getPreferredTarget(this, player);
     const now=Date.now();
 
     // Regen: if not hit for 5s, heal 15 (can repeat every 5s)
@@ -3492,6 +3809,7 @@ class AttackReturnEnemy extends Enemy{
   constructor(type,level){super(type,level);this.homeX=this.x;this.homeY=this.y;this.state='idle';this.attackRange=60;this.attackCooldown=2200;this.lastAttackTime=0;this.attackSpeed=this.speed*2.5}
   update(player){
     if(Date.now()<this.spawnFreezeUntil)return;
+    player = getPreferredTarget(this, player);
     const dx=(player.x+player.width/2)-(this.x+this.width/2);
     const dy=(player.y+player.height/2)-(this.y+this.height/2);
     const distToPlayer=Math.hypot(dx,dy);
@@ -3544,6 +3862,7 @@ class BossEnemy extends Enemy{
   }
   update(player){
     if(Date.now()<this.spawnFreezeUntil)return;
+    player = getPreferredTarget(this, player);
     const dx=player.x-this.x;const dy=player.y-this.y;const dist=Math.hypot(dx,dy);
     const attackRange=60;
     if(dist>attackRange){
@@ -3719,6 +4038,7 @@ class Boss5Enemy extends Enemy{
 
   update(player){
     if(Date.now()<this.spawnFreezeUntil)return;
+    player = getPreferredTarget(this, player);
 
     const now=Date.now();
     const cx=this.x+this.width/2, cy=this.y+this.height/2;
@@ -3896,7 +4216,7 @@ function updateBackgroundForLevel(level){
 function startGame(){
   currentLevel=1;score=0;timer=levelConfigs[0].time;
   player=new Player(selectedCharacter||'jimmy');
-  enemies=[];particles=[];projectiles=[];lasers=[];tempBeams=[];pickups=[];
+  enemies=[];particles=[];projectiles=[];lasers=[];tempBeams=[];pickups=[];wolves=[];
   spawnEnemiesForLevel(currentLevel);
   updateBackgroundForLevel(currentLevel);
   document.getElementById('mainMenu').style.display='none';
@@ -3957,6 +4277,7 @@ return;
 
   if(player) player.update();
   enemies.forEach(e=>{e.update(player)});
+  updateWolves();
   // Marz Super zone tick damage/expansion
   updateMagicZone(now);
   updateParticles();
@@ -4000,6 +4321,7 @@ return;
   // draw Marz Super zone behind entities
   drawMagicZone(now);
   enemies.forEach(e=>e.draw());
+  drawWolves();
   if(player) player.draw();
   drawProjectiles();
   drawLasers();
@@ -4085,6 +4407,14 @@ document.querySelectorAll('.character-card').forEach(card=>{
       updateSalsyUnlockUI();
       return;
     }
+    if(char==='marz' && !allPrevAboveMarz80k()){
+      updateMarzUnlockUI();
+      return;
+    }
+    if(char==='hecate' && !allPrevAboveHecate85k()){
+      updateHecateUnlockUI();
+      return;
+    }
     document.querySelectorAll('.character-card').forEach(c=>c.classList.remove('selected'));
     card.classList.add('selected');
     selectedCharacter=char;
@@ -4099,7 +4429,7 @@ function updateMenuStatsDisplay(char){
   document.getElementById(`menu-dmg-${char}`).textContent=
     char==='voltryx' ? `${Math.round(34*SUPER_DAMAGE_MULT)} (ranged AoE), ${50}x2 (melee)` :
     (char==='salsy' ? '33x2' :
-     (char==='tempostorm' ? '40 (+30 se resta nel laser)' : (char==='marz' ? '40 / 50 / 60' : s.damage)));
+     (char==='tempostorm' ? '40 (+30 se resta nel laser)' : (char==='marz' ? '40 / 50 / 60' : (char==='hecate' ? 'Freccia: colpo forte + 3 frecce' : s.damage))));
 
 }
 
