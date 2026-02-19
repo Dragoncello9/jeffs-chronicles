@@ -90,29 +90,54 @@
     }
 
     .character-select{
-      display:flex;
-      gap:16px;
-      justify-content:center;
+      display:block;
       margin:18px 0;
-      flex-wrap:wrap;
-
-      /* NEW: scrollable character list (extra slots) */
-      max-height:360px;
+      max-height:420px;
       overflow-y:auto;
       overflow-x:hidden;
-      padding:8px 6px;
+      padding:6px;
+      box-sizing:border-box;
     }
+    .character-select::-webkit-scrollbar{width:10px}
+    .character-select::-webkit-scrollbar-thumb{background:#555;border:2px solid #111;border-radius:10px}
+    .character-select::-webkit-scrollbar-track{background:#111}
+
     .character-select::-webkit-scrollbar{width:10px}
     .character-select::-webkit-scrollbar-thumb{background:#555;border:2px solid #111;border-radius:10px}
     .character-select::-webkit-scrollbar-track{background:#111}
 
     /* Ridotte leggermente le card personaggio per evitare sovrapposizioni */
     .character-card{
-      background:#222;border:3px solid #555;padding:12px;
-      width:180px; /* ridotta da 200px a 180px */
-      cursor:pointer;transition:all .2s;position:relative;
-      display:flex;flex-direction:column;align-items:center;
+      background:#222;border:3px solid #555;padding:10px 12px;
+      width:100%;
+      cursor:pointer;transition:all .12s;position:relative;
+      display:flex;flex-direction:row;align-items:center;gap:12px;
+      min-height:64px;box-sizing:border-box;
     }
+    .character-card:hover{transform:translateY(-3px);border-color:#e74c3c;background:#222}
+    .character-card.selected{border-left:6px solid #f39c12;background:#2b2b2b}
+    .character-card.disabled{ filter:grayscale(1); opacity:0.55; cursor:not-allowed; transform:none; }
+    .character-card img{
+      width:56px;
+      height:56px;
+      display:block;
+      image-rendering:pixelated;
+      margin:0;
+      flex:0 0 auto;
+    }
+    .character-card h3{
+      flex:0 0 160px;
+      text-align:left;
+      margin:0;
+      font-size:16px;
+      color:#fff;
+    }
+    .character-card .menu-stats{font-size:13px;color:#ddd;margin-left:8px}
+    .record-badge{position:static;margin-left:12px;font-size:12px}
+    .lock-badge{position:absolute;right:10px;top:10px;font-size:12px;color:#f39c12;background:#000;padding:3px 6px;border:1px solid #f39c12}
+    /* nascondi i vecchi pulsanti interni delle card se presenti */
+    .character-card .select-btn{display:none!important}
+
     .character-card:hover{transform:scale(1.03);border-color:#e74c3c}
     .character-card.selected{border-color:#f39c12;background:#333}
     .character-card.disabled{ filter:grayscale(1); opacity:0.55; cursor:not-allowed; }
@@ -313,23 +338,341 @@
   .guide-modal-content{max-width:calc(100% - 20px);padding:14px}
   .guide-body p{font-size:13px}
 }
-  </style>
+  
+    /* menu stat numbers: only numbers, no labels */
+    .menu-stats{display:flex;gap:12px;align-items:center;justify-content:center;font-size:14px}
+    .menu-stats .stat{min-width:40px;text-align:center;font-weight:bold;color:#f1f1f1}
+    .menu-stats .spacer{width:8px}
+    
+
+.compact-selector{margin:16px 0}
+.char-grid{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:10px;
+}
+.char-grid button{
+  background:#111;
+  border:2px solid #555;
+  color:#fff;
+  font-family:'Press Start 2P', cursive;
+  font-size:10px;
+  padding:10px 6px;
+  cursor:pointer;
+}
+.char-grid button:hover{border-color:#f39c12}
+.char-grid button.empty{
+  background:#222;
+  border-style:dashed;
+  cursor:not-allowed;
+  color:#777;
+}
+
+
+/* ==== COMPACT CHARACTER SELECT PATCH ==== */
+.characterCard, .charCard, .character-card {
+  display:none !important; /* hide big cards */
+}
+
+.charBtn, .characterBtn, .selectCharBtn, .char-button {
+  padding:10px 14px;
+  margin:6px;
+  font-size:18px;
+  border-radius:12px;
+  border:3px solid #555;
+  background:#1e1e1e;
+  color:#fff;
+  cursor:pointer;
+}
+
+.charBtn.selected, .characterBtn.selected, .selectCharBtn.selected, .char-button.selected{
+  border-color:#ff9800 !important;
+  box-shadow:0 0 12px #ff9800;
+}
+
+/* collapse container */
+#charactersContainerCompact{
+  max-height:70vh;
+  overflow:auto;
+  padding:6px;
+}
+
+#moreCharsToggle{
+  width:100%;
+  margin-top:8px;
+  padding:10px;
+  border-radius:12px;
+  border:3px solid #ff9800;
+  background:#2c2c2c;
+  color:#ff9800;
+  font-size:18px;
+  cursor:pointer;
+}
+
+
+/* ==== STRONG SELECT GLOW ==== */
+.charBtn.selected, .characterBtn.selected, .selectCharBtn.selected, .char-button.selected{
+  border-color:#ff9800 !important;
+  box-shadow:
+    0 0 8px #ff9800,
+    0 0 16px #ff9800,
+    0 0 28px rgba(255,152,0,0.9),
+    inset 0 0 12px rgba(255,152,0,0.6);
+  background: linear-gradient(180deg,#2b1a00,#3a2200);
+  transform: scale(1.05);
+  transition: all 0.12s ease;
+}
+
+.charBtn:hover, .characterBtn:hover, .selectCharBtn:hover, .char-button:hover{
+  box-shadow: 0 0 10px rgba(255,152,0,0.6);
+}
+
+
+.ira-glow{
+  color:#7a0019;
+  border:2px solid #7a0019;
+  padding:4px 8px;
+  border-radius:6px;
+  box-shadow:0 0 10px rgba(122,0,25,0.8), 0 0 20px rgba(122,0,25,0.6);
+  font-weight:bold;
+}
+
+
+/* === Account Level UI === */
+#accountLevelBtn{
+  position:fixed;
+  left:14px;
+  bottom:14px;
+  z-index:9999;
+  padding:12px 14px 10px 14px;
+  border-radius:16px;
+  border:2px solid rgba(255,255,255,0.35);
+  background:linear-gradient(180deg, rgba(80,20,140,0.95), rgba(20,10,40,0.92));
+  color:#fff;
+  cursor:pointer;
+  font-weight:900;
+  letter-spacing:1px;
+  text-transform:uppercase;
+  font-family: "Orbitron","Rajdhani","Trebuchet MS","Segoe UI",sans-serif;
+  box-shadow:
+    0 0 0 2px rgba(0,0,0,0.35) inset,
+    0 8px 24px rgba(0,0,0,0.55),
+    0 0 20px rgba(155,89,182,0.45);
+  text-shadow:
+    0 2px 0 rgba(0,0,0,0.55),
+    0 0 10px rgba(241,196,15,0.35);
+  user-select:none;
+}
+#accountLevelBtn:hover{
+  transform:translateY(-1px);
+  box-shadow:
+    0 0 0 2px rgba(0,0,0,0.35) inset,
+    0 10px 28px rgba(0,0,0,0.58),
+    0 0 26px rgba(241,196,15,0.30),
+    0 0 22px rgba(155,89,182,0.55);
+}
+#accountLevelBtn:active{
+  transform:translateY(1px) scale(0.99);
+}
+#accountLevelBtn::after{
+  content:"";
+  position:absolute;
+  inset:2px;
+  border-radius:14px;
+  pointer-events:none;
+  background:linear-gradient(180deg, rgba(255,255,255,0.18), rgba(255,255,255,0));
+  mix-blend-mode:screen;
+  opacity:0.75;
+}
+#accountLevelBtn .sub{
+  display:block;
+  font-weight:700;
+  font-size:12px;
+  opacity:0.9;
+  margin-top:3px;
+  letter-spacing:0.5px;
+}
+@keyframes accPulse{
+  0%{ filter:brightness(1); }
+  50%{ filter:brightness(1.08); }
+  100%{ filter:brightness(1); }
+}
+#accountLevelBtn{
+  animation:accPulse 2.2s ease-in-out infinite;
+}
+#accountModal{
+  position:fixed; inset:0;
+  display:none;
+  z-index:10000;
+  background:rgba(0,0,0,0.72);
+  align-items:center;
+  justify-content:center;
+}
+#accountModal .panel{
+  width:min(720px, 92vw);
+  max-height:min(80vh, 760px);
+  overflow:auto;
+  background:rgba(20,20,20,0.92);
+  border:1px solid rgba(255,255,255,0.25);
+  border-radius:18px;
+  padding:18px;
+  box-shadow:0 0 30px rgba(0,0,0,0.45);
+}
+#accountModal h3{margin:0 0 10px 0}
+#accountModal .row{display:flex;gap:10px;align-items:center;justify-content:space-between;margin:10px 0}
+#accountModal .barWrap{
+  width:100%;
+  height:18px;
+  border-radius:999px;
+  border:1px solid rgba(255,255,255,0.25);
+  background:rgba(255,255,255,0.08);
+  overflow:hidden;
+}
+#accountModal .barFill{
+  height:100%;
+  width:0%;
+  background:linear-gradient(90deg, rgba(46,204,113,0.95), rgba(241,196,15,0.95));
+}
+#accountModal .mission{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+  padding:10px 12px;
+  border-radius:14px;
+  border:1px solid rgba(255,255,255,0.18);
+  background:rgba(255,255,255,0.06);
+  margin:8px 0;
+}
+#accountModal .mission .meta{opacity:0.9;font-size:14px}
+#accountModal .mission .prog{opacity:0.75;font-size:12px;margin-top:4px}
+#accountModal .claimBtn{
+  padding:8px 12px;
+  border-radius:12px;
+  border:1px solid rgba(255,255,255,0.25);
+  background:rgba(255,255,255,0.08);
+  color:#fff;
+  cursor:not-allowed;
+  opacity:0.55;
+  font-weight:700;
+}
+#accountModal .claimBtn.ready{
+  background:rgba(46,204,113,0.28);
+  border-color:rgba(46,204,113,0.75);
+  cursor:pointer;
+  opacity:1;
+}
+#accountModal .closeBtn{
+  padding:8px 12px;
+  border-radius:12px;
+  border:1px solid rgba(255,255,255,0.25);
+  background:rgba(255,255,255,0.08);
+  color:#fff;
+  cursor:pointer;
+}
+
+</style>
+
+<!-- Injected CSS: compact grid selected state -->
+<style id="injected-compact-select-style">
+.char-grid button.selected{
+  border-color:#ff9800 !important;
+  box-shadow:
+    0 0 8px #ff9800,
+    0 0 16px #ff9800,
+    0 0 28px rgba(255,152,0,0.9),
+    inset 0 0 12px rgba(255,152,0,0.35);
+  background: linear-gradient(180deg,#2b1a00,#3a2200);
+  color:#fff;
+  transform: scale(1.03);
+  transition: all 0.12s ease;
+}
+.char-grid button.selected:focus{
+  outline: 3px solid rgba(255,152,0,0.18);
+}
+</style>
+
+
+<!-- === LOCKED COMPACT BUTTON STYLE PATCH (added) === -->
+<style id="locked-compact-style">
+/* locked/disabled compact buttons */
+.char-grid button.locked{
+  background:#2a2a2a !important;
+  border-color:#444 !important;
+  color:#888 !important;
+  opacity:0.45;
+  cursor:not-allowed;
+  box-shadow:none !important;
+  transform:none !important;
+}
+
+/* no hover glow */
+.char-grid button.locked:hover{
+  border-color:#444 !important;
+  box-shadow:none !important;
+}
+
+/* prevent orange glow even if .selected accidentally added */
+.char-grid button.locked.selected{
+  border-color:#444 !important;
+  background:#2a2a2a !important;
+  box-shadow:none !important;
+  transform:none !important;
+}
+</style>
+
+
+<style>
+/* AUTO-SELECTED HIGHLIGHT */
+.char-grid button.selected, .character-card.selected {
+  outline: 3px solid transparent;
+  box-shadow: 0 0 0 3px rgba(255,165,0,0.15), 0 0 8px rgba(255,165,0,0.2);
+  background: linear-gradient(180deg, rgba(255,200,120,0.12), rgba(255,165,0,0.04));
+  border-color: #ff8c00;
+}
+.char-grid button.selected {
+  background-color: #fff7ef;
+}
+</style>
+
 </head>
 <body>
 <div id="bgDefault"></div>
 <div id="bgDark"></div>
 <div id="fadeOverlay"></div>
 <div id="gameContainer">
-<canvas height="700" id="gameCanvas" width="1200"></canvas>
+<canvas height="780" id="gameCanvas" width="1320"></canvas>
+
+<div id="totalScoreDisplay" style="
+  position:absolute;
+  bottom:10px;
+  right:12px;
+  z-index:15;
+  font-size:12px;
+  opacity:0.85;
+  color:#f1c40f;
+  text-shadow:1px 1px 2px #000;
+  font-family:'Press Start 2P', cursive;
+  pointer-events:none;
+">
+PUNTEGGIO TOTALE: 0
+</div>
+
 <div class="ui-overlay" id="uiOverlay" style="display:none;">
 <div>HP: <span id="hpText">100</span></div>
 <div class="hp-bar"><div class="hp-fill" id="hpFill" style="width:100%"></div></div>
-<div style="margin-top:6px;">Buff Attacco: <span id="atkBuffDisplay">0s</span></div>
+<div id="superCooldown" style="margin-top:6px;font-size:12px;color:#fff;font-family:'Press Start 2P', cursive;;color:#ff9800;">Super: Ready</div>
+<div id="bonusTimers" style="margin-top:4px;font-size:11px;line-height:1.4;color:#fff;font-family:'Press Start 2P', cursive;display:none;"></div>
+
+
+
+
 </div>
 <div class="score" id="scoreDisplay" style="display:none;">Score: 0</div>
+<div class="score" id="killsDisplay" style="display:none; top:52px;">Kill: 0</div>
 <div class="timer" id="timerDisplay" style="display:none;">45</div>
 <div class="level-indicator" id="levelDisplay" style="display:none;">Level 1</div>
-<div class="super-cooldown" id="superCooldown" style="display:none;">Super: Ready</div>
+
 <div class="evo-banner" id="evoBanner" style="display:none;">
 <div id="evoBannerText">EVOLUTO!</div>
 </div>
@@ -349,30 +692,53 @@
 <div class="menu" id="mainMenu" style="display:none;">
 <h1>⚔️ JEFF’S CHRONICLES⚔️</h1>
 <h2>Seleziona il tuo combattente</h2>
+
+<div class="compact-selector">
+  <div class="char-grid"><button data-target="jimmy">JIMMY 🔫<br><small class="btn-record" id="btnrec-jimmy">R: 0</small></button>
+    <button data-target="rooney">ROONEY 🐱<br><small class="btn-record" id="btnrec-rooney">R: 0</small></button>
+    <button data-target="jeff">JEFF 🗡️<br><small class="btn-record" id="btnrec-jeff">R: 0</small></button>
+    <button data-target="voltryx">VOLTRYX 🦊<br><small class="btn-record" id="btnrec-voltryx">R: 0</small></button>
+    <button data-target="kouvagia">KOUVAGIA 🦉<br><small class="btn-record" id="btnrec-kouvagia">R: 0</small></button>
+    <button data-target="salsy">SALSY ⚜️<br><small class="btn-record" id="btnrec-salsy">R: 0</small></button>
+    <button data-target="tempostorm">TEMPOSTORM 🔋<br><small class="btn-record" id="btnrec-tempostorm">R: 0</small></button>
+    <button data-target="marz">MARZ 🪄<br><small class="btn-record" id="btnrec-marz">R: 0</small></button>
+    <button data-target="hecate">HÈCATE 🌘<br><small class="btn-record" id="btnrec-hecate">R: 0</small></button>
+    <button data-target="marcus">MARCUS 🎶<br><small class="btn-record" id="btnrec-marcus">R: 0</small></button>
+    <button data-target="lucien">LUCIEN 🗺️<br><small class="btn-record" id="btnrec-lucien">R: 0</small></button>
+    <button data-target="pdor">PDOR ❤️‍🔥<br><small class="btn-record" id="btnrec-pdor">R: 0</small></button>
+<button data-target="bane">BANE 🪓<br><small class="btn-record" id="btnrec-bane">R: 0</small></button>
+<button data-target="hendel">HENDEL 🪨<br><small class="btn-record" id="btnrec-hendel">R: 0</small></button>
+<button data-target="kaerith">KAERITH 🐉<br><small class="btn-record" id="btnrec-kaerith">R: 0</small></button>
+<button class="btn character-btn disabled" data-target="extra2" disabled>❓ Nuovo</button>
+<button class="btn character-btn disabled" data-target="extra3" disabled>❓ Nuovo</button>
+
+
+</div>
+</div>
 <div class="character-select">
 <div class="character-card" data-char="jimmy" id="card-jimmy">
 <h3>JIMMY</h3>
 <p>"🔫"</p>
-<div class="menu-stats">HP: <span id="menu-hp-jimmy">-</span> Danno: <span id="menu-dmg-jimmy">-</span></div>
+<div class="menu-stats"><span class="stat" id="menu-hp-jimmy">-</span><span class="spacer"> </span><span class="stat" id="menu-dmg-jimmy">-</span></div>
 <div class="record-badge" id="record-jimmy">Record: 0</div>
 </div>
 <div class="character-card" data-char="rooney" id="card-rooney">
 <h3>ROONEY</h3>
 <p>"🐱"</p>
-<div class="menu-stats">HP: <span id="menu-hp-rooney">-</span> Danno: <span id="menu-dmg-rooney">-</span></div>
+<div class="menu-stats"><span class="stat" id="menu-hp-rooney">-</span><span class="spacer"> </span><span class="stat" id="menu-dmg-rooney">-</span></div>
 <div class="record-badge" id="record-rooney">Record: 0</div>
 </div>
 <div class="character-card" data-char="jeff" id="card-jeff">
 <h3>JEFF</h3>
 <p>"🗡️"</p>
-<div class="menu-stats">HP: <span id="menu-hp-jeff">-</span> Danno: <span id="menu-dmg-jeff">-</span></div>
+<div class="menu-stats"><span class="stat" id="menu-hp-jeff">-</span><span class="spacer"> </span><span class="stat" id="menu-dmg-jeff">-</span></div>
 <div class="record-badge" id="record-jeff">Record: 0</div>
 </div>
 <!-- Voltryx card (locked until all three records > 50000) -->
 <div class="character-card disabled" data-char="voltryx" id="card-voltryx" title="Sblocca completando 45.000 punti con ogni personaggio">
 <h3>VOLTRYX</h3>
 <p>"🦊"</p>
-<div class="menu-stats">HP: <span id="menu-hp-voltryx">-</span> Danno: <span id="menu-dmg-voltryx">-</span></div>
+<div class="menu-stats"><span class="stat" id="menu-hp-voltryx">-</span><span class="spacer"> </span><span class="stat" id="menu-dmg-voltryx">-</span></div>
 <div class="record-badge" id="record-voltryx">Record: 0</div>
 <div class="lock-badge" id="voltryxLockBadge">LOCKED</div>
 </div>
@@ -380,7 +746,7 @@
 <div class="character-card disabled" data-char="kouvagia" id="card-kouvagia" title="Sblocca facendo 51.000 punti con Voltryx">
 <h3>KOUVAGIA</h3>
 <p>"🦉"</p>
-<div class="menu-stats">HP: <span id="menu-hp-kouvagia">-</span> Danno: <span id="menu-dmg-kouvagia">-</span></div>
+<div class="menu-stats"><span class="stat" id="menu-hp-kouvagia">-</span><span class="spacer"> </span><span class="stat" id="menu-dmg-kouvagia">-</span></div>
 <div class="record-badge" id="record-kouvagia">Record: 0</div>
 <div class="lock-badge" id="kouvagiaLockBadge">LOCKED</div>
 </div>
@@ -388,41 +754,99 @@
 <div class="character-card disabled" data-char="salsy" id="card-salsy" title="Sblocca facendo 60.000 punti con Jimmy, Rooney, Jeff, Voltryx e Kouvagia">
 <h3>SALSY</h3>
 <p>"⚜️"</p>
-<div class="menu-stats">HP: <span id="menu-hp-salsy">-</span> Danno: <span id="menu-dmg-salsy">-</span></div>
+<div class="menu-stats"><span class="stat" id="menu-hp-salsy">-</span><span class="spacer"> </span><span class="stat" id="menu-dmg-salsy">-</span></div>
 <div class="record-badge" id="record-salsy">Record: 0</div>
 <div class="lock-badge" id="salsyLockBadge">LOCKED</div>
 </div>
 <!-- Altri personaggi (aperti con +) -->
 <div class="character-select extra-characters" id="extraCharacterSelect" style="display:none;">
 <!-- Tempostorm card (moved here as FIRST extra character) -->
-<div class="character-card disabled" data-char="tempostorm" id="card-tempostorm" style="margin-right:8px;" title="Sblocca facendo 70.000 punti con tutti i personaggi precedenti (Jimmy, Rooney, Jeff, Voltryx, Kouvagia e Salsy)">
+<div class="character-card disabled" data-char="tempostorm" id="card-tempostorm" style="margin-right:8px;" title="Sblocca facendo 65.000 punti con tutti i personaggi precedenti (Jimmy, Rooney, Jeff, Voltryx, Kouvagia e Salsy)">
 <h3>TEMPOSTORM</h3>
 <p>"🔋"</p>
-<div class="menu-stats">HP: <span id="menu-hp-tempostorm">-</span> Danno: <span id="menu-dmg-tempostorm">-</span></div>
+<div class="menu-stats"><span class="stat" id="menu-hp-tempostorm">-</span><span class="spacer"> </span><span class="stat" id="menu-dmg-tempostorm">-</span></div>
 <div class="record-badge" id="record-tempostorm">Record: 0</div>
 <div class="lock-badge" id="tempostormLockBadge">LOCKED</div>
 </div>
 <!-- Marz card (SECOND, to the right) -->
-<div class="character-card disabled" data-char="marz" id="card-marz" title="Sblocca facendo 80.000 punti con tutti i personaggi precedenti (Jimmy, Rooney, Jeff, Voltryx, Kouvagia, Salsy e Tempostorm)">
+<div class="character-card disabled" data-char="marz" id="card-marz" title="Sblocca facendo 70.000 punti con tutti i personaggi precedenti (Jimmy, Rooney, Jeff, Voltryx, Kouvagia, Salsy e Tempostorm)">
 <h3>MARZ</h3>
 <p>"🪄"</p>
-<div class="menu-stats">HP: <span id="menu-hp-marz">-</span> Danno: <span id="menu-dmg-marz">-</span></div>
+<div class="menu-stats"><span class="stat" id="menu-hp-marz">-</span><span class="spacer"> </span><span class="stat" id="menu-dmg-marz">-</span></div>
 <div class="record-badge" id="record-marz">Record: 0</div>
 <div class="lock-badge" id="marzLockBadge">LOCKED</div>
 </div>
-<!-- Hècate card (locked until 85.000 score with all previous characters) -->
-<div class="character-card disabled" data-char="hecate" id="card-hecate" title="Sblocca facendo 85.000 punti con tutti i personaggi precedenti (Jimmy, Rooney, Jeff, Voltryx, Kouvagia, Salsy, Tempostorm e Marz)">
+<!-- Hècate card (locked until 75.000 score with all previous characters) -->
+<div class="character-card disabled" data-char="hecate" id="card-hecate" title="Sblocca facendo 75.000 punti con tutti i personaggi precedenti (Jimmy, Rooney, Jeff, Voltryx, Kouvagia, Salsy, Tempostorm e Marz)">
 <h3>HÈCATE</h3>
 <p>"🌘"</p>
-<div class="menu-stats">HP: <span id="menu-hp-hecate">-</span> Danno: <span id="menu-dmg-hecate">-</span></div>
+<div class="menu-stats"><span class="stat" id="menu-hp-hecate">-</span><span class="spacer"> </span><span class="stat" id="menu-dmg-hecate">-</span></div>
 <div class="record-badge" id="record-hecate">Record: 0</div>
 <div class="lock-badge" id="hecateLockBadge">LOCKED</div>
 </div>
+
+
+
+<!-- Marcus card (locked until at least one record >= 70.000) -->
+<div class="character-card disabled" data-char="marcus" id="card-marcus" title="Sblocca facendo almeno 70.000 punti con QUALSIASI personaggio">
+<h3>MARCUS</h3>
+<p>"🎶"</p>
+<div class="menu-stats"><span class="stat" id="menu-hp-marcus">-</span><span class="spacer"> </span><span class="stat" id="menu-dmg-marcus">-</span></div>
+<div class="record-badge" id="record-marcus">Record: 0</div>
+<div class="lock-badge" id="marcusLockBadge">LOCKED</div>
 </div>
-<div class="start-row">
-<button class="btn mini-btn" id="extraCharsBtn" title="Altri personaggi" type="button">+</button>
+
+<!-- Lucien card (locked until record Marcus > 25.000) -->
+<div class="character-card disabled" data-char="lucien" id="card-lucien" title="Sblocca facendo più di 25.000 punti con Marcus">
+<h3>LUCIEN</h3>
+<p>"🗺️"</p>
+<div class="menu-stats"><span class="stat" id="menu-hp-lucien">-</span><span class="spacer"> </span><span class="stat" id="menu-dmg-lucien">-</span></div>
+
+<!-- Pdor card (locked until record Marcus >= 50.000 AND Lucien >= 50.000) -->
+<div class="character-card disabled" data-char="pdor" id="card-pdor" title="Sblocca facendo almeno 50.000 punti di record con Marcus e Lucien">
+<h3>PDOR</h3>
+<p>"❤️‍🔥"</p>
+<div class="menu-stats"><span class="stat" id="menu-hp-pdor">-</span><span class="spacer"> </span><span class="stat" id="menu-dmg-pdor">-</span></div>
+<div class="record-badge" id="record-pdor">Record: 0</div>
+<div class="lock-badge" id="pdorLockBadge">LOCKED</div>
+</div>
+<!-- Bane card (locked until record PDOR >= 50.000) -->
+<div class="character-card disabled" data-char="bane" id="card-bane" title="Sblocca facendo almeno 50.000 punti di record con PDOR">
+<h3>BANE</h3>
+<p>"🪓"</p>
+<div class="menu-stats"><span class="stat" id="menu-hp-bane">-</span><span class="spacer"> </span><span class="stat" id="menu-dmg-bane">-</span></div>
+<div class="record-badge" id="record-bane">Record: 0</div>
+<div class="lock-badge" id="baneLockBadge">LOCKED</div>
+</div>
+<div class="record-badge" id="record-lucien">Record: 0</div>
+<div class="lock-badge" id="lucienLockBadge">LOCKED</div>
+</div>
+
+</div>
+</div>
+<div class=\"start-row\">
+
 <button class="btn" id="startBtn">INIZIA BATTAGLIA</button>
 </div>
+<!-- Hendel card (locked until record Bane >= 50.000) -->
+<div class="character-card disabled" data-char="hendel" id="card-hendel" title="Sblocca facendo almeno 50.000 punti di record con Bane">
+<h3>HENDEL</h3>
+<p>"🪨"</p>
+<div class="menu-stats"><span class="stat" id="menu-hp-hendel">-</span><span class="spacer"> </span><span class="stat" id="menu-dmg-hendel">-</span></div>
+<div class="record-badge" id="record-hendel">Record: 0</div>
+<div class="lock-badge" id="hendelLockBadge">LOCKED</div>
+
+<!-- Kaerith card (locked until record Hendel >= 40.000) -->
+<div class="character-card disabled" data-char="kaerith" id="card-kaerith" title="Sblocca facendo 40.000 punti con Hendel">
+<h3>KAERITH 🐉</h3>
+<p>"🐉"</p>
+<div class="menu-stats"><span class="stat" id="menu-hp-kaerith">-</span><span class="spacer"> </span><span class="stat" id="menu-dmg-kaerith">-</span></div>
+<div class="record-badge" id="record-kaerith">Record: 0</div>
+<div class="lock-badge" id="kaerithLockBadge">LOCKED</div>
+</div>
+
+</div>
+
 <!-- Pulsante immagine per aprire la guida -->
 <button aria-label="Apri guida" class="img-btn" id="guideImgBtn" style="display:inline-block;" title="Apri guida" type="button">
 <img alt="Guida" id="guideImg" src="https://i.postimg.cc/JztT9fJH/bea.png"/>
@@ -438,6 +862,7 @@
 <div class="end-screen" id="endScreen" style="display:none;">
 <h1 id="endTitle">GAME OVER</h1>
 <p id="endMessage">Score Finale: 0</p>
+<p id="endKills">Kill: 0</p>
 <p id="endSub">Hai raggiunto il Livello 1</p>
 <p id="recordMessage">Record Personaggio: 0</p>
 <button class="btn" id="restartBtn">RIPROVA</button>
@@ -484,6 +909,7 @@
 <li><strong>Super</strong>: ricarica immediatamente la super.</li>
 <li><strong>Speed</strong>: aumenta la velocità di movimento.</li>
 <li><strong>Shield</strong>: invulnerabilità temporanea.</li>
+<li><strong>StellarBonus</strong>: <strong>+100 HP</strong> e <strong>+25% velocità</strong> per <strong>3s</strong>. Inoltre il personaggio emana un <strong>bagliore bianco luminoso e trasparente</strong> per <strong>1s</strong>. <em>Rilasciato solo dai boss.</em></li>
 <li><strong>Gold</strong>: cura totale + grande aumento del danno + super pronta.</li>
 <li><strong>Malus</strong>: applica poison.</li>
 <li><strong>Furia</strong>: emana 3 grandi onde ad area (sempre più grandi) che infliggono <strong>20 danni</strong> ciascuna; inoltre cura <strong>+10 HP/s</strong> per <strong>10s</strong>.</li>
@@ -561,7 +987,7 @@
 </div>
 <div id="guide-marz-locked" style="margin-top:10px;padding:10px;border:2px dashed rgba(255,255,255,0.35);background:rgba(255,255,255,0.05);">
 <h4>🪄 MARZ</h4>
-<p><em>Questo personaggio si sblocca facendo <strong>80.000 punti</strong> con tutti i personaggi precedenti (Jimmy, Rooney, Jeff, Voltryx, Kouvagia, Salsy e Tempostorm). La descrizione completa apparirà automaticamente appena lo sblocchi.</em></p>
+<p><em>Questo personaggio si sblocca facendo <strong>70.000 punti</strong> con tutti i personaggi precedenti (Jimmy, Rooney, Jeff, Voltryx, Kouvagia, Salsy e Tempostorm). La descrizione completa apparirà automaticamente appena lo sblocchi.</em></p>
 </div>
 <div id="guide-marz" style="display:none;">
 <h4>🪄 MARZ</h4>
@@ -569,21 +995,110 @@
 <p><strong>Statistiche</strong>: 320 HP, velocità 7.2.</p>
 <p><strong>Attacco base</strong>: spara <strong>tre fasci magici</strong> (corti) con danni diversi: <strong>40</strong>, <strong>50</strong>, <strong>60</strong>. Se ci sono almeno 3 nemici, colpisce fino a 3 bersagli differenti; se i nemici sono meno, i fasci si concentrano sugli stessi bersagli disponibili.</p>
 <p><strong>Super – Sigillo Arcano</strong>: crea esattamentte al centro della mappa un <strong>cerchi arcano </strong> che si espande molto lentamente causando molti danni ai nemici presenti all'interno inoltre Marz all'interno dell'area del sigillo ottiene <strong>un aumento del 50% della velocità</strong> finche la super resta attiva quindi per <strong>10 secondi</strong>.</p>
-<p><strong>Sblocco</strong>: 80.000 punti con tutti i personaggi precedenti.</p>
+<p><strong>Sblocco</strong>: 70.000 punti con tutti i personaggi precedenti.</p>
 </div>
 
 <div id="guide-hecate-locked" style="margin-top:10px;padding:10px;border:2px dashed rgba(255,255,255,0.35);background:rgba(255,255,255,0.05);">
 <h4>🌘 HÈCATE</h4>
-<p><em>Questo personaggio si sblocca facendo <strong>85.000 punti</strong> con tutti i personaggi precedenti (Jimmy, Rooney, Jeff, Voltryx, Kouvagia, Salsy, Tempostorm e Marz). La descrizione completa apparirà automaticamente appena lo sblocchi.</em></p>
+<p><em>Questo personaggio si sblocca facendo <strong>75.000 punti</strong> con tutti i personaggi precedenti (Jimmy, Rooney, Jeff, Voltryx, Kouvagia, Salsy, Tempostorm e Marz). La descrizione completa apparirà automaticamente appena lo sblocchi.</em></p>
 </div>
 <div id="guide-hecate" style="display:none;">
 <h4>🌘 HÈCATE</h4>
 <p><strong>Ruolo</strong>: tiratrice a lunga distanza + sustain tramite Super.</p>
 <p><strong>Statistiche</strong>: 325 HP, dash identico a Voltryx.</p>
 <p><strong>Attacco base</strong>: scocca una <strong>freccia a lunghissima distanza</strong> che infligge il danno maggiore al <strong>primo nemico colpito</strong>. Nel punto d’impatto la freccia si <strong>divide istantaneamente</strong> (effetto visivo) in <strong>tre frecce</strong> che cercano e colpiscono <strong>altri nemici</strong> (non quello già colpito).</p>
-<p><strong>Super – Richiamo Lunare</strong>: si cura di <strong>5 HP per ogni nemico presente</strong> nell’arena al momento dell’attivazione. Inoltre richiama tre lupi che attaccano i nemici con morsi letali il richiamo puo essere attivato piu volte ma in campo ci possono essere massimo 6 lupi</p>
-<p><strong>Sblocco</strong>: 85.000 punti con tutti i personaggi precedenti.</p>
+<p><strong>Super – Richiamo Lunare</strong>: si cura di <strong>5 HP per ogni nemico presente</strong> nell’arena al momento dell’attivazione. Inoltre richiama tre lupi che attaccano i nemici con morsi letali il richiamo puo essere attivato piu volte ma in campo ci possono essere massimo 3 lupi</p>
+<p><strong>Sblocco</strong>: 75.000 punti con tutti i personaggi precedenti.</p>
 </div>
+
+
+<div id="guide-pdor-locked" style="margin-top:10px;padding:10px;border:2px dashed rgba(255,255,255,0.35);background:rgba(255,255,255,0.05);">
+  <h4>🪄 PDOR</h4>
+  <p><em>Questo personaggio si sblocca facendo almeno <strong>50.000 punti</strong> di record con <strong>Marcus</strong> e <strong>Lucien</strong>. La descrizione completa apparirà automaticamente appena lo sblocchi.</em></p>
+</div>
+
+
+<div id="guide-bane-locked" style="margin-top:10px;padding:10px;border:2px dashed rgba(255,255,255,0.35);background:rgba(255,255,255,0.05);">
+  <h4>🪓 BANE</h4>
+  <p><em>Questo personaggio si sblocca facendo almeno <strong>50.000 punti</strong> di record con <strong>Pdor</strong>. La descrizione completa apparirà automaticamente appena lo sblocchi.</em></p>
+</div>
+
+
+<div id="guide-marcus-locked" style="margin-top:10px;padding:10px;border:2px dashed rgba(255,255,255,0.35);background:rgba(255,255,255,0.05);">
+  <h4>🎶 MARCUS</h4>
+  <p><em>Questo personaggio si sblocca facendo almeno <strong>70.000 punti</strong> con <strong>qualsiasi</strong> personaggio. La descrizione completa apparirà automaticamente appena lo sblocchi.</em></p>
+</div>
+<div id="guide-marcus" style="display:none;">
+  <h4>🎶 MARCUS</h4>
+  <p><strong>Ruolo</strong>: supporto offensivo a media distanza + controllo con la Super.</p>
+  <p><strong>Statistiche</strong>: 400 HP, velocità 7.</p>
+  <p><strong>Attacco base – Banjo Notes</strong>: Marcus suona il banjo e lancia <strong>note musicali</strong> (proiettili ondulati) che infliggono danni a distanza. Ottimo per tenere i nemici lontani mentre ti riposizioni.</p>
+  <p><strong>Super – Danza Stordente</strong>: gli avversari vengono <strong>storditi/confusi</strong> e “ballano” perdendo controllo per alcuni secondi. In più Marcus ottiene uno <strong>scudo</strong> temporaneo.</p>
+  <p><strong>Stile consigliato</strong>: colpisci da media distanza e usa la Super per creare spazio nei momenti critici.</p>
+  <p><strong>Sblocco</strong>: 70.000 punti con qualsiasi personaggio.</p>
+</div>
+
+<div id="guide-lucien-locked" style="margin-top:10px;padding:10px;border:2px dashed rgba(255,255,255,0.35);background:rgba(255,255,255,0.05);">
+  <h4>🗺️ LUCIEN</h4>
+  <p><em>Questo personaggio si sblocca facendo un record con <strong>Marcus</strong> superiore a <strong>25.000 punti</strong>. La descrizione completa apparirà automaticamente appena lo sblocchi.</em></p>
+</div>
+<div id="guide-lucien" style="display:none;">
+  <h4>🗺️ LUCIEN</h4>
+  <p><strong>Ruolo</strong>: ladro furtivo da burst ravvicinato + utilità tramite bonus.</p>
+  <p><strong>Statistiche</strong>: 380 HP, velocità leggermente superiore alla media (dash/scatto più reattivo).</p>
+  <p><strong>Attacco base – Lama Rapida</strong>: 4 colpi <strong>molto ravvicinati</strong> da <strong>15</strong> danni ciascuno (stile Salsy ma più “a raffica” e a distanza più corta).</p>
+  <p><strong>Super – Furto di Bonus</strong>: Lucien “ruba” <strong>5 bonus casuali</strong> e li rilascia attorno a sé: sono <strong>prendibili</strong> dal personaggio. La Super <strong>non</strong> può generare bonus che ricaricano la Super (quindi niente <strong>Gold</strong> e niente <strong>ricarica Super</strong>).</p>
+  <p><strong>Stile consigliato</strong>: entra rapido, scarica i 4 colpi e usa la Super per trasformare il fight in vantaggio di buff.</p>
+  <p><strong>Sblocco</strong>: record con Marcus &gt; 25.000.</p>
+</div>
+<div id="guide-pdor" style="display:none;">
+  <h4>🪄 PDOR</h4>
+  <p><strong>Ruolo</strong>: mago a distanza con controllo e “chain” sui bersagli.</p>
+  <p><strong>Background</strong>: Pdor è un <strong>tiefling stregone</strong> che canalizza la propria magia per colpire da lontano.</p>
+  <p><strong>Attacco base – Dardo Arcano</strong>: lancia un dardo magico <strong>auto-mirato</strong> verso il nemico più vicino. Il dardo può <strong>rimbalzare/agganciarsi</strong> fino a <strong>5 bersagli</strong> diversi: a ogni salto il <strong>danno si dimezza</strong>. Ottimo per ripulire ondate e punire gruppi.</p>
+  <p><strong>Super – Luci danzanti</strong>: per circa <strong>8 secondi</strong> compaiono <strong>7 sfere luminose</strong> in posizioni casuali dell’arena. Ogni sfera emette pulsazioni ad anello: chi viene toccato dall’anello subisce danno e viene <strong>rallentato</strong> per breve tempo. Perfetta per controllare spazio, spezzare l’inseguimento e fare DPS costante se “chiudi” i nemici nelle zone.</p>
+  <p><strong>Sblocco</strong>: record ≥ 50.000 con Marcus e Lucien.</p>
+</div>
+<div id="guide-bane" style="display:none;">
+  <h4>🪓 BANE</h4>
+  <p><strong>Ruolo</strong>: melee da ondate, danni pesanti e pressione ravvicinata.</p>
+  <p><strong>Background</strong>: Bane è un <strong>barbaro</strong> armato di <strong>ascia bipenne</strong>, costruito per spaccare gruppi a corto raggio.</p>
+  <p><strong>Attacco base – Fendente d’Ascia</strong>: un colpo ampio a ventaglio (quasi a 270° davanti a te) che può colpire fino a <strong>2 nemici</strong> per swing. È ideale per eliminare rapidamente i minion e tenere pulita la zona vicino al personaggio.</p>
+  <p><strong>Super – IRA</strong>: entra in uno stato di furia per <strong>10 secondi</strong>. Durante IRA ottieni <strong>+25% velocità</strong> e l’attacco base diventa molto più rapido (cooldown ridotto). Inoltre l’attacco base riceve un <strong>moltiplicatore danni</strong> in base alle kill che hai al momento dell’attivazione, rendendo IRA devastante nelle fasi avanzate. Alla fine di IRA il ritmo dell’attacco torna verso il valore base (con l’attuale impostazione post-IRA).</p>
+  <p><strong>Sblocco</strong>: record ≥ 50.000 con Pdor.</p>
+</div>
+
+
+<div id="guide-hendel-locked" style="margin-top:10px;padding:10px;border:2px dashed rgba(255,255,255,0.35);background:rgba(255,255,255,0.05);">
+  <h4>🪨 HENDEL</h4>
+  <p><em>Questo personaggio si sblocca facendo almeno <strong>50.000 punti</strong> di record con <strong>Bane</strong>. La descrizione completa apparirà automaticamente appena lo sblocchi.</em></p>
+</div>
+
+<div id="guide-hendel" style="display:none;">
+  <h4>🪨 HENDEL</h4>
+  <p><strong>Ruolo</strong>: bruiser difensivo da controllo ravvicinato (punisce chi prova a ingaggiarti).</p>
+  <p><strong>Statistiche</strong>: alta resistenza e presenza in mischia.</p>
+  <p><strong>Attacco base (J) – Martello Rotante</strong>: Hendel esegue uno swing a “martello” con area composta da <strong>manico vicino</strong> e <strong>testa lontana</strong>. Durante l’attacco l’hitbox ruota in <strong>senso orario</strong> per circa <strong>75°</strong> e può colpire <strong>un solo avversario</strong> per swing. Infligge <strong>120 danni</strong> e applica <strong>stordimento per 0,5s</strong> al bersaglio colpito.</p>
+  <p><strong>Passiva – Ritorsione di Pietra</strong>: ogni nemico che colpisce Hendel viene <strong>respinto lontano</strong> (knockback aumentato) e subisce <strong>30 danni</strong>. È perfetta per spezzare assalti melee e punire anche i ranged quando riesci a farli “sporcare” su di te.</p>
+  <p><strong>Super – Stone Perimeter Crush</strong>: richiama un perimetro di pietra che si <strong>chiude progressivamente</strong> sull’arena, danneggiando i nemici e comprimendoli verso il centro. Ottima per ripulire ondate, controllare boss e forzare posizionamenti sfavorevoli.</p>
+  <p><strong>Stile consigliato</strong>: gioca “frontline”. Entra nel gruppo, prendi un hit con la passiva per creare spazio, poi chiudi con J sul bersaglio più pericoloso.</p>
+  <p><strong>Sblocco</strong>: record ≥ 50.000 con Bane.</p>
+
+<div id="guide-kaerith-locked" style="display:block;padding:12px;border-radius:10px;border:1px dashed rgba(255,255,255,0.35);background:rgba(255,255,255,0.05);margin-top:10px;">
+  <h4>🐉 KAERITH</h4>
+  <p><em>Questo personaggio si sblocca facendo almeno <strong>40.000 punti</strong> di record con <strong>Hendel</strong>. La descrizione completa apparirà automaticamente appena lo sblocchi.</em></p>
+</div>
+
+<div id="guide-kaerith" style="display:none;">
+  <h4>🐉 KAERITH</h4>
+  <p><strong>Specie</strong>: dragonide (dragonide da battaglia, controlla il campo con fiammate).</p>
+  <p><strong>Statistiche</strong>: <strong>410 HP</strong> (molto resistente), mobilità media.</p>
+  <p><strong>Attacco base (J) – Fiammata Continua</strong>: Kaerith sprigiona una <strong>fiammata</strong> in cono davanti a sé (stile i nemici dei livelli 23–24). Finché la fiammata è attiva, il danno è a <strong>tick ripetuti</strong> e <strong>aumenta progressivamente</strong> durante la stessa emissione: i primi istanti bruciano meno, poi la fiammata “carica” e diventa più devastante.</p>
+  <p><strong>Super (K) – Inferno Totale</strong>: infuoca l’intero campo per <strong>9s</strong> con un overlay visivo di fiamme. Durante questo tempo tutti i nemici ottengono lo status <strong>Infuocato</strong>: ogni secondo subiscono danno progressivo che parte da <strong>5</strong> e sale fino a un massimo di <strong>25</strong> (cap). <strong>Ricarica: 21s</strong>.</p>
+</div>
+
+</div>
+
 <h3>11) NEMICI E PERICOLI</h3>
 <p>Nemici melee, veloci, resistenti e a distanza. Nemici con poison. Nemici con laser che richiedono schivata precisa. Boss con attacchi speciali e grandi quantità di HP.</p>
 <h3>12) CONSIGLI FINALI</h3>
@@ -626,19 +1141,143 @@ const HP_MULT=1.40;
 const DAMAGE_MULT=0.85;
 const SUPER_DAMAGE_MULT=0.8;
 const JEFF_SUPER_RADIUS=Math.round(320*0.8);
-const GOLD_PROB=0.10;
+const GOLD_PROB=0.05;
 const JEFF_ATTACK_RANGE_MULT=0.8;
 const JIMMY_SUPER_ADDITIONAL_MULT=0.85;
-const JIMMY_BASE_ADDITIONAL_MULT=1.10;
+const JIMMY_BASE_ADDITIONAL_MULT=1.20;
 
 const URL_DEFAULT='https://i.postimg.cc/8CBFTKs4/Progetto-senza-titolo.png';
 const URL_DARK='https://i.postimg.cc/JhpWH3jJ/Copilot-20251209-232827.png';
+
+// --- Hendel SUPER: Stone Perimeter Crush ---
+let hendelCrush = null;
+function startHendelCrush(duration=3000){
+  hendelCrush = { start: Date.now(), duration, last: Date.now(), exploded:false };
+}
+function _hendelCrushBounds(){
+  const now=Date.now();
+  if(!hendelCrush) return null;
+  const t=Math.max(0, Math.min(1, (now-hendelCrush.start)/hendelCrush.duration));
+  const insetMax = Math.max(0, Math.min(canvas.width, canvas.height)/2 - 40);
+  const inset = insetMax * t;
+  return {t, left: inset, top: inset, right: canvas.width - inset, bottom: canvas.height - inset};
+}
+function updateHendelCrush(){
+  if(!hendelCrush) return;
+  const now=Date.now();
+  const dt=Math.min(0.05, Math.max(0, (now-hendelCrush.last)/1000));
+  hendelCrush.last = now;
+  const b=_hendelCrushBounds();
+  if(!b) return;
+
+  // DoT while shrinking: 20 DPS to enemies; walls push enemies toward center
+  if(enemies && enemies.length){
+    for(let i=enemies.length-1;i>=0;i--){
+      const e=enemies[i];
+      const cx=e.x+e.width/2, cy=e.y+e.height/2;
+      let pushed=false;
+      if(cx < b.left){ e.x += (b.left - cx); pushed=true; }
+      else if(cx > b.right){ e.x -= (cx - b.right); pushed=true; }
+      if(cy < b.top){ e.y += (b.top - cy); pushed=true; }
+      else if(cy > b.bottom){ e.y -= (cy - b.bottom); pushed=true; }
+
+      // clamp
+      e.x = Math.max(0, Math.min(canvas.width - e.width, e.x));
+      e.y = Math.max(0, Math.min(canvas.height - e.height, e.y));
+
+      // 20 damage per second during convergence
+      const dmg = 20 * dt;
+      if(dmg>0){
+        applyEnemyDamage(e, dmg);
+        if(pushed){
+          createParticles(cx,cy,'#8b5a2b',2,2);
+        }
+        if(e.hp<=0){
+          createParticles(e.x,e.y,'#fff176',22,6);
+          dropStellarBonusAtIndexIfNeeded(i);
+          enemies.splice(i,1);
+          applyScore(100*currentLevel);
+          addKill();
+          if(player && player._baneSuperOnKill) player._baneSuperOnKill();
+        }
+      }
+    }
+  }
+
+  // Final explosion at center
+  if(b.t>=1 && !hendelCrush.exploded){
+    hendelCrush.exploded=true;
+    const cx=canvas.width/2, cy=canvas.height/2;
+    createParticles(cx,cy,'#8b5a2b',160,8);
+    createParticles(cx,cy,'#9e9e9e',160,8);
+    shakeScreen();
+
+    if(enemies && enemies.length){
+      for(let i=enemies.length-1;i>=0;i--){
+        const e=enemies[i];
+        const final=applyEnemyDamage(e, 330);
+        showDamageNumber(e.x,e.y,Math.round(final));
+        createParticles(e.x+e.width/2,e.y+e.height/2,'#8b5a2b',26,6);
+        createParticles(e.x+e.width/2,e.y+e.height/2,'#9e9e9e',18,6);
+        if(e.hp<=0){
+          createParticles(e.x,e.y,'#fff176',26,6);
+          dropStellarBonusAtIndexIfNeeded(i);
+          enemies.splice(i,1);
+          applyScore(100*currentLevel);
+          addKill();
+          if(player && player._baneSuperOnKill) player._baneSuperOnKill();
+        }
+      }
+    }
+  }
+
+  // cleanup shortly after explosion
+  if(b.t>=1 && hendelCrush.exploded && (now-hendelCrush.start) > (hendelCrush.duration+350)){
+    hendelCrush=null;
+  }
+}
+function drawHendelCrush(){
+  if(!hendelCrush) return;
+  const b=_hendelCrushBounds();
+  if(!b) return;
+  const w=b.right-b.left, h=b.bottom-b.top;
+  ctx.save();
+  ctx.globalAlpha=0.9;
+  ctx.lineWidth=6;
+  ctx.strokeStyle='rgba(139,61,43,0.95)';
+  ctx.strokeRect(b.left,b.top,w,h);
+  ctx.globalAlpha=0.12;
+  ctx.fillStyle='rgba(139,90,43,0.35)';
+  ctx.fillRect(b.left,b.top,w,h);
+  ctx.restore();
+}
+
 
 
 const URL_FINAL='https://i.postimg.cc/pTHFKHgz/Progetto-senza-titolo-(2).png';
 const URL_ICE='https://i.postimg.cc/K8pgVhTx/icebiome1.png';
 const canvas=document.getElementById('gameCanvas');
 const ctx=canvas.getContext('2d');
+
+
+function getPlayBounds(){
+  // Limiti reali del campo giocabile (non per forza identici al canvas).
+  // Rispetta il margine HUD in basso e, se attivo, lo shrink di Hendel Crush.
+  const bottomLimit = canvas.height-30;
+  let b = {left:0, top:0, right:canvas.width, bottom:bottomLimit};
+
+  // Hendel Crush restringe l'arena: usiamo i suoi bounds se presenti
+  try{
+    if(typeof _hendelCrushBounds==='function'){
+      const hb=_hendelCrushBounds();
+      if(hb && typeof hb.left==='number'){
+        b = {left:hb.left, top:hb.top, right:hb.right, bottom:Math.min(hb.bottom, bottomLimit)};
+      }
+    }
+  }catch(e){}
+
+  return b;
+}
 
 const bgDefault=document.getElementById('bgDefault');
 const bgDark=document.getElementById('bgDark');
@@ -655,6 +1294,7 @@ let selectedCharacter=null;
 let player=null;
 let currentLevel=0;
 let score=0;
+let kills=0;
 let timer=45;
 let enemies=[];
 let particles=[];
@@ -673,6 +1313,11 @@ function applyScore(delta){
   // keep integers (same feeling as before)
   const d = (scaled>=0) ? Math.floor(scaled) : Math.ceil(scaled);
   score = Math.max(0, score + d);
+}
+
+function addKill(n=1){
+  kills = Math.max(0, (kills||0) + (n||1));
+  try{ addAccountKill(selectedCharacter, n||1); }catch(e){}
 }
 
 
@@ -731,9 +1376,10 @@ function updateMagicZone(now){
         createParticles(ex,ey, magicZone.colors[(magicZone.colorIdx++)%magicZone.colors.length], 10, 4);
         if(e.hp<=0){
           createParticles(e.x,e.y,'#fff176',30,6);
+          dropStellarBonusAtIndexIfNeeded(i);
           enemies.splice(i,1);
           applyScore(100*currentLevel);
-        }
+        addKill(); }
       }
     }
 
@@ -745,7 +1391,7 @@ function updateMagicZone(now){
 function drawMagicZone(now){
   if(!magicZone) return;
   const t = Math.max(0, Math.min(1, (now - magicZone.startsAt) / magicZone.durationMs));
-  const pulse = 0.5 + 0.5*Math.sin(now/120);
+  const pulse = 0.5 + 0.5*Math.sin(now/240);
 
   ctx.save();
   ctx.globalAlpha = 0.18 + 0.18*(1-t);
@@ -778,6 +1424,191 @@ function isPointInsideMagicZone(x,y){
   return Math.hypot(x-magicZone.x, y-magicZone.y) <= magicZone.radius;
 }
 
+
+// --- PDOR SUPER: 7 luminous orbiting rings (slow + damage) ---
+let pdorOrbs = null;
+function startPdorOrbs(owner, now){
+  const durationMs = 8000;
+  const count = 7;
+
+  pdorOrbs = {
+    ownerType: owner && owner.type,
+    startsAt: now,
+    endsAt: now + durationMs,
+    orbs: []
+  };
+
+  const margin = 70;
+  for(let i=0;i<count;i++){
+    const cx = margin + Math.random()*(canvas.width - margin*2);
+    const cy = margin + Math.random()*((canvas.height-30) - margin*2);
+    const orbitR = 26 + Math.random()*34;
+    const ang0 = Math.random()*Math.PI*2;
+    const angSpeed = (Math.random()<0.5?-1:1) * (0.036 + Math.random()*0.028); // rad/ms
+
+    pdorOrbs.orbs.push({
+      cx, cy,
+      orbitR,
+      ang: ang0,
+      angSpeed,
+      x: cx + Math.cos(ang0)*orbitR,
+      y: cy + Math.sin(ang0)*orbitR,
+      pulses: [],
+      lastEmit: now - Math.random()*160,
+      hitCd: new Map()
+    });
+  }
+
+  // visual burst
+  if(owner){
+    createParticles(owner.x+owner.width/2, owner.y+owner.height/2, '#ffffff', 36, 6);
+  }
+}
+
+function _applyEnemyTempSlow(enemy, factor, untilMs){
+  const now = Date.now();
+  const until = now + (untilMs||0);
+  // store current speed once (so we restore properly even if the enemy was already slowed by other effects)
+  if(enemy._pdorSlowUntil && now < enemy._pdorSlowUntil){
+    // extend only
+    enemy._pdorSlowUntil = Math.max(enemy._pdorSlowUntil, until);
+    return;
+  }
+  enemy._pdorSpeedBefore = enemy.speed;
+  enemy.speed = (enemy.speed||0) * (factor!=null?factor:0.5);
+  enemy._pdorSlowUntil = until;
+}
+
+function updatePdorOrbs(now){
+  if(!pdorOrbs) return;
+
+  if(now >= pdorOrbs.endsAt){
+    // restore any remaining pdor slow
+    for(const e of enemies){
+      if(e && e._pdorSlowUntil){
+        if(typeof e._pdorSpeedBefore === 'number') e.speed = e._pdorSpeedBefore;
+        e._pdorSpeedBefore = undefined;
+        e._pdorSlowUntil = 0;
+      }
+    }
+    pdorOrbs = null;
+    return;
+  }
+
+  // restore expired slow effects
+  for(const e of enemies){
+    if(e && e._pdorSlowUntil && now >= e._pdorSlowUntil){
+      if(typeof e._pdorSpeedBefore === 'number') e.speed = e._pdorSpeedBefore;
+      e._pdorSpeedBefore = undefined;
+      e._pdorSlowUntil = 0;
+    }
+  }
+
+  const ringThickness = 7;      // "molto ristrette"
+  const emitEvery = 180;        // ms
+  const pulseSpeed = 0.24;      // px/ms
+  const pulseMax = 56;          // px
+  const pulseMin = 10;          // px
+  const perTargetHitCd = 180;   // ms (per orb)
+
+  for(const orb of pdorOrbs.orbs){
+    orb.ang += orb.angSpeed;
+    orb.x = orb.cx + Math.cos(orb.ang)*orb.orbitR;
+    orb.y = orb.cy + Math.sin(orb.ang)*orb.orbitR;
+
+    // emit pulses
+    if(now - orb.lastEmit >= emitEvery){
+      orb.lastEmit = now;
+      orb.pulses.push({ r: pulseMin, born: now });
+    }
+
+    // advance pulses
+    for(let p=orb.pulses.length-1;p>=0;p--){
+      const pulse = orb.pulses[p];
+      pulse.r += pulseSpeed * (now - (pulse._lastNow||now));
+      pulse._lastNow = now;
+      if(pulse.r > pulseMax){
+        orb.pulses.splice(p,1);
+        continue;
+      }
+
+      // collision with enemies on the ring band
+      for(let i=enemies.length-1;i>=0;i--){
+        const e=enemies[i];
+        if(!e) continue;
+        const ex=e.x+e.width/2, ey=e.y+e.height/2;
+        const d=Math.hypot(ex-orb.x, ey-orb.y);
+        if(Math.abs(d - pulse.r) <= ringThickness){
+          const last = orb.hitCd.get(e) || 0;
+          if(now - last < perTargetHitCd) continue;
+          orb.hitCd.set(e, now);
+
+          const dmg = 27;
+          const _final = applyEnemyDamage(e, dmg);
+          showDamageNumber(e.x, e.y, _final);
+          createParticles(ex, ey, '#ffffff', 10, 4);
+
+          _applyEnemyTempSlow(e, 0.5, 1000);
+
+          if(e.hp<=0){
+            createParticles(e.x,e.y,'#fff176',30,6);
+            dropStellarBonusAtIndexIfNeeded(i);
+            enemies.splice(i,1);
+            applyScore(100*currentLevel);
+          addKill(); }
+        }
+      }
+    }
+
+    // keep hit map small
+    if(orb.hitCd.size>90){
+      // prune old entries
+      for(const [k,t] of orb.hitCd.entries()){
+        if(!k || now-t>1500) orb.hitCd.delete(k);
+      }
+    }
+  }
+}
+
+function drawPdorOrbs(now){
+  if(!pdorOrbs) return;
+
+  ctx.save();
+  ctx.globalCompositeOperation='lighter';
+  ctx.shadowColor = 'rgba(255,255,255,0.9)';
+  ctx.shadowBlur = 25;
+
+
+  for(const orb of pdorOrbs.orbs){
+    // core glow
+    const pulse = 0.55 + 0.45*Math.sin((now+orb.cx)/240);
+    ctx.globalAlpha = 0.55 + 0.25*pulse;
+    const grad = ctx.createRadialGradient(orb.x, orb.y, 0, orb.x, orb.y, 30);
+    grad.addColorStop(0, 'rgba(255,255,255,1)');
+    grad.addColorStop(0.4, 'rgba(255,255,255,0.8)');
+    grad.addColorStop(1, 'rgba(255,255,255,0)');
+    ctx.fillStyle = grad;
+
+    ctx.beginPath();
+    ctx.arc(orb.x, orb.y, 7 + 2*pulse, 0, Math.PI*2);
+    ctx.fill();
+
+    // pulses (thin circles)
+    for(const p of orb.pulses){
+      const a = 0.40 + 0.25*Math.sin((now - p.born)/90);
+      ctx.globalAlpha = a;
+      ctx.lineWidth = 3;
+      ctx.strokeStyle = 'rgba(255,255,255,0.95)';
+      ctx.beginPath();
+      ctx.arc(orb.x, orb.y, p.r, 0, Math.PI*2);
+      ctx.stroke();
+    }
+  }
+
+  ctx.restore();
+}
+
+
 let lasers=[];
 let tempBeams=[]; // Tempostorm lasers (friendly beams)
 let wolves=[]; // Hècate Super: lupi amichevoli
@@ -786,7 +1617,7 @@ let lastSecondTick=Date.now();
 let levelAdvanceLock=false;
 let shakeAmount=0;
 
-const images={rooney:new Image(),jimmy:new Image(),jeff:new Image(),voltryx:new Image(),kouvagia:new Image(),salsy:new Image(),tempostorm:new Image() ,marz:new Image(),hecate:new Image()};
+const images={rooney:new Image(),jimmy:new Image(),jeff:new Image(),voltryx:new Image(),kouvagia:new Image(),salsy:new Image(),tempostorm:new Image() ,marz:new Image(),hecate:new Image(),pdor:new Image(),bane:new Image(),hendel:new Image(),kaerith:new Image()};
 images.rooney.src='https://i.postimg.cc/Vs0G7ZPV/rooneyy.png';
 images.jimmy.src='https://i.postimg.cc/13Qzjdn4/jimmyy.png';
 images.jeff.src='https://i.postimg.cc/gkQN3v7R/jeff-(1).png';
@@ -796,6 +1627,12 @@ images.salsy.src='https://i.ibb.co/20zSkjsB/salsy.png';
 images.tempostorm.src='https://i.postimg.cc/mkzj763m/tempostorm.png';
 images.marz.src='https://i.postimg.cc/j5WJZL5X/marz.png';
 images.hecate.src='https://i.postimg.cc/9QjRg424/hecate.png';
+images.marcus=new Image(); images.marcus.src='https://i.postimg.cc/MpKjhyKD/image.png';
+images.lucien=new Image(); images.lucien.src='https://i.postimg.cc/XvqZgdhz/Lucien-(1).png';
+images.pdor=new Image(); images.pdor.src='https://i.postimg.cc/y8nHcqnw/pdor24.png';
+images.bane=new Image(); images.bane.src='https://i.postimg.cc/Kjc7KMzX/bane.png';
+images.hendel.src='https://i.postimg.cc/g2G7LYjr/hendel.png';
+images.kaerith.src='https://i.postimg.cc/pLBZRcHy/Kaerith.png';
 const wolfImg=new Image(); wolfImg.src='https://i.postimg.cc/4y9yBGFw/lupo.png';
 const imagesEvo={jimmy:new Image(),rooney:new Image(),jeff:new Image()};
 imagesEvo.jimmy.src='https://i.postimg.cc/g26ZX0n9/jimmyevo.png';
@@ -809,6 +1646,7 @@ const pickupImgs={
   atk: new Image(),
   super: new Image(),
   gold: new Image(),
+  stellar: new Image(),
   malus: new Image(),
 };
 pickupImgs.heal.src='https://i.postimg.cc/c4jNccLC/heal.png';
@@ -817,6 +1655,7 @@ pickupImgs.speed.src='https://i.postimg.cc/DzCV8QHb/speed.png';
 pickupImgs.atk.src='https://i.postimg.cc/cHjVcxsS/ATK.png';
 pickupImgs.super.src='https://i.postimg.cc/3rss4xSD/Super.png';
 pickupImgs.gold.src='https://i.postimg.cc/wjVZGc6h/gold.png';
+pickupImgs.stellar.src='https://i.postimg.cc/7hhNdJpp/bossbonus.png';
 pickupImgs.malus.src='https://i.postimg.cc/tT1cJKFm/malus.png';
 pickupImgs.furia = new Image(); pickupImgs.furia.src='https://i.postimg.cc/BvCsTjYD/furia.png';
 pickupImgs.ice = new Image(); pickupImgs.ice.src='https://i.postimg.cc/GmF1RB1k/ice.png';
@@ -950,7 +1789,7 @@ function buildEnemyGuideUI(){
 
 const characterStats={
   jimmy:{
-    hp:305,
+    hp:350,
     speed:8*0.75,
     damage:47,
     range:600,
@@ -961,7 +1800,7 @@ const characterStats={
     superDuration:3000
   },
   rooney:{
-    hp:410,
+    hp:450,
     speed:6*0.75,
     damage:Math.round(80*DAMAGE_MULT),
     range:150,
@@ -972,7 +1811,7 @@ const characterStats={
     superDuration:750
   },
   jeff:{
-    hp:330, 
+    hp:400, 
     speed:7.5*0.75,
     damage:Math.round(57*DAMAGE_MULT), // 38
     range:Math.round(320*JEFF_ATTACK_RANGE_MULT),
@@ -983,7 +1822,7 @@ const characterStats={
     superDuration:2800
   },
   voltryx:{
-    hp:340, 
+    hp:425, 
     speed:9*0.75,               
     damage:Math.round(55*DAMAGE_MULT),
     range:Math.round(600), 
@@ -994,7 +1833,7 @@ const characterStats={
     superDuration:1500 
   },
   kouvagia:{
-    hp:350,
+    hp:430,
     speed:7*0.75,
     damage:55,
     range:220,
@@ -1005,7 +1844,7 @@ const characterStats={
     superDuration:600
   },
   salsy:{
-    hp:330,
+    hp:410,
     speed:8*0.75,  // leggermente più veloce di prima
     damage:33,       // per colpo (x2)
     range:330,       // medio ravvicinata
@@ -1016,7 +1855,7 @@ const characterStats={
     superDuration:400
   },
   tempostorm:{
-  hp:360,
+  hp:440,
   speed:6.1*0.75, // leggermente piu di Rooney
   damage:40,      // hit iniziale (extra +30 se il nemico resta nel fascio)
   range:400,
@@ -1027,7 +1866,7 @@ const characterStats={
   superDuration:500
 },
   marz:{
-    hp:320,
+    hp:360,
     speed:6.5*0.75,
     damage:40,
     tripleDamage:[40,50,60],
@@ -1039,8 +1878,81 @@ const characterStats={
     superDuration:2200
   }
 
-  ,hecate:{
-    hp:325,
+  ,
+  marcus:{
+    hp:400,
+    speed:7,
+    damage:20,
+    range:650,
+    cooldown:900,
+    name:'Marcus',
+    attackType:'marcusStream',
+    superCooldown:27000,
+    superDuration:10000
+  },
+  lucien:{
+    hp:380,
+    speed:8.2*0.75, // leggermente sopra la media
+    damage:15,      // per colpo (x4)
+    range:220,      // molto ravvicinato
+    cooldown:700,
+    name:'Lucien',
+    attackType:'lucienBlade',
+    superCooldown:21000,
+    superDuration:450
+  },
+
+  pdor:{
+    hp:420,
+    speed:7.4*0.75,
+    damage:50,
+    range:820,
+    cooldown:180,
+    name:'Pdor',
+    attackType:'pdorDart',
+    superCooldown:16000,
+    superDuration:1000
+  },
+
+
+  bane:{
+    hp:440,
+    speed:6.3*0.75, // leggermente più veloce di Tempostorm, ma sempre media-bassa
+    damage:75,
+    range:230,      // raggio medio-basso
+    cooldown:650,   // swing ascia
+    name:'Bane',
+    attackType:'axeattack',
+    superCooldown:60000,
+    superDuration:10000
+  },
+
+  hendel:{
+    hp:430,
+    speed:6.0*0.75, // la più bassa (o tra le più basse) del gioco
+    damage:120,
+    range:160,
+    cooldown:1100, // attacco base molto lento
+    name:'Hendel',
+    attackType:'hammerattack',
+    superCooldown:30000,
+    superDuration:3000
+  },
+
+  kaerith:{
+    hp:410,
+    speed:8.3*0.75,
+    damage:0,
+    range:300,
+    cooldown:1000, // fiammata continua
+    name:'Kaerith 🐉',
+    attackType:'kaerithFlame',
+    superCooldown:21000,
+    superDuration:6000
+  },
+
+  hecate:{
+    hp:375,
     speed:9*0.75,
     damage:52,
     range:990,
@@ -1081,7 +1993,173 @@ const levelConfigs=[
   ,{enemyType:'boss5',enemyHP:800,enemyDamage:32,enemySpeed:2.2*0.75,time:200,enemyCount:1} // Level 25 (Boss V)
 ];
 
-const RECORDS_KEY='pf_records_v19'; 
+const RECORDS_KEY='pf_records_v19';
+
+/* === Account Level System (v1) === */
+const ACCOUNT_KEY = "pf_account_v1";
+
+function defaultAccount(){
+  return {
+    level: 1,
+    xp: 0,
+    kills: { jimmy:0, rooney:0, jeff:0 },
+    claimed: { m_jimmy:false, m_rooney:false, m_jeff:false }
+  };
+}
+
+let account = null;
+
+function loadAccount(){
+  try{
+    const raw = localStorage.getItem(ACCOUNT_KEY);
+    if(!raw){ account = defaultAccount(); return; }
+    const obj = JSON.parse(raw);
+    account = Object.assign(defaultAccount(), obj||{});
+    account.kills = Object.assign(defaultAccount().kills, account.kills||{});
+    account.claimed = Object.assign(defaultAccount().claimed, account.claimed||{});
+  }catch(e){
+    account = defaultAccount();
+  }
+}
+
+function saveAccount(){
+  try{ localStorage.setItem(ACCOUNT_KEY, JSON.stringify(account||defaultAccount())); }catch(e){}
+}
+
+function xpNeededForLevel(lv){
+  return 1000 + (Math.max(1,lv)-1)*250;
+}
+
+function addAccountXp(amount){
+  if(!account) loadAccount();
+  account.xp = Math.max(0, (account.xp||0) + Math.max(0, amount||0));
+  while(account.xp >= xpNeededForLevel(account.level)){
+    account.xp -= xpNeededForLevel(account.level);
+    account.level += 1;
+  }
+  saveAccount();
+  updateAccountUI();
+}
+
+function addAccountKill(charKey, n=1){
+  if(!account) loadAccount();
+  if(!charKey) return;
+  if(!account.kills) account.kills = {};
+  if(typeof account.kills[charKey] !== 'number') account.kills[charKey] = 0;
+  account.kills[charKey] += Math.max(0, n||1);
+  saveAccount();
+  try{ const modal=document.getElementById('accountModal'); if(modal && modal.style.display==='flex'){ updateAccountUI(); } }catch(e){}
+}
+
+function getMissions(){
+  return [
+    { id:'m_jimmy', label:"Fai 1000 kill con Jimmy", char:'jimmy', goal:1000, xp:350 },
+    { id:'m_rooney', label:"Fai 1000 kill con Rooney", char:'rooney', goal:1000, xp:350 },
+    { id:'m_jeff', label:"Fai 1000 kill con Jeff", char:'jeff', goal:1000, xp:350 },
+  ];
+}
+
+function updateAccountUI(){
+  if(!account) loadAccount();
+  const btn = document.getElementById('accountLevelBtn');
+  const lvEl = document.getElementById('accountLevelValue');
+  const xpText = document.getElementById('accountXpText');
+
+  const level = account.level||1;
+  const need = xpNeededForLevel(level);
+  const xp = account.xp||0;
+
+  if(lvEl) lvEl.textContent = String(level);
+  if(xpText) xpText.textContent = `${xp}/${need} XP`;
+
+  const shouldShow = (startScreen && startScreen.style.display!=='none') || (mainMenuScreen && mainMenuScreen.style.display!=='none');
+  if(btn) btn.style.display = shouldShow ? 'block' : 'none';
+
+  const lh=document.getElementById('accLevelHeader');
+  const xh=document.getElementById('accXpHeader');
+  const bar=document.getElementById('accXpBar');
+  if(lh) lh.textContent=String(level);
+  if(xh) xh.textContent = `${xp}/${need} XP`;
+  if(bar){
+    const pct = Math.max(0, Math.min(1, need? (xp/need) : 0));
+    bar.style.width = `${Math.round(pct*100)}%`;
+  }
+
+  const list=document.getElementById('missionsList');
+  if(list){
+    const missions=getMissions();
+    list.innerHTML='';
+    for(const m of missions){
+      const k = (account.kills && typeof account.kills[m.char]==='number') ? account.kills[m.char] : 0;
+      const done = k >= m.goal;
+      const claimed = !!(account.claimed && account.claimed[m.id]);
+      const wrap=document.createElement('div');
+      wrap.className='mission';
+
+      const left=document.createElement('div');
+      left.className='meta';
+      left.innerHTML = `<div><strong>${m.label}</strong> <span style="opacity:0.75;">(+${m.xp} XP)</span></div>
+                        <div class="prog">${Math.min(k,m.goal)}/${m.goal} kill</div>`;
+
+      const btn=document.createElement('button');
+      btn.className='claimBtn';
+      btn.textContent = claimed ? 'Riscattato' : 'Riscatta';
+      if(done && !claimed){
+        btn.classList.add('ready');
+        btn.disabled=false;
+      }else{
+        btn.disabled=true;
+      }
+      if(claimed){
+        btn.style.opacity='0.65';
+        btn.style.cursor='default';
+        btn.style.background='rgba(46,204,113,0.18)';
+        btn.style.borderColor='rgba(46,204,113,0.35)';
+      }
+
+      btn.addEventListener('click', ()=>{
+        if(!account) loadAccount();
+        const kk = (account.kills && typeof account.kills[m.char]==='number') ? account.kills[m.char] : 0;
+        if(kk < m.goal) return;
+        if(account.claimed && account.claimed[m.id]) return;
+        account.claimed[m.id]=true;
+        saveAccount();
+        addAccountXp(m.xp);
+        updateAccountUI();
+      });
+
+      wrap.appendChild(left);
+      wrap.appendChild(btn);
+      list.appendChild(wrap);
+    }
+  }
+}
+
+function openAccountModal(){
+  const modal=document.getElementById('accountModal');
+  if(modal){
+    modal.style.display='flex';
+    updateAccountUI();
+  }
+}
+function closeAccountModal(){
+  const modal=document.getElementById('accountModal');
+  if(modal) modal.style.display='none';
+}
+
+document.addEventListener('DOMContentLoaded', ()=>{
+  loadAccount();
+  const btn=document.getElementById('accountLevelBtn');
+  const close=document.getElementById('closeAccountModal');
+  const modal=document.getElementById('accountModal');
+
+  if(btn) btn.addEventListener('click', openAccountModal);
+  if(close) close.addEventListener('click', closeAccountModal);
+  if(modal) modal.addEventListener('click', (e)=>{ if(e.target===modal) closeAccountModal(); });
+
+  updateAccountUI();
+});
+ 
 // Backward compatibility: try older keys used by previous versions
 const LEGACY_RECORDS_KEYS = ['pf_records_v18','pf_records_v17','pf_records_v16','pf_records_v15','pf_records'];
 // bumped key to include tempostormnclude salsy + new unlock rules // bumped key to include voltryx
@@ -1104,7 +2182,7 @@ let records=loadRecords();
 
 
 function loadRecords(){
-  const base={jimmy:0,rooney:0,jeff:0,voltryx:0,kouvagia:0,salsy:0,tempostorm:0,marz:0,hecate:0};
+  const base={jimmy:0,rooney:0,jeff:0,voltryx:0,kouvagia:0,salsy:0,tempostorm:0,marz:0,hecate:0,marcus:0,lucien:0,pdor:0,bane:0,hendel:0,kaerith:0};
   try{
     // Primary key (current version)
     const r=localStorage.getItem(RECORDS_KEY);
@@ -1139,12 +2217,24 @@ function updateMenuRecordsDisplay(){
   document.getElementById('record-tempostorm').textContent=`Record: ${records.tempostorm||0}`;
   document.getElementById('record-marz').textContent=`Record: ${records.marz||0}`;
   document.getElementById('record-hecate').textContent=`Record: ${records.hecate||0}`;
+  document.getElementById('record-marcus').textContent=`Record: ${records.marcus||0}`;
+  document.getElementById('record-lucien').textContent=`Record: ${records.lucien||0}`;
+  document.getElementById('record-pdor').textContent=`Record: ${records.pdor||0}`;
+  document.getElementById('record-bane').textContent=`Record: ${records.bane||0}`;
+  const rh=document.getElementById('record-hendel'); if(rh) rh.textContent=`Record: ${records.hendel||0}`;
+  const rk=document.getElementById('record-kaerith'); if(rk) rk.textContent=`Record: ${records.kaerith||0}`;
+  const brk=document.getElementById('btnrec-kaerith'); if(brk) brk.textContent=`R: ${records.kaerith||0}`;
   updateVoltryxUnlockUI();
   updateKouvagiaUnlockUI();
   updateSalsyUnlockUI();
   updateTempostormUnlockUI();
   updateMarzUnlockUI();
   updateHecateUnlockUI();
+  updateLucienUnlockUI();
+  updatePdorUnlockUI();
+  updateBaneUnlockUI();
+  updateHendelUnlockUI();
+  updateKaerithUnlockUI();
   updateGuideUnlockUI();
 }
 function allThreeAbove50k(){
@@ -1228,12 +2318,12 @@ function updateSalsyUnlockUI(){
 
 
 function allPrevAbove85k(){
-  return (records.jimmy||0) >= 70000 &&
-         (records.rooney||0) >= 70000 &&
-         (records.jeff||0) >= 70000 &&
-         (records.voltryx||0) >= 70000 &&
-         (records.kouvagia||0) >= 70000 &&
-         (records.salsy||0) >= 70000;
+  return (records.jimmy||0) >= 65000 &&
+         (records.rooney||0) >= 65000 &&
+         (records.jeff||0) >= 65000 &&
+         (records.voltryx||0) >= 65000 &&
+         (records.kouvagia||0) >= 65000 &&
+         (records.salsy||0) >= 65000;
 }
 function updateTempostormUnlockUI(){
   const card=document.getElementById('card-tempostorm');
@@ -1249,20 +2339,20 @@ function updateTempostormUnlockUI(){
   }else{
     card.classList.add('disabled');
     setLockBadgeState(badge, true);
-    card.title='Sblocca facendo 70.000 punti con tutti i personaggi precedenti (Jimmy, Rooney, Jeff, Voltryx, Kouvagia e Salsy)';
+    card.title='Sblocca facendo 65.000 punti con tutti i personaggi precedenti (Jimmy, Rooney, Jeff, Voltryx, Kouvagia e Salsy)';
   }
 }
 
 
 
 function allPrevAboveMarz80k(){
-  return (records.jimmy||0) >= 80000 &&
-         (records.rooney||0) >= 80000 &&
-         (records.jeff||0) >= 80000 &&
-         (records.voltryx||0) >= 80000 &&
-         (records.kouvagia||0) >= 80000 &&
-         (records.salsy||0) >= 80000 &&
-         (records.tempostorm||0) >= 80000 ;
+  return (records.jimmy||0) >= 70000 &&
+         (records.rooney||0) >= 70000 &&
+         (records.jeff||0) >= 70000 &&
+         (records.voltryx||0) >= 70000 &&
+         (records.kouvagia||0) >= 70000 &&
+         (records.salsy||0) >= 70000 &&
+         (records.tempostorm||0) >= 70000 ;
 }
 function updateMarzUnlockUI(){
   const card=document.getElementById('card-marz');
@@ -1277,20 +2367,20 @@ function updateMarzUnlockUI(){
   }else{
     card.classList.add('disabled');
     setLockBadgeState(badge, true);
-    card.title='Sblocca facendo 80.000 punti con tutti i personaggi precedenti';
+    card.title='Sblocca facendo 70.000 punti con tutti i personaggi precedenti';
   }
 }
 
 
 function allPrevAboveHecate85k(){
-  return (records.jimmy||0) >= 85000 &&
-         (records.rooney||0) >= 85000 &&
-         (records.jeff||0) >= 85000 &&
-         (records.voltryx||0) >= 85000 &&
-         (records.kouvagia||0) >= 85000 &&
-         (records.salsy||0) >= 85000 &&
-         (records.tempostorm||0) >= 85000 &&
-         (records.marz||0) >= 85000;
+  return (records.jimmy||0) >= 75000 &&
+         (records.rooney||0) >= 75000 &&
+         (records.jeff||0) >= 75000 &&
+         (records.voltryx||0) >= 75000 &&
+         (records.kouvagia||0) >= 75000 &&
+         (records.salsy||0) >= 75000 &&
+         (records.tempostorm||0) >= 75000 &&
+         (records.marz||0) >= 75000;
 }
 function updateHecateUnlockUI(){
   const card=document.getElementById('card-hecate');
@@ -1306,9 +2396,121 @@ function updateHecateUnlockUI(){
   }else{
     card.classList.add('disabled');
     setLockBadgeState(badge, true);
-    card.title='Sblocca facendo 85.000 punti con tutti i personaggi precedenti';
+    card.title='Sblocca facendo 75.000 punti con tutti i personaggi precedenti';
   }
 }
+function marcusUnlockedAny(){
+  try{
+    const vals = Object.values(records||{}).map(v=>parseInt(v)||0);
+    return (vals.length? Math.max(...vals) : 0) >= 70000;
+  }catch(e){
+    return false;
+  }
+}
+function lucienUnlocked(){
+  return (records.marcus||0) > 25000;
+}
+function updateLucienUnlockUI(){
+  const card=document.getElementById('card-lucien');
+  const badge=document.getElementById('lucienLockBadge');
+  if(!card||!badge) return;
+
+  const unlocked = lucienUnlocked();
+  if(unlocked){
+    card.classList.remove('disabled');
+    setLockBadgeState(badge, false);
+    card.title='Lucien sbloccato!';
+  }else{
+    card.classList.add('disabled');
+    setLockBadgeState(badge, true);
+    card.title='Sblocca facendo un record con Marcus superiore a 25.000 punti';
+  }
+}
+
+function pdorUnlocked(){
+  return (records.marcus||0) >= 50000 && (records.lucien||0) >= 50000;
+}
+function updatePdorUnlockUI(){
+  const card=document.getElementById('card-pdor');
+  const badge=document.getElementById('pdorLockBadge');
+  if(!card||!badge) return;
+
+  const unlocked = pdorUnlocked();
+  if(unlocked){
+    card.classList.remove('disabled');
+    setLockBadgeState(badge, false);
+    card.title='Pdor sbloccato!';
+  }else{
+    card.classList.add('disabled');
+    setLockBadgeState(badge, true);
+    card.title='Sblocca facendo almeno 50.000 punti di record con Marcus e Lucien';
+  }
+}
+
+function baneUnlocked(){
+  return (records.pdor||0) >= 50000;
+}
+
+function hendelUnlocked(){
+  return (records.bane||0) >= 50000;
+}
+
+function updateHendelUnlockUI(){
+  const card=document.getElementById('card-hendel');
+  const badge=document.getElementById('hendelLockBadge');
+  if(!card||!badge) return;
+
+  const unlocked = hendelUnlocked();
+  if(unlocked){
+    card.classList.remove('disabled');
+    setLockBadgeState(badge, false);
+    card.title='Hendel sbloccato!';
+  }else{
+    card.classList.add('disabled');
+    setLockBadgeState(badge, true);
+    card.title='Sblocca facendo 50.000 punti con Bane';
+  }
+}
+
+
+function kaerithUnlocked(){
+  return (records.hendel||0) >= 40000;
+}
+
+function updateKaerithUnlockUI(){
+  const card=document.getElementById('card-kaerith');
+  const badge=document.getElementById('kaerithLockBadge');
+  if(!card||!badge) return;
+
+  const unlocked = kaerithUnlocked();
+  if(unlocked){
+    card.classList.remove('disabled');
+    setLockBadgeState(badge, false);
+    card.title='Kaerith sbloccato!';
+  }else{
+    card.classList.add('disabled');
+    setLockBadgeState(badge, true);
+    card.title='Sblocca facendo 40.000 punti con Hendel';
+  }
+}
+
+function updateBaneUnlockUI(){
+  const card=document.getElementById('card-bane');
+  const badge=document.getElementById('baneLockBadge');
+  if(!card||!badge) return;
+
+  const unlocked = baneUnlocked();
+  if(unlocked){
+    card.classList.remove('disabled');
+    setLockBadgeState(badge, false);
+    card.title='Bane sbloccato!';
+  }else{
+    card.classList.add('disabled');
+    setLockBadgeState(badge, true);
+    card.title='Sblocca facendo almeno 50.000 punti di record con PDOR';
+  }
+}
+
 function updateGuideUnlockUI(){
   const vUnlocked = allThreeAbove50k();
   const kUnlocked = voltryxAbove51k();
@@ -1316,6 +2518,11 @@ function updateGuideUnlockUI(){
   const tUnlocked = allPrevAbove85k();
   const mUnlocked = allPrevAboveMarz80k();
   const hUnlocked = allPrevAboveHecate85k();
+  const marcUnlocked = marcusUnlockedAny();
+  const lucUnlocked = lucienUnlocked();
+  const pUnlocked = pdorUnlocked();
+  const bUnlocked = baneUnlocked();
+  const kaeUnlocked = kaerithUnlocked();
 
   const vBox=document.getElementById('guide-voltryx');
   const vLock=document.getElementById('guide-voltryx-locked');
@@ -1340,6 +2547,33 @@ function updateGuideUnlockUI(){
   const hBox=document.getElementById('guide-hecate');
   const hLock=document.getElementById('guide-hecate-locked');
   if(hBox&&hLock){ hBox.style.display = hUnlocked ? 'block' : 'none'; hLock.style.display = hUnlocked ? 'none' : 'block'; }
+
+  const pBox=document.getElementById('guide-pdor');
+  const pLock=document.getElementById('guide-pdor-locked');
+  if(pBox&&pLock){ pBox.style.display = pUnlocked ? 'block' : 'none'; pLock.style.display = pUnlocked ? 'none' : 'block'; }
+
+  const bBox=document.getElementById('guide-bane');
+  const hendBox=document.getElementById('guide-hendel');
+  const hendLock=document.getElementById('guide-hendel-locked');
+  const bLock=document.getElementById('guide-bane-locked');
+  if(bBox&&bLock){ bBox.style.display = bUnlocked ? 'block' : 'none'; bLock.style.display = bUnlocked ? 'none' : 'block'; }
+
+  const hendUnlocked = hendelUnlocked();
+  if(hendBox&&hendLock){ hendBox.style.display = hendUnlocked ? 'block' : 'none'; hendLock.style.display = hendUnlocked ? 'none' : 'block'; }
+
+  const kaeBox=document.getElementById('guide-kaerith');
+  const kaeLock=document.getElementById('guide-kaerith-locked');
+  if(kaeBox&&kaeLock){ kaeBox.style.display = kaeUnlocked ? 'block' : 'none'; kaeLock.style.display = kaeUnlocked ? 'none' : 'block'; }
+
+
+  const marcBox=document.getElementById('guide-marcus');
+  const marcLock=document.getElementById('guide-marcus-locked');
+  if(marcBox&&marcLock){ marcBox.style.display = marcUnlocked ? 'block' : 'none'; marcLock.style.display = marcUnlocked ? 'none' : 'block'; }
+
+  const lucBox=document.getElementById('guide-lucien');
+  const lucLock=document.getElementById('guide-lucien-locked');
+  if(lucBox&&lucLock){ lucBox.style.display = lucUnlocked ? 'block' : 'none'; lucLock.style.display = lucUnlocked ? 'none' : 'block'; }
+
 }
 
 
@@ -1369,6 +2603,61 @@ function drawParticles(){
   });
   ctx.globalAlpha=1
 }
+
+// --- IRA kill FX (Bane SUPER) ---
+let iraFxBursts = []; // radial glows on kill
+let iraScreenFlash = 0; // frames
+
+function createIraKillFX(x,y){
+  // Big red burst + sparks
+  createParticles(x,y,'#ff1b3a',70,5);
+  createParticles(x,y,'#7a0019',45,6);
+  createParticles(x,y,'#ff6b6b',35,4);
+  // Expanding glow rings
+  for(let k=0;k<3;k++){
+    iraFxBursts.push({
+      x, y,
+      r: 18 + k*10,
+      vr: 6 + k*1.5,
+      life: 18 + k*6,
+      maxLife: 18 + k*6
+    });
+  }
+  // Small screen flash
+  iraScreenFlash = Math.max(iraScreenFlash, 14);
+}
+
+function updateIraFX(){
+  iraFxBursts = iraFxBursts.filter(b=>{
+    b.r += b.vr;
+    b.life--;
+    return b.life>0;
+  });
+  if(iraScreenFlash>0) iraScreenFlash--;
+}
+
+function drawIraFX(){
+  // Draw glow rings behind particles
+  iraFxBursts.forEach(b=>{
+    const t = b.life / b.maxLife; // 1 -> 0
+    ctx.save();
+    ctx.globalAlpha = 0.55 * t;
+    ctx.strokeStyle = '#7a0019';
+    ctx.lineWidth = 6 * t + 1;
+    ctx.beginPath();
+    ctx.arc(b.x, b.y, b.r, 0, Math.PI*2);
+    ctx.stroke();
+    ctx.globalAlpha = 0.25 * t;
+    ctx.strokeStyle = '#ff1b3a';
+    ctx.lineWidth = 10 * t + 2;
+    ctx.beginPath();
+    ctx.arc(b.x, b.y, b.r*1.12, 0, Math.PI*2);
+    ctx.stroke();
+    ctx.restore();
+  });
+}
+
+
 function showDamageNumber(x,y,dmg){
   const div=document.createElement('div');
   div.className='damage-number';
@@ -1381,14 +2670,14 @@ function showDamageNumber(x,y,dmg){
 }
 
 // ===== Lupi amichevoli (HÈCATE SUPER) =====
-const WOLF_MAX = 6;
+const WOLF_MAX = 3;
 class Wolf{
   constructor(x,y){
     this.x=x; this.y=y;
     this.width=72; this.height=72;
-    this.maxHP=90; this.hp=90;
+    this.maxHP=51; this.hp=51;
     this.speed=3.5; // movimento rapido ma non OP
-    this.damage=30;
+    this.damage=16;
     this.range=70; // morso ravvicinato
     this.cooldown=700;
     this.lastAttack=0;
@@ -1397,10 +2686,49 @@ class Wolf{
     this.invulnerable=false;
     this.shieldActive=false;
   }
-  takeDamage(d){
+  takeDamage(d, attacker){
     if(this.hp<=0) return;
+
+    // Kaerith SUPER: 25% damage reduction while active
+
     this.hp -= d;
     createParticles(this.x+this.width/2, this.y+this.height/2, '#90caf9', 14, 4);
+
+    // Hendel passive: every enemy that hits him is knocked back and takes 40 damage
+    if(this.type==='hendel' && attacker && typeof attacker.hp==='number'){
+      const pcx=this.x+this.width/2, pcy=this.y+this.height/2;
+      const ecx=attacker.x+attacker.width/2, ecy=attacker.y+attacker.height/2;
+      let dx=ecx-pcx, dy=ecy-pcy;
+      const len=Math.hypot(dx,dy)||1;
+      dx/=len; dy/=len;
+
+      // knockback away from Hendel
+      const kb=140;
+      attacker.x += dx*kb;
+      attacker.y += dy*kb;
+      attacker.x = Math.max(0, Math.min(canvas.width - attacker.width, attacker.x));
+      attacker.y = Math.max(0, Math.min(canvas.height - attacker.height, attacker.y));
+
+      // damage
+      const ret=40;
+      attacker.hp -= ret;
+      showDamageNumber(attacker.x, attacker.y, ret);
+      createParticles(attacker.x+attacker.width/2, attacker.y+attacker.height/2, '#8b5a2b', 10, 4);
+      createParticles(attacker.x+attacker.width/2, attacker.y+attacker.height/2, '#9e9e9e', 6, 4);
+
+      // kill handling
+      if(attacker.hp<=0 && enemies){
+        const idx=enemies.indexOf(attacker);
+        if(idx!==-1){
+          createParticles(attacker.x,attacker.y,'#fff176',28,6);
+          dropStellarBonusAtIndexIfNeeded(idx);
+          enemies.splice(idx,1);
+          applyScore(100*currentLevel);
+          addKill();
+          if(this._baneSuperOnKill) this._baneSuperOnKill();
+        }
+      }
+    }
   }
   _nearestEnemy(){
     if(!enemies || enemies.length===0) return null;
@@ -1415,7 +2743,7 @@ class Wolf{
   }
   update(){
     const now=Date.now();
-    const target=this._nearestEnemy();
+const target=this._nearestEnemy();
     if(!target) return;
 
     const cx=this.x+this.width/2, cy=this.y+this.height/2;
@@ -1444,9 +2772,9 @@ class Wolf{
         // kill credit: same as normal kill
         createParticles(target.x, target.y, '#fff176', 30, 6);
         const idx=enemies.indexOf(target);
-        if(idx>=0) enemies.splice(idx,1);
+        if(idx>=0){dropStellarBonusAtIndexIfNeeded(idx);enemies.splice(idx,1);}
         applyScore(100*currentLevel);
-      }
+      addKill(); }
     }
   }
   draw(){
@@ -1502,6 +2830,8 @@ function drawWolves(){
 // I nemici attaccano i lupi se più vicini del player
 function getPreferredTarget(enemy, playerObj){
   try{
+    // Boss sempre focalizzati sul player (evita "zone sicure" quando i lupi attirano l'aggro)
+    if(enemy && typeof enemy.type==='string' && enemy.type.startsWith('boss')) return playerObj;
     if(!wolves || wolves.length===0) return playerObj;
     if(!enemy || !playerObj) return playerObj;
 
@@ -1541,6 +2871,14 @@ function applyEnemyDamage(enemy, baseDmg){
 function shakeScreen(){shakeAmount=8}
 
 // Extended projectile to support friendly, AoE, homing, pulse damage
+
+
+function aabbDist2(ax,ay,aw,ah,bx,by,bw,bh){
+  // distanza minima tra due rettangoli (0 se overlap)
+  const dx = (ax+aw < bx) ? (bx - (ax+aw)) : (bx+bw < ax) ? (ax - (bx+bw)) : 0;
+  const dy = (ay+ah < by) ? (by - (ay+ah)) : (by+bh < ay) ? (ay - (by+bh)) : 0;
+  return dx*dx + dy*dy;
+}
 function spawnProjectile(opts){
   // opts: {x,y,vx,vy,damage,ttl,color,radius,friendly,aoeRadius,aoeFullDamage,homing,speed,isVoltryxSuper,pulseInterval,lastPulse,targetRef,explodeOnExpire}
   const p={
@@ -1560,6 +2898,7 @@ function spawnProjectile(opts){
     h:opts.h||0,
     angle:typeof opts.angle==='number'?opts.angle:null,
     onHitPlayer:opts.onHitPlayer||null,
+    source:opts.source||opts.owner||null,
     meta:opts.meta||null,
     excludeRef:opts.excludeRef||null
   };
@@ -1635,9 +2974,10 @@ function updateProjectiles(){
             showDamageNumber(e.x,e.y, _final);
             if(e.hp<=0){
               createParticles(e.x,e.y,'#fff176',30,6);
+              dropStellarBonusAtIndexIfNeeded(i);
               enemies.splice(i,1);
               applyScore(100*currentLevel);
-                if(this.type==='kouvagia'){this.hp=Math.min(this.maxHP,this.hp+3);createParticles(this.x,this.y,'#2ecc71',6,3);}
+                addKill(); if(this.type==='kouvagia'){this.hp=Math.min(this.maxHP,this.hp+3);createParticles(this.x,this.y,'#2ecc71',6,3);}
             }
           }
         }
@@ -1665,9 +3005,10 @@ function updateProjectiles(){
                 showDamageNumber(ee.x,ee.y, _final);
                 if(ee.hp<=0){
                   createParticles(ee.x,ee.y,'#fff176',30,6);
+                  dropStellarBonusAtIndexIfNeeded(j);
                   enemies.splice(j,1);
                   applyScore(100*currentLevel);
-                }
+                addKill(); }
               }
             }
           }else{
@@ -1705,10 +3046,49 @@ function updateProjectiles(){
             }
             if(e.hp<=0){
               createParticles(e.x,e.y,'#fff176',30,6);
+              dropStellarBonusAtIndexIfNeeded(i);
               enemies.splice(i,1);
               applyScore(100*currentLevel);
-                if(this.type==='kouvagia'){this.hp=Math.min(this.maxHP,this.hp+3);createParticles(this.x,this.y,'#2ecc71',6,3);}
+                addKill(); if(this.type==='kouvagia'){this.hp=Math.min(this.maxHP,this.hp+3);createParticles(this.x,this.y,'#2ecc71',6,3);}
             }
+          }
+          if(p.meta && p.meta.pdorChain){
+            // Chain: jump to nearest enemy up to 5 hits, halving damage each jump.
+            if(!p.meta.hitRefs) p.meta.hitRefs = [];
+            p.meta.hitRefs.push(e);
+            p.meta.hitsLeft = (typeof p.meta.hitsLeft==='number'? p.meta.hitsLeft : 1) - 1;
+
+            if(p.meta.hitsLeft > 0){
+              let bestT=null, bestD=Infinity;
+              for(const t of enemies){
+                if(t===e) continue;
+                if(p.meta.hitRefs.includes(t)) continue;
+                const dx=(t.x+t.width/2)-p.x;
+                const dy=(t.y+t.height/2)-p.y;
+                const d=Math.hypot(dx,dy);
+                if(d<bestD){bestD=d;bestT=t;}
+              }
+              if(bestT){
+                const dx=(bestT.x+bestT.width/2)-p.x;
+                const dy=(bestT.y+bestT.height/2)-p.y;
+                const len=Math.hypot(dx,dy)||1;
+                const speed=9;
+                // halve damage on every jump (including the next hit)
+                p.damage = Math.max(1, Math.round(p.damage * 0.5));
+                p.vx=(dx/len)*speed;
+                p.vy=(dy/len)*speed;
+                p.speed=speed;
+                p.shape='rect';
+                p.w=35; p.h=10;
+                p.angle=Math.atan2(p.vy,p.vx);
+                // nudge forward to avoid re-hitting instantly
+                p.x += p.vx*0.35;
+                p.y += p.vy*0.35;
+                createParticles(p.x,p.y,'#ffffff',6,3);
+                return true; // keep projectile alive
+              }
+            }
+            return false; // no more targets
           }
           return false; // projectile consumed
         }
@@ -1717,8 +3097,21 @@ function updateProjectiles(){
       // enemy projectiles hit player
       if(player && p.x>player.x && p.x<player.x+player.width && p.y>player.y && p.y<player.y+player.height){
         if(typeof p.onHitPlayer==='function'){ try{ p.onHitPlayer(player); }catch(e){} }
-        player.takeDamage(p.damage);
+        player.takeDamage(p.damage, p.source || null);
         return false;
+      }
+
+      // enemy projectiles can hit wolves (Hècate summon)
+      if(wolves && wolves.length){
+        for(const w of wolves){
+          if(!w || w.hp<=0) continue;
+          if(p.x>w.x && p.x<w.x+w.width && p.y>w.y && p.y<w.y+w.height){
+            // apply damage to wolf
+            w.hp -= Math.max(1, Math.round(p.damage));
+            createParticles(w.x+w.width/2, w.y+w.height/2, '#90caf9', 10, 4);
+            return false;
+          }
+        }
       }
     }
 
@@ -1740,9 +3133,10 @@ function updateProjectiles(){
           showDamageNumber(ee.x,ee.y, _final);
           if(ee.hp<=0){
             createParticles(ee.x,ee.y,'#fff176',30,6);
+            dropStellarBonusAtIndexIfNeeded(j);
             enemies.splice(j,1);
             applyScore(100*currentLevel);
-          }
+          addKill(); }
         }
       }
       createParticles(p.x,p.y,'#ffa726',18,5);
@@ -1765,9 +3159,96 @@ function drawProjectiles(){
       ctx.translate(p.x, p.y);
       ctx.rotate(ang);
       ctx.fillStyle=p.color;
-      ctx.fillRect(-w/2, -h/2, w, h);
+
+      // PDOR dart: tapered "crystal/teardrop" instead of a plain rectangle
+      if(p.meta && p.meta.pdorChain){
+        const L = w;               // length
+        const W = Math.max(6, h*1.6); // width (a bit thicker so the shape reads better)
+        ctx.beginPath();
+        // tip (front)
+        ctx.moveTo(L/2, 0);
+        // upper edge to rounded base
+        ctx.quadraticCurveTo(L*0.15,  W*0.75, -L/2,  W*0.35);
+        // round the base
+        ctx.quadraticCurveTo(-L/2 - W*0.25, 0, -L/2, -W*0.35);
+        // lower edge back to tip
+        ctx.quadraticCurveTo(L*0.15, -W*0.75, L/2, 0);
+        ctx.closePath();
+        ctx.fill();
+
+        // subtle inner highlight
+        ctx.globalAlpha = 0.25;
+        ctx.strokeStyle = 'rgba(255,255,255,0.8)';
+        ctx.lineWidth = Math.max(1.5, W*0.12);
+        ctx.stroke();
+        ctx.globalAlpha = 1;
+      }else{
+        // Rooney punch-style homogeneous flared end
+        const L = w;
+        const W = h*1.2;
+
+        ctx.beginPath();
+        // main shaft
+        ctx.moveTo(-L/2, -W/2);
+        ctx.lineTo(L*0.15, -W/2);
+        ctx.lineTo(L*0.15, W/2);
+        ctx.lineTo(-L/2, W/2);
+        ctx.closePath();
+        ctx.fill();
+
+        // flared fist tip
+        ctx.beginPath();
+        ctx.moveTo(L*0.15, -W*0.9);
+        ctx.lineTo(L/2, -W*0.5);
+        ctx.lineTo(L/2, W*0.5);
+        ctx.lineTo(L*0.15, W*0.9);
+        ctx.closePath();
+        ctx.fill();
+      }
       ctx.restore();
+      
+    // Marcus wavy projectile visual (thick undulating line)
+    if(p.meta && p.meta.marcus){
+      const ang = Math.atan2(p.vy||0, p.vx||1);
+      const segs = 20;
+      const length = 120; // total length of the visible wave
+      const step = length / segs;
+      const amp = (p.meta && p.meta.amp) ? p.meta.amp : 14;
+      const freq = (p.meta && p.meta.freq) ? p.meta.freq : 0.9;
+      const phase = (p.meta && p.meta.phase) ? p.meta.phase : 0;
+      const nowT = Date.now();
+      const t2 = (nowT - (p.created||0)) / 1000;
+
+      const cx = p.x, cy = p.y;
+      const dxUnit = Math.cos(ang), dyUnit = Math.sin(ang);
+      const pxUnit = Math.cos(ang + Math.PI/2), pyUnit = Math.sin(ang + Math.PI/2);
+
+      ctx.save();
+      ctx.lineWidth = Math.max(6, (p.radius||8) * 2.2);
+      ctx.lineJoin = 'round';
+      ctx.lineCap = 'round';
+      ctx.strokeStyle = p.color || '#b19cff';
+      ctx.beginPath();
+      for(let i = -Math.floor(segs/2); i <= Math.floor(segs/2); i++){
+        const u = i * step;
+        const wobble = Math.sin((u * 0.06 * freq) + (t2 * freq) + phase);
+        const ox = pxUnit * wobble * amp;
+        const oy = pyUnit * wobble * amp;
+        const x = cx + dxUnit * u + ox;
+        const y = cy + dyUnit * u + oy;
+        if(i === -Math.floor(segs/2)) ctx.moveTo(x,y); else ctx.lineTo(x,y);
+      }
+      ctx.stroke();
+
+      ctx.globalAlpha = 0.14;
+      ctx.lineWidth = Math.max(10, (p.radius||8) * 3.0);
+      ctx.stroke();
       ctx.globalAlpha = 1;
+      ctx.restore();
+      return;
+    }
+
+    ctx.globalAlpha = 1;
       return;
     }
 
@@ -1798,6 +3279,8 @@ function spawnLaser(opts){
     created:Date.now(),ttl:opts.ttl||1000,damage:opts.damage||15,
     kind:opts.kind||'laser', chargeMs:opts.chargeMs||0, chargedAt:Date.now()+ (opts.chargeMs||0),
     hitCooldown:220, lastHit:0,
+    owner:opts.owner||opts.source||null,
+    trackPlayer: !!opts.trackPlayer,
     hitOnce:false
   });
 }
@@ -1805,6 +3288,15 @@ function spawnLaser(opts){
 function updateLasers(){
   const now=Date.now();
   lasers = lasers.filter(L=>{
+    // Aimbot 360° per boss: laser che segue il player durante la durata
+    if(L.trackPlayer && player){
+      const ocx = (L.owner? (L.owner.x + L.owner.width/2) : L.x);
+      const ocy = (L.owner? (L.owner.y + L.owner.height/2) : L.y);
+      const pcx = player.x + player.width/2;
+      const pcy = player.y + player.height/2;
+      L.x = ocx; L.y = ocy;
+      L.angle = Math.atan2(pcy-ocy, pcx-ocx);
+    }
     const alive = (now - L.created) < (L.ttl + (L.chargeMs||0));
     if(!alive) return false;
 
@@ -1835,12 +3327,12 @@ function updateLasers(){
         if(L.kind==='oneyes'){
           if(!L.hitOnce){
             L.hitOnce=true;
-            player.takeDamage(L.damage);
+            player.takeDamage(L.damage, L.owner || null);
           }
         } else {
           if(now - L.lastHit >= L.hitCooldown){
             L.lastHit = now;
-            player.takeDamage(L.damage);
+            player.takeDamage(L.damage, L.owner || null);
           }
         }
       }
@@ -1986,6 +3478,19 @@ function spawnPickup(x,y,type,value=0){
   const hitR = (type==='malus') ? MALUS_HIT_RADIUS : BONUS_HIT_RADIUS;
   pickups.push({x,y,type,value,created:Date.now(),ttl:20000,radius:18,hitRadius:hitR,w:28,h:28});
 }
+
+// Guaranteed StellarBonus drop: on levels 5/10/15/20/25, the LAST enemy alive always drops a StellarBonus exactly where it dies.
+const GUARANTEED_STELLAR_LEVELS = new Set([5,10,15,20,25]);
+function dropStellarBonusAtIndexIfNeeded(enemyIndex){
+  if(!GUARANTEED_STELLAR_LEVELS.has(currentLevel)) return;
+  // if we're about to remove an enemy and it's the last one on the field, enemies.length is 1 at this exact moment
+  if(enemies.length !== 1) return;
+  const e = enemies[enemyIndex];
+  if(!e) return;
+  const cx = e.x + (e.width||0)/2;
+  const cy = e.y + (e.height||0)/2;
+  spawnPickup(cx, cy, 'stellar');
+}
 function spawnPickupsForLevel(level){
   // IMPORTANT: do NOT clear existing pickups here.
   // Bonus pickups remain on the field when the level ends.
@@ -1996,7 +3501,7 @@ function spawnPickupsForLevel(level){
     const isGold=Math.random()<GOLD_PROB;
     const type=isGold ? 'gold' : pickRandomPickupType();
 
-    const x=60+Math.random()*(canvas.width-120);
+    const x=60+Math.random()*(canvas.width-240);
     const y=60+Math.random()*(canvas.height-180);
 
     const hitR = (type==='malus') ? MALUS_HIT_RADIUS : BONUS_HIT_RADIUS;
@@ -2024,6 +3529,7 @@ function drawPickups(){
       else if(p.type==='atk')ctx.fillStyle='#e74c3c';
       else if(p.type==='super')ctx.fillStyle='#f1c40f';
       else if(p.type==='gold')ctx.fillStyle='gold';
+      else if(p.type==='stellar')ctx.fillStyle='rgba(255,255,255,0.9)';
       else if(p.type==='speed')ctx.fillStyle='#3498db';
       else if(p.type==='shieldPickup')ctx.fillStyle='#7fdbff';
       else if(p.type==='malus')ctx.fillStyle='#8b0000';
@@ -2035,11 +3541,18 @@ function drawPickups(){
 }
 
 function updatePickups(playerRef){
-  pickups=pickups.filter(p=>{
+  // Use player CENTER for pickup collection checks.
+  // This fixes edge cases where (using top-left) some pickups became uncollectable near arena borders.
+  const pcx = playerRef.x + (playerRef.width||0)/2;
+  const pcy = playerRef.y + (playerRef.height||0)/2;
+
+  pickups = pickups.filter(p=>{
     if(Date.now()-p.created>p.ttl) return false;
-    const dist=Math.hypot((p.x-playerRef.x),(p.y-playerRef.y));
+
+    const dist = Math.hypot((p.x-pcx),(p.y-pcy));
     const pr = (p.hitRadius!=null) ? p.hitRadius : (p.radius!=null ? p.radius : 18);
-    if(dist<pr+Math.max(playerRef.width,playerRef.height)/2){
+
+    if(dist < pr + Math.max(playerRef.width,playerRef.height)/2){
       applyPickupEffect(playerRef,p.type);
       return false;
     }
@@ -2058,6 +3571,13 @@ function applyPickupEffect(playerRef,type){
   } else if(type==='super'){
     playerRef.lastSuper=Date.now()-playerRef.superCooldown-100;
     createParticles(playerRef.x,playerRef.y,'#f1c40f',20);
+    } else if(type==='stellar'){
+    // StellarBonus: +100 HP, +25% speed for 3s, white opaque glow for 3s
+    playerRef.hp = Math.min(playerRef.maxHP, playerRef.hp + 100);
+    playerRef.speed = playerRef._baseSpeed * 1.25;
+    playerRef.speedBuffUntil = Date.now() + 3000;
+    playerRef.stellarGlowUntil = Date.now() + 1000;
+    createParticles(playerRef.x, playerRef.y, '#ffffff', 36, 5);
   } else if(type==='gold'){
     playerRef.hp=playerRef.maxHP;
     playerRef.attackBuffMultiplier=2.0;
@@ -2116,7 +3636,13 @@ class Player{
     this._slowUntil=0;
     this.damage=s.damage;this.range=s.range;
     this.cooldown=s.cooldown;this.attackType=s.attackType;
+    this._baseCooldown=s.cooldown;
+    // Bane SUPER state
+    this.baneSuperUntil=0;
+    this.baneSuperAttackMult=1;
+    this._baneSuperAppliedCooldown=false;
     this.lastAttack=0;this.facingRight=true;
+    this.aimX=1;this.aimY=0; // ultima direzione di mira/movimento
     this.dashCooldown=0;this.attacking=false;this.attackTime=0;
     this.combo=0;this.damageTaken=0;this.isDashing=false;this.dashTime=0;
     this.superCooldown=s.superCooldown;this.superDuration=s.superDuration;
@@ -2157,6 +3683,8 @@ class Player{
     // --- Evolution (after Boss level 15) ---
     this.evolved=false;
     this._evoFxUntil=0;
+    // StellarBonus visual
+    this.stellarGlowUntil=0;
     this._jimmyNextGrappleCdMult=1;
   }
 
@@ -2169,7 +3697,7 @@ class Player{
 
 
   // Rallentamento temporaneo (usato da alcuni nemici/boss)
-  // pct: 0.10 = -10% velocità. durationMs in millisecondi.
+  // pct: 0.20 = -10% velocità. durationMs in millisecondi.
   applySlow(pct, durationMs){
     const now=Date.now();
     const p=Math.max(0, Math.min(0.60, pct||0)); // cap 60% (Boss5 usa 50%)
@@ -2199,6 +3727,19 @@ class Player{
     if(this.speedBuffUntil && now>this.speedBuffUntil){
       this.speed=this._baseSpeed;this.speedBuffUntil=0;this.isJetpacking=false;this.invulnerable=false
     }
+    // Bane SUPER speed boost handling (independent from pickups)
+    if(this.type==='bane'){
+      if(this.baneSuperSpeedUntil && now < this.baneSuperSpeedUntil){
+        this.speed = Math.max(this.speed, this._baseSpeed * 1.25);
+      } else if(this.baneSuperSpeedUntil && now >= this.baneSuperSpeedUntil){
+        this.baneSuperSpeedUntil = 0;
+        // if no other speed buff is active, restore base speed
+        if(!(this.speedBuffUntil && now < this.speedBuffUntil)){
+          this.speed = this._baseSpeed;
+        }
+      }
+    }
+
     if(this.pickupShieldUntil && now>this.pickupShieldUntil){this.pickupShieldUntil=0;this.invulnerable=false}
 
     // Furia heal-over-time (+10 HP/s for 10s)
@@ -2283,6 +3824,34 @@ class Player{
     }
     if(moveX!==0&&moveY!==0){moveX*=0.707;moveY*=0.707}
 
+    // aggiorna direzione di mira (per attacchi in tutte le direzioni)
+    if(moveX!==0 || moveY!==0){
+      const len=Math.hypot(moveX,moveY)||1;
+      this.aimX=moveX/len;
+      this.aimY=moveY/len;
+    }
+
+    // Kaerith (J) - Attacco continuo a ventaglio stretto (30°) con danno progressivo per bersaglio
+    if(this.type==='kaerith'){
+      if(keys['j'] && !this.isDoingSuper){
+        if(!this._kaerithFlame){
+          this._kaerithFlame={
+            start: now,
+            lastPulse: 0,
+            pulseMs: 90,
+            range: 294,                 // molto lungo
+            angle: Math.PI/6,           // 30°
+            dir:(()=>{  if(typeof enemies!=='undefined' && enemies && enemies.length){    const pcx=this.x+this.width/2, pcy=this.y+this.height/2;    let best=null, bestD=1e18;    for(const e of enemies){      const ex=e.x+e.width/2, ey=e.y+e.height/2;      const d=(ex-pcx)*(ex-pcx)+(ey-pcy)*(ey-pcy);      if(d<bestD){bestD=d; best={x:ex,y:ey};}    }    if(best) return Math.atan2(best.y-pcy, best.x-pcx);  }  return Math.atan2(this.aimY||0, this.aimX||1);})()
+          };
+        } else {
+          this._kaerithFlame.dir = (()=>{  if(typeof enemies!=='undefined' && enemies && enemies.length){    const pcx=this.x+this.width/2, pcy=this.y+this.height/2;    let best=null, bestD=1e18;    for(const e of enemies){      const ex=e.x+e.width/2, ey=e.y+e.height/2;      const d=(ex-pcx)*(ex-pcx)+(ey-pcy)*(ey-pcy);      if(d<bestD){bestD=d; best={x:ex,y:ey};}    }    if(best) return Math.atan2(best.y-pcy, best.x-pcx);  }  return Math.atan2(this.aimY||0, this.aimX||1);})();
+        }
+      } else {
+        this._kaerithFlame=null;
+      }
+    }
+
+
     // Marz super bonus: +50% speed while inside the magic zone
     const marzZoneMult = (this.type==='marz' && isPointInsideMagicZone(this.x+this.width/2, this.y+this.height/2)) ? 1.5 : 1;
 
@@ -2300,14 +3869,16 @@ class Player{
             const e=enemies[i];
             const dist=Math.hypot((e.x+e.width/2)-(this.x+this.width/2),(e.y+e.height/2)-(this.y+this.height/2));
             if(dist<110){
-              const dmg=Math.round(40*this.attackBuffMultiplier);
+              const dmg=Math.round(40*this.attackBuffMultiplier*(this.baneSuperAttackMult||1));
               const _dmg=dmg; const _final=applyEnemyDamage(e,_dmg);
               createParticles(e.x,e.y,'#e84393',10,5);
               showDamageNumber(e.x,e.y, _final);
               if(e.hp<=0){
                 createParticles(e.x,e.y,'#fff176',30,6);
+                dropStellarBonusAtIndexIfNeeded(i);
                 enemies.splice(i,1);
                 applyScore(100*currentLevel);
+                addKill(); this._baneSuperOnKill();
                 if(this.type==='kouvagia'){this.hp=Math.min(this.maxHP,this.hp+3);createParticles(this.x,this.y,'#2ecc71',6,3);}
               }
             }
@@ -2326,14 +3897,16 @@ class Player{
             const e=enemies[i];
             const dist=Math.hypot((e.x+e.width/2)-(this.x+this.width/2),(e.y+e.height/2)-(this.y+this.height/2));
             if(dist<165){
-              const dmg=Math.round(65*this.attackBuffMultiplier);
+              const dmg=Math.round(65*this.attackBuffMultiplier*(this.baneSuperAttackMult||1));
               const _dmg=dmg; const _final=applyEnemyDamage(e,_dmg);
               createParticles(e.x,e.y,'#fd79a8',16,5);
               showDamageNumber(e.x,e.y, _final);
               if(e.hp<=0){
                 createParticles(e.x,e.y,'#fff176',30,6);
+                dropStellarBonusAtIndexIfNeeded(i);
                 enemies.splice(i,1);
                 applyScore(100*currentLevel);
+                addKill(); this._baneSuperOnKill();
                 if(this.type==='kouvagia'){this.hp=Math.min(this.maxHP,this.hp+3);createParticles(this.x,this.y,'#2ecc71',6,3);}
               }
             }
@@ -2371,7 +3944,7 @@ class Player{
           const arcWidth=Math.PI*(120/180);
           const radius=90;
 
-          const baseDmg=Math.round(this.damage*0.65*this.attackBuffMultiplier);
+          const baseDmg=Math.round(this.damage*0.65*this.attackBuffMultiplier*(this.baneSuperAttackMult||1));
 
           let killedGrappleTarget=false;
 
@@ -2392,8 +3965,10 @@ class Player{
                 if(e.hp<=0){
                   if(e===this.grappleTarget) killedGrappleTarget=true;
                   createParticles(e.x,e.y,'#fff176',30,6);
+                  dropStellarBonusAtIndexIfNeeded(i);
                   enemies.splice(i,1);
                   applyScore(100*currentLevel);
+                addKill(); this._baneSuperOnKill();
                 }
               }
             }
@@ -2430,7 +4005,7 @@ class Player{
               const dx=ex-px, dy=ey-py;
               if(Math.abs(dx)<=half && Math.abs(dy)<=half){
                 const dist=Math.hypot(dx,dy);
-                const w=Math.max(0.10, 1 - (dist/maxDist)); // minimo 10% al bordo
+                const w=Math.max(0.20, 1 - (dist/maxDist)); // minimo 10% al bordo
                 hits.push({enemy,w, dist});
               }
             }
@@ -2464,8 +4039,10 @@ class Player{
               for(let i=enemies.length-1;i>=0;i--){
                 if(enemies[i].hp<=0){
                   createParticles(enemies[i].x,enemies[i].y,'#fff176',30,6);
+                  dropStellarBonusAtIndexIfNeeded(i);
                   enemies.splice(i,1);
                   applyScore(100*currentLevel);
+                addKill(); this._baneSuperOnKill();
                 }
               }
             }
@@ -2476,7 +4053,7 @@ class Player{
                 const base=(this.type==='jimmy')?300:140;
                 const mult=(this.type==='jimmy')?(SUPER_DAMAGE_MULT*JIMMY_SUPER_ADDITIONAL_MULT):SUPER_DAMAGE_MULT;
                 let extra=1;if(this.type==='rooney'&&dist<150)extra=1.5;
-                const dmg=Math.round(base*mult*extra*this.attackBuffMultiplier);
+                const dmg=Math.round(base*mult*extra*this.attackBuffMultiplier*(this.baneSuperAttackMult||1));
                 const _dmg=dmg; const _final=applyEnemyDamage(enemy,_dmg);
                 createParticles(enemy.x,enemy.y,'#f39c12',30,6);
                 showDamageNumber(enemy.x,enemy.y, _final);
@@ -2485,8 +4062,14 @@ class Player{
     player.hp = Math.min(player.maxHp, player.hp + 5);
   }
                   createParticles(enemy.x,enemy.y,'#fff176',30,6);
+                  // IRA kill special FX (Bane SUPER)
+                  if(player && player.type==='bane' && Date.now() < player.baneSuperUntil){
+                    createIraKillFX(enemy.x, enemy.y);
+                  }
+                  dropStellarBonusAtIndexIfNeeded(idx);
                   enemies.splice(idx,1);
-                  applyScore(100*currentLevel);}
+                  applyScore(100*currentLevel);addKill(); this._baneSuperOnKill();
+                }
               }
             });
           }
@@ -2524,14 +4107,15 @@ class Player{
                 // hit once, then keep moving forward briefly (pass-through)
                 const base=120;
                 const mult=(this.type==='jimmy')?(SUPER_DAMAGE_MULT*JIMMY_SUPER_ADDITIONAL_MULT):SUPER_DAMAGE_MULT;
-                const dmg=Math.round(base*mult*this.attackBuffMultiplier*(this.type==='jimmy'?2.0:1));
+                const dmg=Math.round(base*mult*this.attackBuffMultiplier*(this.baneSuperAttackMult||1)*(this.type==='jimmy'?2.0:1));
                 const _final=applyEnemyDamage(target, dmg);
                 createParticles(target.x,target.y,'#e74c3c',15,6);
                 showDamageNumber(target.x,target.y, _final);
                 if(target.hp<=0){
                   createParticles(target.x,target.y,'#fff176',30,6);
                   const idx=enemies.indexOf(target);
-                  if(idx>-1){enemies.splice(idx,1);applyScore(100*currentLevel);}
+                  if(idx>-1){dropStellarBonusAtIndexIfNeeded(idx);enemies.splice(idx,1);applyScore(100*currentLevel);addKill(); this._baneSuperOnKill();
+                }
                 }
 
                 // store direction and move through (no interaction/stop)
@@ -2565,8 +4149,10 @@ class Player{
     player.hp = Math.min(player.maxHp, player.hp + 5);
   }
                   createParticles(enemy.x,enemy.y,'#fff176',30,6);
+                  dropStellarBonusAtIndexIfNeeded(idx);
                   enemies.splice(idx,1);
-                  applyScore(100*currentLevel);}
+                  applyScore(100*currentLevel);addKill(); this._baneSuperOnKill();
+                }
               }
             });
           }
@@ -2574,6 +4160,48 @@ class Player{
 
       
       } else if(this.attackType==='salsySword'){
+        if(elapsed>=this.superDuration) this.endSuper();
+
+      
+    } else if(this.attackType==='axeattack'){
+      // BANE axe wide swing: 270° fan, hits max 2 enemies
+      const attackAngle = this.facingRight ? 0 : Math.PI;
+      const arcWidth = Math.PI * 1.5; // 270 degrees
+      let hits = 0;
+      // sort enemies by distance (closer hit first)
+      const sorted = enemies.slice().sort((a,b)=>{
+        const da=Math.hypot(a.x-this.x,a.y-this.y);
+        const db=Math.hypot(b.x-this.x,b.y-this.y);
+        return da-db;
+      });
+      sorted.forEach(enemy=>{
+        if(hits>=2) return;
+        const dx=enemy.x-this.x;
+        const dy=enemy.y-this.y;
+        const dist=Math.hypot(dx,dy);
+        const angle=Math.atan2(dy,dx);
+        let angleDiff=angle-attackAngle;
+        while(angleDiff>Math.PI) angleDiff-=Math.PI*2;
+        while(angleDiff<-Math.PI) angleDiff+=Math.PI*2;
+        if(dist < this.range && Math.abs(angleDiff) < arcWidth/2){
+          const superMult = (this.type==='bane' && this.baneSuperUntil && now < this.baneSuperUntil) ? (this.baneSuperAttackMult||1) : 1;
+          const base = this.damage * this.attackBuffMultiplier * superMult;
+          const dmg = applyEnemyDamage(enemy, base);
+          createParticles(enemy.x,enemy.y,'#c0392b',14,6);
+          showDamageNumber(enemy.x,enemy.y,dmg);
+          hits++;
+          if(enemy.hp<=0){
+            createParticles(enemy.x,enemy.y,'#fff176',30,6);
+            dropStellarBonusAtIndexIfNeeded(enemies.indexOf(enemy));
+            enemies.splice(enemies.indexOf(enemy),1);
+            applyScore(100*currentLevel);
+          addKill(); this._baneSuperOnKill();
+                }
+        }
+      });
+
+
+    } else if(this.attackType==='lucienBlade'){
         if(elapsed>=this.superDuration) this.endSuper();
 
       } else if(this.attackType==='kouvagia'){
@@ -2600,17 +4228,199 @@ class Player{
         }
       }
     }
+    
+
+    // handle Kaerith continuous fan attack (per-target progressive damage, max 90)
+    if(this.type==='kaerith' && this._kaerithFlame){
+      const F=this._kaerithFlame;
+      const now2=Date.now();
+
+      if(!F.lastPulse) F.lastPulse = now2;
+      if(now2 - F.lastPulse >= F.pulseMs){
+        F.lastPulse = now2;
+
+        const pcx=this.x+this.width/2, pcy=this.y+this.height/2;
+        // Aim-assist: orienta il ventaglio verso il nemico più vicino (se presente)
+        if(enemies && enemies.length){
+          let best=null, bestD=1e18;
+          for(const e of enemies){
+            const ex=e.x+e.width/2, ey=e.y+e.height/2;
+            const d=(ex-pcx)*(ex-pcx)+(ey-pcy)*(ey-pcy);
+            if(d<bestD){bestD=d; best={x:ex,y:ey};}
+          }
+          if(best){ F.dir=Math.atan2(best.y-pcy, best.x-pcx); }
+        }
+        const dir=F.dir;
+        const arc=F.angle;
+        const r=F.range;
+
+        // Track per-enemy "time inside cone" (reset quickly if leaves)
+        for(let i=enemies.length-1;i>=0;i--){
+          const e=enemies[i];
+          const ex=e.x+e.width/2, ey=e.y+e.height/2;
+          const dx=ex-pcx, dy=ey-pcy;
+          const dist=Math.hypot(dx,dy);
+
+          let inside=false;
+          if(dist<=r){
+            const ang=Math.atan2(dy,dx);
+            let diff=ang-dir;
+            while(diff>Math.PI) diff-=Math.PI*2;
+            while(diff<-Math.PI) diff+=Math.PI*2;
+            if(Math.abs(diff)<=arc/2) inside=true;
+          }
+
+          if(inside){
+            // start/continue inside timer
+            if(!e._kaerithInsideSince || (e._kaerithLastInside && (now2 - e._kaerithLastInside)>220)){
+              e._kaerithInsideSince = now2;
+            }
+            e._kaerithLastInside = now2;
+
+            const insideSec = Math.max(0, (now2 - e._kaerithInsideSince)/1000);
+
+            // Progressive damage: starts low, ramps up while the SAME enemy stays inside, caps at 90
+            const base = 12;
+            const slope = 20; // reaches cap ~4s
+            const dmg = Math.min(90, Math.round(base + insideSec * slope));
+
+            const final = applyEnemyDamage(e, dmg * (this.attackBuffMultiplier||1) * (this.baneSuperAttackMult||1));
+            showDamageNumber(e.x, e.y, final);
+            createParticles(ex, ey, '#ff3d00', 6, 3);
+
+            if(e.hp<=0){
+              createParticles(e.x,e.y,'#fff176',30,6);
+              dropStellarBonusAtIndexIfNeeded(i);
+              enemies.splice(i,1);
+              applyScore(100*currentLevel);
+              addKill(); if(this._baneSuperOnKill) this._baneSuperOnKill();
+            }
+          } else {
+            // reset if outside for a short moment
+            if(e._kaerithLastInside && (now2 - e._kaerithLastInside)>260){
+              e._kaerithLastInside=0;
+              e._kaerithInsideSince=0;
+            }
+          }
+        }
+      }
+    }
+// === Kaerith SUPER DoT: Infuocato (progressivo 5 -> 25) ===
+if(this.type==='kaerith' && this._kaerithFireUntil && Date.now() < this._kaerithFireUntil){
+  const nowF = Date.now();
+  if(!this._kaerithFireLastTick) this._kaerithFireLastTick = nowF;
+  if(nowF - this._kaerithFireLastTick >= 1000){
+    this._kaerithFireLastTick = nowF;
+
+    const elapsedSec = Math.floor((nowF - (this._kaerithFireStart||nowF))/1000);
+    // progressione: 5 al secondo 0, fino a 25 entro 8s (cap 25)
+    const prog = Math.min(19, Math.round(4 + (elapsedSec * (15/8))));
+    const dmg = Math.max(0, prog);
+
+    if(typeof enemies!=='undefined' && enemies && enemies.length){
+      for(const e of enemies){
+        if(e && typeof e.hp==='number' && e.hp>0){
+          e.hp -= dmg;
+          // piccolo feedback visivo (brace/ember)
+          createParticles(e.x+e.width/2, e.y+e.height/2, '#ff6d00', 6, 3);
+        }
+      }
+    }
+  }
+}
+
+
+
+// handle Hendel hammer sweep (clockwise 75°)
+    if(this.type==='hendel' && this._hammerSwing){
+      const H=this._hammerSwing;
+      const now2=Date.now();
+      const t=Math.max(0, Math.min(1, (now2 - H.start)/H.duration));
+
+      // end
+      if(t>=1){ this._hammerSwing=null; }
+      else if(enemies && enemies.length){
+        // clockwise: from baseAng + arc/2 down to baseAng - arc/2
+        const angStart = H.baseAng + H.arc/2;
+        const angEnd   = H.baseAng - H.arc/2;
+        const ang = angStart + (angEnd - angStart) * t;
+
+        const cx=this.x+this.width/2;
+        const cy=this.y+this.height/2;
+
+        const cos=Math.cos(ang), sin=Math.sin(ang);
+        // rotate world->local by -ang: x' = dx*cos + dy*sin, y' = -dx*sin + dy*cos
+        // NOTE: this swing can hit ONLY ONE opponent total
+        for(let i=enemies.length-1;i>=0;i--){
+          if(H.hitDone) break;
+          const e=enemies[i];
+          if(H.hitSet && H.hitSet.has(e)) continue;
+
+          const ex=e.x+e.width/2;
+          const ey=e.y+e.height/2;
+          const dx=ex-cx, dy=ey-cy;
+
+          const lx = dx*cos + dy*sin;
+          const ly = -dx*sin + dy*cos;
+
+          const inHandle =
+            (lx >= H.handleStart && lx <= (H.handleStart + H.handleLen) &&
+             Math.abs(ly) <= (H.handleW/2));
+
+          const hs = H.headSize;
+          const hx0 = H.headOffset - hs/2;
+          const hx1 = H.headOffset + hs/2;
+          const inHead =
+            (lx >= hx0 && lx <= hx1 &&
+             Math.abs(ly) <= (hs/2));
+
+          if(inHandle || inHead){
+            if(H.hitSet) H.hitSet.add(e);
+
+            // Only one enemy per swing
+            H.hitDone = true;
+
+            // Stun for 0.5s
+            e.stunnedUntil = Date.now() + 500;
+
+            const dmgBase = 120 * (this.attackBuffMultiplier||1) * (this.baneSuperAttackMult||1);
+            const final = applyEnemyDamage(e, dmgBase);
+
+            showDamageNumber(e.x, e.y, final);
+            createParticles(ex, ey, '#ff8c1a', 18, 5);
+
+            if(e.hp<=0){
+              createParticles(e.x,e.y,'#fff176',30,6);
+              dropStellarBonusAtIndexIfNeeded(i);
+              enemies.splice(i,1);
+              applyScore(100*currentLevel);
+              addKill(); if(this._baneSuperOnKill) this._baneSuperOnKill();
+            }
+          }
+        }
+      }
+    }
 
     // integrate velocity
+
     this.x+=this.vx;this.y+=this.vy;
     if(!keys['a']&&!keys['d']&&!this.isDashing&&!this.isGrappling)this.vx*=0.86;
     if(!keys['w']&&!keys['s']&&!this.isGrappling)this.vy*=0.86;
 
     const margin=10;
-    if(this.x<margin)this.x=margin;
-    if(this.x+this.width>canvas.width-margin)this.x=canvas.width-this.width-margin;
-    if(this.y<margin)this.y=margin;
-    if(this.y+this.height>canvas.height-50-margin)this.y=canvas.height-50-this.height-margin;
+    const push=10;
+    let hitWall=false;
+    const B=getPlayBounds();
+
+    const left=B.left+margin, right=B.right-margin;
+    const top=B.top+margin, bottom=B.bottom-margin;
+
+    if(this.x<left){ this.x=left+push; hitWall=true; }
+    if(this.x+this.width>right){ this.x=right-this.width-push; hitWall=true; }
+    if(this.y<top){ this.y=top+push; hitWall=true; }
+    if(this.y+this.height>bottom){ this.y=bottom-this.height-push; hitWall=true; }
+
+    if(hitWall){ createParticles(this.x+this.width/2,this.y+this.height/2,'#90caf9',6,3); }
 
     if(this.dashCooldown>0)this.dashCooldown--;
 
@@ -2637,14 +4447,16 @@ class Player{
             showDamageNumber(e.x,e.y, _final);
             if(e.hp<=0){
               createParticles(e.x,e.y,'#fff176',30,6);
+              dropStellarBonusAtIndexIfNeeded(i);
               enemies.splice(i,1);
               applyScore(100*currentLevel);
+                addKill(); this._baneSuperOnKill();
                 if(this.type==='kouvagia'){this.hp=Math.min(this.maxHP,this.hp+3);createParticles(this.x,this.y,'#2ecc71',6,3);}
             }
           }
         }
       }
-      if(this.type==='jimmy' || this.type==='voltryx' || this.type==='kouvagia' || this.type==='hecate'){
+      if(this.type==='jimmy' || this.type==='voltryx' || this.type==='kouvagia' || this.type==='hecate' || this.type==='lucien'){
         this._dashSpeedMult=4;
         this._dashDuration=300;
         this.dashCooldown=90;
@@ -2705,11 +4517,12 @@ class Player{
                 if(closestEnemy.hp<=0){
                   createParticles(closestEnemy.x,closestEnemy.y,'#fff176',30,6);
                   const idxEnemy=enemies.indexOf(closestEnemy);
-                  if(idxEnemy>-1){enemies.splice(idxEnemy,1);applyScore(100*currentLevel);}
+                  if(idxEnemy>-1){dropStellarBonusAtIndexIfNeeded(idxEnemy);enemies.splice(idxEnemy,1);applyScore(100*currentLevel);addKill(); this._baneSuperOnKill();
+                }
                 }
               }
             };
-          })(i), i*120);
+          })(i), i*240);
         }
       } else {
         let closestEnemy=null;let closestDist=this.range;
@@ -2719,27 +4532,31 @@ class Player{
           if(dist<closestDist&&Math.abs(dy)<220){closestDist=dist;closestEnemy=enemy}
         });
         if(closestEnemy){
-          const dmg=Math.round(this.damage*this.attackBuffMultiplier);
+          const dmg=Math.round(this.damage*this.attackBuffMultiplier*(this.baneSuperAttackMult||1));
           const _dmg=dmg; const _final=applyEnemyDamage(closestEnemy,_dmg);
           createParticles(closestEnemy.x,closestEnemy.y,'#e67e22',12,5);
           showDamageNumber(closestEnemy.x,closestEnemy.y, _final);
           if(closestEnemy.hp<=0){
             createParticles(closestEnemy.x,closestEnemy.y,'#fff176',30,6);
+            dropStellarBonusAtIndexIfNeeded(enemies.indexOf(closestEnemy));
             enemies.splice(enemies.indexOf(closestEnemy),1);
             applyScore(100*currentLevel);
-          }
+          addKill(); this._baneSuperOnKill();
+                }
         } else if(assistTarget){
           const distA=Math.hypot((assistTarget.x-this.x),(assistTarget.y-this.y));
-          if(distA<this.range+120){
-            const dmg=Math.round(this.damage*0.9*this.attackBuffMultiplier);
+          if(distA<this.range+240){
+            const dmg=Math.round(this.damage*0.9*this.attackBuffMultiplier*(this.baneSuperAttackMult||1));
             const _dmg=dmg; const _final=applyEnemyDamage(assistTarget,_dmg);
             createParticles(assistTarget.x,assistTarget.y,'#e67e22',12,5);
             showDamageNumber(assistTarget.x,assistTarget.y, _final);
             if(assistTarget.hp<=0){
               createParticles(assistTarget.x,assistTarget.y,'#fff176',30,6);
+              dropStellarBonusAtIndexIfNeeded(enemies.indexOf(assistTarget));
               enemies.splice(enemies.indexOf(assistTarget),1);
               applyScore(100*currentLevel);
-            }
+            addKill(); this._baneSuperOnKill();
+                }
           }
         }
       }
@@ -2769,7 +4586,7 @@ class Player{
           while(angleDiff>Math.PI)angleDiff-=Math.PI*2;
           while(angleDiff<-Math.PI)angleDiff+=Math.PI*2;
           if(dist<this.range && Math.abs(angleDiff)<arcWidth/2+0.15){
-            const base=37*this.attackBuffMultiplier;
+            const base=37*this.attackBuffMultiplier*(this.baneSuperAttackMult||1);
             const dmg=applyEnemyDamage(enemy, base);
             createParticles(enemy.x,enemy.y,'#f1c40f',10,4);
             showDamageNumber(enemy.x,enemy.y,dmg);
@@ -2778,14 +4595,88 @@ class Player{
     player.hp = Math.min(player.maxHp, player.hp + 5);
   }
               createParticles(enemy.x,enemy.y,'#fff176',30,6);
+              dropStellarBonusAtIndexIfNeeded(enemies.indexOf(enemy));
               enemies.splice(enemies.indexOf(enemy),1);
               applyScore(100*currentLevel);
-            }
+            addKill(); this._baneSuperOnKill();
+                }
           }
         });
       };
       doSwing();
-      setTimeout(doSwing, 120);
+      setTimeout(doSwing, 240);
+
+
+    
+    } else if(this.attackType==='axeattack'){
+      // BANE axe wide swing: 270° fan, hits max 2 enemies
+      const attackAngle = this.facingRight ? 0 : Math.PI;
+      const arcWidth = Math.PI * 1.5; // 270 degrees
+      let hits = 0;
+      // sort enemies by distance (closer hit first)
+      const sorted = enemies.slice().sort((a,b)=>{
+        const da=Math.hypot(a.x-this.x,a.y-this.y);
+        const db=Math.hypot(b.x-this.x,b.y-this.y);
+        return da-db;
+      });
+      sorted.forEach(enemy=>{
+        if(hits>=2) return;
+        const dx=enemy.x-this.x;
+        const dy=enemy.y-this.y;
+        const dist=Math.hypot(dx,dy);
+        const angle=Math.atan2(dy,dx);
+        let angleDiff=angle-attackAngle;
+        while(angleDiff>Math.PI) angleDiff-=Math.PI*2;
+        while(angleDiff<-Math.PI) angleDiff+=Math.PI*2;
+        if(dist < this.range && Math.abs(angleDiff) < arcWidth/2){
+          const superMult = (this.type==='bane' && this.baneSuperUntil && now < this.baneSuperUntil) ? (this.baneSuperAttackMult||1) : 1;
+          const base = this.damage * this.attackBuffMultiplier * superMult;
+          const dmg = applyEnemyDamage(enemy, base);
+          createParticles(enemy.x,enemy.y,'#c0392b',14,6);
+          showDamageNumber(enemy.x,enemy.y,dmg);
+          hits++;
+          if(enemy.hp<=0){
+            createParticles(enemy.x,enemy.y,'#fff176',30,6);
+            dropStellarBonusAtIndexIfNeeded(enemies.indexOf(enemy));
+            enemies.splice(enemies.indexOf(enemy),1);
+            applyScore(100*currentLevel);
+          addKill(); this._baneSuperOnKill();
+                }
+        }
+      });
+
+
+    } else if(this.attackType==='lucienBlade'){
+      // 4 colpi ravvicinati (15x4), stile simile a Salsy ma più vicino
+      const attackAngle=this.facingRight?0:Math.PI;
+      const arcWidth=Math.PI*1.05;
+      const doSwing = ()=>{
+        enemies.forEach(enemy=>{
+          const dx=enemy.x-this.x;const dy=enemy.y-this.y;const dist=Math.hypot(dx,dy);
+          const angle=Math.atan2(dy,dx);
+          let angleDiff=angle-attackAngle;
+          while(angleDiff>Math.PI)angleDiff-=Math.PI*2;
+          while(angleDiff<-Math.PI)angleDiff+=Math.PI*2;
+
+          if(dist<this.range && Math.abs(angleDiff)<arcWidth/2+0.20){
+            const base=15*this.attackBuffMultiplier*(this.baneSuperAttackMult||1);
+            const dmg=applyEnemyDamage(enemy, base);
+            createParticles(enemy.x,enemy.y,'#c8e6ff',8,4);
+            showDamageNumber(enemy.x,enemy.y,dmg);
+            if(enemy.hp<=0){
+              createParticles(enemy.x,enemy.y,'#fff176',30,6);
+              dropStellarBonusAtIndexIfNeeded(enemies.indexOf(enemy));
+              enemies.splice(enemies.indexOf(enemy),1);
+              applyScore(100*currentLevel);
+            addKill(); this._baneSuperOnKill();
+                }
+          }
+        });
+      };
+      doSwing();
+      setTimeout(doSwing, 85);
+      setTimeout(doSwing, 170);
+      setTimeout(doSwing, 255);
 
     } else if(this.attackType==='sword'){
       const attackAngle=this.facingRight?0:Math.PI;const arcWidth=Math.PI*1.6;
@@ -2797,7 +4688,7 @@ class Player{
         while(angleDiff>Math.PI)angleDiff-=Math.PI*2;
         while(angleDiff<-Math.PI)angleDiff+=Math.PI*2;
         if(dist<this.range&&Math.abs(angleDiff)<arcWidth/2+0.2){
-          const dmg=Math.round(this.damage*this.attackBuffMultiplier);
+          const dmg=Math.round(this.damage*this.attackBuffMultiplier*(this.baneSuperAttackMult||1));
           const _dmg=dmg; const _final=applyEnemyDamage(enemy,_dmg);
           createParticles(enemy.x,enemy.y,'#9b59b6',10,4);
           showDamageNumber(enemy.x,enemy.y, _final);
@@ -2806,8 +4697,10 @@ class Player{
     player.hp = Math.min(player.maxHp, player.hp + 5);
   }
             createParticles(enemy.x,enemy.y,'#fff176',30,6);
+            dropStellarBonusAtIndexIfNeeded(enemies.indexOf(enemy));
             enemies.splice(enemies.indexOf(enemy),1);
-            applyScore(100*currentLevel);}
+            applyScore(100*currentLevel);addKill(); this._baneSuperOnKill();
+                }
         }
       });
       // Jeff EVO passive: if a single attack hits 2+ enemies, heal 1% max HP
@@ -2819,14 +4712,16 @@ class Player{
       if(assistTarget){
         const distAssist=Math.hypot((assistTarget.x-this.x),(assistTarget.y-this.y));
         if(distAssist<this.range+60){
-          const dmg=Math.round(this.damage*0.7*this.attackBuffMultiplier);
+          const dmg=Math.round(this.damage*0.7*this.attackBuffMultiplier*(this.baneSuperAttackMult||1));
           const _dmg=dmg; const _final=applyEnemyDamage(assistTarget,_dmg);
           createParticles(assistTarget.x,assistTarget.y,'#9b59b6',10,4);
           showDamageNumber(assistTarget.x,assistTarget.y, _final);
           if(assistTarget.hp<=0){
             createParticles(assistTarget.x,assistTarget.y,'#fff176',30,6);
+            dropStellarBonusAtIndexIfNeeded(enemies.indexOf(assistTarget));
             enemies.splice(enemies.indexOf(assistTarget),1);
-            applyScore(100*currentLevel);}
+            applyScore(100*currentLevel);addKill(); this._baneSuperOnKill();
+                }
         }
       }
 
@@ -2876,19 +4771,21 @@ class Player{
             if(d<best && Math.abs(e.y-this.y)<220){best=d;closest=e}
           });
           if(closest){
-            const dmg=Math.round(perPunchBase*this.attackBuffMultiplier);
+            const dmg=Math.round(perPunchBase*this.attackBuffMultiplier*(this.baneSuperAttackMult||1));
             const _dmg=dmg; const _final=applyEnemyDamage(closest,_dmg);
             createParticles(closest.x,closest.y,'#e67e22',12,5);
             showDamageNumber(closest.x,closest.y, _final);
             if(closest.hp<=0){
               createParticles(closest.x,closest.y,'#fff176',30,6);
+              dropStellarBonusAtIndexIfNeeded(enemies.indexOf(closest));
               enemies.splice(enemies.indexOf(closest),1);
               applyScore(100*currentLevel);
-            }
+            addKill(); this._baneSuperOnKill();
+                }
           }
         };
         punch();
-        setTimeout(punch, 120);
+        setTimeout(punch, 240);
       }
     }
 
@@ -2911,7 +4808,7 @@ else if(this.attackType==='hecateBow'){
   const vx=(dx/len)*speed;
   const vy=(dy/len)*speed;
 
-  const mainDmg = Math.round(this.damage*1.25*this.attackBuffMultiplier);
+  const mainDmg = Math.round(this.damage*1.25*this.attackBuffMultiplier*(this.baneSuperAttackMult||1));
   const splitDmg = Math.round(mainDmg * 0.5); // frecce minori: metà del danno della freccia principale
 
   spawnProjectile({
@@ -2949,8 +4846,8 @@ else if(this.attackType==='tempostormLaser'){
   spawnTempBeam({
     x1:sx,y1:sy,x2:ex,y2:ey,
     width:18,ttl:260,
-    damage1:Math.round(40*this.attackBuffMultiplier),
-    damageStay:Math.round(30*this.attackBuffMultiplier)
+    damage1:Math.round(40*this.attackBuffMultiplier*(this.baneSuperAttackMult||1)),
+    damageStay:Math.round(30*this.attackBuffMultiplier*(this.baneSuperAttackMult||1))
   });
   createParticles(sx,sy,'#4fc3f7',14,4);
 }
@@ -2986,7 +4883,7 @@ else if(this.attackType==='magic'){
     spawnProjectile({
       x:sx,y:sy,
       vx,vy,speed,
-      damage:Math.round(damages[i]*this.attackBuffMultiplier),
+      damage:Math.round(damages[i]*this.attackBuffMultiplier*(this.baneSuperAttackMult||1)),
       ttl:520,
       color:colors[i%colors.length],
       radius:7,
@@ -3007,7 +4904,131 @@ else if(this.attackType==='magic'){
 
   superAttack(){
     const now=Date.now();
-    if(now-this.lastSuper<this.superCooldown||this.isDoingSuper)return false;
+
+    // Bane SUPER:
+// - +25% movement speed for 10s
+// - base attack cooldown reduced by 75% (cooldown * 0.25) for the whole SUPER
+// - during SUPER, base attack gets an extra buff based on current Kill count at activation:
+//   0–25  => +25% (x1.25)
+//   26–50 => +50% (x1.50)
+//   51–75 => +75% (x1.75)
+//   76+   => +100% (x2.00)
+//   (this multiplier is independent from pickup/bonus buffs)
+// - cooldown 60s
+    if(this.type==='hendel'){
+      const sc = (this.superCooldown!=null)?this.superCooldown:24000;
+      if(now - this.lastSuper < sc) return false;
+      this.lastSuper = now;
+      
+      this.invulnerable = true;
+      this.pickupShieldUntil = now + 3000;
+      startHendelCrush(3000);
+      createParticles(this.x+this.width/2,this.y+this.height/2,'#9e9e9e',28,6);
+      shakeScreen();
+      return true;
+    }
+
+
+    if(this.type==='kaerith'){
+      const sc = (this.superCooldown!=null)?this.superCooldown:21000;
+      if(now - this.lastSuper < sc) return false;
+      this.lastSuper = now;
+
+      // === NEW SUPER: Inferno Totale (9s) ===
+      this._kaerithFireStart = now;
+      this._kaerithFireUntil = now + 9000;
+      this._kaerithFireLastTick = 0;
+
+      // burst FX iniziale
+      createParticles(this.x+this.width/2,this.y+this.height/2,'#ff3d00',34,6);
+      shakeScreen(7);
+      return true;
+    }
+
+    if(this.type==='bane'){
+      const sc = (this.superCooldown!=null)?this.superCooldown:60000;
+      if(now - this.lastSuper < sc) return false;
+
+      this.lastSuper = now;
+
+      const dur = (this.superDuration!=null)?this.superDuration:10000;
+      this.baneSuperUntil = now + dur;
+
+      // speed boost (do not downgrade other speed buffs)
+      this.speed = Math.max(this.speed, this._baseSpeed * 1.25);
+
+      // cooldown reduction for base attack (only during SUPER)
+      if(typeof this.cooldown === 'number'){
+        // remember current cooldown (may include other effects)
+        this._preBaneSuperCooldown = this.cooldown;
+
+        // SUPER: faster base attack
+        this.cooldown = this._baseCooldown * 0.25;
+        this._baneSuperAppliedCooldown = true;
+
+        // When SUPER ends (after `dur`), apply fatigue: +75% time between hits
+        // Use a timeout so it triggers even if a frame/update is skipped.
+        const expectedEnd = this.baneSuperUntil;
+        setTimeout(()=>{
+          // still the same player instance and the same SUPER window ended
+          if(this.type!=='bane') return;
+          if(this.baneSuperUntil && this.baneSuperUntil===expectedEnd && Date.now()>=expectedEnd){
+            this.baneSuperUntil = 0;
+            if(this._baseCooldown!=null){
+              this.cooldown = this._baseCooldown * 0.95;
+            }
+            this._preBaneSuperCooldown = undefined;
+            this._baneSuperAppliedCooldown = false;
+
+            // restore speed only if SUPER was the active boost (avoid downgrading other buffs)
+            const superSpeed = this._baseSpeed * 1.25;
+            if(this.speed <= superSpeed + 0.0001){
+              this.speed = this._baseSpeed;
+            }
+          }
+        }, dur + 20);
+      }
+
+      // attack multiplier for SUPER (independent from pickup/bonus buffs)
+      const k = (typeof kills==='number') ? kills : 0;
+      if(k<=25) this.baneSuperAttackMult = 1.25;
+      else if(k<=50) this.baneSuperAttackMult = 1.50;
+      else if(k<=75) this.baneSuperAttackMult = 1.75;
+      else this.baneSuperAttackMult = 2.00;
+
+      return true;
+    }
+
+    
+// --- FIX: HÈCATE SUPER (ensure it always triggers correctly) ---
+// In some later refactors the generic cooldown / isDoingSuper flow can block Hècate.
+// We handle her super explicitly here, mirroring the old working behavior.
+if(this.type==='hecate'){
+  const sc = (this.superCooldown!=null)?this.superCooldown:22000;
+  if(now - this.lastSuper < sc || this.isDoingSuper) return false;
+
+  this.lastSuper = now;
+  this.isDoingSuper = true;
+  this.superStartTime = now;
+  this._superHitDone = false;
+
+  // Heal: 5 HP per enemy on field
+  const heal = Math.max(0, (typeof enemies!=='undefined' && enemies)? enemies.length : 0) * 5;
+  if(heal>0){
+    this.hp = Math.min(this.maxHP, this.hp + heal);
+    createParticles(this.x+this.width/2,this.y+this.height/2,'#c5cae9',28,6);
+  } else {
+    createParticles(this.x+this.width/2,this.y+this.height/2,'#c5cae9',16,5);
+  }
+
+  // Spawn 3 wolves (max 3)
+  spawnWolvesNearPlayer(this, 3);
+
+  shakeScreen();
+  return true;
+}
+
+if(now-this.lastSuper<this.superCooldown||this.isDoingSuper)return false;
     this.lastSuper=now;this.isDoingSuper=true;this.superStartTime=now;this._HitDone=false;
 
     if(this.type==='jimmy'){this.invulnerable=true;this.shieldActive=true}
@@ -3048,6 +5069,26 @@ else if(this.attackType==='magic'){
       createParticles(this.x+this.width/2,this.y+this.height/2,'#f1c40f',26,6);
     }
 
+    else if(this.attackType==='lucienBlade'){
+      // Lucien SUPER: spawn 5 collectible bonuses around him (NO gold, NO super-recharge).
+      // Bonuses are real pickups collectable by the player.
+      const allowedTypes = ['heal','atk','speed','shieldPickup','furia','ice'];
+      const px = this.x + this.width/2;
+      const py = this.y + this.height/2;
+
+      for(let i=0;i<5;i++){
+        const a = Math.random()*Math.PI*2;
+        const r = 60 + Math.random()*25;
+        const t = allowedTypes[Math.floor(Math.random()*allowedTypes.length)];
+        const x = Math.max(40, Math.min(canvas.width-40, px + Math.cos(a)*r));
+        const y = Math.max(40, Math.min(canvas.height-90, py + Math.sin(a)*r));
+        spawnPickup(x, y, t);
+        createParticles(x, y, '#80cbc4', 18, 4);
+      }
+      createParticles(px, py, '#80cbc4', 30, 6);
+    }
+
+
     else if(this.attackType==='kouvagia'){
 
       // Kouvagia super: full heal + large knockback + tiny damage + visual FX
@@ -3078,7 +5119,7 @@ else if(this.attackType==='magic'){
     }
 else if(this.attackType==='hybrid'){
      
-      const dmgPerPulse = Math.round(100 * this.attackBuffMultiplier);
+      const dmgPerPulse = Math.round(120 * this.attackBuffMultiplier);
       spawnProjectile({
         x:this.x+this.width/2,y:this.y+this.height/2,
         vx:(this.facingRight?1:-1)*4,vy:0,speed:6,
@@ -3092,7 +5133,7 @@ else if(this.attackType==='hybrid'){
 
 else if(this.attackType==='tempostormLaser'){
   const cx=canvas.width/2;
-  const cy=(canvas.height-50)/2;
+  const cy=(canvas.height-30)/2;
   let stolen=0;
 
   enemies.forEach(e=>{
@@ -3141,19 +5182,19 @@ else if(this.attackType==='tempostormLaser'){
       // - Deals heavy periodic damage to enemies inside
       // - If Marz stays inside, he gains +50% movement speed
       const cx=canvas.width/2;
-      const cy=(canvas.height-50)/2;
+      const cy=(canvas.height-30)/2;
 
       magicZone = {
         x:cx,
         y:cy,
         startsAt:now,
-        endsAt:now+10000,
+        endsAt:now+6500,
         durationMs:10000,
         startRadius:90,
         maxRadius:560,
         radius:90,
         tickMs:180,
-        damagePerTick:Math.round(16*this.attackBuffMultiplier),
+        damagePerTick:Math.round(16*this.attackBuffMultiplier*(this.baneSuperAttackMult||1)),
         lastTick:0,
         colors:['#ff00ff','#00e5ff','#fff176','#7c4dff','#18ffff'],
         colorIdx:0
@@ -3177,7 +5218,8 @@ else if(this.attackType==='tempostormLaser'){
     if(this.type==='jimmy')this.shieldActive=false
   }
 
-  takeDamage(damage){
+
+  takeDamage(damage, attacker){
     if(this.invulnerable||(this.pickupShieldUntil&&Date.now()<this.pickupShieldUntil))return;
     if(this.shieldActive&&!this.shieldBroken){
       this.shieldDurability-=1;
@@ -3185,15 +5227,81 @@ else if(this.attackType==='tempostormLaser'){
       if(this.shieldDurability<=0){this.shieldBroken=true;this.shieldBrokenTime=Date.now();this.shieldActive=false}
       return;
     }
+
+    // apply damage to Hendel (or any player)
     this.hp-=damage;
     if(!isFinite(this.hp)) this.hp = 0;
     this.hp = Math.max(0, this.hp);
     this.damageTaken++;
     this.combo=0;
     applyScore(-50);
+    this._baneSuperOnKill();
     createParticles(this.x,this.y,'#c0392b',12,5);
     shakeScreen();
+
+    // Hendel retaliation: any enemy that hits Hendel is knocked back and takes 30 damage
+    if(this.type==='hendel' && attacker && typeof attacker.hp==='number' && attacker.hp>0){
+      const pcx=this.x+this.width/2, pcy=this.y+this.height/2;
+      const ecx=attacker.x+attacker.width/2, ecy=attacker.y+attacker.height/2;
+      let dx=ecx-pcx, dy=ecy-pcy;
+      const len=Math.hypot(dx,dy)||1;
+      dx/=len; dy/=len;
+
+      // knockback away from Hendel (a bit of distance)
+      const kb=140;
+      attacker.x += dx*kb;
+      attacker.y += dy*kb;
+      attacker.x = Math.max(0, Math.min(canvas.width - attacker.width, attacker.x));
+      attacker.y = Math.max(0, Math.min(canvas.height - attacker.height, attacker.y));
+
+      // retaliation damage
+      const ret=30;
+      attacker.hp -= ret;
+      showDamageNumber(attacker.x, attacker.y, ret);
+      createParticles(attacker.x+attacker.width/2, attacker.y+attacker.height/2, '#8b5a2b', 10, 4);
+      createParticles(attacker.x+attacker.width/2, attacker.y+attacker.height/2, '#9e9e9e', 6, 4);
+
+      // kill handling (if retaliation finishes the enemy)
+      if(attacker.hp<=0 && enemies){
+        const idx=enemies.indexOf(attacker);
+        if(idx!==-1){
+          createParticles(attacker.x,attacker.y,'#fff176',28,6);
+          dropStellarBonusAtIndexIfNeeded(idx);
+          enemies.splice(idx,1);
+          applyScore(100*currentLevel);
+          addKill();
+          if(this._baneSuperOnKill) this._baneSuperOnKill();
+        }
+      }
+    }
+
     if(this.hp<=0 && gameState==='playing') endGame(false);
+  }
+
+
+  _baneSuperOnKill(){
+    // Kept for compatibility: Bane SUPER attack buff is now decided at activation
+    // based on current Kill count (see superAttack()).
+    return;
+  }
+
+  _updateBaneSuperState(now){
+    if(this.type!=='bane') return;
+    if(this.baneSuperUntil && now >= this.baneSuperUntil){
+      this.baneSuperUntil = 0;
+      // quando la SUPER finisce (dopo la sua durata), l'attacco base diventa più lento: +75% tempo tra i colpi
+      if(this._baseCooldown!=null){
+        this.cooldown = this._baseCooldown * 0.95;
+      }
+      this._preBaneSuperCooldown = undefined;
+      this._baneSuperAppliedCooldown = false;
+      // restore speed only if SUPER was the active boost (avoid downgrading other buffs)
+      const superSpeed = this._baseSpeed * 1.25;
+      if(this.speed <= superSpeed + 0.0001){
+        this.speed = this._baseSpeed;
+      }
+      this.baneSuperAttackMult = 1;
+    }
   }
 
   draw(){
@@ -3217,8 +5325,95 @@ else if(this.attackType==='tempostormLaser'){
         ctx.drawImage(activeImg,-this.x-this.width,this.y,this.width,this.height)
       }else ctx.drawImage(activeImg,this.x,this.y,this.width,this.height);
       ctx.restore()
+    // Hendel hammer VFX (brown handle near Hendel, orange head far)
+    if(this.type==='hendel' && this._hammerSwing){
+      const H=this._hammerSwing;
+      const now=Date.now();
+      const t=Math.max(0, Math.min(1, (now - H.start)/H.duration));
+
+      const angStart = H.baseAng + H.arc/2;
+      const angEnd   = H.baseAng - H.arc/2;
+      const ang = angStart + (angEnd - angStart) * t;
+
+      const cx=this.x+this.width/2;
+      const cy=this.y+this.height/2;
+
+      ctx.save();
+      ctx.translate(cx,cy);
+      ctx.rotate(ang);
+
+      // handle (brown) — closer
+      ctx.globalAlpha = 0.55;
+      ctx.fillStyle = '#b07a56';
+      ctx.strokeStyle = '#000';
+      ctx.lineWidth = 6;
+      ctx.beginPath();
+      ctx.rect(H.handleStart, -H.handleW/2, H.handleLen, H.handleW);
+      ctx.fill();
+      ctx.stroke();
+
+      // head (orange) — farther
+      ctx.globalAlpha = 0.60;
+      ctx.fillStyle = '#ff7f1f';
+      ctx.strokeStyle = '#000';
+      ctx.lineWidth = 7;
+      const hs = H.headSize;
+      ctx.beginPath();
+      ctx.rect(H.headOffset - hs/2, -hs/2, hs, hs);
+      ctx.fill();
+      ctx.stroke();
+
+      ctx.restore();
+    }
+
+
+
+    // Kaerith VFX (fan stretto e lungo)
+    if(this.type==='kaerith' && this._kaerithFlame){
+      const F=this._kaerithFlame;
+      const now=Date.now();
+      const t=Math.max(0, Math.min(1, (now - F.start)/160)); // fade-in veloce
+      const cx=this.x+this.width/2, cy=this.y+this.height/2;
+      const a0=F.dir - F.angle/2;
+      const a1=F.dir + F.angle/2;
+
+      ctx.save();
+      ctx.globalAlpha = 0.16 + 0.26*t;
+      ctx.fillStyle='rgba(255,120,0,0.95)';
+      ctx.beginPath();
+      ctx.moveTo(cx,cy);
+      ctx.arc(cx,cy,F.range,a0,a1,false);
+      ctx.closePath();
+      ctx.fill();
+
+      ctx.globalAlpha = 0.10 + 0.18*t;
+      ctx.strokeStyle='rgba(255,60,0,0.95)';
+      ctx.lineWidth=4;
+      ctx.beginPath();
+      ctx.arc(cx,cy,F.range,a0,a1,false);
+      ctx.stroke();
+      ctx.restore();
+    }
+
+
     } else {
       ctx.fillStyle='#3498db';ctx.fillRect(this.x,this.y,this.width,this.height)
+    }
+
+    // StellarBonus glow (luminous transparent, 1s – only light aura)
+    if(this.stellarGlowUntil && Date.now() < this.stellarGlowUntil){
+      const cx=this.x+this.width/2, cy=this.y+this.height/2;
+      ctx.save();
+      ctx.globalCompositeOperation='lighter';
+  ctx.shadowColor = 'rgba(255,255,255,0.9)';
+  ctx.shadowBlur = 25;
+
+      ctx.globalAlpha = 0.45;
+      ctx.fillStyle = 'rgba(255,255,255,0.6)';
+      ctx.beginPath();
+      ctx.arc(cx, cy, Math.max(this.width,this.height)*0.65, 0, Math.PI*2);
+      ctx.fill();
+      ctx.restore();
     }
 
 
@@ -3242,10 +5437,38 @@ else if(this.attackType==='tempostormLaser'){
     if(this.attacking&&!this.isGrappling){
       ctx.save();
       if(this.attackType==='punch'){
-        ctx.strokeStyle='rgba(230,126,34,0.7)';ctx.lineWidth=8;ctx.beginPath();
-        const punchX=this.x+this.width/2+(this.facingRight?this.range:-this.range);
-        ctx.moveTo(this.x+this.width/2,this.y+this.height/2);
-        ctx.lineTo(punchX,this.y+this.height/2);ctx.stroke()
+        const cx=this.x+this.width/2, cy=this.y+this.height/2;
+        const dir=this.facingRight?1:-1;
+        const punchX=cx + dir*this.range;
+
+        // Rooney: punch beam with a flared "fist" end (homogeneous)
+        if(this.type==='rooney'){
+          const shaftW = 18;         // thickness of the shaft
+          const fistW  = 34;         // thickness of the fist end
+          const fistL  = 34;         // length of the fist end
+          ctx.fillStyle='rgba(231,76,60,0.85)'; // solid-ish red punch
+          // shaft
+          ctx.beginPath();
+          ctx.rect(Math.min(cx,punchX), cy-shaftW/2, Math.abs(punchX-cx)-fistL, shaftW);
+          ctx.fill();
+          // fist end (flared)
+          const endStart = punchX - dir*fistL;
+          ctx.beginPath();
+          ctx.moveTo(endStart, cy - fistW*0.55);
+          ctx.lineTo(punchX,  cy - fistW*0.35);
+          ctx.lineTo(punchX,  cy + fistW*0.35);
+          ctx.lineTo(endStart, cy + fistW*0.55);
+          ctx.closePath();
+          ctx.fill();
+        }else{
+          // default punch telegraph
+          ctx.strokeStyle='rgba(230,126,34,0.7)';
+          ctx.lineWidth=8;
+          ctx.beginPath();
+          ctx.moveTo(cx,cy);
+          ctx.lineTo(punchX,cy);
+          ctx.stroke();
+        }
       }else if(this.attackType==='sword'){
         ctx.strokeStyle='rgba(155,89,182,0.6)';ctx.lineWidth=5;
         const angle=this.facingRight?0:Math.PI;const arcWidth=Math.PI*1.2;
@@ -3255,6 +5478,30 @@ else if(this.attackType==='tempostormLaser'){
         const angle=this.facingRight?0:Math.PI;const arcWidth=Math.PI*1.35;
         ctx.fillStyle='rgba(241,196,15,0.12)';
         ctx.strokeStyle='rgba(241,196,15,0.75)';
+        ctx.lineWidth=6;
+        ctx.beginPath();
+        ctx.moveTo(this.x+this.width/2,this.y+this.height/2);
+        ctx.arc(this.x+this.width/2,this.y+this.height/2,this.range,angle-arcWidth/2,angle+arcWidth/2);
+        ctx.closePath();
+        ctx.fill();
+        ctx.stroke();
+      }else if(this.attackType==='axeattack'){
+        // Visual area: Bane axe swing (270°)
+        const angle=this.facingRight?0:Math.PI;const arcWidth=Math.PI*1.5;
+        ctx.fillStyle='rgba(231,76,60,0.20)';
+        ctx.strokeStyle='rgba(231,76,60,0.85)';
+        ctx.lineWidth=7;
+        ctx.beginPath();
+        ctx.moveTo(this.x+this.width/2,this.y+this.height/2);
+        ctx.arc(this.x+this.width/2,this.y+this.height/2,this.range,angle-arcWidth/2,angle+arcWidth/2);
+        ctx.closePath();
+        ctx.fill();
+        ctx.stroke();
+      }else if(this.attackType==='lucienBlade'){
+        // Visual area: Lucien 4-hit close-range blade fan
+        const angle=this.facingRight?0:Math.PI;const arcWidth=Math.PI*1.05;
+        ctx.fillStyle='rgba(200,230,255,0.13)';
+        ctx.strokeStyle='rgba(200,230,255,0.82)';
         ctx.lineWidth=6;
         ctx.beginPath();
         ctx.moveTo(this.x+this.width/2,this.y+this.height/2);
@@ -3302,7 +5549,7 @@ else if(this.attackType==='tempostormLaser'){
         ctx.strokeStyle='rgba(0,176,255,0.45)';
         ctx.lineWidth=10;
         ctx.beginPath();
-        ctx.arc(canvas.width/2,(canvas.height-50)/2,180,0,Math.PI*2);
+        ctx.arc(canvas.width/2,(canvas.height-30)/2,180,0,Math.PI*2);
         ctx.stroke();
         ctx.restore();
       }
@@ -3310,7 +5557,7 @@ else if(this.attackType==='salsySword'){
         // Show 1-3 target reticles + launch lines during Salsy super
         ctx.save();
         ctx.strokeStyle='rgba(241,196,15,0.75)';
-        ctx.fillStyle='rgba(241,196,15,0.10)';
+        ctx.fillStyle='rgba(241,196,15,0.20)';
         ctx.lineWidth=5;
         const px=this.x+this.width/2, py=this.y+this.height/2;
         const list=(this.superTargets||[]).slice(0,3);
@@ -3402,7 +5649,7 @@ class Enemy{
     this.vy=(Math.random()-0.5)*cfg.enemySpeed*mult;
     this.maxHP=Math.round(cfg.enemyHP*(1+0.25*level));
     this.hp=this.maxHP;
-    const baseDamage=Math.round(cfg.enemyDamage*(1+0.10*level));
+    const baseDamage=Math.round(cfg.enemyDamage*(1+0.20*level));
     this.damage=(level>=7)?Math.round(baseDamage*0.8):baseDamage;
     this.speed=cfg.enemySpeed*mult;
     if(level===8)this.speed*=0.925;
@@ -3430,6 +5677,11 @@ class Enemy{
   }
   update(player){
     if(Date.now()<this.spawnFreezeUntil)return;
+    // Global stun (e.g., Hendel hammer): freeze AI/movement briefly
+    if(this.stunnedUntil && Date.now() < this.stunnedUntil){
+      this.vx = 0; this.vy = 0;
+      return;
+    }
     player = getPreferredTarget(this, player);
     const now=Date.now();
 
@@ -3466,6 +5718,7 @@ class Enemy{
       if(dist>220 && (now-this.lastAttack)>this.attackCooldown){
         const angle=Math.atan2(dy,dx);
         spawnLaser({
+          owner:this,
           x:cx, y:cy,
           angle,
           length:650,
@@ -3493,8 +5746,9 @@ class Enemy{
       }
 
       // melee hit
-      if(dist<70 && (now-this.lastAttack)>this.attackCooldown && !player.isDashing){
-        player.takeDamage(this.damage);
+      const hitRangeBoss4 = 70 + Math.max(this.width,this.height)*0.35;
+      if( (aabbDist2(this.x,this.y,this.width,this.height, player.x,player.y,player.width,player.height) <= hitRangeBoss4*hitRangeBoss4) && (now-this.lastAttack)>this.attackCooldown && !player.isDashing){
+        player.takeDamage(this.damage, this);
         this.lastAttack=now;
         createParticles(player.x,player.y,'#e17055',14,4);
       }
@@ -3506,6 +5760,7 @@ class Enemy{
         const angle=Math.atan2(dy,dx);
         // charge + beam
         spawnLaser({
+          owner:this,
           x:cx, y:cy,
           angle,
           length:760,
@@ -3513,7 +5768,8 @@ class Enemy{
           ttl:1000,
           damage:70,
           kind:'photon',
-          chargeMs:500
+          chargeMs:500,
+          trackPlayer:true
         });
         // visual charge
         createParticles(cx,cy,'#f1c40f',40,6);
@@ -3530,7 +5786,7 @@ class Enemy{
       // melee attack
       if(dist<60 && (now-this.lastAttack)>this.attackCooldown && !player.isDashing){
         if(this.type==='veleno'){
-          player.takeDamage(15);
+          player.takeDamage(15, this);
           // apply poison only if not already poisoned (non-stackable)
           if(!player.poisonUntil || now >= player.poisonUntil){
             player.poisonUntil = now + (this.poisonDuration||6000);
@@ -3542,17 +5798,18 @@ class Enemy{
             createParticles(player.x,player.y,'#00b894',10,3);
           }
         } else {
-          player.takeDamage(this.damage);
+          player.takeDamage(this.damage, this);
         }
         this.lastAttack=now;
       }
     }
 
     this.x+=this.vx;this.y+=this.vy;
+    // boundaries
     if(this.x<0)this.x=0;if(this.x+this.width>canvas.width)this.x=canvas.width-this.width;
-    if(this.y<0)this.y=0;if(this.y+this.height>canvas.height-50)this.y=canvas.height-50-this.height;
+    if(this.y<0)this.y=0;if(this.y+this.height>canvas.height-30)this.y=canvas.height-30-this.height;
   }
-draw(){
+  draw(){
     const imgKey = (this.type==='boss' || this.type==='boss1') ? 'boss1' : this.type;
     const img = enemyImages[imgKey];
     if(img && img.complete){
@@ -3573,6 +5830,10 @@ class ShooterEnemy extends Enemy{
   constructor(type,level){super(type,level);this.shootCooldown=Math.max(600,1800-level*40);this.lastShoot=0;this.bulletSpeed=5+level*0.15}
   update(player){
     if(Date.now()<this.spawnFreezeUntil)return;
+    if(this.stunnedUntil && Date.now() < this.stunnedUntil){
+      this.vx = 0; this.vy = 0;
+      return;
+    }
     player = getPreferredTarget(this, player);
     const dx=(player.x+player.width/2)-(this.x+this.width/2);
     const dy=(player.y+player.height/2)-(this.y+this.height/2);
@@ -3582,7 +5843,7 @@ class ShooterEnemy extends Enemy{
     else{this.vx*=0.9;this.vy*=0.9}
     this.x+=this.vx;this.y+=this.vy;
     if(this.x<0)this.x=0;if(this.x+this.width>canvas.width)this.x=canvas.width-this.width;
-    if(this.y<0)this.y=0;if(this.y+this.height>canvas.height-50)this.y=canvas.height-50-this.height;
+    if(this.y<0)this.y=0;if(this.y+this.height>canvas.height-30)this.y=canvas.height-30-this.height;
     if(Date.now()-this.lastShoot>this.shootCooldown){
       this.lastShoot=Date.now();
       const len=Math.hypot(dx,dy)||1;
@@ -3590,7 +5851,7 @@ class ShooterEnemy extends Enemy{
       spawnProjectile({
         x:this.x+this.width/2,y:this.y+this.height/2,
         vx,vy,damage:Math.max(1,Math.round(this.damage*0.6)),ttl:4000,
-        color:'#ffd54f',radius:6,friendly:false
+        color:'#ffd54f',radius:6,friendly:false,source:this
       })
     }
   }
@@ -3611,12 +5872,16 @@ class ArcherEnemy extends Enemy{
     super(type,level);
     this.shootCooldown=Math.max(650, 1250 - level*18);
     this.lastShoot=0;
-    this.arrowSpeed=9.2 + level*0.10;
+    this.arrowSpeed=9.2 + level*0.20;
     this.keepMin=520; // very far
     this.keepMax=700;
   }
   update(player){
     if(Date.now()<this.spawnFreezeUntil)return;
+    if(this.stunnedUntil && Date.now() < this.stunnedUntil){
+      this.vx = 0; this.vy = 0;
+      return;
+    }
     player = getPreferredTarget(this, player);
     const now=Date.now();
     const dx=(player.x+player.width/2)-(this.x+this.width/2);
@@ -3638,7 +5903,7 @@ class ArcherEnemy extends Enemy{
 
     this.x+=this.vx; this.y+=this.vy;
     if(this.x<0)this.x=0;if(this.x+this.width>canvas.width)this.x=canvas.width-this.width;
-    if(this.y<0)this.y=0;if(this.y+this.height>canvas.height-50)this.y=canvas.height-50-this.height;
+    if(this.y<0)this.y=0;if(this.y+this.height>canvas.height-30)this.y=canvas.height-30-this.height;
 
     if(now-this.lastShoot>this.shootCooldown){
       this.lastShoot=now;
@@ -3649,6 +5914,8 @@ class ArcherEnemy extends Enemy{
         x:this.x+this.width/2,
         y:this.y+this.height/2,
         vx, vy,
+        friendly:false,
+        source:this,
         damage:Math.max(8, Math.round(this.damage*0.85)),
         ttl:3200,
         color:'#e0e0e0',
@@ -3657,7 +5924,7 @@ class ArcherEnemy extends Enemy{
         w:18,
         h:4,
         angle:Math.atan2(vy,vx),
-        onHitPlayer:(pl)=>{ if(pl && typeof pl.applySlow==='function') pl.applySlow(0.10, 2500); }
+        onHitPlayer:(pl)=>{ if(pl && typeof pl.applySlow==='function') pl.applySlow(0.20, 2500); }
       });
     }
   }
@@ -3691,6 +5958,10 @@ class GlacialEnemy extends Enemy{
   }
   update(player){
     if(Date.now()<this.spawnFreezeUntil)return;
+    if(this.stunnedUntil && Date.now() < this.stunnedUntil){
+      this.vx = 0; this.vy = 0;
+      return;
+    }
     player = getPreferredTarget(this, player);
     const now=Date.now();
 
@@ -3721,7 +5992,7 @@ class GlacialEnemy extends Enemy{
 
     this.x+=this.vx; this.y+=this.vy;
     if(this.x<0)this.x=0;if(this.x+this.width>canvas.width)this.x=canvas.width-this.width;
-    if(this.y<0)this.y=0;if(this.y+this.height>canvas.height-50)this.y=canvas.height-50-this.height;
+    if(this.y<0)this.y=0;if(this.y+this.height>canvas.height-30)this.y=canvas.height-30-this.height;
 
     // Start cone attack
     if(now-this.lastAttack>this.attackCooldown){
@@ -3759,7 +6030,7 @@ class GlacialEnemy extends Enemy{
           const base = Math.max(3, Math.round(this.damage*0.20));
           const ramp = Math.round(insideSec * 2.2); // gradual increase
           const dmg = Math.min(22, base + ramp);
-          player.takeDamage(dmg);
+          player.takeDamage(dmg, this);
           createParticles(player.x,player.y,'#b2bec3',8,3);
         }
       } else {
@@ -3809,6 +6080,10 @@ class AttackReturnEnemy extends Enemy{
   constructor(type,level){super(type,level);this.homeX=this.x;this.homeY=this.y;this.state='idle';this.attackRange=60;this.attackCooldown=2200;this.lastAttackTime=0;this.attackSpeed=this.speed*2.5}
   update(player){
     if(Date.now()<this.spawnFreezeUntil)return;
+    if(this.stunnedUntil && Date.now() < this.stunnedUntil){
+      this.vx = 0; this.vy = 0;
+      return;
+    }
     player = getPreferredTarget(this, player);
     const dx=(player.x+player.width/2)-(this.x+this.width/2);
     const dy=(player.y+player.height/2)-(this.y+this.height/2);
@@ -3821,7 +6096,7 @@ class AttackReturnEnemy extends Enemy{
     else if(this.state==='attack'){
       const nx=dx/(distToPlayer||1);const ny=dy/(distToPlayer||1);
       this.vx=nx*this.attackSpeed;this.vy=ny*this.attackSpeed;
-      if(distToPlayer<this.attackRange){player.takeDamage(this.damage);this.lastAttackTime=Date.now();this.state='returning'}
+      if(distToPlayer<this.attackRange){player.takeDamage(this.damage, this);this.lastAttackTime=Date.now();this.state='returning'}
     }
     else if(this.state==='returning'){
       const hx=this.homeX-this.x;const hy=this.homeY-this.y;const distHome=Math.hypot(hx,hy);
@@ -3832,7 +6107,7 @@ class AttackReturnEnemy extends Enemy{
     }
     this.x+=this.vx;this.y+=this.vy;
     if(this.x<0)this.x=0;if(this.x+this.width>canvas.width)this.x=canvas.width-this.width;
-    if(this.y<0)this.y=0;if(this.y+this.height>canvas.height-50)this.y=canvas.height-50-this.height;
+    if(this.y<0)this.y=0;if(this.y+this.height>canvas.height-30)this.y=canvas.height-30-this.height;
   }
   draw(){
     const img = enemyImages['attacker'];
@@ -3862,22 +6137,35 @@ class BossEnemy extends Enemy{
   }
   update(player){
     if(Date.now()<this.spawnFreezeUntil)return;
+    if(this.stunnedUntil && Date.now() < this.stunnedUntil){
+      this.vx = 0; this.vy = 0;
+      return;
+    }
     player = getPreferredTarget(this, player);
-    const dx=player.x-this.x;const dy=player.y-this.y;const dist=Math.hypot(dx,dy);
+    const cx=this.x+this.width/2, cy=this.y+this.height/2;
+    const px=player.x+player.width/2, py=player.y+player.height/2;
+    const dx=px-cx; const dy=py-cy; const dist=Math.hypot(dx,dy);
     const attackRange=60;
+    const hitRange = attackRange + Math.max(this.width,this.height)*0.35;
+    // Range effettivo: include dimensioni del nemico per evitare "zone sicure" ai bordi (clamp)
     if(dist>attackRange){
       const nx=dx/(dist||1);const ny=dy/(dist||1);
       this.vx=nx*this.speed;this.vy=ny*this.speed;
     } else {
+
       this.vx*=0.9;this.vy*=0.9;
-      if(Date.now()-this.lastAttack>this.attackCooldown&&!player.isDashing){
-        player.takeDamage(this.damage);
-        this.lastAttack=Date.now();
+            if(Date.now()-this.lastAttack>this.attackCooldown&&!player.isDashing){
+        // Se siamo clamped contro un bordo, potremmo non arrivare mai a dist<=attackRange puro.
+        // Usiamo hitRange per consentire il colpo quando siamo realisticamente "a contatto".
+        if( (aabbDist2(this.x,this.y,this.width,this.height, player.x,player.y,player.width,player.height) <= hitRange*hitRange) ){
+          player.takeDamage(this.damage, this);
+          this.lastAttack=Date.now();
+        }
       }
     }
     this.x+=this.vx;this.y+=this.vy;
     if(this.x<0)this.x=0;if(this.x+this.width>canvas.width)this.x=canvas.width-this.width;
-    if(this.y<0)this.y=0;if(this.y+this.height>canvas.height-50)this.y=canvas.height-50-this.height;
+    if(this.y<0)this.y=0;if(this.y+this.height>canvas.height-30)this.y=canvas.height-30-this.height;
     if(Date.now()-this.lastSuper>this.superCooldown){
       this.lastSuper=Date.now();this.superActive=true;this.superStart=Date.now()
     }
@@ -3992,7 +6280,7 @@ class Boss5Enemy extends Enemy{
   applySwingDamage(player, now){
     // tick damage durante lo sweep, senza colpire mentre il player è in dash
     if(player.isDashing) return;
-    if(this.lastSwingTick && (now-this.lastSwingTick)<120) return;
+    if(this.lastSwingTick && (now-this.lastSwingTick)<240) return;
 
     const cx=this.x+this.width/2, cy=this.y+this.height/2;
     const px=player.x+player.width/2, py=player.y+player.height/2;
@@ -4032,12 +6320,16 @@ class Boss5Enemy extends Enemy{
 
     if(inside){
       this.lastSwingTick=now;
-      player.takeDamage(18);
+      player.takeDamage(18, this);
     }
   }
 
   update(player){
     if(Date.now()<this.spawnFreezeUntil)return;
+    if(this.stunnedUntil && Date.now() < this.stunnedUntil){
+      this.vx = 0; this.vy = 0;
+      return;
+    }
     player = getPreferredTarget(this, player);
 
     const now=Date.now();
@@ -4090,10 +6382,11 @@ class Boss5Enemy extends Enemy{
     }
 
     // contatto ravvicinato (solo se non in dash) - leggero
-    if(dist<55 && !player.isDashing && !this.swingActive){
+    const hitRangeTouch = 55 + Math.max(this.width,this.height)*0.25;
+    if( (aabbDist2(this.x,this.y,this.width,this.height, player.x,player.y,player.width,player.height) <= hitRangeTouch*hitRangeTouch) && !player.isDashing && !this.swingActive){
       if(!this._lastTouch) this._lastTouch=0;
       if(now-this._lastTouch>900){
-        player.takeDamage(14);
+        player.takeDamage(14, this);
         this._lastTouch=now;
       }
     }
@@ -4214,7 +6507,7 @@ function updateBackgroundForLevel(level){
 }
 
 function startGame(){
-  currentLevel=1;score=0;timer=levelConfigs[0].time;
+  currentLevel=1;score=0;kills=0;timer=levelConfigs[0].time;
   player=new Player(selectedCharacter||'jimmy');
   enemies=[];particles=[];projectiles=[];lasers=[];tempBeams=[];pickups=[];wolves=[];
   spawnEnemiesForLevel(currentLevel);
@@ -4224,6 +6517,7 @@ function startGame(){
   if(ss) ss.style.display='none';
   document.getElementById('uiOverlay').style.display='block';
   document.getElementById('scoreDisplay').style.display='block';
+  document.getElementById('killsDisplay').style.display='block';
   document.getElementById('timerDisplay').style.display='block';
   document.getElementById('levelDisplay').style.display='block';
   document.getElementById('superCooldown').style.display='block';
@@ -4234,8 +6528,10 @@ function endGame(won){
   if(gameState!=='playing') return;
   gameState='ended';
   document.getElementById('endScreen').style.display='block';
+  const kd=document.getElementById('killsDisplay'); if(kd) kd.style.display='none';
   document.getElementById('endTitle').textContent=won?'VICTORY':'GAME OVER';
   document.getElementById('endMessage').textContent=`Score Finale: ${score}`;
+  try{ const ek=document.getElementById('endKills'); if(ek) ek.textContent=`Kill: ${kills||0}`; }catch(e){}
   document.getElementById('endSub').textContent=`Hai raggiunto il Livello ${currentLevel}`;
   const rec=records[selectedCharacter]||0;
   if(score>rec){records[selectedCharacter]=score;saveRecords();}
@@ -4260,6 +6556,37 @@ if(difficultyMode==='easy' && player){
   }
 }
 
+
+function drawKaerithFireOverlay(now){
+  if(!player || player.type!=='kaerith' || !player._kaerithFireUntil || now>=player._kaerithFireUntil) return;
+
+  // overlay fiamme: flicker + embers
+  const t = 1 - Math.max(0, Math.min(1, (player._kaerithFireUntil - now)/9000));
+  ctx.save();
+  ctx.globalAlpha = 0.18 + 0.10*Math.sin(now/70);
+  ctx.fillStyle = '#ff3d00';
+  ctx.fillRect(0,0,canvas.width,canvas.height);
+
+  // “lingue” di fuoco stilizzate (righe verticali random)
+  ctx.globalAlpha = 0.10 + 0.06*Math.sin(now/55);
+  for(let i=0;i<22;i++){
+    const x = (Math.random()*canvas.width)|0;
+    const h = 120 + Math.random()*260;
+    const w = 14 + Math.random()*26;
+    const y = canvas.height - h;
+    ctx.fillRect(x,y,w,h);
+  }
+
+  // embers
+  ctx.globalAlpha = 0.22;
+  ctx.fillStyle = '#ffd180';
+  for(let i=0;i<28;i++){
+    const x = (Math.random()*canvas.width)|0;
+    const y = (Math.random()*canvas.height)|0;
+    ctx.fillRect(x,y,2,2);
+  }
+  ctx.restore();
+}
 function gameLoop(){
   requestAnimationFrame(gameLoop);
   if(gameState!=='playing')return;
@@ -4276,11 +6603,14 @@ return;
   }
 
   if(player) player.update();
+    updateHendelCrush();
   enemies.forEach(e=>{e.update(player)});
   updateWolves();
   // Marz Super zone tick damage/expansion
   updateMagicZone(now);
+  updatePdorOrbs(now);
   updateParticles();
+  updateIraFX();
   updateProjectiles();
   updateLasers();
   updateTempBeams();
@@ -4289,9 +6619,10 @@ return;
 
   for(let i=enemies.length-1;i>=0;i--){
     if(enemies[i].hp<=0){
+      dropStellarBonusAtIndexIfNeeded(i);
       const dead=enemies.splice(i,1)[0];
       applyScore(100*currentLevel);
-      createParticles(dead.x,dead.y,'#fff176',30,6);
+      addKill(); createParticles(dead.x,dead.y,'#fff176',30,6);
     }
   }
 
@@ -4318,8 +6649,11 @@ return;
     ctx.save();ctx.translate(sx,sy);shakeAmount*=0.9
   } else ctx.save();
 
+    drawKaerithFireOverlay(now);
+
   // draw Marz Super zone behind entities
   drawMagicZone(now);
+  drawPdorOrbs(now);
   enemies.forEach(e=>e.draw());
   drawWolves();
   if(player) player.draw();
@@ -4327,10 +6661,21 @@ return;
   drawLasers();
   drawTempBeams();
   drawFuriaWaves();
+  drawIraFX();
   drawParticles();
-  drawPickups();
+  drawHendelCrush();
+    drawPickups();
 
   ctx.restore();
+
+  // IRA screen tint flash
+  if(iraScreenFlash>0){
+    ctx.save();
+    ctx.globalAlpha = Math.min(0.35, iraScreenFlash/40);
+    ctx.fillStyle = '#7a0019';
+    ctx.fillRect(0,0,canvas.width,canvas.height);
+    ctx.restore();
+  }
 
   if(player){
     document.getElementById('hpText').textContent=Math.max(0,Math.round(player.hp));
@@ -4341,10 +6686,41 @@ return;
   }
 
   document.getElementById('scoreDisplay').textContent=`Score: ${score}`;
+  const kEl=document.getElementById('killsDisplay'); if(kEl) kEl.textContent=`Kill: ${kills}`;
   document.getElementById('timerDisplay').textContent=timer;
   document.getElementById('levelDisplay').textContent=`Level ${currentLevel}`;
   const superReady=(Date.now()-player.lastSuper>=player.superCooldown)?'Ready':Math.ceil((player.superCooldown-(Date.now()-player.lastSuper))/1000)+'s';
   document.getElementById('superCooldown').textContent=`Super: ${superReady}`;
+
+// ===== BONUS TIMER HUD (dentro interfaccia di gioco) =====
+const bonusBox=document.getElementById('bonusTimers');
+if(bonusBox){
+  const nowT=Date.now();
+  const rows=[];
+
+  const add=(label,until,color)=>{
+    if(until && until>nowT){
+      const t=Math.ceil((until-nowT)/1000);
+      rows.push('<span style="color:'+color+'">'+label+': '+t+'s</span>');
+    }
+  };
+
+  add('SCUDO', player.pickupShieldUntil, '#7fdfff');   // azzurro chiaro
+  add('SPEED', player.speedBuffUntil, '#3498db');      // blu
+  add('<span class="ira-glow">IRA</span>', player.baneSuperUntil, '#ff9800'); // arancione (Bane)
+  add('FURIA', player.furiaHealUntil, '#ff00ff');      // fucsia
+  add('ATK', player.attackBuffUntil, '#ff3b3b');       // rosso
+  add('POISON', player.poisonUntil, '#4b0082');        // viola scuro
+
+  if(rows.length){
+    bonusBox.style.display='block';
+    bonusBox.innerHTML=rows.join('<br>');
+  }else{
+    bonusBox.style.display='none';
+    bonusBox.innerHTML='';
+  }
+}
+// ===============================================
   if(player.attackBuffUntil) document.getElementById('atkBuffDisplay').textContent=Math.max(0,Math.ceil((player.attackBuffUntil-Date.now())/1000))+'s';
   else document.getElementById('atkBuffDisplay').textContent='0s';
 }
@@ -4381,7 +6757,7 @@ function triggerEvolutionThenNextLevel(charType){
 window.addEventListener('keydown',e=>{
   const k=e.key.toLowerCase();
   keys[k]=true;
-  if(k==='j'&&gameState==='playing'){player.attack()}
+  if(k==='j'&&gameState==='playing'){ if(player && player.type!=='kaerith'){ player.attack(); } }
   if(k==='k'&&gameState==='playing'){player.superAttack()}
   if(k===' '&&gameState==='playing'){player.dodge()}
 });
@@ -4415,6 +6791,46 @@ document.querySelectorAll('.character-card').forEach(card=>{
       updateHecateUnlockUI();
       return;
     }
+    if(char==='lucien' && !lucienUnlocked()){
+      updateLucienUnlockUI();
+      return;
+    }
+    if(char==='pdor' && !pdorUnlocked()){
+      updatePdorUnlockUI();
+      // show lock message popup
+      const lockBox=document.getElementById('lockMessage');
+      const lockText=document.getElementById('lockText');
+      if(lockBox && lockText){
+        lockText.innerText = "Personaggio BLOCCATO\nsi sblocca facendo 50.000\ncon marcus e lucien";
+        lockBox.style.display='block';
+      }
+      return;
+    }
+
+    if(char==='bane' && !baneUnlocked()){
+      updateBaneUnlockUI();
+      // show lock message popup
+      const lockBox=document.getElementById('lockMessage');
+      const lockText=document.getElementById('lockText');
+      if(lockBox && lockText){
+        lockText.innerText = "Personaggio BLOCCATO\nSblocca facendo 50.000\ncon PDOR";
+        lockBox.style.display='block';
+      }
+      
+    if(char==='hendel' && !hendelUnlocked()){
+      updateHendelUnlockUI();
+      // show lock message popup
+      const lockBox=document.getElementById('lockMessage');
+      const lockText=document.getElementById('lockText');
+      if(lockBox && lockText){
+        lockText.innerText = "personaggio BLOCCATO  si sblocca facendo 50.000 con Bane";
+        lockBox.style.display='block';
+      }
+      return;
+    }
+return;
+    }
+
     document.querySelectorAll('.character-card').forEach(c=>c.classList.remove('selected'));
     card.classList.add('selected');
     selectedCharacter=char;
@@ -4429,7 +6845,7 @@ function updateMenuStatsDisplay(char){
   document.getElementById(`menu-dmg-${char}`).textContent=
     char==='voltryx' ? `${Math.round(34*SUPER_DAMAGE_MULT)} (ranged AoE), ${50}x2 (melee)` :
     (char==='salsy' ? '33x2' :
-     (char==='tempostorm' ? '40 (+30 se resta nel laser)' : (char==='marz' ? '40 / 50 / 60' : (char==='hecate' ? 'Freccia: colpo forte + 3 frecce' : s.damage))));
+     (char==='tempostorm' ? '40 (+30 se resta nel laser)' : (char==='marz' ? '40 / 50 / 60' : (char==='hecate' ? 'Freccia: colpo forte + 3 frecce' : (char==='lucien' ? '15x4' : (char==='pdor' ? 'Dardo: 50 (chain x5)' : (char==='bane' ? '—' : s.damage)))))));
 
 }
 
@@ -4442,6 +6858,7 @@ function updateMenuStatsDisplay(char){
   if(startScreen && mainMenu){
     // default view
     startScreen.style.display='block';
+  try{ updateAccountUI(); }catch(e){}
     mainMenu.style.display='none';
     gameState='start';
   }
@@ -4477,6 +6894,7 @@ document.getElementById('restartBtn').addEventListener('click',()=>{
   startGame();
 });
 document.getElementById('menuBtn').addEventListener('click',()=>{
+  const kd=document.getElementById('killsDisplay'); if(kd) kd.style.display='none';
   document.getElementById('endScreen').style.display='none';
   document.getElementById('mainMenu').style.display='block';
   gameState='menu';
@@ -4488,10 +6906,16 @@ function populateMenuStatsAll(){
   updateMenuStatsDisplay('rooney');
   updateMenuStatsDisplay('jeff');
   updateMenuStatsDisplay('voltryx');
-updateMenuStatsDisplay('kouvagia');
+  updateMenuStatsDisplay('kouvagia');
   updateMenuStatsDisplay('salsy');
   updateMenuStatsDisplay('tempostorm');
   updateMenuStatsDisplay('marz');
+  updateMenuStatsDisplay('hecate');
+  updateMenuStatsDisplay('marcus');
+  updateMenuStatsDisplay('lucien');
+  updateMenuStatsDisplay('pdor');
+  updateMenuStatsDisplay('bane');
+  updateMenuStatsDisplay('hendel');
 }
 populateMenuStatsAll();
 updateMenuRecordsDisplay();
@@ -4627,9 +7051,10 @@ function updateFuriaWaves(){
           createParticles(e.x,e.y,'#ff4dff',14,5);
           if(e.hp<=0){
             createParticles(e.x,e.y,'#fff176',30,6);
+            dropStellarBonusAtIndexIfNeeded(i);
             enemies.splice(i,1);
             applyScore(100*currentLevel);
-          }
+          addKill(); }
         }
       }
     }
@@ -4678,6 +7103,41 @@ function drawFuriaWaves(){
   }
 }
 
+
+// --- MARCUS UNLOCK: at least one character record >= 70000 ---
+function updateMarcusUnlock(){
+  const badge=document.getElementById('marcusLockBadge');
+  const card=document.getElementById('card-marcus');
+  if(!badge||!card) return;
+
+  let maxRecord=0;
+  document.querySelectorAll('.record-badge').forEach(r=>{
+    const v=parseInt(r.textContent.replace(/[^0-9]/g,''))||0;
+    if(v>maxRecord) maxRecord=v;
+  });
+
+  if(maxRecord>=70000){
+    card.classList.remove('disabled');
+    if(badge) badge.style.display='none';
+  }
+}
+setInterval(updateMarcusUnlock,500);
+setInterval(updateLucienUnlockUI,500);
+
+
+// --- Ensure MARCUS selection behaves like others ---
+document.querySelectorAll('.char-grid button[data-target]').forEach(btn=>{
+  btn.addEventListener('click', ()=>{
+    const target = btn.dataset.target;
+    const card = document.getElementById('card-'+target);
+    if(!card || card.classList.contains('disabled')) return;
+
+    document.querySelectorAll('.character-card').forEach(c=>c.classList.remove('selected'));
+    card.classList.add('selected');
+    selectedCharacter = target;
+  });
+});
+
 </script>
 </div>
 <script>
@@ -4703,7 +7163,812 @@ window.addEventListener('keyup', e => {
   const k = normalizeKey(e.key);
   keys[k] = false;
 });
+
+// --- MARCUS UNLOCK: at least one character record >= 70000 ---
+function updateMarcusUnlock(){
+  const badge=document.getElementById('marcusLockBadge');
+  const card=document.getElementById('card-marcus');
+  if(!badge||!card) return;
+
+  let maxRecord=0;
+  document.querySelectorAll('.record-badge').forEach(r=>{
+    const v=parseInt(r.textContent.replace(/[^0-9]/g,''))||0;
+    if(v>maxRecord) maxRecord=v;
+  });
+
+  if(maxRecord>=70000){
+    card.classList.remove('disabled');
+    if(badge) badge.style.display='none';
+  }
+}
+setInterval(updateMarcusUnlock,500);
+
+
+// --- Ensure MARCUS selection behaves like others ---
+document.querySelectorAll('.char-grid button[data-target]').forEach(btn=>{
+  btn.addEventListener('click', ()=>{
+    const target = btn.dataset.target;
+    const card = document.getElementById('card-'+target);
+    if(!card || card.classList.contains('disabled')) return;
+
+    document.querySelectorAll('.character-card').forEach(c=>c.classList.remove('selected'));
+    card.classList.add('selected');
+    selectedCharacter = target;
+  });
+});
+
 </script>
 
+
+<script>
+(function(){
+  try{ window.selectedCharacter = window.selectedCharacter || null; }catch(e){ window.selectedCharacter = null; }
+  function clearSelected(){ document.querySelectorAll('.character-card').forEach(c=>c.classList.remove('selected')); }
+  document.querySelectorAll('.character-card').forEach(card=>{
+    card.addEventListener('click', function(e){
+      if(card.classList.contains('disabled')) return;
+      clearSelected();
+      card.classList.add('selected');
+      var ch = card.dataset && card.dataset.char ? card.dataset.char : null;
+      if(ch) window.selectedCharacter = ch;
+      var legacy = document.getElementById('card-' + ch);
+      if(legacy && legacy !== card){ legacy.classList.add('selected'); }
+    });
+  });
+  document.addEventListener('DOMContentLoaded', function(){
+    if(window.selectedCharacter){
+      var el = document.querySelector('.character-card[data-char="' + window.selectedCharacter + '"]');
+      if(el) el.classList.add('selected');
+    }
+  });
+})();
+
+// --- MARCUS UNLOCK: at least one character record >= 70000 ---
+function updateMarcusUnlock(){
+  const badge=document.getElementById('marcusLockBadge');
+  const card=document.getElementById('card-marcus');
+  if(!badge||!card) return;
+
+  let maxRecord=0;
+  document.querySelectorAll('.record-badge').forEach(r=>{
+    const v=parseInt(r.textContent.replace(/[^0-9]/g,''))||0;
+    if(v>maxRecord) maxRecord=v;
+  });
+
+  if(maxRecord>=70000){
+    card.classList.remove('disabled');
+    if(badge) badge.style.display='none';
+  }
+}
+setInterval(updateMarcusUnlock,500);
+
+
+// --- Ensure MARCUS selection behaves like others ---
+document.querySelectorAll('.char-grid button[data-target]').forEach(btn=>{
+  btn.addEventListener('click', ()=>{
+    const target = btn.dataset.target;
+    const card = document.getElementById('card-'+target);
+    if(!card || card.classList.contains('disabled')) return;
+
+    document.querySelectorAll('.character-card').forEach(c=>c.classList.remove('selected'));
+    card.classList.add('selected');
+    selectedCharacter = target;
+  });
+});
+
+</script>
+
+
+<script>
+document.querySelectorAll('.char-grid button[data-target]').forEach(b=>{
+  b.addEventListener('click',()=>{
+    const card=document.querySelector('#card-'+b.dataset.target);
+    if(card && !card.classList.contains('disabled')){
+      card.click();
+    }
+  });
+});
+
+// --- MARCUS UNLOCK: at least one character record >= 70000 ---
+function updateMarcusUnlock(){
+  const badge=document.getElementById('marcusLockBadge');
+  const card=document.getElementById('card-marcus');
+  if(!badge||!card) return;
+
+  let maxRecord=0;
+  document.querySelectorAll('.record-badge').forEach(r=>{
+    const v=parseInt(r.textContent.replace(/[^0-9]/g,''))||0;
+    if(v>maxRecord) maxRecord=v;
+  });
+
+  if(maxRecord>=70000){
+    card.classList.remove('disabled');
+    if(badge) badge.style.display='none';
+  }
+}
+setInterval(updateMarcusUnlock,500);
+
+
+// --- Ensure MARCUS selection behaves like others ---
+document.querySelectorAll('.char-grid button[data-target]').forEach(btn=>{
+  btn.addEventListener('click', ()=>{
+    const target = btn.dataset.target;
+    const card = document.getElementById('card-'+target);
+    if(!card || card.classList.contains('disabled')) return;
+
+    document.querySelectorAll('.character-card').forEach(c=>c.classList.remove('selected'));
+    card.classList.add('selected');
+    selectedCharacter = target;
+  });
+});
+
+</script>
+
+
+<div id="lockMessage" style="
+  position:fixed;
+  left:50%;top:50%;
+  transform:translate(-50%,-50%);
+  background:rgba(0,0,0,0.9);
+  border:3px solid #f39c12;
+  padding:18px 22px;
+  font-family:'Press Start 2P', cursive;
+  font-size:12px;
+  color:#fff;
+  z-index:999;
+  display:none;
+  text-align:center;
+  box-shadow:0 0 25px rgba(0,0,0,0.8);
+">
+  <div id="lockText"></div>
+  <div style="margin-top:12px;">
+    <button id="lockCloseBtn" style="
+      background:#e74c3c;
+      border:none;
+      padding:8px 14px;
+      font-family:'Press Start 2P', cursive;
+      cursor:pointer;
+      color:#fff;
+      font-size:11px;
+    ">OK</button>
+  </div>
+</div>
+
+
+<!-- Auto-open / scroll fixes for extra characters (added by assistant) -->
+<script>
+(function(){
+  const extraCharsBtn=document.getElementById('extraCharsBtn');
+  const extraCharacterSelect=document.getElementById('extraCharacterSelect');
+  // Helper to ensure an element is visible (display:block) and scrolled into view
+  function openAndScrollTo(el){
+    if(!el) return;
+    if(window.getComputedStyle(el).display === 'none') el.style.display = 'block';
+    setTimeout(()=>{ try{ el.scrollIntoView({behavior:'smooth', block:'nearest', inline:'center'}); }catch(e){} },60);
+  }
+
+  if(extraCharsBtn && extraCharacterSelect){
+    extraCharsBtn.addEventListener('click', ()=>{
+      const isOpen = extraCharacterSelect.style.display === 'block';
+      extraCharacterSelect.style.display = isOpen ? 'none' : 'block';
+      if(!isOpen){
+        setTimeout(()=>{ try{ extraCharacterSelect.scrollIntoView({behavior:'smooth', block:'nearest', inline:'center'}); 
+          const first = extraCharacterSelect.querySelector('.character-card');
+          if(first) first.focus && first.focus(); }catch(e){} },80);
+      }
+    });
+
+    // When clicking compact selector buttons, if the target card lives inside the extraCharacterSelect,
+    // open that panel and scroll to it so selection is visible (handles Marcus/Hècate cases).
+    document.querySelectorAll('.char-grid button[data-target]').forEach(btn=>{
+      btn.addEventListener('click', ()=>{
+        try{
+          const target = btn.dataset.target;
+          const card = document.getElementById('card-'+target);
+          if(card && extraCharacterSelect && extraCharacterSelect.contains(card)){
+            // open and scroll to target card
+            extraCharacterSelect.style.display = 'block';
+            setTimeout(()=>{ try{ card.scrollIntoView({behavior:'smooth', block:'nearest', inline:'center'}); }catch(e){} },80);
+          }
+        }catch(e){}
+      });
+    });
+  }
+})();
+</script>
+
+
+<!-- ===== SAFE MARCUS PATCH (non-invasiva) ===== -->
+<script>
+(function(){
+
+// ------------------ GLOBAL ------------------
+window.marcusSuper = null;
+
+// ------------------ CHARACTER STATS ADD ------------------
+if(typeof characterStats!=='undefined' && !characterStats.marcus){
+  characterStats.marcus = {
+    hp:340,
+    speed:5.4,
+    damage:20,
+    range:720,
+    cooldown:650,
+    name:'Marcus',
+    attackType:'marcusStream',
+    superCooldown: 25000,
+    superDuration:10000
+  };
+}
+
+// ------------------ PROJECTILE PATCH ------------------
+const _updateProjectiles = updateProjectiles;
+updateProjectiles = function(){
+  _updateProjectiles();
+  const now = Date.now();
+  if(!window.projectiles) return;
+
+  for(const p of projectiles){
+    if(p.meta && p.meta.marcus){
+      const t = (now - p.created) / 1000;
+      const freq = (p.meta && p.meta.freq) ? p.meta.freq : 1.0;
+      const amp = (p.meta && p.meta.amp) ? p.meta.amp : 14;
+      const phase = (p.meta && p.meta.phase) ? p.meta.phase : 0;
+      const off = Math.sin(t * freq + phase) * amp;
+      const len = Math.hypot(p.vx, p.vy) || 1;
+      const perpX = -p.vy / len;
+      const perpY = p.vx / len;
+      p.x += perpX * off * 0.6;
+      p.y += perpY * off * 0.6;
+      p.x += p.vx * 0.06;
+      p.y += p.vy * 0.06;
+    }
+  }
+};
+
+// (Removed old heal-on-hit logic)
+
+
+
+// ------------------ PLAYER ATTACK PATCH ------------------
+const _playerAttack = Player.prototype.attack;
+Player.prototype.attack = function(){
+
+  if(this.type==='pdor'){
+    const now = Date.now();
+    if(!this._pdorLastShot) this._pdorLastShot = 0;
+    const cd = 420; // slower cadence between darts
+    if(now - this._pdorLastShot < cd) return false;
+    this._pdorLastShot = now;
+
+    const cx = this.x + this.width/2;
+    const cy = this.y + this.height/2;
+
+    // auto-aim to closest enemy
+    let target=null, best=999999;
+    for(const e of enemies){
+      const d=Math.hypot((e.x+e.width/2)-cx,(e.y+e.height/2)-cy);
+      if(d<best){best=d;target=e;}
+    }
+
+    let ang = target
+      ? Math.atan2((target.y+target.height/2)-cy,(target.x+target.width/2)-cx)
+      : (this.facingRight?0:Math.PI);
+
+    const speed = 9;
+    const vx = Math.cos(ang)*speed;
+    const vy = Math.sin(ang)*speed;
+
+    const baseDmg = Math.round((this.damage||50) * (this.attackBuffMultiplier||1));
+
+    spawnProjectile({
+      x:cx,
+      y:cy,
+      vx,vy,speed,
+      damage:baseDmg,
+      ttl:1600,
+      color:'#ffffff',
+      radius:10,
+      friendly:true,
+      shape:'rect',
+      w:35,
+      h:10,
+      angle:ang,
+      meta:{ pdorChain:true, hitsLeft:5, hitRefs:[] }
+    });
+    createParticles(cx,cy,'#ffffff',10,4);
+    return true;
+  }
+
+
+  if(this.type==='marcus'){
+
+    const now = Date.now();
+    if(!this._marcusLastShot) this._marcusLastShot = 0;
+
+    const cd = 250; // cooldown (faster attacks)
+    if(now - this._marcusLastShot < cd) return false;
+    this._marcusLastShot = now;
+    // ---- HEAL ON ATTACK (1% current HP, integer, min 1) ----
+    const healAmount = Math.max(1, Math.floor(this.hp * 0.01));
+    this.hp = Math.min(this.maxHP, this.hp + healAmount);
+
+
+    const cx = this.x + this.width/2;
+    const cy = this.y + this.height/2;
+
+    // auto-aim
+    let target=null, best=999999;
+    for(const e of enemies){
+      const d=Math.hypot(e.x-cx,e.y-cy);
+      if(d<best){best=d;target=e;}
+    }
+
+    let baseAngle = target
+      ? Math.atan2((target.y+target.height/2)-cy,(target.x+target.width/2)-cx)
+      : (this.facingRight?0:Math.PI);
+
+    // TRUE STREAMS → ONE long projectile each
+    const spread=[-0.25,0,0.25];
+    const speed = 6;
+
+    for(const s of spread){
+
+      const ang=baseAngle+s;
+
+      spawnProjectile({
+        x:cx,
+        y:cy,
+        vx:Math.cos(ang)*speed,
+        vy:Math.sin(ang)*speed,
+        damage:Math.round(20*this.attackBuffMultiplier*(this.baneSuperAttackMult||1)),
+        ttl:900,            // long life = looks like beam/flow
+        color:'#b19cff',
+        radius:10,          // thicker = stream feeling
+        friendly:true,
+        meta:{marcus:true, phase:Math.random()*Math.PI*2}, wave:true, amp:16, freq:1.0
+      });
+    }
+
+    return true;
+  }
+    
+  if(this.type==='hendel'){
+    const now=Date.now();
+    if(now - this.lastAttack < this.cooldown || this.isDoingSuper) return false;
+    this.lastAttack = now;
+    this.attacking=true; this.attackTime=now;
+
+    // auto-aim verso il nemico più vicino (se presente)
+    if(enemies && enemies.length){
+      const pcx=this.x+this.width/2, pcy=this.y+this.height/2;
+      let best=null, bestD=Infinity;
+      for(const e of enemies){
+        const ecx=e.x+e.width/2, ecy=e.y+e.height/2;
+        const d=(ecx-pcx)*(ecx-pcx) + (ecy-pcy)*(ecy-pcy);
+        if(d<bestD){bestD=d; best=e;}
+      }
+      if(best){
+        const ecx=best.x+best.width/2, ecy=best.y+best.height/2;
+        let dx=ecx-pcx, dy=ecy-pcy;
+        const len=Math.hypot(dx,dy)||1;
+        dx/=len; dy/=len;
+        this.aimX=dx; this.aimY=dy;
+        this.facingRight = dx>=0;
+      }
+    }
+
+    // NEW BASE ATTACK (J): hammer sweep clockwise 75° — damage 100 on hit
+    const baseAng = Math.atan2(this.aimY||0, this.aimX||1);
+    const arc = 75 * Math.PI / 180;
+
+    this._hammerSwing = {
+      start: now,
+      duration: 260,
+      baseAng,
+      arc,
+      // geometry (in local space: +x = forward)
+      handleStart: 22,
+      handleLen: 118,
+      handleW: 30,
+      headOffset: 196,
+      headSize: 120,
+      hitSet: new WeakSet(),
+      hitDone: false
+    };
+
+    const cx=this.x+this.width/2, cy=this.y+this.height/2;
+    createParticles(cx,cy,'#bdbdbd',14,5);
+    shakeScreen();
+    return true;
+  }
+return _playerAttack.call(this);
+};
+
+// ------------------ SUPER PATCH ------------------
+
+
+const _super = Player.prototype.superAttack;
+Player.prototype.superAttack = function(){
+
+  if(this.type==='pdor'){
+    const now=Date.now();
+    const sc = (this.superCooldown!=null)?this.superCooldown:16000;
+    if(this.lastSuper && (now - this.lastSuper) < sc) return false;
+    this.lastSuper = now;
+
+    // Spawn 7 random luminous orbiting rings for 8 seconds.
+    startPdorOrbs(this, now);
+    shakeScreen();
+    return true;
+  }
+
+  if(this.type==='marcus'){
+    const now=Date.now();
+    // enforce cooldown (25s) — fallback to 25000 if this.superCooldown is not set
+    const sc = (this.superCooldown!=null)?this.superCooldown:25000;
+    if(this.lastSuper && (now - this.lastSuper) < sc) return false;
+    this.lastSuper = now;
+    marcusSuper={endsAt:now+6500};
+    this.pickupShieldUntil=now+6500;
+    this.invulnerable=true;
+    return true;
+  }
+  return _super.call(this);
+};
+
+// ------------------ ENEMY CONFUSION ------------------
+// Marcus Super should "stun/confuse" ALL enemies (including Shooter/Attacker/Boss classes that override update).
+// The old patch only wrapped Enemy.prototype.update, so subclasses with their own update() were immune.
+function _applyMarcusConfusion(enemy){
+  if(!(marcusSuper && Date.now() < marcusSuper.endsAt)) return false;
+
+  // Confusion: wander randomly, no attacks, no AI.
+  const s = enemy.speed || 2;
+  enemy.vx = (Math.random()-0.5) * s * 2.0;
+  enemy.vy = (Math.random()-0.5) * s * 2.0;
+  enemy.x += enemy.vx;
+  enemy.y += enemy.vy;
+
+  // clamp within arena
+  if(enemy.x < 0) enemy.x = 0;
+  if(enemy.x + enemy.width > canvas.width) enemy.x = canvas.width - enemy.width;
+  if(enemy.y < 0) enemy.y = 0;
+  if(enemy.y + enemy.height > canvas.height - 50) enemy.y = canvas.height - 50 - enemy.height;
+
+  return true;
+}
+
+(function patchAllEnemyUpdatesForMarcusSuper(){
+  const wrappers = [];
+  function wrap(proto){
+    if(!proto || typeof proto.update !== 'function') return;
+    const original = proto.update;
+    // avoid double-wrapping
+    if(original && original.__marcusWrapped) return;
+    const wrapped = function(playerRef){
+      if(_applyMarcusConfusion(this)) return;
+      return original.call(this, playerRef);
+    };
+    wrapped.__marcusWrapped = true;
+    proto.update = wrapped;
+  }
+
+  // Base + all known subclasses in this file
+  wrap(Enemy && Enemy.prototype);
+  wrap(typeof ShooterEnemy!=='undefined' && ShooterEnemy.prototype);
+  wrap(typeof ArcherEnemy!=='undefined' && ArcherEnemy.prototype);
+  wrap(typeof GlacialEnemy!=='undefined' && GlacialEnemy.prototype);
+  wrap(typeof AttackReturnEnemy!=='undefined' && AttackReturnEnemy.prototype);
+  wrap(typeof BossEnemy!=='undefined' && BossEnemy.prototype);
+  wrap(typeof Boss5Enemy!=='undefined' && Boss5Enemy.prototype);
+})();
+
+})();
+
+/* ==== COMPACT CHARACTER SELECT LOGIC ==== */
+document.addEventListener('DOMContentLoaded', ()=>{
+  const btns = document.querySelectorAll('.charBtn, .characterBtn, .selectCharBtn, .char-button');
+  btns.forEach(b=>{
+    b.addEventListener('click', ()=>{
+      btns.forEach(x=>x.classList.remove('selected'));
+      b.classList.add('selected');
+    });
+  });
+});
+
+</script>
+
+<!-- Injected JS: compact grid selection behaviour -->
+<script id="injected-compact-select-script">
+document.addEventListener('DOMContentLoaded', function(){
+  const grid = document.querySelector('.char-grid');
+  if(!grid) return;
+  const gridButtons = Array.from(grid.querySelectorAll('button')).filter(b => !b.classList.contains('empty') && !b.disabled);
+  // Initialize: if any button has attribute data-selected="true", mark it selected
+  let initial = gridButtons.find(b => b.getAttribute('data-selected') === 'true');
+  if(!initial){
+    // Try to match window.selectedCharacter if available
+    try{
+      if(window.selectedCharacter){
+        initial = gridButtons.find(b => b.getAttribute('data-target') === window.selectedCharacter);
+      }
+    }catch(e){}
+  }
+  if(initial) {
+    gridButtons.forEach(b=>b.classList.remove('selected'));
+    initial.classList.add('selected');
+  }
+
+  gridButtons.forEach(btn=>{
+    btn.addEventListener('click', function(e){
+      // toggle selection: selecting one at a time
+      gridButtons.forEach(b=>b.classList.remove('selected'));
+      btn.classList.add('selected');
+
+      // update global variable if present
+      try{ window.selectedCharacter = btn.getAttribute('data-target'); }catch(e){}
+
+      // also sync with the larger character-card list (visual cue)
+      const target = btn.getAttribute('data-target');
+      if(target){
+        document.querySelectorAll('.character-card').forEach(c=>c.classList.remove('selected'));
+        const card = document.querySelector('.character-card[data-char="'+target+'"]');
+        if(card) card.classList.add('selected');
+      }
+    });
+
+    // keyboard accessibility: allow selection with Enter or Space
+    btn.addEventListener('keydown', function(e){
+      if(e.key === 'Enter' || e.key === ' '){
+        e.preventDefault();
+        btn.click();
+      }
+    });
+  });
+});
+</script>
+
+
+<!-- === LOCKED COMPACT BUTTON LOGIC PATCH (added) === -->
+<script id="locked-compact-script">
+document.addEventListener('DOMContentLoaded', function(){
+
+  const gridButtons = document.querySelectorAll('.char-grid button[data-target]');
+
+  function syncLockedState(){
+    gridButtons.forEach(btn=>{
+      const id = btn.dataset.target;
+      const card = document.getElementById('card-'+id);
+      if(!card) return;
+
+      if(card.classList.contains('disabled')){
+        btn.classList.add('locked');
+        btn.classList.remove('selected');
+        btn.disabled = false; // still clickable to show lock message
+      }else{
+        btn.classList.remove('locked');
+      }
+    });
+  }
+
+  // initial sync
+  syncLockedState();
+
+  // re-check every 500ms (covers unlocks like Marcus)
+  setInterval(syncLockedState, 500);
+
+  // block selection glow for locked
+  gridButtons.forEach(btn=>{
+    btn.addEventListener('click', function(e){
+      if(btn.classList.contains('locked')){
+        btn.classList.remove('selected');
+        return; // do not allow orange selection
+      }
+    }, true);
+  });
+});
+</script>
+
+
+<!-- AUTO-START ON COMPACT SELECTION: selects character and starts battle when clicking the compact name+emoji button -->
+
+<script id="compact-selection-only">
+document.addEventListener('DOMContentLoaded', function(){
+  try{
+    const compactButtons = document.querySelectorAll('.char-grid button[data-target]');
+    compactButtons.forEach(btn=>{
+      btn.addEventListener('click', function(e){
+        try{
+          const id = btn.dataset.target;
+          if(!id) return;
+          const card = document.getElementById('card-' + id);
+          // Only allow selection if card exists and is not disabled/locked
+          if(card && !card.classList.contains('disabled')){
+            // set selection in global
+            window.selectedCharacter = id;
+            // visual: remove previous selected markers
+            document.querySelectorAll('.char-grid button').forEach(b=>b.classList.remove('selected'));
+            btn.classList.add('selected');
+            document.querySelectorAll('.character-card').forEach(c=>c.classList.remove('selected'));
+            card.classList.add('selected');
+            // update displays if existing functions are available
+            if(typeof updateMenuRecordsDisplay === 'function') try{ updateMenuRecordsDisplay(); }catch(e){}
+            if(typeof updateMenuStatsDisplay === 'function') try{ updateMenuStatsDisplay(id); }catch(e){}
+            // do NOT start the game automatically; user must press INIZIA BATTAGLIA
+          } else {
+            // Optionally show a brief locked feedback if a function exists
+            if(typeof showLockedFeedback === 'function') try{ showLockedFeedback(id); }catch(e){}
+          }
+        }catch(err){}
+      });
+    });
+  }catch(e){}
+});
+</script>
+
+
+
+<script id="compact-record-sync">
+document.addEventListener('DOMContentLoaded', function(){
+  function syncCompactRecords(){
+    document.querySelectorAll('.record-badge').forEach(r=>{
+      const id = r.id.replace('record-','');
+      const btn = document.getElementById('btnrec-'+id);
+      if(btn){
+        const val = parseInt(r.textContent.replace(/[^0-9]/g,''))||0;
+        btn.textContent = 'R: ' + val;
+      }
+    });
+  }
+
+  // initial + periodic sync
+  syncCompactRecords();
+  setInterval(syncCompactRecords, 500);
+
+  // if existing update function exists, hook it
+  if(typeof updateMenuRecordsDisplay === 'function'){
+    const old = updateMenuRecordsDisplay;
+    window.updateMenuRecordsDisplay = function(){
+      old();
+      syncCompactRecords();
+    }
+  }
+});
+</script>
+
+
+<script id="total-score-sync">
+document.addEventListener('DOMContentLoaded', function(){
+
+  const totalEl = document.getElementById('totalScoreDisplay');
+
+  
+  function updateVisibility(){
+    if(typeof gameState !== 'undefined' && gameState === 'playing'){
+      totalEl.style.display = 'none';
+    }else{
+      totalEl.style.display = 'block';
+    }
+  }
+
+  function updateTotalScore(){
+    let total = 0;
+    document.querySelectorAll('.record-badge').forEach(r=>{
+      const v = parseInt(r.textContent.replace(/[^0-9]/g,'')) || 0;
+      total += v;
+    });
+    if(totalEl) totalEl.textContent = 'PUNTEGGIO TOTALE: ' + total;
+  }
+
+  updateTotalScore();
+  setInterval(()=>{updateTotalScore();updateVisibility();}, 300);
+
+  if(typeof updateMenuRecordsDisplay === 'function'){
+    const old = updateMenuRecordsDisplay;
+    window.updateMenuRecordsDisplay = function(){
+      old();
+      updateTotalScore();
+    }
+  }
+});
+</script>
+
+
+<!-- === Account Level Button + Modal === -->
+<button id="accountLevelBtn" style="display:none;">
+  LV <span id="accountLevelValue">1</span>
+  <span class="sub"><span id="accountXpText">0/1000 XP</span></span>
+</button>
+
+<div id="accountModal">
+  <div class="panel">
+    <div class="row">
+      <h3>🏅 Livello Account: <span id="accLevelHeader">1</span></h3>
+      <button class="closeBtn" id="closeAccountModal">Chiudi</button>
+    </div>
+
+    <div class="row" style="flex-direction:column;align-items:flex-start;">
+      <div style="width:100%;display:flex;justify-content:space-between;gap:10px;align-items:center;">
+        <div style="opacity:0.9;">Progresso al prossimo livello</div>
+        <div style="opacity:0.85;font-weight:700;" id="accXpHeader">0/1000 XP</div>
+      </div>
+      <div class="barWrap"><div class="barFill" id="accXpBar"></div></div>
+    </div>
+
+    <h4 style="margin:14px 0 6px 0;">📜 Missioni</h4>
+    <div id="missionsList"></div>
+
+    <div style="opacity:0.7;font-size:12px;margin-top:10px;">
+      Le missioni danno XP. Quando una missione è completata, il tasto <strong>Riscatta</strong> diventa verde e cliccabile.
+    </div>
+  </div>
+</div>
+
 </body>
+
+<script>
+const unlockMessages = {
+  voltryx: "Personaggio BLOCCATO\nSblocca facendo 45.000 punti\ncon Jimmy, Rooney e Jeff",
+  kouvagia: "Personaggio BLOCCATO\nSblocca facendo 50.000 punti\ncon Voltryx",
+  salsy: "Personaggio BLOCCATO\nSblocca facendo 60.000 punti\ncon tutti i personaggi precedenti",
+  tempostorm: "Personaggio BLOCCATO\nSblocca facendo 65.000 punti\ncon tutti i personaggi precedenti",
+  marz: "Personaggio BLOCCATO\nSblocca facendo 70.000 punti\ncon tutti i personaggi precedenti",
+  hecate: "Personaggio BLOCCATO\nSblocca facendo 75.000 punti\ncon tutti i personaggi precedenti",
+  lucien: "Personaggio BLOCCATO\nSblocca facendo un record con Marcus\nsuperiore a 25.000",
+  pdor: "Personaggio BLOCCATO\nsi sblocca facendo 50.000\ncon marcus e lucien",
+  bane: "Personaggio BLOCCATO\nSblocca facendo 50.000\ncon PDOR",
+  hendel: "personaggio BLOCCATO  si sblocca facendo 50.000 con Bane",
+  kaerith: "Personaggio BLOCCATO\nsi sblocca facendo 40.000 con Hendel"
+};
+
+const lockBox = document.getElementById('lockMessage');
+const lockText = document.getElementById('lockText');
+document.getElementById('lockCloseBtn').onclick = ()=>lockBox.style.display='none';
+
+document.querySelectorAll('.char-grid button[data-target]').forEach(btn=>{
+  btn.addEventListener('click',()=>{
+    const id = btn.dataset.target;
+    const card = document.getElementById('card-'+id);
+    if(card && card.classList.contains('disabled')){
+      lockText.innerText = unlockMessages[id] || "Personaggio BLOCCATO\nSblocca facendo un record di 70.000 con un personaggio";
+      lockBox.style.display = 'block';
+    }
+  });
+});
+
+// --- MARCUS UNLOCK: at least one character record >= 70000 ---
+function updateMarcusUnlock(){
+  const badge=document.getElementById('marcusLockBadge');
+  const card=document.getElementById('card-marcus');
+  if(!badge||!card) return;
+
+  let maxRecord=0;
+  document.querySelectorAll('.record-badge').forEach(r=>{
+    const v=parseInt(r.textContent.replace(/[^0-9]/g,''))||0;
+    if(v>maxRecord) maxRecord=v;
+  });
+
+  if(maxRecord>=70000){
+    card.classList.remove('disabled');
+    if(badge) badge.style.display='none';
+  }
+}
+setInterval(updateMarcusUnlock,500);
+
+
+// --- Ensure MARCUS selection behaves like others ---
+document.querySelectorAll('.char-grid button[data-target]').forEach(btn=>{
+  btn.addEventListener('click', ()=>{
+    const target = btn.dataset.target;
+    const card = document.getElementById('card-'+target);
+    if(!card || card.classList.contains('disabled')) return;
+
+    document.querySelectorAll('.character-card').forEach(c=>c.classList.remove('selected'));
+    card.classList.add('selected');
+    selectedCharacter = target;
+  });
+});
+
+</script>
+
 </html>
