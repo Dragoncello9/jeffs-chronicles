@@ -438,137 +438,454 @@
 }
 
 
-/* === Account Level UI === */
-#accountLevelBtn{
-  position:fixed;
+/* ===== Account Level UI ===== */
+.account-level-btn{
+  position:absolute;
   left:14px;
   bottom:14px;
-  z-index:9999;
-  padding:12px 14px 10px 14px;
-  border-radius:16px;
-  border:2px solid rgba(255,255,255,0.35);
-  background:linear-gradient(180deg, rgba(80,20,140,0.95), rgba(20,10,40,0.92));
-  color:#fff;
-  cursor:pointer;
-  font-weight:900;
-  letter-spacing:1px;
-  text-transform:uppercase;
-  font-family: "Orbitron","Rajdhani","Trebuchet MS","Segoe UI",sans-serif;
-  box-shadow:
-    0 0 0 2px rgba(0,0,0,0.35) inset,
-    0 8px 24px rgba(0,0,0,0.55),
-    0 0 20px rgba(155,89,182,0.45);
-  text-shadow:
-    0 2px 0 rgba(0,0,0,0.55),
-    0 0 10px rgba(241,196,15,0.35);
-  user-select:none;
-}
-#accountLevelBtn:hover{
-  transform:translateY(-1px);
-  box-shadow:
-    0 0 0 2px rgba(0,0,0,0.35) inset,
-    0 10px 28px rgba(0,0,0,0.58),
-    0 0 26px rgba(241,196,15,0.30),
-    0 0 22px rgba(155,89,182,0.55);
-}
-#accountLevelBtn:active{
-  transform:translateY(1px) scale(0.99);
-}
-#accountLevelBtn::after{
-  content:"";
-  position:absolute;
-  inset:2px;
-  border-radius:14px;
-  pointer-events:none;
-  background:linear-gradient(180deg, rgba(255,255,255,0.18), rgba(255,255,255,0));
-  mix-blend-mode:screen;
-  opacity:0.75;
-}
-#accountLevelBtn .sub{
-  display:block;
-  font-weight:700;
-  font-size:12px;
-  opacity:0.9;
-  margin-top:3px;
-  letter-spacing:0.5px;
-}
-@keyframes accPulse{
-  0%{ filter:brightness(1); }
-  50%{ filter:brightness(1.08); }
-  100%{ filter:brightness(1); }
-}
-#accountLevelBtn{
-  animation:accPulse 2.2s ease-in-out infinite;
-}
-#accountModal{
-  position:fixed; inset:0;
-  display:none;
-  z-index:10000;
-  background:rgba(0,0,0,0.72);
+  display:flex;
+  flex-direction:column;
   align-items:center;
   justify-content:center;
+  gap:2px;
+  width:110px;
+  height:92px;
+  border:2px solid rgba(255,255,255,0.75);
+  border-radius:14px;
+  background:linear-gradient(180deg, rgba(40,40,60,0.95), rgba(20,20,30,0.95));
+  box-shadow:0 0 18px rgba(255,255,255,0.20), inset 0 0 14px rgba(0,0,0,0.55);
+  cursor:pointer;
+  user-select:none;
+  transform:translateZ(0);
 }
-#accountModal .panel{
-  width:min(720px, 92vw);
-  max-height:min(80vh, 760px);
-  overflow:auto;
-  background:rgba(20,20,20,0.92);
-  border:1px solid rgba(255,255,255,0.25);
-  border-radius:18px;
-  padding:18px;
-  box-shadow:0 0 30px rgba(0,0,0,0.45);
-}
-#accountModal h3{margin:0 0 10px 0}
-#accountModal .row{display:flex;gap:10px;align-items:center;justify-content:space-between;margin:10px 0}
-#accountModal .barWrap{
-  width:100%;
-  height:18px;
+.account-level-btn:hover{ transform:scale(1.03); box-shadow:0 0 22px rgba(255,255,255,0.28), inset 0 0 14px rgba(0,0,0,0.55); }
+.account-level-btn:active{ transform:scale(0.98); }
+.alb-badge{
+  font-family: 'Press Start 2P', monospace;
+  font-size:10px;
+  padding:3px 8px;
   border-radius:999px;
-  border:1px solid rgba(255,255,255,0.25);
-  background:rgba(255,255,255,0.08);
-  overflow:hidden;
+  background:rgba(255,215,64,0.18);
+  border:1px solid rgba(255,215,64,0.55);
+  color:#ffd54f;
+  letter-spacing:1px;
 }
-#accountModal .barFill{
+.alb-level{
+  font-family: 'Press Start 2P', monospace;
+  font-size:22px;
+  color:#fff;
+  text-shadow:0 0 10px rgba(255,255,255,0.35);
+}
+.alb-xp{
+  font-family: 'Press Start 2P', monospace;
+  font-size:9px;
+  color:#cfd8dc;
+  opacity:0.95;
+}
+
+.account-panel{
+  width:min(720px, 92vw);
+  margin:0 auto;
+  padding:12px 14px;
+  border-radius:16px;
+  border:1px solid rgba(255,255,255,0.35);
+  background:rgba(0,0,0,0.25);
+  box-shadow:0 0 18px rgba(255,255,255,0.12);
+}
+.account-top{display:flex;justify-content:space-between;align-items:baseline;gap:10px;flex-wrap:wrap;}
+.account-lv{
+  font-family:'Press Start 2P', monospace;
+  font-size:16px;
+  color:#fff;
+}
+.account-xptext{font-family:'Press Start 2P', monospace;font-size:11px;color:#cfd8dc;}
+.xpbar-wrap{
+  position:relative;
+  height:16px;
+  border-radius:999px;
+  overflow:hidden;
+  margin-top:10px;
+  border:1px solid rgba(255,255,255,0.35);
+  background:rgba(0,0,0,0.35);
+}
+.xpbar{
   height:100%;
   width:0%;
-  background:linear-gradient(90deg, rgba(46,204,113,0.95), rgba(241,196,15,0.95));
+  background:linear-gradient(90deg, rgba(76,175,80,0.95), rgba(255,235,59,0.95));
+  transition:width 380ms ease;
 }
-#accountModal .mission{
+.xpbar-glow{
+  position:absolute; inset:0;
+  box-shadow: inset 0 0 12px rgba(255,255,255,0.20);
+  pointer-events:none;
+}
+
+.missions-list{
+  width:min(720px, 92vw);
+  margin:0 auto;
   display:flex;
-  align-items:center;
+  flex-direction:column;
+  gap:10px;
+}
+.mission{
+  display:flex;
   justify-content:space-between;
-  gap:12px;
+  gap:10px;
+  align-items:center;
   padding:10px 12px;
   border-radius:14px;
-  border:1px solid rgba(255,255,255,0.18);
-  background:rgba(255,255,255,0.06);
-  margin:8px 0;
+  border:1px solid rgba(255,255,255,0.30);
+  background:rgba(0,0,0,0.22);
 }
-#accountModal .mission .meta{opacity:0.9;font-size:14px}
-#accountModal .mission .prog{opacity:0.75;font-size:12px;margin-top:4px}
-#accountModal .claimBtn{
-  padding:8px 12px;
-  border-radius:12px;
+.mission .m-left{display:flex;flex-direction:column;gap:6px;}
+.mission .m-title{font-family:'Press Start 2P', monospace;font-size:11px;color:#fff;line-height:1.35;}
+.mission .m-progress{font-family:'Press Start 2P', monospace;font-size:10px;color:#cfd8dc;}
+.mission .m-barwrap{
+  width:260px; max-width:40vw;
+  height:12px; border-radius:999px;
+  overflow:hidden;
   border:1px solid rgba(255,255,255,0.25);
+  background:rgba(0,0,0,0.35);
+}
+.mission .m-bar{
+  height:100%;
+  width:0%;
+  background:linear-gradient(90deg, rgba(120,144,156,0.95), rgba(0,188,212,0.95));
+  transition:width 260ms ease;
+}
+.mission .claim-btn{
+  font-family:'Press Start 2P', monospace;
+  font-size:10px;
+  padding:10px 10px;
+  border-radius:12px;
+  border:1px solid rgba(255,255,255,0.35);
   background:rgba(255,255,255,0.08);
-  color:#fff;
+  color:#b0bec5;
   cursor:not-allowed;
-  opacity:0.55;
-  font-weight:700;
+  min-width:140px;
 }
-#accountModal .claimBtn.ready{
-  background:rgba(46,204,113,0.28);
-  border-color:rgba(46,204,113,0.75);
+.mission .claim-btn.ready{
   cursor:pointer;
-  opacity:1;
+  background:linear-gradient(180deg, rgba(46,204,113,0.95), rgba(39,174,96,0.95));
+  border:1px solid rgba(46,204,113,0.90);
+  color:#06110a;
+  box-shadow:0 0 18px rgba(46,204,113,0.25);
 }
-#accountModal .closeBtn{
-  padding:8px 12px;
-  border-radius:12px;
-  border:1px solid rgba(255,255,255,0.25);
-  background:rgba(255,255,255,0.08);
+.mission .claim-btn.claimed{
+  cursor:default;
+  background:rgba(76,175,80,0.18);
+  border:1px solid rgba(76,175,80,0.45);
+  color:#a5d6a7;
+}
+
+.xp-float{
+  position:fixed;
+  left:50%;
+  top:18%;
+  transform:translateX(-50%);
+  font-family:'Press Start 2P', monospace;
+  font-size:14px;
+  color:#ffd54f;
+  text-shadow:0 0 12px rgba(255,213,79,0.45);
+  pointer-events:none;
+  animation:xpPop 650ms ease forwards;
+  z-index:9999;
+}
+@keyframes xpPop{
+  0%{opacity:0; transform:translateX(-50%) translateY(10px) scale(0.96);}
+  15%{opacity:1;}
+  100%{opacity:0; transform:translateX(-50%) translateY(-24px) scale(1.06);}
+}
+
+
+/* ===== LEVEL UP ANIMATION ===== */
+#levelUpOverlay{
+  position:fixed;
+  inset:0;
+  display:none;
+  align-items:center;
+  justify-content:center;
+  background:rgba(0,0,0,0.55);
+  z-index:99999;
+}
+#levelUpOverlay.show{
+  display:flex;
+  animation:luFade 900ms ease forwards;
+}
+#levelUpOverlay .lu-card{
+  width:min(520px, 92vw);
+  padding:22px 18px;
+  border-radius:18px;
+  border:2px solid rgba(255,255,255,0.65);
+  background:radial-gradient(circle at 30% 20%, rgba(255,235,59,0.22), rgba(0,0,0,0.65));
+  box-shadow:0 0 28px rgba(255,235,59,0.22), 0 0 60px rgba(0,188,212,0.12);
+  text-align:center;
+  transform:scale(0.86);
+  animation:luPop 900ms ease forwards;
+}
+#levelUpOverlay .lu-title{
+  font-family:'Press Start 2P', monospace;
+  font-size:24px;
+  letter-spacing:2px;
   color:#fff;
-  cursor:pointer;
+  text-shadow:0 0 18px rgba(255,255,255,0.35);
+  margin-bottom:10px;
+}
+#levelUpOverlay .lu-sub{
+  font-family:'Press Start 2P', monospace;
+  font-size:11px;
+  color:#cfd8dc;
+}
+#levelUpOverlay .lu-level{
+  margin-top:14px;
+  font-family:'Press Start 2P', monospace;
+  font-size:44px;
+  color:#ffd54f;
+  text-shadow:0 0 22px rgba(255,213,79,0.45);
+}
+#levelUpOverlay::before{
+  content:"";
+  position:absolute;
+  inset:-20%;
+  background:conic-gradient(from 90deg, rgba(255,235,59,0.0), rgba(255,235,59,0.35), rgba(0,188,212,0.25), rgba(255,235,59,0.0));
+  filter:blur(10px);
+  animation:luSpin 900ms linear forwards;
+  opacity:0.9;
+}
+@keyframes luPop{
+  0%{transform:scale(0.70) translateY(10px); opacity:0;}
+  20%{opacity:1;}
+  60%{transform:scale(1.05) translateY(-6px);}
+  100%{transform:scale(0.98) translateY(-10px); opacity:1;}
+}
+@keyframes luFade{
+  0%{opacity:0;}
+  12%{opacity:1;}
+  100%{opacity:0;}
+}
+@keyframes luSpin{
+  0%{transform:rotate(0deg) scale(1.0);}
+  100%{transform:rotate(320deg) scale(1.15);}
+}
+
+
+/* ===== Account Menu Compact + Scroll ===== */
+#accountMenu{
+  max-width: 760px;
+  padding-top: 14px !important;
+  padding-bottom: 14px !important;
+}
+#accountMenu h2{
+  font-size: 20px !important;
+  margin-bottom: 4px !important;
+}
+#accountMenu p{
+  font-size: 13px !important;
+}
+#accountMenu h3{
+  font-size: 15px !important;
+  margin: 10px 0 6px !important;
+}
+#accountMenu .account-panel{
+  width: min(560px, 90vw) !important;
+  padding: 10px 12px !important;
+}
+#accountMenu .account-lv{ font-size: 14px !important; }
+#accountMenu .account-xptext{ font-size: 10px !important; }
+#accountMenu .xpbar-wrap{ height: 14px !important; margin-top: 8px !important; }
+
+#accountMenu .missions-list{
+  width: min(560px, 90vw) !important;
+  max-height: 320px;
+  overflow-y: auto;
+  padding-right: 6px; /* spazio scrollbar */
+}
+#accountMenu .missions-list::-webkit-scrollbar{ width: 8px; }
+#accountMenu .missions-list::-webkit-scrollbar-thumb{
+  background: rgba(255,255,255,0.22);
+  border-radius: 999px;
+}
+#accountMenu .missions-list::-webkit-scrollbar-track{
+  background: rgba(0,0,0,0.18);
+  border-radius: 999px;
+}
+#accountMenu .mission{
+  padding: 8px 10px !important;
+}
+#accountMenu .mission .m-title{ font-size: 10px !important; }
+#accountMenu .mission .m-progress{ font-size: 9px !important; }
+#accountMenu .mission .m-barwrap{ height: 10px !important; }
+#accountMenu .mission .claim-btn{
+  font-size: 9px !important;
+  padding: 9px 9px !important;
+  min-width: 128px !important;
+}
+
+
+/* ===== Mission Difficulty Badge ===== */
+.mission-mid{
+  margin-left:6px;
+  padding:2px 6px;
+  border-radius:999px;
+  font-family:'Press Start 2P', monospace;
+  font-size:8px;
+  background:rgba(255,235,59,0.18);
+  border:1px solid rgba(255,235,59,0.7);
+  color:#ffeb3b;
+  text-shadow:0 0 6px rgba(255,235,59,0.4);
+}
+
+
+/* ===== Mission Easy Badge ===== */
+.mission-easy{
+  margin-left:6px;
+  padding:2px 6px;
+  border-radius:999px;
+  font-family:'Press Start 2P', monospace;
+  font-size:8px;
+  background:rgba(46,204,113,0.18);
+  border:1px solid rgba(46,204,113,0.75);
+  color:#2ecc71;
+  text-shadow:0 0 6px rgba(46,204,113,0.35);
+}
+
+
+/* ===== Mission Difficulty Badge (HARD) ===== */
+.mission-hard{
+  margin-left:6px;
+  padding:2px 6px;
+  border-radius:999px;
+  font-family:'Press Start 2P', monospace;
+  font-size:8px;
+  background:rgba(244,67,54,0.18);
+  border:1px solid rgba(244,67,54,0.75);
+  color:#ff5252;
+  text-shadow:0 0 6px rgba(244,67,54,0.35);
+}
+
+
+/* ===== TOTAL SCORE HIGHLIGHT ===== */
+.total-score,
+#totalScore,
+.score-total{
+  font-size: 28px !important;
+  font-weight: bold;
+  letter-spacing: 1px;
+  color: #00e5ff;
+  text-shadow: 0 0 10px rgba(0,229,255,0.7), 0 0 18px rgba(0,229,255,0.5);
+  margin-bottom: 10px;
+  z-index: 5;
+  position: relative;
+}
+
+
+/* ===== TOTAL SCORE FOREGROUND LAYER ===== */
+.total-score,
+#totalScore,
+.score-total{
+  position: fixed !important;
+  bottom: 12px;
+  right: 14px;
+  z-index: 9999;
+  font-size: 26px !important;
+  font-weight: bold;
+  color:#00e5ff;
+  text-shadow:0 0 10px rgba(0,229,255,.8),0 0 18px rgba(0,229,255,.6);
+  pointer-events:none;
+}
+
+
+/* ===== TOTAL SCORE REALLY FOREGROUND (HUD) ===== */
+#totalScoreDisplay{
+  position:fixed !important;
+  bottom:10px !important;
+  right:12px !important;
+  z-index:999999 !important;
+  font-size:16px !important;
+  opacity:1 !important;
+  color:#ffd54f !important;
+  text-shadow:0 0 10px rgba(255,213,79,0.75), 1px 1px 2px #000 !important;
+  pointer-events:none !important;
+}
+
+
+/* ===== MENU COMPACT HEIGHT ===== */
+.menu-container,
+#mainMenu,
+.menu{
+  max-height: 75vh !important;
+  padding-top: 20px !important;
+  padding-bottom: 20px !important;
+  overflow: hidden !important;
+}
+
+
+/* ===== TOTAL SCORE BOTTOM CENTER ===== */
+#totalScoreDisplay{
+  position: fixed !important;
+  bottom: 12px !important;
+  left: 50% !important;
+  transform: translateX(-50%) !important;
+  right: auto !important;
+  z-index: 999999 !important;
+  font-size: 18px !important;
+  opacity: 1 !important;
+  color:#ffd54f !important;
+  text-shadow:0 0 12px rgba(255,213,79,0.8), 1px 1px 2px #000 !important;
+  pointer-events:none !important;
+}
+
+
+/* ===== MENU SLIGHTLY EXPANDED ===== */
+.menu-container,
+#mainMenu,
+.menu{
+  max-height: 85vh !important;
+  padding-top: 26px !important;
+  padding-bottom: 26px !important;
+}
+
+
+/* ===== MENU REPROPORTION + LIFT BOTTOM BUTTONS ===== */
+#mainMenu.menu,
+#mainMenu,
+.menu{
+  max-height: 88vh !important;
+  padding-top: 24px !important;
+  padding-bottom: 18px !important;
+  overflow: visible !important; /* evita tagli sui bottoni */
+}
+
+/* Alza INIZIA BATTAGLIA */
+.start-row{
+  margin-top: 6px !important;
+  position: relative;
+  top: -10px;
+}
+
+/* Alza i pulsanti Guida e Bestiario */
+#guideImgBtn,
+#enemyGuideImgBtn{
+  position: relative;
+  top: -10px;
+}
+
+/* Riduci un filo lo spazio sotto la selezione personaggi */
+.character-select{ margin-bottom: 6px !important; }
+
+
+/* ===== Mission Difficulty Badge (MYTHIC) ===== */
+.mission-mythic{
+  margin-left:6px;
+  padding:2px 7px;
+  border-radius:999px;
+  font-family:'Press Start 2P', monospace;
+  font-size:8px;
+  background:linear-gradient(135deg,#e5f7ff,#b9f2ff,#e5f7ff);
+  border:1px solid #b9f2ff;
+  color:#eafcff;
+  text-shadow:0 0 10px rgba(185,242,255,0.9),0 0 18px rgba(185,242,255,0.6);
+  box-shadow:0 0 12px rgba(185,242,255,0.6);
 }
 
 </style>
@@ -709,11 +1026,7 @@ PUNTEGGIO TOTALE: 0
 <button data-target="bane">BANE 🪓<br><small class="btn-record" id="btnrec-bane">R: 0</small></button>
 <button data-target="hendel">HENDEL 🪨<br><small class="btn-record" id="btnrec-hendel">R: 0</small></button>
 <button data-target="kaerith">KAERITH 🐉<br><small class="btn-record" id="btnrec-kaerith">R: 0</small></button>
-<button class="btn character-btn disabled" data-target="extra2" disabled>❓ Nuovo</button>
-<button class="btn character-btn disabled" data-target="extra3" disabled>❓ Nuovo</button>
-
-
-</div>
+<button class="btn character-btn disabled" data-target="extra2" disabled>❓ Nuovo</button> </div>
 </div>
 <div class="character-select">
 <div class="character-card" data-char="jimmy" id="card-jimmy">
@@ -855,14 +1168,47 @@ PUNTEGGIO TOTALE: 0
 <button aria-label="Apri bestiario" class="img-btn" id="enemyGuideImgBtn" style="display:inline-block;" title="Bestiario (Nemici &amp; Boss)" type="button">
 <img alt="Bestiario" id="enemyGuideImg" src="https://i.postimg.cc/NFVhJNLC/pixelcut-export-(2).png"/>
 </button>
-<p style="margin-top:12px;font-size:15px;color:#ddd">Controlli: WASD - Muovi | J - Attacco | K - Super Mossa | Spazio - Schivata</p>
+
+<!-- Account Level Button (bottom-left) -->
+<button id="accountLevelBtn" type="button" class="account-level-btn" aria-label="Livello account" title="Livello account">
+  <div class="alb-badge">LV</div>
+  <div class="alb-level" id="accountLevelText">1</div>
+  <div class="alb-xp" id="accountXpMini">0/100</div>
+</button>
+
+<p style="margin-top:12px;font-size:14px;color:#ddd;text-align:center;max-width:420px;margin-left:auto;margin-right:auto;"><span style='display:block;text-align:center;line-height:1.4;'><span style='display:block;text-align:center;line-height:1.2;font-size:12px;letter-spacing:0.5px;'>WASD = Muovi • J = Attacco<br>K = Super • Spazio = Schivata</span></span></p>
+
 </div>
+
+<!-- Account Level Screen -->
+<div class="menu" id="accountMenu" style="display:none;">
+  <h2 style="margin-bottom:6px;">🎖️ LIVELLO ACCOUNT</h2>
+  <p style="margin-top:0;color:#ddd;font-size:14px;">Completa missioni per ottenere XP e salire di livello.</p>
+
+  <div class="account-panel">
+    <div class="account-top">
+      <div class="account-lv">LV <span id="accountMenuLevel">1</span></div>
+      <div class="account-xptext"><span id="accountMenuXp">0</span>/<span id="accountMenuXpNeed">100</span> XP</div>
+    </div>
+    <div class="xpbar-wrap">
+      <div class="xpbar" id="accountXpBar"></div>
+      <div class="xpbar-glow"></div>
+    </div>
+  </div>
+
+  <h3 style="margin:14px 0 8px;">📜 Missioni</h3>
+  <div id="missionsList" class="missions-list"></div>
+
+  <div style="margin-top:14px;display:flex;gap:10px;justify-content:center;flex-wrap:wrap;">
+    <button id="accountBackBtn" class="btn" type="button">⬅ Torna al Menu</button>
+  </div>
+</div>
+
 
 </div>
 <div class="end-screen" id="endScreen" style="display:none;">
 <h1 id="endTitle">GAME OVER</h1>
 <p id="endMessage">Score Finale: 0</p>
-<p id="endKills">Kill: 0</p>
 <p id="endSub">Hai raggiunto il Livello 1</p>
 <p id="recordMessage">Record Personaggio: 0</p>
 <button class="btn" id="restartBtn">RIPROVA</button>
@@ -1316,8 +1662,35 @@ function applyScore(delta){
 }
 
 function addKill(n=1){
-  kills = Math.max(0, (kills||0) + (n||1));
-  try{ addAccountKill(selectedCharacter, n||1); }catch(e){}
+  n = Math.max(1, Math.floor(n||1));
+  kills = Math.max(0, (kills||0) + n);
+
+  // per-match kill counter (for "75 kill in una partita")
+  matchKills = Math.max(0, (matchKills||0) + n);
+  if(accountState && accountState.stats){
+    accountState.stats.bestMatchKills = Math.max(Math.floor(accountState.stats.bestMatchKills||0), matchKills);
+  }
+
+  // mission progress (account level)
+  try{ accountOnKill(selectedCharacter, n); }catch(e){}
+
+  // matchKills mission update (solo in UNA partita: non accumula tra run)
+try{
+  let shouldSave=false;
+  for(const m of missionsSorted){
+    if(m.claimed) continue;
+    if(m.type==='matchKills'){
+      if(matchKills >= m.target){
+        m.progress = m.target;
+        shouldSave=true; // salva solo quando completata
+      }else{
+        // progress temporaneo per UI (non persistente)
+        m.progress = Math.max(0, Math.min(m.target, matchKills));
+      }
+    }
+  }
+  if(shouldSave) saveAccount();
+}catch(e){}
 }
 
 
@@ -1995,170 +2368,489 @@ const levelConfigs=[
 
 const RECORDS_KEY='pf_records_v19';
 
-/* === Account Level System (v1) === */
+/* ===== Account Level System (v1) ===== */
 const ACCOUNT_KEY = "pf_account_v1";
+const ACCOUNT_DEFAULT = {
+  level: 1,
+  xp: 0,
+  xpNeed: 100,
+  totalXp: 0,
+  schema: 2,
+  stats: { totalKills:0, superUses:0, pickups:0, bestMatchKills:0, totalDamage:0, totalScore:0 },
+  missions: [
+  // 1000 kill missions
+  { id:"m_jimmy_1000",    char:"jimmy",    target:1000, progress:0, xpReward:120, claimed:false, difficulty:null },
+  { id:"m_rooney_1000",   char:"rooney",   target:1000, progress:0, xpReward:120, claimed:false, difficulty:null },
+  { id:"m_jeff_1000",     char:"jeff",     target:1000, progress:0, xpReward:120, claimed:false, difficulty:null },
 
-function defaultAccount(){
-  return {
-    level: 1,
-    xp: 0,
-    kills: { jimmy:0, rooney:0, jeff:0 },
-    claimed: { m_jimmy:false, m_rooney:false, m_jeff:false }
-  };
+  // INTERMEDIA (giallo) - 200 XP
+  { id:"m_voltryx_1000",    char:"voltryx",    target:1000, progress:0, xpReward:200, claimed:false, difficulty:"mid" },
+  { id:"m_kouvagia_1000",   char:"kouvagia",   target:1000, progress:0, xpReward:200, claimed:false, difficulty:"mid" },
+  { id:"m_salsy_1000",      char:"salsy",      target:1000, progress:0, xpReward:200, claimed:false, difficulty:"mid" },
+  { id:"m_tempostorm_1000", char:"tempostorm", target:1000, progress:0, xpReward:200, claimed:false, difficulty:"mid" },
+  { id:"m_marz_1000",       char:"marz",       target:1000, progress:0, xpReward:200, claimed:false, difficulty:"mid" },
+  { id:"m_hecate_1000",     char:"hecate",     target:1000, progress:0, xpReward:200, claimed:false, difficulty:"mid" },
+
+  { id:"m_marcus_1000",   char:"marcus",   target:1000, progress:0, xpReward:200, claimed:false, difficulty:"mid" },
+  { id:"m_lucien_1000",   char:"lucien",   target:1000, progress:0, xpReward:200, claimed:false, difficulty:"mid" },
+  { id:"m_pdor_1000",     char:"pdor",     target:1000, progress:0, xpReward:200, claimed:false, difficulty:"mid" },
+  { id:"m_bane_1000",     char:"bane",     target:1000, progress:0, xpReward:200, claimed:false, difficulty:"mid" },
+  { id:"m_hendel_1000",   char:"hendel",   target:1000, progress:0, xpReward:200, claimed:false, difficulty:"mid" },
+  { id:"m_kaerith_1000",  char:"kaerith",  target:1000, progress:0, xpReward:200, claimed:false, difficulty:"mid" },
+
+  // FACILE (verde) - 100 XP
+  { id:"e_totalKills_500",    type:"totalKills", target:500,  progress:0, xpReward:100, claimed:false, difficulty:"easy" },
+  { id:"e_matchKills_75",     type:"matchKills", target:75,   progress:0, xpReward:100, claimed:false, difficulty:"easy" },
+  { id:"e_bossLevel10",       type:"bossLevel",  target:1,    progress:0, xpReward:100, claimed:false, difficulty:"easy", levelTarget:10 },
+  { id:"e_superUses_50",      type:"superUses",  target:50,   progress:0, xpReward:100, claimed:false, difficulty:"easy" },
+  { id:"e_pickups_100",       type:"pickups",    target:100,  progress:0, xpReward:100, claimed:false, difficulty:"easy" },
+// COMPLICATA (rosso) - 300 XP
+{ id:"h_level20_clear",    type:"reachLevel",      target:1,    progress:0, xpReward:300, claimed:false, difficulty:"hard", levelTarget:20 },
+{ id:"h_totalKills_10000", type:"totalKills",      target:10000, progress:0, xpReward:300, claimed:false, difficulty:"hard" },
+{ id:"h_level15_noSuper",  type:"noSuperToLevel",  target:1,    progress:0, xpReward:300, claimed:false, difficulty:"hard", levelTarget:15 },
+{ id:"h_level15_noDamage", type:"noDamageToLevel", target:1,    progress:0, xpReward:300, claimed:false, difficulty:"hard", levelTarget:15 },
+
+// Danni (totali)
+{ id:"e_totalDmg_10000",  type:"totalDamage", target:10000,   progress:0, xpReward:100, claimed:false, difficulty:"easy" },
+{ id:"m_totalDmg_100000", type:"totalDamage", target:100000,  progress:0, xpReward:200, claimed:false, difficulty:"mid" },
+{ id:"h_totalDmg_2000000",type:"totalDamage", target:2000000, progress:0, xpReward:300, claimed:false, difficulty:"hard" },
+
+  // MITICA (platino) - 300 XP
+  { id:"x_totalScore_1500000", type:"totalScore", target:1500000, progress:0, xpReward: 1000, claimed:false, difficulty:"mythic" },
+
+]
+};
+
+function xpNeedForLevel(level){
+  // XP necessario per passare dal livello 'level' al successivo
+  level = Math.max(1, Math.floor(level||1));
+  return Math.max(100, 100 * Math.pow(2, level-1));
 }
 
-let account = null;
+function xpNeedForLevelOld(level){
+  // Vecchia curva: xpNeed = floor(prev*1.2 + 12), partendo da 100 al livello 1->2
+  level = Math.max(1, Math.floor(level||1));
+  let need = 100;
+  for(let l=1; l<level; l++){
+    need = Math.floor(need*1.20 + 12);
+  }
+  return Math.max(50, need);
+}
+
+function recalcAccountFromTotalXp(showAnim){
+  // Deriva level/xp/xpNeed dalla totalXp usando la curva attuale (100,200,400,...)
+  const prevLevel = accountState.level;
+  let total = Math.max(0, Math.floor(accountState.totalXp||0));
+  let lvl = 1;
+  let need = xpNeedForLevel(lvl);
+  let safety=0;
+  while(total >= need && safety++<200){
+    total -= need;
+    lvl += 1;
+    need = xpNeedForLevel(lvl);
+  }
+  accountState.level = lvl;
+  accountState.xpNeed = need;
+  accountState.xp = total;
+
+  if(showAnim && accountState.level > prevLevel){
+    showLevelUpOverlay(accountState.level);
+  }
+}
+
+
+function syncMissionsFromStats(){
+  try{
+    if(!accountState.stats) accountState.stats = { totalKills:0, superUses:0, pickups:0, bestMatchKills:0 };
+    for(const m of accountState.missions){
+      if(m.claimed) continue;
+      if(m.type==='totalKills') m.progress = Math.min(m.target, Math.floor(accountState.stats.totalKills||0));
+      if(m.type==='superUses') m.progress = Math.min(m.target, Math.floor(accountState.stats.superUses||0));
+      if(m.type==='pickups')   m.progress = Math.min(m.target, Math.floor(accountState.stats.pickups||0));
+      if(m.type==='matchKills') m.progress = Math.min(m.target, Math.floor(accountState.stats.bestMatchKills||0));
+    }
+  }catch(e){}
+}
+
 
 function loadAccount(){
   try{
     const raw = localStorage.getItem(ACCOUNT_KEY);
-    if(!raw){ account = defaultAccount(); return; }
-    const obj = JSON.parse(raw);
-    account = Object.assign(defaultAccount(), obj||{});
-    account.kills = Object.assign(defaultAccount().kills, account.kills||{});
-    account.claimed = Object.assign(defaultAccount().claimed, account.claimed||{});
+    if(!raw) return JSON.parse(JSON.stringify(ACCOUNT_DEFAULT));
+    const a = JSON.parse(raw);
+
+    const out = JSON.parse(JSON.stringify(ACCOUNT_DEFAULT));
+    out.schema = 2;
+
+    // legacy fields
+    if(typeof a.level==="number") out.level = Math.max(1, Math.floor(a.level));
+    if(typeof a.xp==="number") out.xp = Math.max(0, Math.floor(a.xp));
+
+    // Source of truth: totalXp
+    if(typeof a.totalXp==="number"){
+      out.totalXp = Math.max(0, Math.floor(a.totalXp));
+    }else{
+      // Migrazione intelligente: ricostruisci TOTAL XP dalla vecchia curva (1.2+12) + livello + xp correnti
+      // Esempio reale: livello 3 con 118/170 => 100 + 132 + 118 = 350 totalXP
+      let sum=0;
+      for(let l=1; l<out.level; l++){
+        sum += xpNeedForLevelOld(l);
+      }
+      out.totalXp = sum + out.xp;
+    }
+
+    // placeholder;
+    if(a.stats && typeof a.stats==='object'){
+      out.stats = {
+        totalKills: Math.max(0, Math.floor(a.stats.totalKills||0)),
+        superUses: Math.max(0, Math.floor(a.stats.superUses||0)),
+        pickups: Math.max(0, Math.floor(a.stats.pickups||0)),
+        bestMatchKills: Math.max(0, Math.floor(a.stats.bestMatchKills||0)),
+      };
+    }
+
+    // placeholder; verrà ricalcolato da totalXp
+    out.xpNeed = xpNeedForLevel(out.level);
+
+    // missions
+    if(Array.isArray(a.missions)){
+      for(const mm of out.missions){
+        const found = a.missions.find(x=>x && x.id===mm.id);
+        if(found){
+          if(typeof found.progress==="number") mm.progress = Math.max(0, Math.floor(found.progress));
+          if(typeof found.claimed==="boolean") mm.claimed = found.claimed;
+        }
+      }
+    }
+    return out;
   }catch(e){
-    account = defaultAccount();
+    return JSON.parse(JSON.stringify(ACCOUNT_DEFAULT));
   }
 }
+function saveAccount(){ try{ localStorage.setItem(ACCOUNT_KEY, JSON.stringify(accountState)); }catch(e){} }
 
-function saveAccount(){
-  try{ localStorage.setItem(ACCOUNT_KEY, JSON.stringify(account||defaultAccount())); }catch(e){}
+
+function normalizeAccountProgress(showAnim){
+  // Allinea level/xp/xpNeed al totale. Se totalXp manca (legacy), lo ricostruiamo.
+  try{
+    if(!(typeof accountState.totalXp==="number")){
+      let sum=0;
+      for(let l=1; l<accountState.level; l++){
+        sum += xpNeedForLevelOld(l);
+      }
+      accountState.totalXp = sum + (accountState.xp||0);
+    }else{
+      accountState.totalXp = Math.max(0, Math.floor(accountState.totalXp||0));
+    }
+    recalcAccountFromTotalXp(!!showAnim);
+    syncMissionsFromStats();
+    saveAccount();
+  }catch(e){}
 }
 
-function xpNeededForLevel(lv){
-  return 1000 + (Math.max(1,lv)-1)*250;
+let accountState = loadAccount();
+normalizeAccountProgress(false);
+let matchKills=0;
+let runUsedSuper=false;
+let runTookDamage=false;
+
+
+function accountXpPct(){
+  const need = Math.max(1, accountState.xpNeed);
+  return Math.max(0, Math.min(1, accountState.xp/need));
 }
 
-function addAccountXp(amount){
-  if(!account) loadAccount();
-  account.xp = Math.max(0, (account.xp||0) + Math.max(0, amount||0));
-  while(account.xp >= xpNeededForLevel(account.level)){
-    account.xp -= xpNeededForLevel(account.level);
-    account.level += 1;
-  }
+function applyAccountXp(xpGain){
+  xpGain = Math.max(0, Math.floor(xpGain||0));
+  if(xpGain<=0) return;
+
+  accountState.totalXp = Math.max(0, Math.floor(accountState.totalXp||0)) + xpGain;
+
+  recalcAccountFromTotalXp(true);
   saveAccount();
-  updateAccountUI();
+  refreshAccountUi(true);
 }
 
-function addAccountKill(charKey, n=1){
-  if(!account) loadAccount();
-  if(!charKey) return;
-  if(!account.kills) account.kills = {};
-  if(typeof account.kills[charKey] !== 'number') account.kills[charKey] = 0;
-  account.kills[charKey] += Math.max(0, n||1);
-  saveAccount();
-  try{ const modal=document.getElementById('accountModal'); if(modal && modal.style.display==='flex'){ updateAccountUI(); } }catch(e){}
+function showXpFloat(text){
+  const d=document.createElement("div");
+  d.className="xp-float";
+  d.textContent=text;
+  document.body.appendChild(d);
+  setTimeout(()=>{ try{ d.remove(); }catch(e){} }, 720);
 }
 
-function getMissions(){
-  return [
-    { id:'m_jimmy', label:"Fai 1000 kill con Jimmy", char:'jimmy', goal:1000, xp:350 },
-    { id:'m_rooney', label:"Fai 1000 kill con Rooney", char:'rooney', goal:1000, xp:350 },
-    { id:'m_jeff', label:"Fai 1000 kill con Jeff", char:'jeff', goal:1000, xp:350 },
-  ];
+function showLevelUpOverlay(newLevel){
+  const ov=document.getElementById('levelUpOverlay');
+  const lv=document.getElementById('levelUpNewLevel');
+  if(lv) lv.textContent=String(newLevel);
+  if(!ov) return;
+  ov.classList.remove('show'); // restart anim
+  void ov.offsetWidth;
+  ov.classList.add('show');
+
+  // extra juice
+  try{ shakeScreen(9); }catch(e){}
+  setTimeout(()=>{ try{ ov.classList.remove('show'); }catch(e){} }, 900);
 }
 
-function updateAccountUI(){
-  if(!account) loadAccount();
-  const btn = document.getElementById('accountLevelBtn');
-  const lvEl = document.getElementById('accountLevelValue');
-  const xpText = document.getElementById('accountXpText');
+function refreshAccountUi(animate){
+  const lvEl=document.getElementById("accountLevelText");
+  const miniXp=document.getElementById("accountXpMini");
+  if(lvEl) lvEl.textContent=String(accountState.level);
+  if(miniXp) miniXp.textContent = `${accountState.xp}/${accountState.xpNeed}`;
 
-  const level = account.level||1;
-  const need = xpNeededForLevel(level);
-  const xp = account.xp||0;
+  const lv2=document.getElementById("accountMenuLevel");
+  const xpEl=document.getElementById("accountMenuXp");
+  const needEl=document.getElementById("accountMenuXpNeed");
+  const bar=document.getElementById("accountXpBar");
+  if(lv2) lv2.textContent=String(accountState.level);
+  if(xpEl) xpEl.textContent=String(accountState.xp);
+  if(needEl) needEl.textContent=String(accountState.xpNeed);
 
-  if(lvEl) lvEl.textContent = String(level);
-  if(xpText) xpText.textContent = `${xp}/${need} XP`;
-
-  const shouldShow = (startScreen && startScreen.style.display!=='none') || (mainMenuScreen && mainMenuScreen.style.display!=='none');
-  if(btn) btn.style.display = shouldShow ? 'block' : 'none';
-
-  const lh=document.getElementById('accLevelHeader');
-  const xh=document.getElementById('accXpHeader');
-  const bar=document.getElementById('accXpBar');
-  if(lh) lh.textContent=String(level);
-  if(xh) xh.textContent = `${xp}/${need} XP`;
   if(bar){
-    const pct = Math.max(0, Math.min(1, need? (xp/need) : 0));
-    bar.style.width = `${Math.round(pct*100)}%`;
-  }
-
-  const list=document.getElementById('missionsList');
-  if(list){
-    const missions=getMissions();
-    list.innerHTML='';
-    for(const m of missions){
-      const k = (account.kills && typeof account.kills[m.char]==='number') ? account.kills[m.char] : 0;
-      const done = k >= m.goal;
-      const claimed = !!(account.claimed && account.claimed[m.id]);
-      const wrap=document.createElement('div');
-      wrap.className='mission';
-
-      const left=document.createElement('div');
-      left.className='meta';
-      left.innerHTML = `<div><strong>${m.label}</strong> <span style="opacity:0.75;">(+${m.xp} XP)</span></div>
-                        <div class="prog">${Math.min(k,m.goal)}/${m.goal} kill</div>`;
-
-      const btn=document.createElement('button');
-      btn.className='claimBtn';
-      btn.textContent = claimed ? 'Riscattato' : 'Riscatta';
-      if(done && !claimed){
-        btn.classList.add('ready');
-        btn.disabled=false;
-      }else{
-        btn.disabled=true;
-      }
-      if(claimed){
-        btn.style.opacity='0.65';
-        btn.style.cursor='default';
-        btn.style.background='rgba(46,204,113,0.18)';
-        btn.style.borderColor='rgba(46,204,113,0.35)';
-      }
-
-      btn.addEventListener('click', ()=>{
-        if(!account) loadAccount();
-        const kk = (account.kills && typeof account.kills[m.char]==='number') ? account.kills[m.char] : 0;
-        if(kk < m.goal) return;
-        if(account.claimed && account.claimed[m.id]) return;
-        account.claimed[m.id]=true;
-        saveAccount();
-        addAccountXp(m.xp);
-        updateAccountUI();
-      });
-
-      wrap.appendChild(left);
-      wrap.appendChild(btn);
-      list.appendChild(wrap);
+    const pct = Math.round(accountXpPct()*100);
+    if(animate){
+      bar.style.transition="width 520ms ease";
+      requestAnimationFrame(()=>{ bar.style.width = pct+"%"; });
+    } else {
+      bar.style.transition="width 260ms ease";
+      bar.style.width = pct+"%";
     }
   }
+  renderMissions();
 }
 
-function openAccountModal(){
-  const modal=document.getElementById('accountModal');
-  if(modal){
-    modal.style.display='flex';
-    updateAccountUI();
+function charLabel(c){
+  if(c==='jimmy') return 'Jimmy';
+  if(c==='rooney') return 'Rooney';
+  if(c==='jeff') return 'Jeff';
+  return c;
+}
+
+function missionTitle(m){
+  if(m.type==='totalKills') return `Uccidi ${m.target} nemici totali`;
+  if(m.type==='totalDamage') return `Causa ${m.target} danni totali`;
+  if(m.type==='totalScore') return `Ottieni un punteggio totale superiore a ${m.target}`;
+  if(m.type==='matchKills') return `Fai ${m.target} kill in una partita`;
+  if(m.type==='bossLevel') return `Supera il livello ${m.levelTarget||10}`;
+  if(m.type==='reachLevel') return `Sconfiggi il livello ${m.levelTarget||20}`;
+  if(m.type==='noSuperToLevel') return `Supera il livello ${m.levelTarget||15} senza usare la super`;
+  if(m.type==='noDamageToLevel') return `Subisci 0 danni fino al livello ${m.levelTarget||15}`;
+  if(m.type==='superUses') return `Usa la super ${m.target} volte (totali)`;
+  if(m.type==='pickups') return `Raccogli ${m.target} pickup (totali)`;
+  return 'Missione';
+}
+
+function renderMissions(){
+  const wrap=document.getElementById("missionsList");
+  if(!wrap) return;
+  wrap.innerHTML="";
+
+
+// Ordine missioni:
+// 1) NON riscattate prima, riscattate sempre in fondo
+// 2) tra quelle non riscattate: FACILE (verde) prima di INTERMEDIA (giallo) e poi le altre
+
+const missionsSorted = accountState.missions
+  .map((m,i)=>({m,i}))
+  .sort((A,B)=>{
+    const a=A.m, b=B.m;
+
+    // riscattate sempre in fondo
+    if(!!a.claimed !== !!b.claimed) return a.claimed ? 1 : -1;
+
+    const isBase = (x)=>['jimmy','rooney','jeff'].includes(x.char);
+
+    // priorità:
+    // 0 = base
+    // 1 = facile
+    // 2 = intermedia
+    // 3 = altre
+    const weight = (x)=>{
+      if(isBase(x)) return 0;
+      if(x.difficulty==='easy') return 1;
+      if(x.difficulty==='mid') return 2;
+      if(x.difficulty==='hard') return 3;
+      if(x.difficulty==='mythic') return 4;
+      return 5;
+    };
+
+    const dw = weight(a) - weight(b);
+    if(dw!==0) return dw;
+
+    return A.i - B.i; // stabile
+  })
+  .map(o=>o.m);
+
+
+  for(const m of missionsSorted){
+    const done = m.progress >= m.target;
+    const claimed = !!m.claimed;
+
+    const row=document.createElement("div");
+    row.className="mission";
+
+    const left=document.createElement("div");
+    left.className="m-left";
+
+    const title=document.createElement("div");
+    title.className="m-title";
+    const badge = (m.difficulty==='easy') ? "<span class='mission-easy'>FACILE</span>" : (m.difficulty==='mid') ? "<span class='mission-mid'>INTERMEDIA</span>" : (m.difficulty==='hard') ? "<span class='mission-hard'>COMPLICATA</span>" : (m.difficulty==='mythic') ? "<span class='mission-mythic'>MITICA</span>" : "";
+    if(m.char){
+      title.innerHTML = `Fai ${m.target} kill con ${charLabel(m.char)} ${badge}`;
+    } else {
+      title.innerHTML = `${missionTitle(m)} ${badge}`;
+    }
+
+    const prog=document.createElement("div");
+    prog.className="m-progress";
+    const p = Math.min(m.target, m.progress);
+    prog.textContent = `${p}/${m.target} ${m.char ? 'kill' : (m.type==='bossLevel' ? 'completato' : 'progresso')} • Ricompensa: ${m.xpReward} XP`;
+
+    const barwrap=document.createElement("div");
+    barwrap.className="m-barwrap";
+    const bar=document.createElement("div");
+    bar.className="m-bar";
+    const pct=Math.round(Math.min(1, (m.progress||0)/m.target)*100);
+    bar.style.width=pct+"%";
+    barwrap.appendChild(bar);
+
+    left.appendChild(title);
+    left.appendChild(prog);
+    left.appendChild(barwrap);
+
+    const btn=document.createElement("button");
+    btn.type="button";
+    btn.className="claim-btn";
+    if(claimed){
+      btn.classList.add("claimed");
+      btn.textContent="✔ Riscattata";
+      btn.disabled=true;
+    }else if(done){
+      btn.classList.add("ready");
+      btn.textContent="Riscatta +XP";
+      btn.disabled=false;
+      btn.addEventListener("click", ()=>{
+        m.claimed=true;
+        saveAccount();
+        showXpFloat(`+${m.xpReward} XP`);
+        applyAccountXp(m.xpReward);
+        refreshAccountUi(true);
+      });
+    }else{
+      btn.textContent="Non completata";
+      btn.disabled=true;
+    }
+
+    row.appendChild(left);
+    row.appendChild(btn);
+    wrap.appendChild(row);
   }
 }
-function closeAccountModal(){
-  const modal=document.getElementById('accountModal');
-  if(modal) modal.style.display='none';
+
+function accountOnKill(charType, n=1){
+  n = Math.max(1, Math.floor(n||1));
+  // stats
+  if(!accountState.stats) accountState.stats = { totalKills:0, superUses:0, pickups:0, bestMatchKills:0 };
+  accountState.stats.totalKills = Math.max(0, Math.floor(accountState.stats.totalKills||0)) + n;
+
+  // character kill missions
+  for(const m of accountState.missions){
+    if(m.claimed) continue;
+    if(m.char && m.char===charType){
+      m.progress = Math.min(m.target, (m.progress||0) + n);
+    }
+  }
+
+  // easy missions
+  for(const m of accountState.missions){
+    if(m.claimed) continue;
+    if(m.type==='totalKills'){
+      m.progress = Math.min(m.target, Math.floor(accountState.stats.totalKills||0));
+    }
+  }
+  saveAccount();
 }
 
-document.addEventListener('DOMContentLoaded', ()=>{
-  loadAccount();
-  const btn=document.getElementById('accountLevelBtn');
-  const close=document.getElementById('closeAccountModal');
-  const modal=document.getElementById('accountModal');
 
-  if(btn) btn.addEventListener('click', openAccountModal);
-  if(close) close.addEventListener('click', closeAccountModal);
-  if(modal) modal.addEventListener('click', (e)=>{ if(e.target===modal) closeAccountModal(); });
 
-  updateAccountUI();
-});
+function accountOnScoreAdded(points){
+  points = Math.max(0, Math.floor(points||0));
+  if(points<=0) return;
+  try{
+    accountState.stats.totalScore = Math.max(0, Math.floor(accountState.stats.totalScore||0)) + points;
+    for(const m of accountState.missions){
+      if(!m.claimed && m.type==='totalScore'){
+        m.progress = accountState.stats.totalScore;
+      }
+    }
+    saveAccount();
+  }catch(e){}
+}
+function accountOnDamageDealt(dmg){
+  dmg = Math.max(0, Math.floor(dmg||0));
+  if(dmg<=0) return;
+  try{
+    accountState.stats = accountState.stats || {};
+    accountState.stats.totalDamage = Math.max(0, Math.floor(accountState.stats.totalDamage||0)) + dmg;
+
+    for(const m of accountState.missions){
+      if(m.claimed) continue;
+      if(m.type==='totalDamage'){
+        m.progress = Math.min(m.target, accountState.stats.totalDamage);
+      }
+    }
+    saveAccount();
+  }catch(e){}
+}
+
+
+function accountOnBossLevel(level){
+  try{
+    for(const m of accountState.missions){
+      if(m.claimed) continue;
+      if(m.type==='bossLevel' && (m.levelTarget||10)===level){
+        m.progress = 1;
+      }
+    }
+    saveAccount();
+  }catch(e){}
+}
+function accountOnSuperUsed(){
+  try{
+    runUsedSuper=true;
+    if(!accountState.stats) accountState.stats = { totalKills:0, superUses:0, pickups:0, bestMatchKills:0 };
+    accountState.stats.superUses = Math.max(0, Math.floor(accountState.stats.superUses||0)) + 1;
+    for(const m of accountState.missions){
+      if(m.claimed) continue;
+      if(m.type==='superUses'){
+        m.progress = Math.min(m.target, Math.floor(accountState.stats.superUses||0));
+      }
+    }
+    saveAccount();
+  }catch(e){}
+}
+
+function accountOnPlayerDamaged(){
+  try{
+    runTookDamage = true;
+    // missione no-damage fino al livello X: se prendi danno, resta non completata in questa run
+  }catch(e){}
+}
+
+function accountOnPickupCollected(){
+  try{
+    if(!accountState.stats) accountState.stats = { totalKills:0, superUses:0, pickups:0, bestMatchKills:0 };
+    accountState.stats.pickups = Math.max(0, Math.floor(accountState.stats.pickups||0)) + 1;
+    for(const m of accountState.missions){
+      if(m.claimed) continue;
+      if(m.type==='pickups'){
+        m.progress = Math.min(m.target, Math.floor(accountState.stats.pickups||0));
+      }
+    }
+    saveAccount();
+  }catch(e){}
+}
  
 // Backward compatibility: try older keys used by previous versions
 const LEGACY_RECORDS_KEYS = ['pf_records_v18','pf_records_v17','pf_records_v16','pf_records_v15','pf_records'];
@@ -2692,6 +3384,8 @@ class Wolf{
     // Kaerith SUPER: 25% damage reduction while active
 
     this.hp -= d;
+    // Account mission: no-damage run tracking
+    if(d>0){ try{ accountOnPlayerDamaged(); }catch(e){} }
     createParticles(this.x+this.width/2, this.y+this.height/2, '#90caf9', 14, 4);
 
     // Hendel passive: every enemy that hits him is knocked back and takes 40 damage
@@ -2865,6 +3559,7 @@ function applyEnemyDamage(enemy, baseDmg){
   const finalDmg = Math.max(0, Math.round(baseDmg * mult * markMult(enemy)));
   enemy._lastHitAt = Date.now();
   enemy.hp -= finalDmg;
+  try{ accountOnDamageDealt(finalDmg); }catch(e){}
   return finalDmg;
 }
 
@@ -3554,6 +4249,7 @@ function updatePickups(playerRef){
 
     if(dist < pr + Math.max(playerRef.width,playerRef.height)/2){
       applyPickupEffect(playerRef,p.type);
+      try{ accountOnPickupCollected(); }catch(e){}
       return false;
     }
     return true;
@@ -4919,12 +5615,14 @@ else if(this.attackType==='magic'){
       const sc = (this.superCooldown!=null)?this.superCooldown:24000;
       if(now - this.lastSuper < sc) return false;
       this.lastSuper = now;
+
       
       this.invulnerable = true;
       this.pickupShieldUntil = now + 3000;
       startHendelCrush(3000);
       createParticles(this.x+this.width/2,this.y+this.height/2,'#9e9e9e',28,6);
       shakeScreen();
+
       return true;
     }
 
@@ -6507,7 +7205,8 @@ function updateBackgroundForLevel(level){
 }
 
 function startGame(){
-  currentLevel=1;score=0;kills=0;timer=levelConfigs[0].time;
+  currentLevel=1;score=0;kills=0;matchKills=0;timer=levelConfigs[0].time;
+  runUsedSuper=false; runTookDamage=false;
   player=new Player(selectedCharacter||'jimmy');
   enemies=[];particles=[];projectiles=[];lasers=[];tempBeams=[];pickups=[];wolves=[];
   spawnEnemiesForLevel(currentLevel);
@@ -6531,7 +7230,6 @@ function endGame(won){
   const kd=document.getElementById('killsDisplay'); if(kd) kd.style.display='none';
   document.getElementById('endTitle').textContent=won?'VICTORY':'GAME OVER';
   document.getElementById('endMessage').textContent=`Score Finale: ${score}`;
-  try{ const ek=document.getElementById('endKills'); if(ek) ek.textContent=`Kill: ${kills||0}`; }catch(e){}
   document.getElementById('endSub').textContent=`Hai raggiunto il Livello ${currentLevel}`;
   const rec=records[selectedCharacter]||0;
   if(score>rec){records[selectedCharacter]=score;saveRecords();}
@@ -6548,6 +7246,39 @@ if(difficultyMode==='easy' && player){
 }
   if(currentLevel < levelConfigs.length){
     currentLevel++;
+
+// Missioni legate ai livelli (check quando avanzi)
+try{
+  for(const m of accountState.missions){
+    if(m.claimed) continue;
+    if(m.type==='reachLevel'){
+      const tgt = m.levelTarget||20;
+      if(currentLevel > tgt) m.progress = m.target;
+    }
+    if(m.type==='noSuperToLevel'){
+      const tgt = m.levelTarget||15;
+      if(currentLevel > tgt && !runUsedSuper) m.progress = m.target;
+    }
+    if(m.type==='noDamageToLevel'){
+      const tgt = m.levelTarget||15;
+      if(currentLevel > tgt && !runTookDamage) m.progress = m.target;
+    }
+  }
+  saveAccount();
+}catch(e){}
+
+    // missione: supera il livello 10 (quando entri nel livello 11 o oltre)
+    try{
+      for(const m of accountState.missions){
+        if(m.claimed) continue;
+        if(m.type==='bossLevel' && (m.levelTarget||10)===10){
+          if(currentLevel > 10){
+            m.progress = m.target; // completed
+          }
+        }
+      }
+      saveAccount();
+    }catch(e){}
     spawnEnemiesForLevel(currentLevel);
     timer=levelConfigs[Math.max(0,currentLevel-1)].time;
     updateBackgroundForLevel(currentLevel);
@@ -6758,7 +7489,10 @@ window.addEventListener('keydown',e=>{
   const k=e.key.toLowerCase();
   keys[k]=true;
   if(k==='j'&&gameState==='playing'){ if(player && player.type!=='kaerith'){ player.attack(); } }
-  if(k==='k'&&gameState==='playing'){player.superAttack()}
+  if(k==='k'&&gameState==='playing'){
+    const ok = player && player.superAttack && player.superAttack();
+    if(ok){ try{ accountOnSuperUsed(); }catch(e){} }
+  }
   if(k===' '&&gameState==='playing'){player.dodge()}
 });
 window.addEventListener('keyup',e=>{keys[e.key.toLowerCase()]=false;});
@@ -6858,7 +7592,6 @@ function updateMenuStatsDisplay(char){
   if(startScreen && mainMenu){
     // default view
     startScreen.style.display='block';
-  try{ updateAccountUI(); }catch(e){}
     mainMenu.style.display='none';
     gameState='start';
   }
@@ -7136,6 +7869,36 @@ document.querySelectorAll('.char-grid button[data-target]').forEach(btn=>{
     card.classList.add('selected');
     selectedCharacter = target;
   });
+});
+
+
+
+/* ===== Account Menu Handlers ===== */
+function openAccountMenu(){
+  try{
+    const mm=document.getElementById("mainMenu");
+    const am=document.getElementById("accountMenu");
+    if(mm) mm.style.display="none";
+    if(am) am.style.display="block";
+    refreshAccountUi(false);
+  }catch(e){}
+}
+function closeAccountMenu(){
+  try{
+    const mm=document.getElementById("mainMenu");
+    const am=document.getElementById("accountMenu");
+    if(am) am.style.display="none";
+    if(mm) mm.style.display="block";
+    refreshAccountUi(false);
+  }catch(e){}
+}
+document.addEventListener("DOMContentLoaded", ()=>{
+  const btn=document.getElementById("accountLevelBtn");
+  const back=document.getElementById("accountBackBtn");
+  if(btn) btn.addEventListener("click", openAccountMenu);
+  if(back) back.addEventListener("click", closeAccountMenu);
+  normalizeAccountProgress(false);
+  refreshAccountUi(false);
 });
 
 </script>
@@ -7679,7 +8442,7 @@ document.addEventListener('DOMContentLoaded', ()=>{
 </script>
 
 <!-- Injected JS: compact grid selection behaviour -->
-<script id="injected-compact-select-script">
+<script>
 document.addEventListener('DOMContentLoaded', function(){
   const grid = document.querySelector('.char-grid');
   if(!grid) return;
@@ -7730,7 +8493,7 @@ document.addEventListener('DOMContentLoaded', function(){
 
 
 <!-- === LOCKED COMPACT BUTTON LOGIC PATCH (added) === -->
-<script id="locked-compact-script">
+<script>
 document.addEventListener('DOMContentLoaded', function(){
 
   const gridButtons = document.querySelectorAll('.char-grid button[data-target]');
@@ -7772,7 +8535,7 @@ document.addEventListener('DOMContentLoaded', function(){
 
 <!-- AUTO-START ON COMPACT SELECTION: selects character and starts battle when clicking the compact name+emoji button -->
 
-<script id="compact-selection-only">
+<script>
 document.addEventListener('DOMContentLoaded', function(){
   try{
     const compactButtons = document.querySelectorAll('.char-grid button[data-target]');
@@ -7808,7 +8571,7 @@ document.addEventListener('DOMContentLoaded', function(){
 
 
 
-<script id="compact-record-sync">
+<script>
 document.addEventListener('DOMContentLoaded', function(){
   function syncCompactRecords(){
     document.querySelectorAll('.record-badge').forEach(r=>{
@@ -7837,7 +8600,7 @@ document.addEventListener('DOMContentLoaded', function(){
 </script>
 
 
-<script id="total-score-sync">
+<script>
 document.addEventListener('DOMContentLoaded', function(){
 
   const totalEl = document.getElementById('totalScoreDisplay');
@@ -7858,7 +8621,24 @@ document.addEventListener('DOMContentLoaded', function(){
       total += v;
     });
     if(totalEl) totalEl.textContent = 'PUNTEGGIO TOTALE: ' + total;
+  
+
+// Sync nel sistema missioni (MITICA totalScore) usando il totale record-badge
+try{
+  if(typeof accountState !== 'undefined' && accountState && accountState.stats){
+    accountState.stats.totalScore = total;
+    if(Array.isArray(accountState.missions)){
+      for(const mm of accountState.missions){
+        if(!mm.claimed && mm.type==='totalScore'){
+          mm.progress = total;
+        }
+      }
+    }
+    if(typeof saveAccount === 'function') saveAccount();
   }
+}catch(e){}
+
+}
 
   updateTotalScore();
   setInterval(()=>{updateTotalScore();updateVisibility();}, 300);
@@ -7874,33 +8654,12 @@ document.addEventListener('DOMContentLoaded', function(){
 </script>
 
 
-<!-- === Account Level Button + Modal === -->
-<button id="accountLevelBtn" style="display:none;">
-  LV <span id="accountLevelValue">1</span>
-  <span class="sub"><span id="accountXpText">0/1000 XP</span></span>
-</button>
-
-<div id="accountModal">
-  <div class="panel">
-    <div class="row">
-      <h3>🏅 Livello Account: <span id="accLevelHeader">1</span></h3>
-      <button class="closeBtn" id="closeAccountModal">Chiudi</button>
-    </div>
-
-    <div class="row" style="flex-direction:column;align-items:flex-start;">
-      <div style="width:100%;display:flex;justify-content:space-between;gap:10px;align-items:center;">
-        <div style="opacity:0.9;">Progresso al prossimo livello</div>
-        <div style="opacity:0.85;font-weight:700;" id="accXpHeader">0/1000 XP</div>
-      </div>
-      <div class="barWrap"><div class="barFill" id="accXpBar"></div></div>
-    </div>
-
-    <h4 style="margin:14px 0 6px 0;">📜 Missioni</h4>
-    <div id="missionsList"></div>
-
-    <div style="opacity:0.7;font-size:12px;margin-top:10px;">
-      Le missioni danno XP. Quando una missione è completata, il tasto <strong>Riscatta</strong> diventa verde e cliccabile.
-    </div>
+<!-- Level Up Overlay -->
+<div id="levelUpOverlay" style="display:none;">
+  <div class="lu-card">
+    <div class="lu-title">LEVEL UP!</div>
+    <div class="lu-sub">Sei salito al livello</div>
+    <div class="lu-level" id="levelUpNewLevel">2</div>
   </div>
 </div>
 
