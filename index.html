@@ -108,7 +108,7 @@
 
     /* Ridotte leggermente le card personaggio per evitare sovrapposizioni */
     .character-card{
-      background:#222;border:3px solid #555;padding:10px 12px;
+      background:#222;border:3px solid #555;padding:9px 10px;
       width:100%;
       cursor:pointer;transition:all .12s;position:relative;
       display:flex;flex-direction:row;align-items:center;gap:12px;
@@ -204,6 +204,8 @@
     }
 
     .btn{ background:#e74c3c;color:#fff;border:none;padding:10px 22px; font-size:16px;cursor:pointer;margin:8px; font-family:'Press Start 2P', cursive; /* Bottoni in stile menu */ }
+    .btn.btn-mini{padding:6px 12px;font-size:14px;margin:6px;}
+
 
     /* Extra character button + layout */
     .start-row{display:flex;gap:10px;align-items:center;justify-content:center;margin-top:10px;}
@@ -458,6 +460,112 @@
   user-select:none;
   transform:translateZ(0);
 }
+
+.skin-btn{
+  position:absolute;
+  right:14px;
+  bottom:14px;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  gap:6px;
+  width:110px;
+  height:92px;
+  border:2px solid rgba(255,255,255,0.70);
+  border-radius:14px;
+  background:linear-gradient(180deg, rgba(210,210,220,0.92), rgba(140,140,155,0.92));
+  box-shadow:0 0 18px rgba(255,255,255,0.18), inset 0 0 14px rgba(0,0,0,0.35);
+  cursor:pointer;
+  user-select:none;
+}
+.skin-btn:hover{filter:brightness(1.06);}
+.skin-btn:active{transform:translateY(1px);}
+
+.skin-btn-img{
+  width:42px;
+  height:42px;
+  image-rendering:pixelated;
+  filter:drop-shadow(0 2px 3px rgba(0,0,0,0.55));
+}
+.skin-btn-label{
+  font-family:'Press Start 2P', cursive;
+  font-size:12px;
+  letter-spacing:0.6px;
+  color:#14151a;
+  text-shadow:0 1px 0 rgba(255,255,255,0.45);
+}
+
+.skin-scroller-wrap{
+  width:100%;
+  max-width:740px;
+  margin:0 auto;
+  padding:10px 8px;
+  border:2px solid rgba(255,255,255,0.16);
+  border-radius:14px;
+  background:rgba(0,0,0,0.18);
+  box-shadow:inset 0 0 18px rgba(0,0,0,0.45);
+}
+.skin-scroller{
+  display:flex;
+  gap:12px;
+  overflow-x:auto;
+  overflow-y:hidden;
+  padding:8px 6px;
+  scroll-snap-type:x mandatory;
+  -webkit-overflow-scrolling:touch;
+}
+.skin-scroller::-webkit-scrollbar{height:10px;}
+.skin-scroller::-webkit-scrollbar-thumb{background:rgba(255,255,255,0.22);border-radius:999px;}
+.skin-scroller::-webkit-scrollbar-track{background:rgba(0,0,0,0.18);border-radius:999px;}
+
+.skin-card{
+  flex:0 0 auto;
+  width:170px;
+  border:2px solid rgba(255,255,255,0.22);
+  border-radius:16px;
+  background:linear-gradient(180deg, rgba(40,40,55,0.92), rgba(20,20,30,0.92));
+  box-shadow:0 0 16px rgba(255,255,255,0.10), inset 0 0 16px rgba(0,0,0,0.55);
+  padding:12px 10px 10px;
+  text-align:center;
+  scroll-snap-align:start;
+}
+.skin-card img{
+  width:120px;
+  height:120px;
+  object-fit:contain;
+  image-rendering:pixelated;
+  filter:drop-shadow(0 4px 6px rgba(0,0,0,0.55));
+}
+.skin-img-missing{
+  width:120px;
+  height:120px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  border-radius:14px;
+  background:rgba(255,255,255,0.08);
+  border:1px solid rgba(255,255,255,0.18);
+  color:rgba(255,255,255,0.6);
+  font-size:54px;
+  font-weight:900;
+  margin:0 auto;
+}
+
+.skin-card .skin-name{
+  margin-top:8px;
+  font-family:'Press Start 2P', cursive;
+  font-size:12px;
+  color:#fff;
+  opacity:0.95;
+}
+.skin-card .skin-sub{
+  margin-top:4px;
+  font-size:14px;
+  color:#cfcfe6;
+  opacity:0.9;
+}
+
 .account-level-btn:hover{ transform:scale(1.03); box-shadow:0 0 22px rgba(255,255,255,0.28), inset 0 0 14px rgba(0,0,0,0.55); }
 .account-level-btn:active{ transform:scale(0.98); }
 .alb-badge{
@@ -525,24 +633,54 @@
   margin:0 auto;
   display:flex;
   flex-direction:column;
-  gap:10px;
+  gap:8px;
 }
+
+/* ===== Missioni: header + pulsante ordinamento (più piccolo, argento) ===== */
+.missions-header{
+  width:min(720px, 92vw);
+  margin:10px auto 6px !important;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:8px;
+  flex-wrap:wrap;
+}
+.missions-header h3{
+  margin:0 !important;
+  font-family:'Press Start 2P', monospace;
+  font-size:13px;
+  line-height:1.2;
+}
+#missionsSortBtn{
+  padding:4px 8px !important;
+  font-size:10px !important;
+  margin:0 !important;
+  border-radius:10px;
+  border:1px solid rgba(255,255,255,0.75);
+  background:linear-gradient(180deg, rgba(230,230,230,0.95), rgba(150,150,150,0.95));
+  color:#111;
+  box-shadow:0 0 12px rgba(192,192,192,0.18);
+}
+#missionsSortBtn:hover{filter:brightness(1.06);transform:translateY(-1px);}
+#missionsSortBtn:active{filter:brightness(0.98);transform:translateY(0px);}
+
 .mission{
   display:flex;
   justify-content:space-between;
   gap:10px;
   align-items:center;
-  padding:10px 12px;
+  padding:9px 10px;
   border-radius:14px;
   border:1px solid rgba(255,255,255,0.30);
   background:rgba(0,0,0,0.22);
 }
 .mission .m-left{display:flex;flex-direction:column;gap:6px;}
-.mission .m-title{font-family:'Press Start 2P', monospace;font-size:11px;color:#fff;line-height:1.35;}
-.mission .m-progress{font-family:'Press Start 2P', monospace;font-size:10px;color:#cfd8dc;}
+.mission .m-title{font-family:'Press Start 2P', monospace;font-size:10px;color:#fff;line-height:1.35;}
+.mission .m-progress{font-family:'Press Start 2P', monospace;font-size:9px;color:#cfd8dc;}
 .mission .m-barwrap{
   width:260px; max-width:40vw;
-  height:12px; border-radius:999px;
+  height:10px; border-radius:999px;
   overflow:hidden;
   border:1px solid rgba(255,255,255,0.25);
   background:rgba(0,0,0,0.35);
@@ -555,14 +693,14 @@
 }
 .mission .claim-btn{
   font-family:'Press Start 2P', monospace;
-  font-size:10px;
-  padding:10px 10px;
+  font-size:9px;
+  padding:8px 9px;
   border-radius:12px;
   border:1px solid rgba(255,255,255,0.35);
   background:rgba(255,255,255,0.08);
   color:#b0bec5;
   cursor:not-allowed;
-  min-width:140px;
+  min-width:124px;
 }
 .mission .claim-btn.ready{
   cursor:pointer;
@@ -1137,7 +1275,7 @@ PUNTEGGIO TOTALE: 0
 
 </div>
 </div>
-<div class=\"start-row\">
+<div class="start-row">
 
 <button class="btn" id="startBtn">INIZIA BATTAGLIA</button>
 </div>
@@ -1176,6 +1314,13 @@ PUNTEGGIO TOTALE: 0
   <div class="alb-xp" id="accountXpMini">0/100</div>
 </button>
 
+<!-- SKIN Button (bottom-right) -->
+<button id="skinBtn" type="button" class="skin-btn" aria-label="Skin" title="Skin">
+  <img class="skin-btn-img" alt="Skin" src="https://i.postimg.cc/3xZ4x8YB/285b2ef5-7936-474d-adf4-2a413673da6e.png"/>
+  <div class="skin-btn-label">SKIN</div>
+</button>
+
+
 <p style="margin-top:12px;font-size:14px;color:#ddd;text-align:center;max-width:420px;margin-left:auto;margin-right:auto;"><span style='display:block;text-align:center;line-height:1.4;'><span style='display:block;text-align:center;line-height:1.2;font-size:12px;letter-spacing:0.5px;'>WASD = Muovi • J = Attacco<br>K = Super • Spazio = Schivata</span></span></p>
 
 </div>
@@ -1196,7 +1341,10 @@ PUNTEGGIO TOTALE: 0
     </div>
   </div>
 
-  <h3 style="margin:14px 0 8px;">📜 Missioni</h3>
+  <div class="missions-header" style="margin:14px 0 8px;display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap;">
+    <h3 style="margin:0;">📜 Missioni</h3>
+    <button id="missionsSortBtn" class="btn btn-mini" type="button">↕ Ordine: difficoltà</button>
+  </div>
   <div id="missionsList" class="missions-list"></div>
 
   <div style="margin-top:14px;display:flex;gap:10px;justify-content:center;flex-wrap:wrap;">
@@ -1206,6 +1354,22 @@ PUNTEGGIO TOTALE: 0
 
 
 </div>
+
+<!-- SKIN Screen -->
+<div class="menu" id="skinMenu" style="display:none;">
+  <h2 style="margin-bottom:6px;">🧥 SKIN</h2>
+  <p style="margin:0 0 10px;font-size:16px;color:#ddd;">Personaggi sbloccati</p>
+
+  <div class="skin-scroller-wrap">
+    <div id="skinScroller" class="skin-scroller" aria-label="Lista skin a scorrimento orizzontale"></div>
+  </div>
+
+  <div style="margin-top:14px;display:flex;gap:10px;justify-content:center;flex-wrap:wrap;">
+    <button id="skinBackBtn" class="btn" type="button">⬅ Torna al Menu</button>
+  </div>
+</div>
+
+
 <div class="end-screen" id="endScreen" style="display:none;">
 <h1 id="endTitle">GAME OVER</h1>
 <p id="endMessage">Score Finale: 0</p>
@@ -1612,15 +1776,8 @@ function getPlayBounds(){
   const bottomLimit = canvas.height-30;
   let b = {left:0, top:0, right:canvas.width, bottom:bottomLimit};
 
-  // Hendel Crush restringe l'arena: usiamo i suoi bounds se presenti
-  try{
-    if(typeof _hendelCrushBounds==='function'){
-      const hb=_hendelCrushBounds();
-      if(hb && typeof hb.left==='number'){
-        b = {left:hb.left, top:hb.top, right:hb.right, bottom:Math.min(hb.bottom, bottomLimit)};
-      }
-    }
-  }catch(e){}
+  // Hendel Crush: NON restringere l'arena del player (evita che Hendel venga trascinato al centro)
+  // La spinta verso il centro e il DoT sono già applicati ai nemici in updateHendelCrush().
 
   return b;
 }
@@ -1808,7 +1965,9 @@ function startPdorOrbs(owner, now){
     ownerType: owner && owner.type,
     startsAt: now,
     endsAt: now + durationMs,
-    orbs: []
+    orbs: [],
+    extraSpawnTimes: [ now + Math.floor(durationMs*(0.25 + Math.random()*0.35)), now + Math.floor(durationMs*(0.60 + Math.random()*0.30)) ],
+    extraSpawned: 0
   };
 
   const margin = 70;
@@ -2255,7 +2414,7 @@ const characterStats={
   marcus:{
     hp:400,
     speed:7,
-    damage:20,
+    damage:15,
     range:650,
     cooldown:900,
     name:'Marcus',
@@ -2278,7 +2437,7 @@ const characterStats={
   pdor:{
     hp:420,
     speed:7.4*0.75,
-    damage:50,
+    damage:42,
     range:820,
     cooldown:180,
     name:'Pdor',
@@ -2291,13 +2450,13 @@ const characterStats={
   bane:{
     hp:440,
     speed:6.3*0.75, // leggermente più veloce di Tempostorm, ma sempre media-bassa
-    damage:75,
+    damage:60,
     range:230,      // raggio medio-basso
     cooldown:650,   // swing ascia
     name:'Bane',
     attackType:'axeattack',
     superCooldown:60000,
-    superDuration:10000
+    superDuration:8000
   },
 
   hendel:{
@@ -2305,10 +2464,10 @@ const characterStats={
     speed:6.0*0.75, // la più bassa (o tra le più basse) del gioco
     damage:120,
     range:160,
-    cooldown:1100, // attacco base molto lento
+    cooldown:825, // attacco base molto lento
     name:'Hendel',
     attackType:'hammerattack',
-    superCooldown:30000,
+    superCooldown:26000,
     superDuration:3000
   },
 
@@ -2316,7 +2475,7 @@ const characterStats={
     hp:410,
     speed:8.3*0.75,
     damage:0,
-    range:300,
+    range:210,
     cooldown:1000, // fiammata continua
     name:'Kaerith 🐉',
     attackType:'kaerithFlame',
@@ -2461,16 +2620,19 @@ function recalcAccountFromTotalXp(showAnim){
 
 function syncMissionsFromStats(){
   try{
-    if(!accountState.stats) accountState.stats = { totalKills:0, superUses:0, pickups:0, bestMatchKills:0 };
+    if(!accountState.stats) accountState.stats = { totalKills:0, superUses:0, pickups:0, bestMatchKills:0, totalDamage:0, totalScore:0 };
     for(const m of accountState.missions){
       if(m.claimed) continue;
-      if(m.type==='totalKills') m.progress = Math.min(m.target, Math.floor(accountState.stats.totalKills||0));
-      if(m.type==='superUses') m.progress = Math.min(m.target, Math.floor(accountState.stats.superUses||0));
-      if(m.type==='pickups')   m.progress = Math.min(m.target, Math.floor(accountState.stats.pickups||0));
-      if(m.type==='matchKills') m.progress = Math.min(m.target, Math.floor(accountState.stats.bestMatchKills||0));
+      if(m.type==='totalKills')   m.progress = Math.min(m.target, Math.floor(accountState.stats.totalKills||0));
+      if(m.type==='superUses')    m.progress = Math.min(m.target, Math.floor(accountState.stats.superUses||0));
+      if(m.type==='pickups')      m.progress = Math.min(m.target, Math.floor(accountState.stats.pickups||0));
+      if(m.type==='matchKills')   m.progress = Math.min(m.target, Math.floor(accountState.stats.bestMatchKills||0));
+      if(m.type==='totalDamage')  m.progress = Math.min(m.target, Math.floor(accountState.stats.totalDamage||0));
+      if(m.type==='totalScore')   m.progress = Math.min(m.target, Math.floor(accountState.stats.totalScore||0));
     }
   }catch(e){}
 }
+
 
 
 function loadAccount(){
@@ -2506,6 +2668,8 @@ function loadAccount(){
         superUses: Math.max(0, Math.floor(a.stats.superUses||0)),
         pickups: Math.max(0, Math.floor(a.stats.pickups||0)),
         bestMatchKills: Math.max(0, Math.floor(a.stats.bestMatchKills||0)),
+        totalDamage: Math.max(0, Math.floor(a.stats.totalDamage||0)),
+        totalScore: Math.max(0, Math.floor(a.stats.totalScore||0)),
       };
     }
 
@@ -2641,46 +2805,82 @@ function missionTitle(m){
   return 'Missione';
 }
 
+let missionsSortMode = "difficulty"; // "difficulty" | "completion"
+
 function renderMissions(){
   const wrap=document.getElementById("missionsList");
   if(!wrap) return;
   wrap.innerHTML="";
 
 
-// Ordine missioni:
-// 1) NON riscattate prima, riscattate sempre in fondo
-// 2) tra quelle non riscattate: FACILE (verde) prima di INTERMEDIA (giallo) e poi le altre
+// Ordine missioni (selezionabile dall'UI):
+// - "difficulty": ordine classico (base -> facile -> intermedia -> complicata -> mythic), riscattate in fondo
+// - "completion": da quella più vicina al completamento a quella più lontana, riscattate in fondo
 
-const missionsSorted = accountState.missions
-  .map((m,i)=>({m,i}))
-  .sort((A,B)=>{
-    const a=A.m, b=B.m;
+const missionsSorted = (() => {
+  const list = accountState.missions.map((m,i)=>({m,i}));
 
-    // riscattate sempre in fondo
-    if(!!a.claimed !== !!b.claimed) return a.claimed ? 1 : -1;
+  if(missionsSortMode === 'completion'){
+    return list
+      .sort((A,B)=>{
+        const a=A.m, b=B.m;
 
-    const isBase = (x)=>['jimmy','rooney','jeff'].includes(x.char);
+        // riscattate sempre in fondo
+        if(!!a.claimed !== !!b.claimed) return a.claimed ? 1 : -1;
 
-    // priorità:
-    // 0 = base
-    // 1 = facile
-    // 2 = intermedia
-    // 3 = altre
-    const weight = (x)=>{
-      if(isBase(x)) return 0;
-      if(x.difficulty==='easy') return 1;
-      if(x.difficulty==='mid') return 2;
-      if(x.difficulty==='hard') return 3;
-      if(x.difficulty==='mythic') return 4;
-      return 5;
-    };
+        const aDone = (a.progress||0) >= (a.target||0);
+        const bDone = (b.progress||0) >= (b.target||0);
 
-    const dw = weight(a) - weight(b);
-    if(dw!==0) return dw;
+        // completate (ma non ancora riscattate) in alto
+        if(aDone !== bDone) return aDone ? -1 : 1;
 
-    return A.i - B.i; // stabile
-  })
-  .map(o=>o.m);
+        const aRem = Math.max(0, (a.target||0) - (a.progress||0));
+        const bRem = Math.max(0, (b.target||0) - (b.progress||0));
+        if(aRem !== bRem) return aRem - bRem;
+
+        // tie-break: % completamento (più alto prima)
+        const aPct = (a.target>0) ? ((a.progress||0) / a.target) : 0;
+        const bPct = (b.target>0) ? ((b.progress||0) / b.target) : 0;
+        if(aPct !== bPct) return bPct - aPct;
+
+        return A.i - B.i; // stabile
+      })
+      .map(o=>o.m);
+  }
+
+  // default: difficulty
+  return list
+    .sort((A,B)=>{
+      const a=A.m, b=B.m;
+
+      // riscattate sempre in fondo
+      if(!!a.claimed !== !!b.claimed) return a.claimed ? 1 : -1;
+
+      const isBase = (x)=>['jimmy','rooney','jeff'].includes(x.char);
+
+      // priorità:
+      // 0 = base
+      // 1 = facile
+      // 2 = intermedia
+      // 3 = complicata
+      // 4 = mythic
+      // 5 = altre
+      const weight = (x)=>{
+        if(isBase(x)) return 0;
+        if(x.difficulty==='easy') return 1;
+        if(x.difficulty==='mid') return 2;
+        if(x.difficulty==='hard') return 3;
+        if(x.difficulty==='mythic') return 4;
+        return 5;
+      };
+
+      const dw = weight(a) - weight(b);
+      if(dw!==0) return dw;
+
+      return A.i - B.i; // stabile
+    })
+    .map(o=>o.m);
+})();
 
 
   for(const m of missionsSorted){
@@ -2751,7 +2951,7 @@ const missionsSorted = accountState.missions
 function accountOnKill(charType, n=1){
   n = Math.max(1, Math.floor(n||1));
   // stats
-  if(!accountState.stats) accountState.stats = { totalKills:0, superUses:0, pickups:0, bestMatchKills:0 };
+  if(!accountState.stats) accountState.stats = { totalKills:0, superUses:0, pickups:0, bestMatchKills:0, totalDamage:0, totalScore:0 };
   accountState.stats.totalKills = Math.max(0, Math.floor(accountState.stats.totalKills||0)) + n;
 
   // character kill missions
@@ -2819,7 +3019,7 @@ function accountOnBossLevel(level){
 function accountOnSuperUsed(){
   try{
     runUsedSuper=true;
-    if(!accountState.stats) accountState.stats = { totalKills:0, superUses:0, pickups:0, bestMatchKills:0 };
+    if(!accountState.stats) accountState.stats = { totalKills:0, superUses:0, pickups:0, bestMatchKills:0, totalDamage:0, totalScore:0 };
     accountState.stats.superUses = Math.max(0, Math.floor(accountState.stats.superUses||0)) + 1;
     for(const m of accountState.missions){
       if(m.claimed) continue;
@@ -2840,7 +3040,7 @@ function accountOnPlayerDamaged(){
 
 function accountOnPickupCollected(){
   try{
-    if(!accountState.stats) accountState.stats = { totalKills:0, superUses:0, pickups:0, bestMatchKills:0 };
+    if(!accountState.stats) accountState.stats = { totalKills:0, superUses:0, pickups:0, bestMatchKills:0, totalDamage:0, totalScore:0 };
     accountState.stats.pickups = Math.max(0, Math.floor(accountState.stats.pickups||0)) + 1;
     for(const m of accountState.missions){
       if(m.claimed) continue;
@@ -4535,7 +4735,7 @@ class Player{
             start: now,
             lastPulse: 0,
             pulseMs: 90,
-            range: 294,                 // molto lungo
+            range: 206,                 // range ridotto (-30%)
             angle: Math.PI/6,           // 30°
             dir:(()=>{  if(typeof enemies!=='undefined' && enemies && enemies.length){    const pcx=this.x+this.width/2, pcy=this.y+this.height/2;    let best=null, bestD=1e18;    for(const e of enemies){      const ex=e.x+e.width/2, ey=e.y+e.height/2;      const d=(ex-pcx)*(ex-pcx)+(ey-pcy)*(ey-pcy);      if(d<bestD){bestD=d; best={x:ex,y:ey};}    }    if(best) return Math.atan2(best.y-pcy, best.x-pcx);  }  return Math.atan2(this.aimY||0, this.aimX||1);})()
           };
@@ -4976,9 +5176,9 @@ class Player{
             const insideSec = Math.max(0, (now2 - e._kaerithInsideSince)/1000);
 
             // Progressive damage: starts low, ramps up while the SAME enemy stays inside, caps at 90
-            const base = 12;
-            const slope = 20; // reaches cap ~4s
-            const dmg = Math.min(90, Math.round(base + insideSec * slope));
+            const base = 8;
+            const slope = 13; // ramp ridotta (-35%)
+            const dmg = Math.min(59, Math.round(base + insideSec * slope));
 
             const final = applyEnemyDamage(e, dmg * (this.attackBuffMultiplier||1) * (this.baneSuperAttackMult||1));
             showDamageNumber(e.x, e.y, final);
@@ -7892,11 +8092,89 @@ function closeAccountMenu(){
     refreshAccountUi(false);
   }catch(e){}
 }
+
+function getUnlockedCharacterKeys(){
+  const cards=[...document.querySelectorAll('.character-card[data-char]')];
+  const keys = cards
+    .filter(c=>c && c.dataset && c.dataset.char && !(c.classList && c.classList.contains('disabled')) )
+    .map(c=>String(c.dataset.char||"").trim())
+    .filter(k=>k && !k.startsWith("extra"));
+
+  // unique
+  return [...new Set(keys)];
+}
+
+
+function renderSkinMenu(){
+  const sc=document.getElementById("skinScroller");
+  if(!sc) return;
+
+  const keys=getUnlockedCharacterKeys();
+  sc.innerHTML="";
+
+  if(keys.length===0){
+    sc.innerHTML = `<div style="padding:10px;color:#ddd;font-size:16px;opacity:0.9;">Nessun personaggio sbloccato ancora.</div>`;
+    return;
+  }
+
+  keys.forEach((k)=>{
+    // name from character card if available
+    let name=k.toUpperCase();
+    const h3=document.querySelector(`.character-card[data-char="${k}"] h3`);
+    if(h3 && h3.textContent) name=h3.textContent.trim();
+
+    // image source
+    let src="";
+    try{
+      if(typeof images!=="undefined" && images && images[k] && images[k].src) src=images[k].src;
+    }catch(e){}
+
+    const card=document.createElement("div");
+    card.className="skin-card";
+    const imgHtml = src ? `<img alt="${name}" src="${src}"/>` : `<div class="skin-img-missing" aria-hidden="true">?</div>`;
+    card.innerHTML = `
+      ${imgHtml}
+      <div class="skin-name">${name}</div>
+      <div class="skin-sub">Sbloccato</div>
+    `;
+    sc.appendChild(card);
+  });
+}
+
+function openSkinMenu(){
+  try{
+    const mm=document.getElementById("mainMenu");
+    const sm=document.getElementById("skinMenu");
+    if(mm) mm.style.display="none";
+    if(sm) sm.style.display="block";
+    renderSkinMenu();
+  }catch(e){}
+}
+function closeSkinMenu(){
+  try{
+    const mm=document.getElementById("mainMenu");
+    const sm=document.getElementById("skinMenu");
+    if(sm) sm.style.display="none";
+    if(mm) mm.style.display="block";
+  }catch(e){}
+}
 document.addEventListener("DOMContentLoaded", ()=>{
   const btn=document.getElementById("accountLevelBtn");
   const back=document.getElementById("accountBackBtn");
-  if(btn) btn.addEventListener("click", openAccountMenu);
+  const sortBtn=document.getElementById("missionsSortBtn");
+  
+
+  const skinBtn=document.getElementById("skinBtn");
+  const skinBack=document.getElementById("skinBackBtn");
+  if(skinBtn) skinBtn.addEventListener("click", openSkinMenu);
+  if(skinBack) skinBack.addEventListener("click", closeSkinMenu);
+if(btn) btn.addEventListener("click", openAccountMenu);
   if(back) back.addEventListener("click", closeAccountMenu);
+  if(sortBtn) sortBtn.addEventListener("click", ()=>{
+    missionsSortMode = (missionsSortMode==="completion") ? "difficulty" : "completion";
+    sortBtn.textContent = (missionsSortMode==="completion") ? "↕ Ordine: più vicine" : "↕ Ordine: difficoltà";
+    renderMissions();
+  });
   normalizeAccountProgress(false);
   refreshAccountUi(false);
 });
@@ -8248,7 +8526,7 @@ Player.prototype.attack = function(){
     const now = Date.now();
     if(!this._marcusLastShot) this._marcusLastShot = 0;
 
-    const cd = 250; // cooldown (faster attacks)
+    const cd = 500; // cooldown (nerf: slower attacks)
     if(now - this._marcusLastShot < cd) return false;
     this._marcusLastShot = now;
     // ---- HEAL ON ATTACK (1% current HP, integer, min 1) ----
