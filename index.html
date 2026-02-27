@@ -12169,7 +12169,7 @@ function setCosmoUnlocked(){
     const buyBtn = document.getElementById('lockBuyBtn');
     if(!lockBox || !lockText) return;
 
-    lockText.innerText = "Personaggio BLOCCATO\\nSblocca acquistandolo\\ncon " + COSMO_COST + " Frammenti d'Etere";
+    lockText.innerText = "Personaggio BLOCCATO Sblocca acquistandolo con " + COSMO_COST + " Frammenti d'Etere";
     if(buyBtn){
       buyBtn.style.display = 'inline-block';
       buyBtn.textContent = "COMPRA (" + COSMO_COST + ")";
@@ -12189,7 +12189,7 @@ function setCosmoUnlocked(){
             if(typeof updateMenuStatsDisplay === "function") updateMenuStatsDisplay('cosmo');
           }catch(e){}
         }else{
-          lockText.innerText = "Etere insufficiente\\nServono " + COSMO_COST + " frammenti";
+          lockText.innerText = "Etere insufficiente Servono " + COSMO_COST + " frammenti";
         }
       };
     }
