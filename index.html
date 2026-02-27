@@ -1402,6 +1402,84 @@
 #totalScoreInfoModal .ts-body ul{ margin:10px 0 0 18px; }
 #totalScoreInfoModal .ts-body li{ margin:6px 0; }
 </style>
+
+<style id="cosmo-buy-style-patch">
+#cosmoShopBuyBtn{
+  background:linear-gradient(180deg,#2ecc71,#27ae60);
+  border:2px solid #2ecc71;
+  color:#06110a;
+}
+#cosmoShopBuyBtn.disabled{
+  background:#555 !important;
+  border:2px solid #777 !important;
+  color:#ccc !important;
+  cursor:not-allowed !important;
+  box-shadow:none !important;
+  filter:grayscale(0.4);
+}
+</style>
+
+
+
+
+<style id="account-menu-layout-fix">
+/* === ACCOUNT MENU: keep "Torna al Menu" always inside, without breaking open/close === */
+#accountMenu{
+  max-height: 82vh !important;
+  overflow: hidden !important;
+  padding-bottom: 14px !important;
+}
+
+/* Only when JS sets display to block, apply flex layout */
+#accountMenu[style*="display:block"], 
+#accountMenu[style*="display: block"]{
+  display:flex !important;
+  flex-direction:column !important;
+}
+
+/* allow the internal content to scroll instead of pushing the back button out */
+#accountMenu .missions-list{
+  flex: 1 1 auto !important;
+  max-height: none !important;
+  overflow-y: auto !important;
+  padding-bottom: 84px !important; /* room for sticky button */
+}
+
+/* keep the back button visible inside the panel */
+#accountMenu #accountBackBtn{
+  position: sticky !important;
+  bottom: 12px !important;
+  z-index: 30 !important;
+}
+
+/* slightly re-proportion typography inside account menu for small screens */
+@media (max-width: 900px){
+  #accountMenu{ max-height: 84vh !important; padding-top: 12px !important; }
+  #accountMenu h2{ font-size: 18px !important; }
+  #accountMenu .account-panel{ width: min(520px, 92vw) !important; }
+  #accountMenu .mission .m-barwrap{ max-width: 52vw !important; }
+}
+</style>
+
+
+
+
+<style id="platinum-border-style">
+/* ===== PLATINUM BORDER (record >= 150.000) ===== */
+.platinumBorder{
+  border:4px solid #e5f7ff !important;
+  box-shadow:
+    0 0 10px rgba(229,247,255,0.75),
+    0 0 18px rgba(185,242,255,0.70),
+    0 0 28px rgba(120,220,255,0.55),
+    inset 0 0 12px rgba(255,255,255,0.18) !important;
+  background:linear-gradient(180deg, rgba(255,255,255,0.10), rgba(0,0,0,0.05));
+}
+.char-grid button.platinumBorder:hover{
+  filter:brightness(1.05);
+}
+</style>
+
 </head>
 
 
@@ -1476,6 +1554,24 @@ style="width:56px;height:56px;image-rendering:pixelated;display:block;">
   </div>
 </div>
 
+<!-- Cosmo Shop Modal -->
+<div class="guide-modal" id="cosmoShopModal" aria-hidden="true" style="display:none;">
+  <div class="guide-modal-content" role="dialog" aria-modal="true" aria-labelledby="cosmoShopTitle" style="max-width:560px;width:min(560px,92vw);border-radius:16px;">
+    <button class="guide-close" id="cosmoShopCloseBtn" type="button" aria-label="Chiudi">✕</button>
+    <div class="ether-title" id="cosmoShopTitle" style="color:#7fffd4;">COSMO 🌀</div>
+    <div class="ether-body" style="font-size:18px;">
+      <div style="margin-bottom:10px;">Acquista <b>Cosmo</b> per <b>1000</b> Frammenti d'Etere.</div>
+      <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:14px;">
+        <button class="btn btn-mini" id="cosmoShopBuyBtn" type="button">COMPRA (1000)</button>
+        <button class="btn btn-mini" id="cosmoShopOkBtn" type="button" style="background:#555;">OK</button>
+      </div>
+      <div id="cosmoShopHint" style="margin-top:12px;opacity:0.9;color:#ddd;"></div>
+    </div>
+  </div>
+</div>
+
+
+
 
 <div class="score" id="scoreDisplay" style="display:none;">Score: 0</div>
 <div class="score" id="killsDisplay" style="display:none; top:52px;">Kill: 0</div>
@@ -1544,7 +1640,7 @@ style="height:1.9em;display:block;image-rendering:pixelated;">
 <button data-target="bane">BANE 🪓<br><small class="btn-record" id="btnrec-bane">R: 0</small></button>
 <button data-target="hendel">HENDEL 🪨<br><small class="btn-record" id="btnrec-hendel">R: 0</small></button>
 <button data-target="kaerith">KAERITH 🐉<br><small class="btn-record" id="btnrec-kaerith">R: 0</small></button>
-<button class="btn character-btn disabled" data-target="extra2" disabled>❓ Nuovo</button> </div>
+<button data-target="cosmo">COSMO 🌀<br><small class="btn-record" id="btnrec-cosmo">R: 0</small></button> </div>
 </div>
 <div class="character-select">
 <div class="character-card" data-char="jimmy" id="card-jimmy">
@@ -1674,6 +1770,16 @@ style="height:1.9em;display:block;image-rendering:pixelated;">
 <div class="menu-stats"><span class="stat" id="menu-hp-kaerith">100 XP</span><span class="spacer"> </span><span class="stat" id="menu-dmg-kaerith">100 XP</span></div>
 <div class="record-badge" id="record-kaerith">Record: 0</div>
 <div class="lock-badge" id="kaerithLockBadge">LOCKED</div>
+
+<!-- Cosmo card (locked: purchase with 1000 ether) -->
+<div class="character-card disabled" data-char="cosmo" id="card-cosmo" title="Sblocca comprandolo con 1000 Frammenti d'Etere">
+<h3>COSMO 🌀</h3>
+<p>"🌀"</p>
+<div class="menu-stats"><span class="stat" id="menu-hp-cosmo">100 XP</span><span class="spacer"> </span><span class="stat" id="menu-dmg-cosmo">100 XP</span></div>
+<div class="record-badge" id="record-cosmo">Record: 0</div>
+<div class="lock-badge" id="cosmoLockBadge">LOCKED</div>
+</div>
+
 </div>
 
 </div>
@@ -2332,6 +2438,94 @@ function pickRandomPickupType(){
 }
 let projectiles=[];
 
+// --- BOSS RINGS (Boss20) ---
+let bossRings=[];
+
+function spawnBossRing(opts){
+  // opts: {x,y,damage,maxR,ttl,pull,owner}
+  bossRings.push({
+    x:opts.x,y:opts.y,
+    created:Date.now(),
+    ttl:opts.ttl||900,
+    maxR:opts.maxR||300,
+    damage:opts.damage||20,
+    pull:opts.pull||3,
+    owner:opts.owner||null,
+    hit:false
+  });
+}
+
+function updateBossRings(now){
+  if(!player) return;
+  bossRings = bossRings.filter(r=>{
+    const t=(now-r.created)/(r.ttl||900);
+    if(t>=1) return false;
+
+    const cx=r.x, cy=r.y;
+    const px=player.x+player.width/2;
+    const py=player.y+player.height/2;
+    const dist=Math.hypot(px-cx, py-cy);
+    const radius=(r.maxR||300)*t;
+    const band=16;
+
+    // damage once when wave reaches player
+    if(!r.hit && dist <= radius+band){
+      r.hit=true;
+      player.takeDamage(r.damage, r.owner||null);
+
+      // pull towards center (instant + short acceleration)
+      const dx=cx-px, dy=cy-py;
+      const d=Math.hypot(dx,dy)||1;
+      const nx=dx/d, ny=dy/d;
+      player.vx += nx*(r.pull||3);
+      player.vy += ny*(r.pull||3);
+      createParticles(player.x,player.y,'#f1c40f',18,4);
+
+      // EXTRA: small positional pull on hit (Lv 20 Boss ring)
+      try{
+        if((typeof currentLevel!=='undefined' && currentLevel===20) && (r.owner && r.owner.type==='boss20')){
+          const nudge = 34; // "un po"
+          player.x += nx*nudge;
+          player.y += ny*nudge;
+          // clamp into arena
+          if(player.x<0) player.x=0;
+          if(player.y<0) player.y=0;
+          if(player.x+player.width>canvas.width) player.x=canvas.width-player.width;
+          if(player.y+player.height>canvas.height-30) player.y=canvas.height-30-player.height;
+        }
+      }catch(e){}
+    }
+
+    // mild continuous pull while inside wave reach
+    if(dist <= radius+60){
+      const dx=cx-px, dy=cy-py;
+      const d=Math.hypot(dx,dy)||1;
+      player.vx += (dx/d)*0.12;
+      player.vy += (dy/d)*0.12;
+    }
+
+    return true;
+  });
+}
+
+function drawBossRings(now){
+  for(const r of bossRings){
+    const t=(now-r.created)/(r.ttl||900);
+    if(t<0 || t>1) continue;
+    const radius=(r.maxR||300)*t;
+    ctx.save();
+    ctx.globalAlpha = 0.55*(1-t);
+    ctx.lineWidth = 8;
+    ctx.strokeStyle = 'rgba(255,255,0,0.85)';
+    ctx.beginPath();
+    ctx.arc(r.x, r.y, radius, 0, Math.PI*2);
+    ctx.stroke();
+    ctx.restore();
+  }
+}
+
+
+
 // --- MARZ SUPER: expanding magic zone ---
 // Active only when Marz uses his Super.
 let magicZone=null;
@@ -2385,7 +2579,11 @@ function drawMagicZone(now){
   ctx.fillStyle = grad;
   ctx.beginPath();
   ctx.arc(magicZone.x, magicZone.y, magicZone.radius, 0, Math.PI*2);
-  ctx.fill();
+  
+ctx.shadowColor = '#000000';
+ctx.shadowBlur = 25;
+
+ctx.fill();
 
   // rings
   ctx.globalAlpha = 0.55;
@@ -2576,7 +2774,11 @@ function drawPdorOrbs(now){
 
     ctx.beginPath();
     ctx.arc(orb.x, orb.y, 7 + 2*pulse, 0, Math.PI*2);
-    ctx.fill();
+    
+ctx.shadowColor = '#000000';
+ctx.shadowBlur = 25;
+
+ctx.fill();
 
     // pulses (thin circles)
     for(const p of orb.pulses){
@@ -2602,7 +2804,7 @@ let lastSecondTick=Date.now();
 let levelAdvanceLock=false;
 let shakeAmount=0;
 
-const images={rooney:new Image(),jimmy:new Image(),jeff:new Image(),voltryx:new Image(),kouvagia:new Image(),salsy:new Image(),tempostorm:new Image() ,marz:new Image(),hecate:new Image(),pdor:new Image(),bane:new Image(),hendel:new Image(),kaerith:new Image()};
+const images={rooney:new Image(),jimmy:new Image(),jeff:new Image(),voltryx:new Image(),kouvagia:new Image(),salsy:new Image(),tempostorm:new Image() ,marz:new Image(),hecate:new Image(),pdor:new Image(),bane:new Image(),hendel:new Image(),kaerith:new Image(),cosmo:new Image()};
 images.rooney.src='https://i.postimg.cc/Vs0G7ZPV/rooneyy.png';
 images.jimmy.src='https://i.postimg.cc/13Qzjdn4/jimmyy.png';
 images.jeff.src='https://i.postimg.cc/gkQN3v7R/jeff-(1).png';
@@ -2618,6 +2820,7 @@ images.pdor=new Image(); images.pdor.src='https://i.postimg.cc/y8nHcqnw/pdor24.p
 images.bane=new Image(); images.bane.src='https://i.postimg.cc/Kjc7KMzX/bane.png';
 images.hendel.src='https://i.postimg.cc/g2G7LYjr/hendel.png';
 images.kaerith.src='https://i.postimg.cc/pLBZRcHy/Kaerith.png';
+images.cosmo.src='https://i.postimg.cc/yY5Z6hHP/cosmo.png';
 const wolfImg=new Image(); wolfImg.src='https://i.postimg.cc/4y9yBGFw/lupo.png';
 const imagesEvo={jimmy:new Image(),rooney:new Image(),jeff:new Image()};
 imagesEvo.jimmy.src='https://i.postimg.cc/g26ZX0n9/jimmyevo.png';
@@ -2669,7 +2872,7 @@ enemyImages.boss3.src='https://i.postimg.cc/xjzKWcTs/boss3-(1).png';
 
 enemyImages.veleno.src='https://i.postimg.cc/3xNWGRWY/veleno.png';
 enemyImages.oneyes.src='https://i.postimg.cc/g2xkJTBG/oneyes.png';
-enemyImages.boss4.src='https://i.postimg.cc/Px6d8kgr/boss4.png';
+enemyImages.boss4.src='https://i.postimg.cc/8c9bHWff/unnamed-(2).png';
 enemyImages.boss5.src='https://i.postimg.cc/wvGJm86S/boss5.png';
 enemyImages.archer.src='https://i.postimg.cc/VLSg4gpV/archer.png';
 enemyImages.glacial.src='https://i.postimg.cc/W1LG8vMN/glacial.png';
@@ -2709,7 +2912,7 @@ const enemyGuideData={
   boss1:{ name:'BOSS I', imgKey:'boss1', desc:'HP: 150 ⭐⭐⭐☆☆ Danno: 20 ⭐⭐⭐☆☆ Velocità: ⭐⭐☆☆☆ Passiva: ❌ | Boss introduttivo, pressione costante.'},
   boss2:{ name:'BOSS II', imgKey:'boss2', desc:'HP: 300 ⭐⭐⭐⭐☆ Danno: 27 ⭐⭐⭐⭐☆ Velocità: ⭐⭐⭐☆☆ Passiva: ❌ | Molto più aggressivo, richiede gestione super.'},
   boss3:{ name:'BOSS III', imgKey:'boss3', desc:'HP: 666 ⭐⭐⭐⭐⭐ Danno:  33 ⭐⭐⭐⭐☆ Velocità: ⭐⭐☆☆☆ Passiva: ❌ | Spartiacque del gioco, alta difficoltà tecnica.'},
-  boss4:{ name:'BOSS IV', imgKey:'boss4', desc:'HP: 999 ⭐⭐⭐⭐⭐ Danno: 35 ⭐⭐⭐⭐☆ Velocità: ⭐⭐☆☆☆ Passiva: 🧠 Attacchi telegraphed Premia lettura e tempismo.'},
+  boss4:{ name:'BOSS IV', imgKey:'boss4', desc:'HP: 900 ⭐⭐⭐⭐⭐ Danno: 30 ⭐⭐⭐☆☆ Velocità: ⭐⭐☆☆☆ Attacco: ventaglio 180° + onda circolare che danneggia e attira.'},
   boss5:{ name:'BOSS V', imgKey:'boss5', desc:'HP: 800 ⭐⭐⭐⭐⭐ Danno: 32 ⭐⭐⭐⭐☆ Velocità: ⭐⭐☆☆☆ Abilità passive: ♻️ Rigenerazione HP ogni 28s 🌊 Onda di respinta 🧊 Rallentamento 50% per 2s se nel raggio'}
 };
 
@@ -2891,7 +3094,7 @@ const characterStats={
     hp:470,
     speed:5.5,
     damage:42,
-    range:820,
+    range:700,
     cooldown:180,
     name:'Pdor',
     attackType:'pdorDart',
@@ -2903,7 +3106,7 @@ const characterStats={
   bane:{
     hp:490,
     speed:5.5, // leggermente più veloce di Tempostorm, ma sempre media-bassa
-    damage:60,
+    damage:67,
     range:230,      // raggio medio-basso
     cooldown:650,   // swing ascia
     name:'Bane',
@@ -2917,7 +3120,7 @@ const characterStats={
     speed:5, // la più bassa (o tra le più basse) del gioco
     damage:120,
     range:160,
-    cooldown:825, // attacco base molto lento
+    cooldown:810, // attacco base molto lento
     name:'Hendel',
     attackType:'hammerattack',
     superCooldown:26000,
@@ -2928,9 +3131,9 @@ const characterStats={
     hp:460,
     speed:6.5,
     damage:0,
-    range:262.5,
+    range:300,
     cooldown:1000, // fiammata continua
-    name:'Kaerith 🐉',
+    name:'Kaerith',
     attackType:'kaerithFlame',
     superCooldown:21000,
     superDuration:6000
@@ -2946,6 +3149,19 @@ const characterStats={
     attackType:'hecateBow',
     superCooldown:22000,
     superDuration:700
+  }
+
+  ,
+  cosmo:{
+    hp:430,
+    speed:7,
+    damage:32,
+    range:480,
+    cooldown:800,
+    name:'Cosmo',
+    attackType:'cosmo',
+    superCooldown: 44000,
+    superDuration:7000
   }
 };
 
@@ -2968,13 +3184,13 @@ const levelConfigs=[
   {enemyType:'attacker',enemyHP:90,enemyDamage:17,enemySpeed:3.2*0.75,time:50,enemyCount:5},
   {enemyType:'attacker',enemyHP:99,enemyDamage:19,enemySpeed:3.4*0.75,time:60,enemyCount:6},
   {enemyType:'boss3',enemyHP:666,enemyDamage:33,enemySpeed:2.4*0.75,time:100,enemyCount:1}
-  ,{enemyType:'veleno',enemyHP:60,enemyDamage:13,enemySpeed:3.1*0.75,time:50,enemyCount:7} // Level 16
-  ,{enemyType:'veleno',enemyHP:70,enemyDamage:15,enemySpeed:3.3*0.75,time:50,enemyCount:9} // Level 17
+  ,{enemyType:'veleno',enemyHP:60,enemyDamage:13,enemySpeed:2.8*0.75,time:50,enemyCount:7} // Level 16
+  ,{enemyType:'veleno',enemyHP:70,enemyDamage:15,enemySpeed:2.9*0.75,time:50,enemyCount:9} // Level 17
   ,{enemyType:'oneyes',enemyHP:55,enemyDamage:8,enemySpeed:2.1*0.75,time:55,enemyCount:4} // Level 18
   ,{enemyType:'oneyes',enemyHP:60,enemyDamage:9,enemySpeed:2.3*0.75,time:55,enemyCount:5} // Level 19
-  ,{enemyType:'boss4',enemyHP:999,enemyDamage:35,enemySpeed:2.2*0.75,time:180,enemyCount:1} // Level 20
-  ,{enemyType:'archer',enemyHP:78,enemyDamage:14,enemySpeed:2.6*0.75,time:65,enemyCount:4} // Level 21 (Ice)
-  ,{enemyType:'archer',enemyHP:86,enemyDamage:15,enemySpeed:2.8*0.75,time:65,enemyCount:5} // Level 22 (Ice)
+  ,{enemyType:'boss4',enemyHP:900,enemyDamage:30,enemySpeed:4.2,time:180,enemyCount:1} // Level 20
+  ,{enemyType:'archer',enemyHP:78,enemyDamage:14,enemySpeed:2.3*0.75,time:65,enemyCount:4} // Level 21 (Ice)
+  ,{enemyType:'archer',enemyHP:86,enemyDamage:15,enemySpeed:2.4*0.75,time:65,enemyCount:5} // Level 22 (Ice)
   ,{enemyType:'glacial',enemyHP:150,enemyDamage:22,enemySpeed:2.3*0.75,time:70,enemyCount:2} // Level 23 (Ice)
   ,{enemyType:'glacial',enemyHP:165,enemyDamage:24,enemySpeed:2.4*0.75,time:80,enemyCount:3} // Level 24 (Ice)
 
@@ -2999,7 +3215,7 @@ const ACCOUNT_DEFAULT = {
   { id:"m_jeff_1000",     char:"jeff",     target:1000, progress:0, xpReward:120, claimed:false, difficulty:null },
 
   // INTERMEDIA (giallo) - 200 XP
-  { id:"m_goldpickups_50", title:"Ottieni 50 Pickups Gold", type:"gold_pickups_50", target:50, progress:0, xpReward:200, claimed:false, difficulty:"mid" },
+  { id:"m_goldpickups_50", title:"Raccogli 50 Pickups Gold (totali)", type:"goldPickups", target:50, progress:0, xpReward:200, claimed:false, difficulty:"mid" },
 
   { id:"m_voltryx_1000",    char:"voltryx",    target:1000, progress:0, xpReward:200, claimed:false, difficulty:"mid" },
   { id:"m_kouvagia_1000",   char:"kouvagia",   target:1000, progress:0, xpReward:200, claimed:false, difficulty:"mid" },
@@ -3022,13 +3238,13 @@ const ACCOUNT_DEFAULT = {
   { id:"e_superUses_50",      type:"superUses",  target:50,   progress:0, xpReward:100, claimed:false, difficulty:"easy" },
   { id:"e_pickups_100",       type:"pickups",    target:100,  progress:0, xpReward:100, claimed:false, difficulty:"easy" },
   { id:"e_totalKills_1000",   type:"totalKills",  target:1000,  progress:0, xpReward:100, claimed:false, difficulty:"easy" },
-  { id:"e_totalHeal_5000",    type:"totalHeal",  target:5000,  progress:0, xpReward:100, claimed:false, difficulty:"easy" },
+  { id:"e_totalHeal_5000",    title:"Recupera 5000 HP (totali)",    type:"totalHeal", target:5000,   progress:0, xpReward:100, claimed:false, difficulty:"easy" },
   { id:"e_record_jimmy_40000", type:"recordScore", char:"jimmy", target:40000, progress:0, xpReward:100, claimed:false, difficulty:"easy" },
   { id:"e_record_jeff_40000",  type:"recordScore", char:"jeff",  target:40000, progress:0, xpReward:100, claimed:false, difficulty:"easy" },
   { id:"e_record_rooney_40000",type:"recordScore", char:"rooney",target:40000, progress:0, xpReward:100, claimed:false, difficulty:"easy" },
   { id:"e_totalScore_175000",  type:"totalScore", target:175000, progress:0, xpReward:100, claimed:false, difficulty:"easy" },
   { id:"m_totalScore_500000",  type:"totalScore", target:500000, progress:0, xpReward:200, claimed:false, difficulty:"mid" },
-  { id:"m_totalHeal_50000",    type:"totalHeal",  target:50000,  progress:0, xpReward:200, claimed:false, difficulty:"mid" },
+  { id:"m_totalHeal_50000",   title:"Recupera 50000 HP (totali)",   type:"totalHeal", target:50000,  progress:0, xpReward:200, claimed:false, difficulty:"mid" },
 
 // COMPLICATA (rosso) - 300 XP
 { id:"h_level20_clear",    type:"reachLevel",      target:1,    progress:0, xpReward:300, claimed:false, difficulty:"hard", levelTarget:20 },
@@ -3040,7 +3256,7 @@ const ACCOUNT_DEFAULT = {
 { id:"e_totalDmg_10000",  type:"totalDamage", target:10000,   progress:0, xpReward:100, claimed:false, difficulty:"easy" },
 { id:"m_totalDmg_100000", type:"totalDamage", target:100000,  progress:0, xpReward:200, claimed:false, difficulty:"mid" },
 { id:"h_totalDmg_2000000",type:"totalDamage", target:2000000, progress:0, xpReward:300, claimed:false, difficulty:"hard" },
-{ id:"h_totalHeal_500000", type:"totalHeal", target:500000, progress:0, xpReward:300, claimed:false, difficulty:"hard" },
+{ id:"h_totalHeal_500000",  title:"Recupera 500000 HP (totali)",  type:"totalHeal", target:500000, progress:0, xpReward:300, claimed:false, difficulty:"hard" },
 
 
   // MITICA (platino) - 300 XP
@@ -3090,22 +3306,22 @@ function recalcAccountFromTotalXp(showAnim){
 function syncMissionsFromStats(){
   try{
     if(!accountState.stats) accountState.stats = { totalKills:0, superUses:0, pickups:0, totalGoldPickups:0, bestMatchKills:0, totalDamage:0, totalScore:0, totalHeal:0 };
+
     for(const m of accountState.missions){
-      if(m.claimed) continue;
-      if(m.type==='totalKills')   m.progress = Math.min(m.target, Math.floor(accountState.stats.totalKills||0));
-      if(m.type==='superUses')    m.progress = Math.min(m.target, Math.floor(accountState.stats.superUses||0));
-      if(m.type==='pickups')      m.progress = Math.min(m.target, Math.floor(accountState.stats.pickups||0));
-      if(m.type==='matchKills')   m.progress = Math.min(m.target, Math.floor(accountState.stats.bestMatchKills||0));
-      if(m.type==='totalDamage')  m.progress = Math.min(m.target, Math.floor(accountState.stats.totalDamage||0));
-      if(m.type==='totalScore')   m.progress = Math.min(m.target, Math.floor(accountState.stats.totalScore||0));
-      if(m.type==='totalHeal')   m.progress = Math.min(m.target, Math.floor(accountState.stats.totalHeal||0));
-      if(m.type==='recordScore') m.progress = Math.min(m.target, Math.floor((records && records[m.char])||0));
-      if(m.type==='totalHeal')   m.progress = Math.min(m.target, Math.floor(accountState.stats.totalHeal||0));
-      if(m.type==='recordScore') m.progress = Math.min(m.target, Math.floor((records && records[m.char])||0));
+      if(!m || m.claimed) continue;
+
+      if(m.type==='totalKills')    m.progress = Math.min(m.target, Math.floor(accountState.stats.totalKills||0));
+      else if(m.type==='superUses')   m.progress = Math.min(m.target, Math.floor(accountState.stats.superUses||0));
+      else if(m.type==='pickups')     m.progress = Math.min(m.target, Math.floor(accountState.stats.pickups||0));
+      else if(m.type==='goldPickups') m.progress = Math.min(m.target, Math.floor(accountState.stats.totalGoldPickups||0));
+      else if(m.type==='matchKills')  m.progress = Math.min(m.target, Math.floor(accountState.stats.bestMatchKills||0));
+      else if(m.type==='totalDamage') m.progress = Math.min(m.target, Math.floor(accountState.stats.totalDamage||0));
+      else if(m.type==='totalScore')  m.progress = Math.min(m.target, Math.floor(accountState.stats.totalScore||0));
+      else if(m.type==='totalHeal')   m.progress = Math.min(m.target, Math.floor(accountState.stats.totalHeal||0));
+      else if(m.type==='recordScore') m.progress = Math.min(m.target, Math.floor((records && records[m.char])||0));
     }
   }catch(e){}
 }
-
 
 
 function loadAccount(){
@@ -3140,9 +3356,11 @@ function loadAccount(){
         totalKills: Math.max(0, Math.floor(a.stats.totalKills||0)),
         superUses: Math.max(0, Math.floor(a.stats.superUses||0)),
         pickups: Math.max(0, Math.floor(a.stats.pickups||0)),
+        totalGoldPickups: Math.max(0, Math.floor(a.stats.totalGoldPickups||0)),
         bestMatchKills: Math.max(0, Math.floor(a.stats.bestMatchKills||0)),
         totalDamage: Math.max(0, Math.floor(a.stats.totalDamage||0)),
         totalScore: Math.max(0, Math.floor(a.stats.totalScore||0)),
+        totalHeal: Math.max(0, Math.floor(a.stats.totalHeal||0)),
       };
     }
 
@@ -3186,8 +3404,52 @@ function normalizeAccountProgress(showAnim){
 }
 
 let accountState = loadAccount();
+
+/* === MISSIONS CLAIM-ONCE (stable) === */
+const MISSION_CLAIMS_KEY = "pf_mission_claims_v2";
+function missionKey(m){
+  // Deterministic key even if ids are missing/duplicated
+  const type = (m && (m.type ?? "base")) + "";
+  const char = (m && (m.char ?? "")) + "";
+  const diff = (m && (m.difficulty ?? "")) + "";
+  const target = (m && (m.target ?? "")) + "";
+  const title = (m && (m.title ?? m.name ?? "")) + "";
+  return [type,char,diff,target,title].join("|");
+}
+function loadMissionClaims(){
+  try{
+    const raw = localStorage.getItem(MISSION_CLAIMS_KEY);
+    const arr = raw ? JSON.parse(raw) : [];
+    return new Set(Array.isArray(arr) ? arr : []);
+  }catch(e){ return new Set(); }
+}
+function saveMissionClaims(set){
+  try{ localStorage.setItem(MISSION_CLAIMS_KEY, JSON.stringify(Array.from(set))); }catch(e){}
+}
+let missionClaims = loadMissionClaims();
+
+function applyMissionClaimsToState(){
+  try{
+    if(!accountState || !Array.isArray(accountState.missions)) return;
+    for(const m of accountState.missions){
+      if(!m) continue;
+      const k = missionKey(m);
+      if(missionClaims.has(k)){
+        m.claimed = true;
+      }
+      // ensure id exists (nice-to-have for debugging/UI)
+      if(!m.id || typeof m.id!=="string" || !m.id.trim()){
+        m.id = k;
+      }
+    }
+  }catch(e){}
+}
+
+applyMissionClaimsToState();
+
 normalizeAccountProgress(false);
 let matchKills=0;
+let matchHealMissionCount=0; // heal counted toward heal-missions in this run (capped)
 let runUsedSuper=false;
 let runTookDamage=false;
 
@@ -3329,7 +3591,7 @@ function missionTitle(m){
   if(m.type==='pickups') return `Raccogli ${m.target} pickup (totali)`;
   if(m.type==='totalHeal') return `Recupera ${m.target} HP (totali)`;
   if(m.type==='recordScore') return `Raggiungi record di ${m.target} con ${charLabel(m.char)}`;
-  if(m.type==='gold_pickups_50') return 'Ottieni 50 Pickups Gold';
+  if(m.type==='goldPickups') return `Raccogli ${m.target} Pickups Gold (totali)`;
   return 'Missione';
 }
 
@@ -3362,14 +3624,15 @@ const missionsSorted = (() => {
         // completate (ma non ancora riscattate) in alto
         if(aDone !== bDone) return aDone ? -1 : 1;
 
-        const aRem = Math.max(0, (a.target||0) - (a.progress||0));
-        const bRem = Math.max(0, (b.target||0) - (b.progress||0));
-        if(aRem !== bRem) return aRem - bRem;
-
-        // tie-break: % completamento (più alto prima)
+        // Ordina per PROPORZIONE di completamento (più alto = più vicino)
         const aPct = (a.target>0) ? ((a.progress||0) / a.target) : 0;
         const bPct = (b.target>0) ? ((b.progress||0) / b.target) : 0;
         if(aPct !== bPct) return bPct - aPct;
+
+        // tie-break: meno rimanenti (assoluto) prima
+        const aRem = Math.max(0, (a.target||0) - (a.progress||0));
+        const bRem = Math.max(0, (b.target||0) - (b.progress||0));
+        if(aRem !== bRem) return aRem - bRem;
 
         return A.i - B.i; // stabile
       })
@@ -3413,7 +3676,7 @@ const missionsSorted = (() => {
 
   for(const m of missionsSorted){
     const done = m.progress >= m.target;
-    const claimed = !!m.claimed;
+    const claimed = !!m.claimed || (missionClaims && missionClaims.has(missionKey(m)));
 
     const row=document.createElement("div");
     row.className="mission";
@@ -3464,6 +3727,9 @@ const missionsSorted = (() => {
       btn.textContent="Riscatta +XP";
       btn.disabled=false;
       btn.addEventListener("click", ()=>{
+        const key = missionKey(m);
+        if(missionClaims && missionClaims.has(key)) return; // already claimed
+        if(missionClaims){ missionClaims.add(key); saveMissionClaims(missionClaims); }
         m.claimed=true;
         saveAccount();
         showXpFloat(`+${m.xpReward} XP`);
@@ -3540,9 +3806,32 @@ function accountOnDamageDealt(dmg){
 function accountOnHeal(amount){
   amount = Math.max(0, Math.floor(amount||0));
   if(amount<=0) return;
+
+  // Heal-missions should be accumulative across multiple runs, but not "farmable" in a single run.
+  // We therefore CAP how much healing can contribute to missions per run.
+  // (Healing in-game still happens normally; this cap only limits mission/stat progression.)
   try{
     accountState.stats = accountState.stats || {};
-    accountState.stats.totalHeal = Math.max(0, Math.floor(accountState.stats.totalHeal||0)) + amount;
+
+    // Per-run cap: at least 300, otherwise ~5x player's maxHP
+    let maxHP = 0;
+    try{
+      maxHP = Math.max(0, Math.floor((player && (player.maxHP ?? player.maxHp ?? player.maxHpAlias ?? player.maxHealth)) || 0));
+    }catch(e){ maxHP = 0; }
+    const perRunCap = Math.max(300, Math.floor(maxHP * 5));
+
+    // Amount that actually counts toward mission progress this run
+    let add = amount;
+    if(perRunCap > 0){
+      const used = Math.max(0, Math.floor(matchHealMissionCount||0));
+      const remaining = Math.max(0, perRunCap - used);
+      add = Math.min(amount, remaining);
+      matchHealMissionCount = used + add;
+    }
+
+    if(add<=0) return;
+
+    accountState.stats.totalHeal = Math.max(0, Math.floor(accountState.stats.totalHeal||0)) + add;
     for(const m of accountState.missions){
       if(m.claimed) continue;
       if(m.type==='totalHeal'){
@@ -3552,6 +3841,7 @@ function accountOnHeal(amount){
     saveAccount();
   }catch(e){}
 }
+
 
 
 function accountOnBossLevel(level){
@@ -3606,26 +3896,26 @@ function accountOnPickupCollected(pickupType){
 }
   
   function accountOnHealed(amount){
+  try{
     amount = Math.max(0, Math.floor(amount||0));
     if(amount<=0) return;
 
+    // Somma cumulativa tra partite (persistente)
     if(!accountState.stats) accountState.stats = { totalKills:0, superUses:0, pickups:0, totalGoldPickups:0, bestMatchKills:0, totalDamage:0, totalScore:0, totalHeal:0 };
     accountState.stats.totalHeal = Math.max(0, Math.floor(accountState.stats.totalHeal||0)) + amount;
 
-    // aggiorna progress missioni (cumulativo, NON in singola partita)
+    // Aggiorna progress missioni heal (cumulativo su totale)
     if(Array.isArray(accountState.missions)){
-      accountState.missions.forEach(m=>{
-        if(!m || m.claimed) return;
+      for(const m of accountState.missions){
+        if(!m || m.claimed) continue;
         if(m.type==='totalHeal'){
-        m.progress = Math.min(m.target, Math.floor(accountState.stats.totalHeal||0));
+          m.progress = Math.min(m.target, Math.floor(accountState.stats.totalHeal||0));
+        }
       }
-      });
     }
-    saveAccountState();
-  }
-
-
- 
+    saveAccount();
+  }catch(e){}
+}
 // Backward compatibility: try older keys used by previous versions
 const LEGACY_RECORDS_KEYS = ['pf_records_v18','pf_records_v17','pf_records_v16','pf_records_v15','pf_records'];
 // bumped key to include tempostormnclude salsy + new unlock rules // bumped key to include voltryx
@@ -3648,7 +3938,7 @@ let records=loadRecords();
 
 
 function loadRecords(){
-  const base={jimmy:0,rooney:0,jeff:0,voltryx:0,kouvagia:0,salsy:0,tempostorm:0,marz:0,hecate:0,marcus:0,lucien:0,pdor:0,bane:0,hendel:0,kaerith:0};
+  const base={jimmy:0,rooney:0,jeff:0,voltryx:0,kouvagia:0,salsy:0,tempostorm:0,marz:0,hecate:0,marcus:0,lucien:0,pdor:0,bane:0,hendel:0,kaerith:0,cosmo:0};
   try{
     // Primary key (current version)
     const r=localStorage.getItem(RECORDS_KEY);
@@ -3690,6 +3980,8 @@ function updateMenuRecordsDisplay(){
   const rh=document.getElementById('record-hendel'); if(rh) rh.textContent=`Record: ${records.hendel||0}`;
   const rk=document.getElementById('record-kaerith'); if(rk) rk.textContent=`Record: ${records.kaerith||0}`;
   const brk=document.getElementById('btnrec-kaerith'); if(brk) brk.textContent=`R: ${records.kaerith||0}`;
+  const rc=document.getElementById('record-cosmo'); if(rc) rc.textContent=`Record: ${records.cosmo||0}`;
+  const brc=document.getElementById('btnrec-cosmo'); if(brc) brc.textContent=`R: ${records.cosmo||0}`;
   updateVoltryxUnlockUI();
   updateKouvagiaUnlockUI();
   updateSalsyUnlockUI();
@@ -3728,8 +4020,9 @@ function applyBronzeCharBorders(){
   const bronzeThreshold = 50000;
   const silverThreshold = 75000;
   const goldThreshold = 100000;
+  const platinumThreshold = 150000;
 
-  const buttons = [
+const buttons = [
     ...Array.from(document.querySelectorAll('.char-grid button[data-target]')),
     ...Array.from(document.querySelectorAll('button.charBtn,button.characterBtn,button.selectCharBtn,button.char-button')),
   ];
@@ -3741,9 +4034,11 @@ function applyBronzeCharBorders(){
 
     const rec = (typeof records === 'object' && records) ? (Number(records[key])||0) : 0;
 
-    btn.classList.remove('bronzeBorder','silverBorder','goldBorder');
+    btn.classList.remove('bronzeBorder','silverBorder','goldBorder','platinumBorder');
 
-    if(rec >= goldThreshold){
+    if(rec >= platinumThreshold){
+      btn.classList.add('platinumBorder');
+    } else if(rec >= goldThreshold){
       btn.classList.add('goldBorder');
     } else if(rec >= silverThreshold){
       btn.classList.add('silverBorder');
@@ -4194,7 +4489,9 @@ class Wolf{
   constructor(x,y){
     this.x=x; this.y=y;
     this.width=72; this.height=72;
-    this.maxHP=51; this.hp=51;
+    this.maxHP=51;
+    this.hp=this.maxHP;
+    this.maxHp=this.maxHP; // alias for legacy code
     this.speed=3.5; // movimento rapido ma non OP
     this.damage=16;
     this.range=70; // morso ravvicinato
@@ -4209,9 +4506,21 @@ class Wolf{
     if(this.hp<=0) return;
 
     // Kaerith SUPER: 25% damage reduction while active
-
+    // --- Safety: avoid NaN/Infinity damage propagating to HP ---
+    d = Number(d);
+    if(!Number.isFinite(d) || d < 0) d = 0;
+    this.hp = Number(this.hp);
+    if(!Number.isFinite(this.hp)) this.hp = Number(this.maxHP)||0;
     this.hp -= d;
-    // Account mission: no-damage run tracking
+    if(!Number.isFinite(this.hp)) this.hp = 0;
+    // clamp
+    const _maxHp = Number(this.maxHP);
+    if(Number.isFinite(_maxHp) && _maxHp > 0){
+      this.hp = Math.max(0, Math.min(_maxHp, this.hp));
+    } else {
+      this.hp = Math.max(0, this.hp);
+    }
+// Account mission: no-damage run tracking
     if(d>0){ try{ accountOnPlayerDamaged(); }catch(e){} }
     createParticles(this.x+this.width/2, this.y+this.height/2, '#90caf9', 14, 4);
 
@@ -4264,6 +4573,17 @@ class Wolf{
   }
   update(){
     const now=Date.now();
+    // COSMO: manage short invul + passive stacks
+    if(this.type==='cosmo'){
+      if(this._cosmoInvulUntil && now > this._cosmoInvulUntil){
+        // don't override shield pickup invulnerability
+        if(!this.pickupShieldUntil || now > this.pickupShieldUntil){
+          this.invulnerable = false;
+        }
+        this._cosmoInvulUntil = 0;
+      }
+      try{ _cosmoRecalcDmgMult(); }catch(e){}
+    }
 const target=this._nearestEnemy();
     if(!target) return;
 
@@ -4696,7 +5016,11 @@ function drawProjectiles(){
         // lower edge back to tip
         ctx.quadraticCurveTo(L*0.15, -W*0.75, L/2, 0);
         ctx.closePath();
-        ctx.fill();
+        
+ctx.shadowColor = '#000000';
+ctx.shadowBlur = 25;
+
+ctx.fill();
 
         // subtle inner highlight
         ctx.globalAlpha = 0.25;
@@ -4716,7 +5040,11 @@ function drawProjectiles(){
         ctx.lineTo(L*0.15, W/2);
         ctx.lineTo(-L/2, W/2);
         ctx.closePath();
-        ctx.fill();
+        
+ctx.shadowColor = '#000000';
+ctx.shadowBlur = 25;
+
+ctx.fill();
 
         // flared fist tip
         ctx.beginPath();
@@ -4725,7 +5053,11 @@ function drawProjectiles(){
         ctx.lineTo(L/2, W*0.5);
         ctx.lineTo(L*0.15, W*0.9);
         ctx.closePath();
-        ctx.fill();
+        
+ctx.shadowColor = '#000000';
+ctx.shadowBlur = 25;
+
+ctx.fill();
       }
       ctx.restore();
       
@@ -4778,7 +5110,11 @@ function drawProjectiles(){
     ctx.fillStyle=p.color;
     ctx.beginPath();
     ctx.arc(p.x,p.y,p.isVoltryxSuper ? 18 : p.radius,0,Math.PI*2);
-    ctx.fill();
+    
+ctx.shadowColor = '#000000';
+ctx.shadowBlur = 25;
+
+ctx.fill();
     ctx.globalAlpha = 1;
 
     if(p.isVoltryxSuper){
@@ -4793,7 +5129,7 @@ function drawProjectiles(){
 }
 
 
-// Laser hazards (OneEyes + Boss4)
+// Laser hazards (OneEyes)
 function spawnLaser(opts){
   // opts: {x,y,angle,length,width,ttl,damage,kind,chargeMs,chargedAt}
   lasers.push({
@@ -5057,7 +5393,11 @@ function drawPickups(){
       else if(p.type==='malus')ctx.fillStyle='#8b0000';
       ctx.beginPath();
       ctx.arc(p.x,p.y,(p.radius!=null)?p.radius:Math.min(w,h)/2,0,Math.PI*2);
-      ctx.fill();
+      
+ctx.shadowColor = '#000000';
+ctx.shadowBlur = 25;
+
+ctx.fill();
     }
   });
 }
@@ -5172,7 +5512,7 @@ class Player{
     this._baneSuperAppliedCooldown=false;
     this.lastAttack=0;this.facingRight=true;
     this.aimX=1;this.aimY=0; // ultima direzione di mira/movimento
-    this.dashCooldown=0;this.attacking=false;this.attackTime=0;
+    this.dashCooldown=0.0;this.attacking=false;this.attackTime=0;
     this.combo=0;this.damageTaken=0;this.isDashing=false;this.dashTime=0;
     this.superCooldown=s.superCooldown;this.superDuration=s.superDuration;
     this.lastSuper=-s.superCooldown;this.isDoingSuper=false;this.superStartTime=0;
@@ -5247,6 +5587,18 @@ class Player{
 
   update(){
     const now=Date.now();
+
+    // COSMO: breve invulnerabilità (dash) — evita invulnerabilità permanente
+    if(this.type==='cosmo'){
+      if(this._cosmoInvulUntil && now > this._cosmoInvulUntil){
+        // non disattivare l'invulnerabilità se è attiva quella del pickup scudo
+        if(!(this.pickupShieldUntil && now < this.pickupShieldUntil)){
+          this.invulnerable = false;
+        }
+        this._cosmoInvulUntil = 0;
+      }
+      try{ _cosmoRecalcDmgMult(); }catch(e){}
+    }
 
     if(this.shieldBroken&&now-this.shieldBrokenTime>this.shieldRegenMs){
       this.shieldBroken=false;this.shieldDurability=this.shieldMaxDurability
@@ -5530,18 +5882,25 @@ class Player{
             // - Area QUADRATA centrata su Rooney.
             // - Danno totale massimo: 300 (senza buff) distribuito tra TUTTI i nemici nell'area.
             // - Falloff: più un nemico è lontano dal centro, meno danno subisce.
-            const half=200; // mezzo lato del quadrato (lato=400)
+            const half=320; // mezzo lato del quadrato (lato=640) [60% più grande]
             const px=this.x+this.width/2, py=this.y+this.height/2;
+            // VISUAL: show the super area on screen
+            try{ addRooneyAreaFX(px, py, half); }catch(e){}
             const hits=[];
-            const maxDist=Math.hypot(half,half) || 1;
+            // 3 fasce (come in UI): centro (rosso) > medio (arancione) > esterno (giallo)
+            // Usiamo la distanza "Chebyshev" (max(|dx|,|dy|)) per ottenere quadri concentrici.
+            const innerHalf = half * 0.55; // fascia centrale
+            const midHalf   = half * 0.80; // fascia intermedia
 
             for(const enemy of enemies){
               const ex=enemy.x+enemy.width/2, ey=enemy.y+enemy.height/2;
               const dx=ex-px, dy=ey-py;
               if(Math.abs(dx)<=half && Math.abs(dy)<=half){
-                const dist=Math.hypot(dx,dy);
-                const w=Math.max(0.20, 1 - (dist/maxDist)); // minimo 10% al bordo
-                hits.push({enemy,w, dist});
+                const d = Math.max(Math.abs(dx), Math.abs(dy)); // quadri concentrici
+                let w = 0.25; // fascia esterna (gialla) - danno minimo ma sempre presente
+                if(d <= innerHalf) w = 1.00;        // centro (rosso)
+                else if(d <= midHalf) w = 0.55;     // medio (arancione)
+                hits.push({enemy,w, dist:d});
               }
             }
 
@@ -5594,8 +5953,8 @@ class Player{
                 showDamageNumber(enemy.x,enemy.y, _final);
                 if(enemy.hp<=0){
   if(player && player.type==='jeff' && player.evolved){
-    player.hp = Math.min(player.maxHp, player.hp + 5);
-  }
+    player.hp = Math.min(Number(player.maxHP)||0, (Number(player.hp)||0) + 5);
+}
                   createParticles(enemy.x,enemy.y,'#fff176',30,6);
                   // IRA kill special FX (Bane SUPER)
                   if(player && player.type==='bane' && Date.now() < player.baneSuperUntil){
@@ -5681,8 +6040,8 @@ class Player{
                 showDamageNumber(enemy.x,enemy.y, _final);
                 if(enemy.hp<=0){
   if(player && player.type==='jeff' && player.evolved){
-    player.hp = Math.min(player.maxHp, player.hp + 5);
-  }
+    player.hp = Math.min(Number(player.maxHP)||0, (Number(player.hp)||0) + 5);
+}
                   createParticles(enemy.x,enemy.y,'#fff176',30,6);
                   dropStellarBonusAtIndexIfNeeded(idx);
                   enemies.splice(idx,1);
@@ -5758,6 +6117,10 @@ class Player{
         }
       } else if(this.attackType==='magic'){
         // Freeze is applied instantly in superAttack(); keep VFX only for superDuration.
+        if(elapsed>=this.superDuration){
+          this.endSuper();
+        }
+      } else if(this.attackType==='cosmo'){
         if(elapsed>=this.superDuration){
           this.endSuper();
         }
@@ -5971,6 +6334,36 @@ if(this.type==='kaerith' && this._kaerithFireUntil && Date.now() < this._kaerith
     if(this.dashCooldown<=0&&!this.isDoingSuper){
       this.isDashing=true;this.dashTime=Date.now();
 
+
+      // COSMO dash: short teleport + cosmic trail (0.5s) + slightly longer cooldown
+      if(this.type==='cosmo'){
+        const now=Date.now();
+        const ox=this.x+this.width/2, oy=this.y+this.height/2;
+        const dirX=(this.aimX|| (this.facingRight?1:-1));
+        const dirY=(this.aimY||0);
+        const len=Math.hypot(dirX,dirY)||1;
+        const ax=dirX/len, ay=dirY/len;
+        const dist=170;
+
+        // trail at origin
+        if(!window.cosmoTrails) window.cosmoTrails = [];
+        window.cosmoTrails.push({x:ox, y:oy, until: now+500, lastTick: now});
+
+        // teleport
+        this.x = Math.max(getPlayBounds().left+10, Math.min(getPlayBounds().right-this.width-10, this.x + ax*dist));
+        this.y = Math.max(getPlayBounds().top+10,  Math.min(getPlayBounds().bottom-this.height-10, this.y + ay*dist));
+
+        // brief invulnerability window
+        this.invulnerable = true;
+        this._cosmoInvulUntil = now + 180;
+
+        // cooldown: +1.2s vs normal (approx)
+        this.dashCooldown = 51.25;// reduced -75% cooldown (was 162)
+        this.isDashing = false;
+        return;
+      }
+
+
       // Kouvagia passive: dodge deals 10 damage to nearby enemies
       if(this.type==='kouvagia'){
         for(let i=enemies.length-1;i>=0;i--){
@@ -5994,18 +6387,19 @@ if(this.type==='kaerith' && this._kaerithFireUntil && Date.now() < this._kaerith
       if(this.type==='jimmy' || this.type==='voltryx' || this.type==='kouvagia' || this.type==='hecate' || this.type==='lucien'){
         this._dashSpeedMult=4;
         this._dashDuration=300;
-        this.dashCooldown=90;
+        this.dashCooldown=112.5;
       } else {
         this._dashSpeedMult=3;
         this._dashDuration=200;
-        this.dashCooldown=90;
+        this.dashCooldown=112.5;
       }
     }
   }
 
   attack(){
     const now=Date.now();
-    if(now-this.lastAttack<this.cooldown||this.isDoingSuper)return false;
+    // Allow Cosmo to keep using base attack (J) even while SUPER is active
+    if(now-this.lastAttack<this.cooldown || (this.isDoingSuper && this.type!=='cosmo')) return false;
     // Jimmy EVO passive: if unlocked, the next grapple gets -20% cooldown (only for that next grapple)
     if(this.type==='jimmy' && this.evolved && this.attackType==='grapple' && this._jimmyNextGrappleCdMult && this._jimmyNextGrappleCdMult<1){
       const mult=this._jimmyNextGrappleCdMult;
@@ -6031,7 +6425,106 @@ if(this.type==='kaerith' && this._kaerithFireUntil && Date.now() < this._kaerith
       }
     }
 
-    if(this.attackType==='punch'){
+    if(this.attackType==='cosmo'){
+      const cx=this.x+this.width/2, cy=this.y+this.height/2;
+      const dirX=(this.aimX|| (this.facingRight?1:-1));
+      const dirY=(this.aimY||0);
+      const aimLen=Math.hypot(dirX,dirY)||1;
+      const ax=dirX/aimLen, ay=dirY/aimLen;
+
+
+      // If a Singolarità is active, allow a precise "billiard" tap to change its direction.
+      // Fix: the hitbox used to be too generous, so sometimes your shot would "hit the orb" instead of nearby enemies.
+      // New rules:
+      //  - if an enemy is very close to the player, we ALWAYS prioritize the enemy shot (no orb redirect)
+      //  - orb redirect only if the orb is fairly near and you aim very precisely at it
+      if(window.cosmoSingularity && window.cosmoSingularity.active){
+        // If there is a close enemy, don't let the orb steal the shot
+        let closeEnemy=false;
+        for(const e of enemies){
+          const ex=e.x+e.width/2, ey=e.y+e.height/2;
+          const dd=Math.hypot(ex-cx, ey-cy);
+          if(dd <= 140){ closeEnemy=true; break; }
+        }
+
+        if(!closeEnemy){
+          const orb=window.cosmoSingularity;
+          const ox=orb.x, oy=orb.y;
+          const vx=ox-cx, vy=oy-cy;
+          const proj = vx*ax + vy*ay;
+
+          // Only when the orb is in front AND reasonably close
+          if(proj>0 && proj <= Math.min(this.range, 260)){
+            const perp = Math.abs(vx*ay - vy*ax);
+            const hitR = (orb.r*0.65) + 8; // tighter than before
+            if(perp <= hitR){
+              const sp = Math.min(6.5, Math.max(3.2, (orb.speed||3.6) + 1.2));
+              orb.vx = ax*sp;
+              orb.vy = ay*sp;
+              orb.speed = sp;
+              // small hit feedback
+              try{ createParticles(ox,oy,'#b8e6ff',14,4); }catch(e){}
+              return true;
+            }
+          }
+        }
+      }
+
+      // AIMBOT 360°: pick best enemy anywhere within range (works both left & right)
+      // We still give a small preference to the current aim direction (if any), but enemies behind can be selected.
+      let best=null, bestScore=1e18;
+      for(const enemy of enemies){
+        const ex=enemy.x+enemy.width/2, ey=enemy.y+enemy.height/2;
+        const dx=ex-cx, dy=ey-cy;
+        let dist=Math.hypot(dx,dy);
+        if(dist>this.range) continue;
+
+        // If the enemy is overlapping/point-blank, always lock it in.
+        // This fixes rare cases where an enemy sits exactly on the player and would be skipped due to dist≈0.
+        if(dist < 14){
+          best = enemy; bestScore = -1;
+          break;
+        }
+
+        // angle cost vs aim direction (0..pi). If no aim, keep it neutral.
+        // Guard against tiny distances to avoid NaN.
+        dist = Math.max(dist, 0.001);
+        let angleCost=0;
+        const dot=((dx/dist)*ax + (dy/dist)*ay);
+        const clampedDot=Math.max(-1, Math.min(1, dot));
+        angleCost = Math.acos(clampedDot); // radians
+
+        // Score: closest wins, with mild aim-direction bias
+        const score = dist + angleCost*90; // 90px per rad (~141px at pi/2)
+        if(score<bestScore){ best=enemy; bestScore=score; }
+      }
+      if(!best) return true;
+
+      // VISUAL: show Cosmo shot on screen
+      try{ addCosmoShot(cx, cy, best.x+best.width/2, best.y+best.height/2); }catch(e){}
+
+      // base hit + apply/trigger Marchio Cosmico
+      const base = (this.damage||36) * this.attackBuffMultiplier * (this._cosmoDmgMult||1);
+      const dealt = applyEnemyDamage(best, base);
+      createParticles(best.x,best.y,'#8bd3ff',10,4);
+      showDamageNumber(best.x,best.y,dealt);
+
+      // Mark logic
+      if(!best._cosmoMark){
+        best._cosmoMark = { applied: now, explodeAt: now+1000, mini:false };
+      }else{
+        // Re-hit before explosion => trigger immediate burst (+60%) + double slow
+        if(now < (best._cosmoMark.explodeAt||0)){
+          best._cosmoMark.triggerNow = true;
+        }else{
+          best._cosmoMark = { applied: now, explodeAt: now+1000, mini:false };
+        }
+      }
+
+      return true;
+    }
+
+    else if(this.attackType==='punch'){
       if(this.type==='rooney'){
         const multipliers=[1,1.15,1.25];
         for(let i=0;i<3;i++){
@@ -6041,7 +6534,7 @@ if(this.type==='kaerith' && this._kaerithFireUntil && Date.now() < this._kaerith
               enemies.forEach(enemy=>{
                 const dx=enemy.x-this.x;const dy=enemy.y-this.y;
                 const dist=Math.hypot(dx,dy);
-                if(dist<closestDist&&Math.abs(dy)<220){closestDist=dist;closestEnemy=enemy}
+                if(dist<closestDist){closestDist=dist;closestEnemy=enemy}
               });
               if(closestEnemy){
                 const baseDmg=this.damage;
@@ -6131,8 +6624,8 @@ if(this.type==='kaerith' && this._kaerithFireUntil && Date.now() < this._kaerith
             showDamageNumber(enemy.x,enemy.y,dmg);
             if(enemy.hp<=0){
   if(player && player.type==='jeff' && player.evolved){
-    player.hp = Math.min(player.maxHp, player.hp + 5);
-  }
+    player.hp = Math.min(Number(player.maxHP)||0, (Number(player.hp)||0) + 5);
+}
               createParticles(enemy.x,enemy.y,'#fff176',30,6);
               dropStellarBonusAtIndexIfNeeded(enemies.indexOf(enemy));
               enemies.splice(enemies.indexOf(enemy),1);
@@ -6233,8 +6726,8 @@ if(this.type==='kaerith' && this._kaerithFireUntil && Date.now() < this._kaerith
           showDamageNumber(enemy.x,enemy.y, _final);
           if(enemy.hp<=0){
   if(player && player.type==='jeff' && player.evolved){
-    player.hp = Math.min(player.maxHp, player.hp + 5);
-  }
+    player.hp = Math.min(Number(player.maxHP)||0, (Number(player.hp)||0) + 5);
+}
             createParticles(enemy.x,enemy.y,'#fff176',30,6);
             dropStellarBonusAtIndexIfNeeded(enemies.indexOf(enemy));
             enemies.splice(enemies.indexOf(enemy),1);
@@ -6274,7 +6767,7 @@ if(this.type==='kaerith' && this._kaerithFireUntil && Date.now() < this._kaerith
       this.dashTime=Date.now();
       this._dashSpeedMult=5.2;
       this._dashDuration=260;
-      this.dashCooldown=95;
+      this.dashCooldown=118.75;
 
       this._kouvagiaDashActive=true;
       this._kouvagiaDashHitCd=0;
@@ -6445,6 +6938,23 @@ else if(this.attackType==='magic'){
 
   superAttack(){
     const now=Date.now();
+
+
+    // COSMO SUPER — Singolarità Errante (7s, mobile, steering via base attack)
+    if(this.type==='cosmo'){
+      const now2=Date.now();
+      const sc=(this.superCooldown!=null)?this.superCooldown:25000;
+      if(now2-this.lastSuper<sc || this.isDoingSuper) return false;
+      this.lastSuper = now2;
+      this.isDoingSuper = true;
+      this.superStartTime = now2;
+
+      const cx=this.x+this.width/2, cy=this.y+this.height/2;
+      const dirX=(this.aimX|| (this.facingRight?1:-1));
+      const dirY=(this.aimY||0);
+      spawnCosmoSingularity(cx, cy, dirX, dirY);
+      return true;
+    }
 
     // Bane SUPER:
 // - +25% movement speed for 10s
@@ -6898,7 +7408,11 @@ else if(this.attackType==='tempostormLaser'){
       ctx.lineWidth = 6;
       ctx.beginPath();
       ctx.rect(H.handleStart, -H.handleW/2, H.handleLen, H.handleW);
-      ctx.fill();
+      
+ctx.shadowColor = '#000000';
+ctx.shadowBlur = 25;
+
+ctx.fill();
       ctx.stroke();
 
       // head (orange) — farther
@@ -6909,7 +7423,11 @@ else if(this.attackType==='tempostormLaser'){
       const hs = H.headSize;
       ctx.beginPath();
       ctx.rect(H.headOffset - hs/2, -hs/2, hs, hs);
-      ctx.fill();
+      
+ctx.shadowColor = '#000000';
+ctx.shadowBlur = 25;
+
+ctx.fill();
       ctx.stroke();
 
       ctx.restore();
@@ -6933,7 +7451,11 @@ else if(this.attackType==='tempostormLaser'){
       ctx.moveTo(cx,cy);
       ctx.arc(cx,cy,F.range,a0,a1,false);
       ctx.closePath();
-      ctx.fill();
+      
+ctx.shadowColor = '#000000';
+ctx.shadowBlur = 25;
+
+ctx.fill();
 
       ctx.globalAlpha = 0.10 + 0.18*t;
       ctx.strokeStyle='rgba(255,60,0,0.95)';
@@ -6961,7 +7483,11 @@ else if(this.attackType==='tempostormLaser'){
       ctx.fillStyle = 'rgba(255,255,255,0.6)';
       ctx.beginPath();
       ctx.arc(cx, cy, Math.max(this.width,this.height)*0.65, 0, Math.PI*2);
-      ctx.fill();
+      
+ctx.shadowColor = '#000000';
+ctx.shadowBlur = 25;
+
+ctx.fill();
       ctx.restore();
     }
 
@@ -6990,25 +7516,53 @@ else if(this.attackType==='tempostormLaser'){
         const dir=this.facingRight?1:-1;
         const punchX=cx + dir*this.range;
 
-        // Rooney: punch beam with a flared "fist" end (homogeneous)
+        // Rooney: punch beam 360° + aimbot visual (ruota verso il bersaglio più vicino)
         if(this.type==='rooney'){
           const shaftW = 18;         // thickness of the shaft
           const fistW  = 34;         // thickness of the fist end
           const fistL  = 34;         // length of the fist end
-          ctx.fillStyle='rgba(231,76,60,0.85)'; // solid-ish red punch
+
+          // trova bersaglio più vicino (entro range+40)
+          let tx=null, ty=null;
+          let closestDist=this.range+40;
+          for(const e of enemies){
+            const ex=e.x+e.width/2, ey=e.y+e.height/2;
+            const dx=ex-cx, dy=ey-cy;
+            const dist=Math.hypot(dx,dy);
+            if(dist<closestDist){ closestDist=dist; tx=ex; ty=ey; }
+          }
+
+          const ang = (tx!==null) ? Math.atan2(ty-cy, tx-cx) : (this.facingRight?0:Math.PI);
+
+          ctx.save();
+          ctx.translate(cx, cy);
+          ctx.rotate(ang);
+
+          const punchLen = Math.max(20, this.range);
+          ctx.fillStyle='rgba(231,76,60,0.88)'; // red punch
+
           // shaft
           ctx.beginPath();
-          ctx.rect(Math.min(cx,punchX), cy-shaftW/2, Math.abs(punchX-cx)-fistL, shaftW);
+          ctx.rect(0, -shaftW/2, Math.max(0, punchLen-fistL), shaftW);
+
+          ctx.shadowColor = '#000000';
+          ctx.shadowBlur = 25;
           ctx.fill();
+
           // fist end (flared)
-          const endStart = punchX - dir*fistL;
+          const endStart = punchLen - fistL;
           ctx.beginPath();
-          ctx.moveTo(endStart, cy - fistW*0.55);
-          ctx.lineTo(punchX,  cy - fistW*0.35);
-          ctx.lineTo(punchX,  cy + fistW*0.35);
-          ctx.lineTo(endStart, cy + fistW*0.55);
+          ctx.moveTo(endStart, -fistW*0.55);
+          ctx.lineTo(punchLen,  -fistW*0.35);
+          ctx.lineTo(punchLen,   fistW*0.35);
+          ctx.lineTo(endStart,   fistW*0.55);
           ctx.closePath();
+
+          ctx.shadowColor = '#000000';
+          ctx.shadowBlur = 25;
           ctx.fill();
+
+          ctx.restore();
         }else{
           // default punch telegraph
           ctx.strokeStyle='rgba(230,126,34,0.7)';
@@ -7032,7 +7586,11 @@ else if(this.attackType==='tempostormLaser'){
         ctx.moveTo(this.x+this.width/2,this.y+this.height/2);
         ctx.arc(this.x+this.width/2,this.y+this.height/2,this.range,angle-arcWidth/2,angle+arcWidth/2);
         ctx.closePath();
-        ctx.fill();
+        
+ctx.shadowColor = '#000000';
+ctx.shadowBlur = 25;
+
+ctx.fill();
         ctx.stroke();
       }else if(this.attackType==='axeattack'){
         // Visual area: Bane axe swing (270°)
@@ -7044,7 +7602,11 @@ else if(this.attackType==='tempostormLaser'){
         ctx.moveTo(this.x+this.width/2,this.y+this.height/2);
         ctx.arc(this.x+this.width/2,this.y+this.height/2,this.range,angle-arcWidth/2,angle+arcWidth/2);
         ctx.closePath();
-        ctx.fill();
+        
+ctx.shadowColor = '#000000';
+ctx.shadowBlur = 25;
+
+ctx.fill();
         ctx.stroke();
       }else if(this.attackType==='lucienBlade'){
         // Visual area: Lucien 4-hit close-range blade fan
@@ -7056,7 +7618,11 @@ else if(this.attackType==='tempostormLaser'){
         ctx.moveTo(this.x+this.width/2,this.y+this.height/2);
         ctx.arc(this.x+this.width/2,this.y+this.height/2,this.range,angle-arcWidth/2,angle+arcWidth/2);
         ctx.closePath();
-        ctx.fill();
+        
+ctx.shadowColor = '#000000';
+ctx.shadowBlur = 25;
+
+ctx.fill();
         ctx.stroke();
       }else if(this.attackType==='hybrid'){
         ctx.strokeStyle='rgba(243,156,18,0.6)';ctx.lineWidth=6;
@@ -7075,7 +7641,7 @@ else if(this.attackType==='tempostormLaser'){
     }
 
     if(this.isDoingSuper){
-      if(this.attackType==='punch'){
+      if(this.attackType==='punch' && this.type!=='rooney'){
         ctx.save();ctx.strokeStyle='rgba(243,156,18,0.45)';ctx.lineWidth=12;ctx.beginPath();
         const arcRadius=350;ctx.arc(this.x+this.width/2,this.y+this.height/2,arcRadius,0,Math.PI*2);ctx.stroke();ctx.restore()
       }
@@ -7118,7 +7684,11 @@ else if(this.attackType==='salsySword'){
           ctx.setLineDash([]);
           // reticle
           ctx.beginPath();ctx.arc(tx,ty,26,0,Math.PI*2);ctx.stroke();
-          ctx.beginPath();ctx.arc(tx,ty,10,0,Math.PI*2);ctx.fill();ctx.stroke();
+          ctx.beginPath();ctx.arc(tx,ty,10,0,Math.PI*2);
+ctx.shadowColor = '#000000';
+ctx.shadowBlur = 25;
+
+ctx.fill();ctx.stroke();
         });
         ctx.restore();
       }
@@ -7136,7 +7706,11 @@ else if(this.attackType==='salsySword'){
       ctx.fillStyle='rgba(255,215,0,0.9)';
       ctx.beginPath();
       ctx.ellipse(this.x+this.width/2,this.y+this.height+12,18,8,0,0,Math.PI*2);
-      ctx.fill();
+      
+ctx.shadowColor = '#000000';
+ctx.shadowBlur = 25;
+
+ctx.fill();
       ctx.restore();
     }
 
@@ -7190,6 +7764,8 @@ class Enemy{
     const cfg=levelConfigs[Math.max(0,Math.min(levelConfigs.length-1,level-1))];
     const mult=1+0.15*level;
     this.type=type;
+    if(!window._enemyIdSeq) window._enemyIdSeq = 1;
+    this._id = window._enemyIdSeq++;
     this.x=Math.random()*(canvas.width-100)+50;
     this.y=Math.random()*(canvas.height-150)+50;
     this.width=Math.round(56*1.2);
@@ -7202,6 +7778,12 @@ class Enemy{
     this.damage=(level>=7)?Math.round(baseDamage*0.8):baseDamage;
     this.speed=cfg.enemySpeed*mult;
     if(level===8)this.speed*=0.925;
+    // Modalità FACILE: nemici più lenti (-10%) e meno danno (-20%)
+    if(difficultyMode==='easy'){
+      this.vx*=0.90; this.vy*=0.90;
+      this.speed*=0.90;
+      this.damage=Math.round(this.damage*0.8);
+    }
     this.lastAttack=0;this.attackCooldown=2000;this.spawnFreezeUntil=Date.now()+500;
     // Special enemies
     if(this.type==='veleno'){
@@ -7215,15 +7797,28 @@ class Enemy{
       this.preferRange=520;
     }
     if(this.type==='boss4'){
-      this.width=Math.round(225*1.2);
-      this.height=Math.round(230*1.2);
-      this.attackCooldown=950;
-      this.beamCooldown=12000;
-      this.lastBeam=Date.now()-this.beamCooldown;
-      this.isChargingBeam=false;
-    }
+      this.width=Math.round(240*1.2);
+      this.height=Math.round(240*1.2);
 
-  }
+      // Override scaling: boss has fixed stats
+      this.maxHP=900;
+      this.hp=this.maxHP;
+
+      this.damage=30;          // fan damage
+      this.ringDamage=20;      // ring damage
+      this.speed=4.2;
+      this.vx=(Math.random()-0.5)*this.speed;
+      this.vy=(Math.random()-0.5)*this.speed;
+
+      this.attackCooldown=1100;
+      this.fanRange=260;
+      this.fanHalfAngle=Math.PI/2; // 180° total
+      this.swingUntil=0;
+      this.swingAngle=0;
+          this.ringEvery=2000;
+      this.nextRingAt=Date.now()+600;
+    }
+}
   update(player){
     if(Date.now()<this.spawnFreezeUntil)return;
     // Global stun (e.g., Hendel hammer): freeze AI/movement briefly
@@ -7233,6 +7828,17 @@ class Enemy{
     }
     player = getPreferredTarget(this, player);
     const now=Date.now();
+
+    // COSMO slow (from Marchio Cosmico)
+    if(this._cosmoSlowUntil){
+      if(now < this._cosmoSlowUntil){
+        if(this._cosmoOrigSpeed==null) this._cosmoOrigSpeed = this.speed;
+        this.speed = (this._cosmoOrigSpeed||this.speed) * (this._cosmoSlowFactor || 0.55);
+      }else{
+        if(this._cosmoOrigSpeed!=null) this.speed = this._cosmoOrigSpeed;
+        this._cosmoSlowUntil = 0;
+      }
+    }
 
     const cx=this.x+this.width/2;
     const cy=this.y+this.height/2;
@@ -7282,52 +7888,51 @@ class Enemy{
       }
     }
 
-    // Boss4: slow melee + photon beam every 12s
+    // Boss20: fan (180°) + expanding ring that damages and pulls
     else if(this.type==='boss4'){
-      // During charge, slow down a lot
-      if(this.isChargingBeam){
-        this.vx *= 0.8;
-        this.vy *= 0.8;
-      } else {
-        // chase slowly
-        this.vx = nx*this.speed*0.92;
-        this.vy = ny*this.speed*0.92;
+      // chase
+      this.vx = nx*this.speed;
+      this.vy = ny*this.speed;
+
+
+      // ring wave every 2 seconds (independent from attack)
+      const bcx=this.x+this.width/2;
+      const bcy=this.y+this.height/2;
+      if(now >= (this.nextRingAt||0)){
+        if(typeof spawnBossRing==='function'){
+          spawnBossRing({x:bcx,y:bcy,damage:(this.ringDamage||20),maxR:600,ttl:950,pull:2.2,owner:this});
+        }
+        this.nextRingAt = now + (this.ringEvery||2000);
       }
 
-      // melee hit
-      const hitRangeBoss4 = 70 + Math.max(this.width,this.height)*0.35;
-      if( (aabbDist2(this.x,this.y,this.width,this.height, player.x,player.y,player.width,player.height) <= hitRangeBoss4*hitRangeBoss4) && (now-this.lastAttack)>this.attackCooldown && !player.isDashing){
-        player.takeDamage(this.damage, this);
-        this.lastAttack=now;
-        createParticles(player.x,player.y,'#e17055',14,4);
-      }
+      // fan attack
+      const cx=this.x+this.width/2;
+      const cy=this.y+this.height/2;
+      if(dist <= (this.fanRange||260) && (now-this.lastAttack)>this.attackCooldown && !player.isDashing){
+        const ang=Math.atan2(dy,dx);
+        this.swingAngle=ang;
+        this.swingUntil=now+240;
 
-      // photon beam
-      if((now-this.lastBeam) >= (this.beamCooldown||12000) && !this.isChargingBeam){
-        this.isChargingBeam=true;
-        this.lastBeam=now;
-        const angle=Math.atan2(dy,dx);
-        // charge + beam
-        spawnLaser({
-          owner:this,
-          x:cx, y:cy,
-          angle,
-          length:760,
-          width:75,
-          ttl:1000,
-          damage:70,
-          kind:'photon',
-          chargeMs:500,
-          trackPlayer:false
-        });
-        // visual charge
-        createParticles(cx,cy,'#f1c40f',40,6);
+        // cone hit check
+        const px=player.x+player.width/2;
+        const py=player.y+player.height/2;
+        const distP=Math.hypot(px-cx, py-cy);
+        if(distP <= (this.fanRange||260)){
+          // smallest signed angle diff
+          let diff = Math.atan2(Math.sin(ang - Math.atan2(py-cy, px-cx)), Math.cos(ang - Math.atan2(py-cy, px-cx)));
+          diff = Math.abs(diff);
+          if(diff <= (this.fanHalfAngle||Math.PI/2)){
+            player.takeDamage(this.damage, this);
+            createParticles(player.x,player.y,'#e17055',16,4);
+          }
+        }
         shakeScreen();
-        setTimeout(()=>{ this.isChargingBeam=false; }, 900);
+        this.lastAttack=now;
       }
     }
 
     // Veleno: melee + non-stack poison
+
     else {
       this.vx = nx*this.speed;
       this.vy = ny*this.speed;
@@ -7367,11 +7972,46 @@ class Enemy{
       const colors={slime:'#2ecc71',drone:'#95a5a6',mech:'#e67e22',shadow:'#9b59b6',boss:'#e74c3c',shooter:'#95a5a6',attacker:'#e67e22',boss2:'#e74c3c',boss3:'#e74c3c'};
       ctx.fillStyle=colors[this.type]||'#e74c3c';
       ctx.fillRect(this.x,this.y,this.width,this.height);
-    }
+        }
+    // Boss20 fan visual
+    try{
+      const now=Date.now();
+      if(this.type==='boss4' && this.swingUntil && now < this.swingUntil){
+        const cx=this.x+this.width/2;
+        const cy=this.y+this.height/2;
+        const r=(this.fanRange||260);
+        ctx.save();
+        ctx.globalAlpha = 0.22;
+        ctx.fillStyle = 'rgba(255,255,0,0.9)';
+        ctx.beginPath();
+        ctx.moveTo(cx,cy);
+        ctx.arc(cx,cy,r, (this.swingAngle||0)-(this.fanHalfAngle||Math.PI/2), (this.swingAngle||0)+(this.fanHalfAngle||Math.PI/2));
+        ctx.closePath();
+        ctx.fill();
+        ctx.restore();
+      }
+    }catch(e){}
     const hpPercent=this.hp/this.maxHP;
     ctx.fillStyle='#333';ctx.fillRect(this.x,this.y-10,this.width,5);
     ctx.fillStyle=hpPercent>0.5?'#2ecc71':hpPercent>0.25?'#f39c12':'#e74c3c';
     ctx.fillRect(this.x,this.y-10,this.width*hpPercent,5);
+    // MARK INDICATOR: black dot above marked enemies (Salsy mark / Cosmo mark)
+    try{
+      const now=Date.now();
+      const isMarked = (this.salsyMarkUntil && now < this.salsyMarkUntil) || (!!this._cosmoMark);
+      if(isMarked){
+        ctx.save();
+        ctx.fillStyle = '#000';
+        ctx.beginPath();
+        ctx.arc(this.x+this.width/2, this.y-18, 5, 0, Math.PI*2);
+        
+ctx.shadowColor = '#000000';
+ctx.shadowBlur = 25;
+
+ctx.fill();
+        ctx.restore();
+      }
+    }catch(e){}
   }
 }
 
@@ -7412,7 +8052,24 @@ class ShooterEnemy extends Enemy{
     ctx.fillStyle='#333';ctx.fillRect(this.x,this.y-10,this.width,5);
     ctx.fillStyle=hpPercent>0.5?'#2ecc71':hpPercent>0.25?'#f39c12':'#e74c3c';
     ctx.fillRect(this.x,this.y-10,this.width*hpPercent,5);
-  }
+
+    // MARK INDICATOR: black dot above marked enemies (Salsy mark / Cosmo mark)
+    try{
+      const now=Date.now();
+      const isMarked = (this.salsyMarkUntil && now < this.salsyMarkUntil) || (!!this._cosmoMark);
+      if(isMarked){
+        ctx.save();
+        ctx.fillStyle = '#000';
+        ctx.beginPath();
+        ctx.arc(this.x+this.width/2, this.y-18, 5, 0, Math.PI*2);
+        
+ctx.shadowColor = '#000000';
+ctx.shadowBlur = 25;
+
+ctx.fill();
+        ctx.restore();
+      }
+    }catch(e){}  }
 }
 
 
@@ -7485,7 +8142,24 @@ class ArcherEnemy extends Enemy{
     ctx.fillStyle='#333';ctx.fillRect(this.x,this.y-10,this.width,5);
     ctx.fillStyle=hpPercent>0.5?'#2ecc71':hpPercent>0.25?'#f39c12':'#e74c3c';
     ctx.fillRect(this.x,this.y-10,this.width*hpPercent,5);
-  }
+
+    // MARK INDICATOR: black dot above marked enemies (Salsy mark / Cosmo mark)
+    try{
+      const now=Date.now();
+      const isMarked = (this.salsyMarkUntil && now < this.salsyMarkUntil) || (!!this._cosmoMark);
+      if(isMarked){
+        ctx.save();
+        ctx.fillStyle = '#000';
+        ctx.beginPath();
+        ctx.arc(this.x+this.width/2, this.y-18, 5, 0, Math.PI*2);
+        
+ctx.shadowColor = '#000000';
+ctx.shadowBlur = 25;
+
+ctx.fill();
+        ctx.restore();
+      }
+    }catch(e){}  }
 }
 
 class GlacialEnemy extends Enemy{
@@ -7605,7 +8279,11 @@ class GlacialEnemy extends Enemy{
       ctx.moveTo(cx,cy);
       ctx.arc(cx,cy,this.coneRange,a0,a1,false);
       ctx.closePath();
-      ctx.fill();
+      
+ctx.shadowColor = '#000000';
+ctx.shadowBlur = 25;
+
+ctx.fill();
       ctx.globalAlpha=0.12;
       ctx.strokeStyle='rgba(180,220,255,0.9)';
       ctx.lineWidth=4;
@@ -7621,7 +8299,24 @@ class GlacialEnemy extends Enemy{
     ctx.fillStyle='#333';ctx.fillRect(this.x,this.y-10,this.width,5);
     ctx.fillStyle=hpPercent>0.5?'#2ecc71':hpPercent>0.25?'#f39c12':'#e74c3c';
     ctx.fillRect(this.x,this.y-10,this.width*hpPercent,5);
-  }
+
+    // MARK INDICATOR: black dot above marked enemies (Salsy mark / Cosmo mark)
+    try{
+      const now=Date.now();
+      const isMarked = (this.salsyMarkUntil && now < this.salsyMarkUntil) || (!!this._cosmoMark);
+      if(isMarked){
+        ctx.save();
+        ctx.fillStyle = '#000';
+        ctx.beginPath();
+        ctx.arc(this.x+this.width/2, this.y-18, 5, 0, Math.PI*2);
+        
+ctx.shadowColor = '#000000';
+ctx.shadowBlur = 25;
+
+ctx.fill();
+        ctx.restore();
+      }
+    }catch(e){}  }
 }
 
 
@@ -7666,7 +8361,24 @@ class AttackReturnEnemy extends Enemy{
     ctx.fillStyle='#333';ctx.fillRect(this.x,this.y-10,this.width,5);
     ctx.fillStyle=hpPercent>0.5?'#2ecc71':hpPercent>0.25?'#f39c12':'#e74c3c';
     ctx.fillRect(this.x,this.y-10,this.width*hpPercent,5);
-  }
+
+    // MARK INDICATOR: black dot above marked enemies (Salsy mark / Cosmo mark)
+    try{
+      const now=Date.now();
+      const isMarked = (this.salsyMarkUntil && now < this.salsyMarkUntil) || (!!this._cosmoMark);
+      if(isMarked){
+        ctx.save();
+        ctx.fillStyle = '#000';
+        ctx.beginPath();
+        ctx.arc(this.x+this.width/2, this.y-18, 5, 0, Math.PI*2);
+        
+ctx.shadowColor = '#000000';
+ctx.shadowBlur = 25;
+
+ctx.fill();
+        ctx.restore();
+      }
+    }catch(e){}  }
 }
 
 class BossEnemy extends Enemy{
@@ -7729,7 +8441,24 @@ class BossEnemy extends Enemy{
     ctx.fillStyle='#333';ctx.fillRect(this.x,this.y-10,this.width,5);
     ctx.fillStyle=hpPercent>0.5?'#2ecc71':hpPercent>0.25?'#f39c12':'#e74c3c';
     ctx.fillRect(this.x,this.y-10,this.width*hpPercent,5);
-  }
+
+    // MARK INDICATOR: black dot above marked enemies (Salsy mark / Cosmo mark)
+    try{
+      const now=Date.now();
+      const isMarked = (this.salsyMarkUntil && now < this.salsyMarkUntil) || (!!this._cosmoMark);
+      if(isMarked){
+        ctx.save();
+        ctx.fillStyle = '#000';
+        ctx.beginPath();
+        ctx.arc(this.x+this.width/2, this.y-18, 5, 0, Math.PI*2);
+        
+ctx.shadowColor = '#000000';
+ctx.shadowBlur = 25;
+
+ctx.fill();
+        ctx.restore();
+      }
+    }catch(e){}  }
 }
 class Boss5Enemy extends Enemy{
   constructor(type,level){
@@ -7829,6 +8558,8 @@ class Boss5Enemy extends Enemy{
   applySwingDamage(player, now){
     // tick damage durante lo sweep, senza colpire mentre il player è in dash
     if(player.isDashing) return;
+    if(player.invulnerableUntil && Date.now() < player.invulnerableUntil) return;
+    if(player.invincibleUntil && Date.now() < player.invincibleUntil) return;
     if(this.lastSwingTick && (now-this.lastSwingTick)<240) return;
 
     const cx=this.x+this.width/2, cy=this.y+this.height/2;
@@ -7845,27 +8576,21 @@ class Boss5Enemy extends Enemy{
     const t=Math.max(0, Math.min(1, (now-this.swingStart)/this.swingDuration));
     const cur=this.swingStartAngle + (this.swingEndAngle-this.swingStartAngle)*t;
 
-    // se lo sweep è verso destra, consideriamo la parte già "coperta" sinistra->cur
-    const minA=Math.min(this.swingStartAngle, cur);
-    const maxA=Math.max(this.swingStartAngle, cur);
-
-    // normalizza per confronto (gestione wrap a -pi/pi)
-    function norm(a){
-      while(a<-Math.PI) a+=Math.PI*2;
-      while(a> Math.PI) a-=Math.PI*2;
-      return a;
-    }
-    const a=norm(ang);
-    const aMin=norm(minA);
-    const aMax=norm(maxA);
+    // Controllo robusto "dentro l'arco coperto" (direzione: swingStartAngle -> cur, CCW con wrap)
+    const TAU = Math.PI*2;
+    const to0 = (a)=>((a%TAU)+TAU)%TAU;
+    const a0 = to0(ang);
+    const s0 = to0(this.swingStartAngle);
+    const c0 = to0(cur);
 
     let inside=false;
-    if(aMin<=aMax){
-      inside = (a>=aMin && a<=aMax);
-    }else{
+    if(s0<=c0){
+      inside = (a0>=s0 && a0<=c0);
+    } else {
       // wrap-around
-      inside = (a>=aMin || a<=aMax);
+      inside = (a0>=s0 || a0<=c0);
     }
+
 
     if(inside){
       this.lastSwingTick=now;
@@ -7952,6 +8677,23 @@ class Boss5Enemy extends Enemy{
     ctx.fillStyle=hpPercent>0.5?'#2ecc71':hpPercent>0.25?'#f39c12':'#e74c3c';
     ctx.fillRect(this.x,this.y-10,this.width*hpPercent,5);
 
+    // MARK INDICATOR: black dot above marked enemies (Salsy mark / Cosmo mark)
+    try{
+      const now=Date.now();
+      const isMarked = (this.salsyMarkUntil && now < this.salsyMarkUntil) || (!!this._cosmoMark);
+      if(isMarked){
+        ctx.save();
+        ctx.fillStyle = '#000';
+        ctx.beginPath();
+        ctx.arc(this.x+this.width/2, this.y-18, 5, 0, Math.PI*2);
+        
+ctx.shadowColor = '#000000';
+ctx.shadowBlur = 25;
+
+ctx.fill();
+        ctx.restore();
+      }
+    }catch(e){}
     const now=Date.now();
     const cx=this.x+this.width/2, cy=this.y+this.height/2;
 
@@ -7979,7 +8721,11 @@ class Boss5Enemy extends Enemy{
       ctx.moveTo(cx,cy);
       ctx.arc(cx,cy, this.fanRange, this.swingStartAngle, cur, false);
       ctx.closePath();
-      ctx.fill();
+      
+ctx.shadowColor = '#000000';
+ctx.shadowBlur = 25;
+
+ctx.fill();
 
       ctx.globalAlpha=0.65;
       ctx.lineWidth=4;
@@ -8059,7 +8805,7 @@ function startGame(){
   const etherUI = document.getElementById('etherHud');
   if(etherUI) etherUI.style.display='none';
 
-  currentLevel=1;score=0;kills=0;matchKills=0;timer=levelConfigs[0].time;
+  currentLevel=1;score=0;kills=0;matchKills=0;matchHealMissionCount=0;timer=levelConfigs[0].time;
   runUsedSuper=false; runTookDamage=false;
   player=new Player(selectedCharacter||'jimmy');
   enemies=[];particles=[];projectiles=[];lasers=[];tempBeams=[];pickups=[];wolves=[];
@@ -8184,6 +8930,381 @@ function drawKaerithFireOverlay(now){
   }
   ctx.restore();
 }
+
+
+/* ===== VISUAL FX: Rooney Area (zona quadrata) + Cosmo Shot (hitscan) ===== */
+window.rooneyAreaFX = window.rooneyAreaFX || [];
+function addRooneyAreaFX(cx, cy, half){
+  try{
+    const now=Date.now();
+    // pre-generate some crack segments for a stable look
+    const cracks=[];
+    for(let i=0;i<10;i++){
+      const x1 = cx + (Math.random()*2-1)*half*0.95;
+      const y1 = cy + (Math.random()*2-1)*half*0.95;
+      const x2 = cx + (Math.random()*2-1)*half*0.95;
+      const y2 = cy + (Math.random()*2-1)*half*0.95;
+      cracks.push([x1,y1,x2,y2, 0.35+Math.random()*0.65]);
+    }
+    window.rooneyAreaFX.push({cx,cy,half,start:now,ttl:650,cracks});
+  }catch(e){}
+}
+function drawRooneyAreaFX(now){
+  const arr = window.rooneyAreaFX;
+  if(!arr || !arr.length) return;
+  now = now || Date.now();
+  for(let i=arr.length-1;i>=0;i--){
+    const fx=arr[i];
+    const t = (now - fx.start) / (fx.ttl||650);
+    if(t>=1){ arr.splice(i,1); continue; }
+
+    const easeIn = Math.min(1, t/0.18);
+    const easeOut = 1 - Math.max(0, (t-0.65)/0.35);
+    const a = Math.max(0, Math.min(1, easeIn*easeOut));
+
+    const pulse = 0.5 + 0.5*Math.sin((now-fx.start)/70);
+    const pad = (1-a)*18;
+    const left = fx.cx - fx.half - pad;
+    const top  = fx.cy - fx.half - pad;
+    const size = fx.half*2 + pad*2;
+
+    ctx.save();
+    ctx.globalAlpha = 0.28*a;
+    ctx.fillStyle = 'rgba(255,40,40,0.30)';
+    ctx.fillRect(left, top, size, size);
+
+    ctx.globalAlpha = (0.85*a);
+    ctx.lineWidth = 6 + 3*pulse;
+    ctx.shadowColor = 'rgba(255,0,0,0.65)';
+    ctx.shadowBlur = 22;
+    ctx.strokeStyle = 'rgba(255,60,60,0.95)';
+    ctx.setLineDash([10, 8]);
+    ctx.strokeRect(left, top, size, size);
+    // inner glow
+    ctx.globalAlpha = 0.45*a;
+    ctx.setLineDash([]);
+    ctx.lineWidth = 3 + 2*pulse;
+    ctx.strokeStyle = 'rgba(255,0,0,0.55)';
+    ctx.strokeRect(left+10, top+10, size-20, size-20);
+    ctx.setLineDash([]);
+
+    // inner "cracks"
+    ctx.globalAlpha = 0.55*a;
+    ctx.lineWidth = 1.8;
+    ctx.strokeStyle = 'rgba(40,0,0,0.9)';
+    for(const seg of (fx.cracks||[])){
+      ctx.globalAlpha = 0.45*a*seg[4];
+      ctx.beginPath();
+      ctx.moveTo(seg[0], seg[1]);
+      ctx.lineTo(seg[2], seg[3]);
+      ctx.stroke();
+    }
+
+    // dust ring
+    ctx.globalAlpha = 0.18*a;
+    ctx.strokeStyle = 'rgba(255,120,120,0.85)';
+    ctx.lineWidth = 2;
+    ctx.strokeRect(left+6, top+6, size-12, size-12);
+
+    ctx.restore();
+  }
+}
+
+window.cosmoShots = window.cosmoShots || [];
+function addCosmoShot(x1,y1,x2,y2){
+  try{
+    window.cosmoShots.push({x1,y1,x2,y2,start:Date.now(),ttl:140});
+  }catch(e){}
+}
+function drawCosmoShots(now){
+  const arr = window.cosmoShots;
+  if(!arr || !arr.length) return;
+  now = now || Date.now();
+  for(let i=arr.length-1;i>=0;i--){
+    const s=arr[i];
+    const t=(now-s.start)/(s.ttl||140);
+    if(t>=1){ arr.splice(i,1); continue; }
+    const a = Math.max(0, 1-t);
+    const wob = Math.sin((now-s.start)/26)*2.2;
+
+    ctx.save();
+    ctx.globalAlpha = 0.85*a;
+    ctx.lineCap='round';
+
+    // outer glow
+    ctx.strokeStyle='rgba(139,211,255,0.65)';
+    ctx.lineWidth = 10 + wob;
+    ctx.beginPath();
+    ctx.moveTo(s.x1,s.y1);
+    ctx.lineTo(s.x2,s.y2);
+    ctx.stroke();
+
+    // core
+    ctx.globalAlpha = 0.95*a;
+    ctx.strokeStyle='rgba(255,255,255,0.92)';
+    ctx.lineWidth = 3.2;
+    ctx.beginPath();
+    ctx.moveTo(s.x1,s.y1);
+    ctx.lineTo(s.x2,s.y2);
+    ctx.stroke();
+
+    // endpoint spark
+    ctx.globalAlpha = 0.65*a;
+    ctx.fillStyle='rgba(255,255,255,0.95)';
+    ctx.beginPath();
+    ctx.arc(s.x2, s.y2, 5 + 2*Math.sin((now-s.start)/18), 0, Math.PI*2);
+    
+ctx.shadowColor = '#000000';
+ctx.shadowBlur = 25;
+
+ctx.fill();
+
+    ctx.restore();
+  }
+}
+
+
+/* ===== COSMO SYSTEMS: Marchio Cosmico + Singolarità ===== */
+window.cosmoSingularity = null;
+
+function _cosmoRecalcDmgMult(){
+  if(!player || player.type!=='cosmo') return;
+  const now=Date.now();
+  if(!player._cosmoStacks) player._cosmoStacks = [];
+  // drop expired
+  player._cosmoStacks = player._cosmoStacks.filter(t=>t>now);
+  const stacks = Math.max(0, Math.min(3, player._cosmoStacks.length));
+  player._cosmoDmgMult = 1 + 0.05*stacks;
+}
+
+function cosmoOnMarkExplode(){
+  if(!player || player.type!=='cosmo') return;
+  const now=Date.now();
+  // +5% dmg for 2s (stack max 3)
+  if(!player._cosmoStacks) player._cosmoStacks = [];
+  player._cosmoStacks.push(now+2000);
+  while(player._cosmoStacks.length>3) player._cosmoStacks.shift();
+  _cosmoRecalcDmgMult();
+
+  // small super cooldown refund: subtract 4% from lastSuper timestamp
+  try{
+    const refund = Math.round((player.superCooldown||24000) * 0.04);
+    player.lastSuper -= refund;
+  }catch(e){}
+}
+
+function updateCosmoMarks(now){
+  now = now || Date.now();
+  for(const e of enemies){
+    const m = e._cosmoMark;
+    if(!m) continue;
+
+    if(m.triggerNow || now >= (m.explodeAt||0)){
+      const isMini = !!m.mini;
+      const burst = !!m.triggerNow;
+      const baseExpl = isMini ? 26 : 58;
+      const dmg = baseExpl * (burst ? 1.6 : 1.0) * (player && player.type==='cosmo' ? (player.attackBuffMultiplier||1) * (player._cosmoDmgMult||1) : 1);
+      const dealt = applyEnemyDamage(e, dmg);
+      createParticles(e.x+e.width/2, e.y+e.height/2, '#ffffff', isMini?16:28, 6);
+      showDamageNumber(e.x, e.y, dealt);
+
+      // slow
+      e._cosmoSlowFactor = 0.55;
+      e._cosmoSlowUntil = now + (burst ? 1200 : 600);
+
+      // chain: apply a mini-mark to nearby enemies (no infinite)
+      if(!isMini){
+        for(const other of enemies){
+          if(other===e) continue;
+          const dx=(other.x+other.width/2)-(e.x+e.width/2);
+          const dy=(other.y+other.height/2)-(e.y+e.height/2);
+          const dist=Math.hypot(dx,dy);
+          if(dist<=180 && !other._cosmoMark){
+            other._cosmoMark = { applied: now, explodeAt: now+650, mini:true };
+          }
+        }
+      }
+
+      // passive trigger
+      cosmoOnMarkExplode();
+
+      // clear
+      e._cosmoMark = null;
+    }
+  }
+}
+
+function spawnCosmoSingularity(px, py, dirX, dirY){
+  const len=Math.hypot(dirX,dirY)||1;
+  const ax=dirX/len, ay=dirY/len;
+  const sp=1.8;
+  window.cosmoSingularity = {
+    active:true,
+    born:Date.now(),
+    until:Date.now()+7000,
+    x:px, y:py,
+    vx:ax*sp, vy:ay*sp,
+    speed:sp,
+    r:34,
+    pullR:Math.hypot(canvas.width, canvas.height)+40,
+    dps:7,
+    lastTick:Date.now(),
+    absorbed:0,
+    absorbedSet:{}
+  };
+}
+
+function updateCosmoSingularity(now){
+  const orb = window.cosmoSingularity;
+  if(!orb || !orb.active) return;
+
+  // move
+  orb.x += orb.vx;
+  orb.y += orb.vy;
+
+  // bounce off walls
+  if(orb.x < orb.r){ orb.x = orb.r; orb.vx = Math.abs(orb.vx); }
+  if(orb.x > canvas.width-orb.r){ orb.x = canvas.width-orb.r; orb.vx = -Math.abs(orb.vx); }
+  if(orb.y < orb.r){ orb.y = orb.r; orb.vy = Math.abs(orb.vy); }
+  if(orb.y > canvas.height-orb.r){ orb.y = canvas.height-orb.r; orb.vy = -Math.abs(orb.vy); }
+
+  // pull + damage tick
+  const now2 = now || Date.now();
+  for(const e of enemies){
+    const ex=e.x+e.width/2, ey=e.y+e.height/2;
+    const dx=orb.x-ex, dy=orb.y-ey;
+    const dist=Math.hypot(dx,dy);
+
+    // Strong global attraction: field reaches the whole arena.
+    // (Set dynamically in case canvas size changes.)
+    orb.pullR = Math.hypot(canvas.width, canvas.height) + 40;
+    if(dist<=orb.pullR){
+      const t = Math.max(0, 1 - dist/orb.pullR);
+      // Always-on pull even at long range, with aggressive ramp-up near the center.
+      // Enemies can still move, but the drag + ramp makes the center eventually win.
+      let pull = 0.12 + Math.pow(t, 1.32) * 3.2;
+      if (pull > 3.7) pull = 3.7;
+      e.x += (dx/(dist||1))*pull;
+      e.y += (dy/(dist||1))*pull;
+      // drag inside the field (simulated resistance)
+      if(e.vx!=null){ e.vx *= 0.975; e.vy *= 0.975; }
+// absorbed count (once per enemy)
+      if(dist <= orb.r+40 && !orb.absorbedSet[e._id]){
+        orb.absorbedSet[e._id] = true;
+        orb.absorbed += 1;
+      }
+
+      // DoT every ~220ms
+      if(!orb.lastTick) orb.lastTick = now2;
+      if(now2 - orb.lastTick >= 220){
+        orb.lastTick = now2;
+        const dealt=applyEnemyDamage(e, orb.dps);
+        if(dealt>0) showDamageNumber(e.x,e.y,dealt);
+      }
+    }
+  }
+
+  // end -> explosion
+  if(now2 >= orb.until){
+    const base = 110;
+    const bonus = Math.min(420, orb.absorbed * 35);
+    const aoe = 260;
+    for(let i=enemies.length-1;i>=0;i--){
+      const e=enemies[i];
+      const ex=e.x+e.width/2, ey=e.y+e.height/2;
+      const d=Math.hypot(ex-orb.x, ey-orb.y);
+      if(d<=aoe){
+        const dealt=applyEnemyDamage(e, base+bonus*(1-d/aoe));
+        createParticles(ex,ey,'#ffffff',28,7);
+        showDamageNumber(e.x,e.y,dealt);
+      }
+    }
+    createParticles(orb.x,orb.y,'#b8e6ff',90,8);
+    shakeAmount = Math.max(shakeAmount, 12);
+    orb.active=false;
+  }
+}
+
+function drawCosmoSingularity(){
+  const orb = window.cosmoSingularity;
+  if(!orb || !orb.active) return;
+  const now = Date.now();
+  const pulse = 0.5 + 0.5*Math.sin(now/120);
+
+  ctx.save();
+  ctx.globalAlpha = 0.95;
+
+  // central black sphere with "black luminous" pulsating glow
+  const glow = 14 + 18*pulse;
+  ctx.shadowColor = 'rgba(0,0,0,0.92)';
+  ctx.shadowBlur = glow;
+
+  // subtle dark aura (still only central sphere visible — no big circumference)
+  const grad = ctx.createRadialGradient(orb.x, orb.y, Math.max(2, orb.r*0.25), orb.x, orb.y, orb.r + 18);
+  grad.addColorStop(0, 'rgba(0,0,0,0.95)');
+  grad.addColorStop(0.6, 'rgba(0,0,0,0.75)');
+  grad.addColorStop(1, 'rgba(0,0,0,0)');
+
+  ctx.fillStyle = grad;
+  ctx.beginPath();
+  ctx.arc(orb.x, orb.y, orb.r + 4*pulse, 0, Math.PI*2);
+  
+ctx.shadowColor = '#000000';
+ctx.shadowBlur = 25;
+
+ctx.fill();
+
+  // solid core
+  ctx.shadowBlur = 0;
+  ctx.fillStyle = 'rgba(0,0,0,1)';
+  ctx.beginPath();
+  ctx.arc(orb.x, orb.y, Math.max(6, orb.r - 6 + 2*pulse), 0, Math.PI*2);
+  
+ctx.shadowColor = '#000000';
+ctx.shadowBlur = 25;
+
+ctx.fill();
+
+  ctx.restore();
+}
+
+function updateCosmoTrails(now){
+  if(!window.cosmoTrails || !window.cosmoTrails.length) return;
+  now = now || Date.now();
+  for(let i=window.cosmoTrails.length-1;i>=0;i--){
+    const t=window.cosmoTrails[i];
+    if(now>=t.until){ window.cosmoTrails.splice(i,1); continue; }
+    if(now - (t.lastTick||0) >= 120){
+      t.lastTick = now;
+      for(const e of enemies){
+        const ex=e.x+e.width/2, ey=e.y+e.height/2;
+        const d=Math.hypot(ex-t.x, ey-t.y);
+        if(d<=90){
+          const dealt=applyEnemyDamage(e, 4);
+          if(dealt>0) showDamageNumber(e.x,e.y,dealt);
+        }
+      }
+    }
+  }
+}
+function drawCosmoTrails(){
+  if(!window.cosmoTrails || !window.cosmoTrails.length) return;
+  const now=Date.now();
+  ctx.save();
+  for(const t of window.cosmoTrails){
+    const a = Math.max(0, (t.until-now)/500);
+    ctx.globalAlpha = 0.35*a;
+    ctx.fillStyle = 'rgba(184,230,255,0.85)';
+    ctx.beginPath();
+    ctx.arc(t.x, t.y, 55, 0, Math.PI*2);
+    
+ctx.shadowColor = '#000000';
+ctx.shadowBlur = 25;
+
+ctx.fill();
+  }
+  ctx.restore();
+}
 function gameLoop(){
   requestAnimationFrame(gameLoop);
   if(gameState!=='playing')return;
@@ -8202,6 +9323,9 @@ return;
   if(player) player.update();
     updateHendelCrush();
   enemies.forEach(e=>{e.update(player)});
+  updateCosmoMarks(now);
+  updateCosmoSingularity(now);
+  updateCosmoTrails(now);
   updateWolves();
   // Marz Super zone tick damage/expansion
   updateMagicZone(now);
@@ -8212,6 +9336,7 @@ return;
   updateLasers();
   updateTempBeams();
   updateFuriaWaves();
+  updateBossRings(now);
   if(player) updatePickups(player);
 
   for(let i=enemies.length-1;i>=0;i--){
@@ -8251,9 +9376,14 @@ return;
   // draw Marz Super zone behind entities
   drawMagicZone(now);
   drawPdorOrbs(now);
+  drawCosmoSingularity();
+  drawCosmoTrails();
+  drawRooneyAreaFX(now);
   enemies.forEach(e=>e.draw());
+  drawBossRings(now);
   drawWolves();
   if(player) player.draw();
+  drawCosmoShots(now);
   drawProjectiles();
   drawLasers();
   drawTempBeams();
@@ -8428,10 +9558,17 @@ document.querySelectorAll('.character-card').forEach(card=>{
       }
       return;
     }
-return;
-    }
 
-    document.querySelectorAll('.character-card').forEach(c=>c.classList.remove('selected'));
+    // COSMO purchase unlock (1000 Ether)
+    if(char==='cosmo' && !isCharPurchased('cosmo')){
+      // Cosmo is purchasable with Ether fragments (no generic "Personaggio BLOCCATO" popup)
+      showCosmoShopModal();
+      return;
+    }
+          };
+      
+
+torAll('.character-card').forEach(c=>c.classList.remove('selected'));
     card.classList.add('selected');
     selectedCharacter=char;
     updateMenuStatsDisplay(selectedCharacter);
@@ -8441,6 +9578,11 @@ return;
 function updateMenuStatsDisplay(char){
   const s=characterStats[char];
   if(!s)return;
+  if(char==='cosmo'){
+    document.getElementById(`menu-hp-${char}`).textContent=s.hp;
+    document.getElementById(`menu-dmg-${char}`).textContent='Marchio + Supernova';
+    return;
+  }
   document.getElementById(`menu-hp-${char}`).textContent=s.hp;
   document.getElementById(`menu-dmg-${char}`).textContent=
     char==='voltryx' ? `${Math.round(34*SUPER_DAMAGE_MULT)} (ranged AoE), ${50}x2 (melee)` :
@@ -8948,6 +10090,66 @@ if(btn) btn.addEventListener("click", openAccountMenu);
   refreshAccountUi(false);
 });
 
+
+function renderUnlockButton(character){
+    if(character.locked){
+        return `<button onclick="unlockCharacter('${character.id}')">
+                SBLOCCA (1000 Frammenti d'Etere)
+                </button>`;
+    }
+    return "";
+}
+
+
+function showCosmoShopModal(){
+  const modal = document.getElementById('cosmoShopModal');
+  if(!modal) return;
+  const hint = document.getElementById('cosmoShopHint');
+  const buyBtn = document.getElementById('cosmoShopBuyBtn');
+  const okBtn = document.getElementById('cosmoShopOkBtn');
+  const closeBtn = document.getElementById('cosmoShopCloseBtn');
+
+  // If already purchased, never show
+  if(isCharPurchased && isCharPurchased('cosmo')) return;
+
+  if(hint){
+    hint.textContent = '';
+  }
+
+  const close = ()=>{
+    try{ modal.style.display='none'; modal.classList.remove('show'); }catch(e){}
+  };
+
+  if(closeBtn) closeBtn.onclick = close;
+  if(okBtn) okBtn.onclick = close;
+
+  if(buyBtn){
+    buyBtn.style.display = 'inline-block';
+    buyBtn.onclick = ()=>{
+      const ok = tryPurchaseCosmo();
+      if(ok){
+        // Close and auto-select Cosmo
+        close();
+        try{
+          // Mark selected in compact grid, if present
+          document.querySelectorAll('.char-grid button').forEach(b=>b.classList.remove('selected'));
+          const bcos = document.querySelector('.char-grid button[data-target="cosmo"]');
+          if(bcos) bcos.classList.add('selected');
+        }catch(e){}
+        try{
+          selectedCharacter = 'cosmo';
+          updateMenuStatsDisplay('cosmo');
+        }catch(e){}
+      }else{
+        if(hint) hint.textContent = "Frammenti insufficienti: servono 1000.";
+      }
+    };
+  }
+
+  modal.style.display='flex';
+  modal.classList.add('show');
+}
+
 </script>
 </div>
 <script>
@@ -9006,6 +10208,16 @@ document.querySelectorAll('.char-grid button[data-target]').forEach(btn=>{
     selectedCharacter = target;
   });
 });
+
+
+function renderUnlockButton(character){
+    if(character.locked){
+        return `<button onclick="unlockCharacter('${character.id}')">
+                SBLOCCA (1000 Frammenti d'Etere)
+                </button>`;
+    }
+    return "";
+}
 
 </script>
 
@@ -9066,6 +10278,16 @@ document.querySelectorAll('.char-grid button[data-target]').forEach(btn=>{
   });
 });
 
+
+function renderUnlockButton(character){
+    if(character.locked){
+        return `<button onclick="unlockCharacter('${character.id}')">
+                SBLOCCA (1000 Frammenti d'Etere)
+                </button>`;
+    }
+    return "";
+}
+
 </script>
 
 
@@ -9112,6 +10334,16 @@ document.querySelectorAll('.char-grid button[data-target]').forEach(btn=>{
   });
 });
 
+
+function renderUnlockButton(character){
+    if(character.locked){
+        return `<button onclick="unlockCharacter('${character.id}')">
+                SBLOCCA (1000 Frammenti d'Etere)
+                </button>`;
+    }
+    return "";
+}
+
 </script>
 
 
@@ -9141,6 +10373,18 @@ document.querySelectorAll('.char-grid button[data-target]').forEach(btn=>{
       color:#fff;
       font-size:11px;
     ">OK</button>
+    <button id="lockBuyBtn" style="
+      background:#2ecc71;
+      border:none;
+      padding:8px 14px;
+      font-family:'Press Start 2P', cursive;
+      cursor:pointer;
+      color:#06110a;
+      font-size:11px;
+      margin-left:10px;
+      display:none;
+    ">COMPRA</button>
+
   </div>
 </div>
 
@@ -9185,6 +10429,16 @@ document.querySelectorAll('.char-grid button[data-target]').forEach(btn=>{
     });
   }
 })();
+
+function renderUnlockButton(character){
+    if(character.locked){
+        return `<button onclick="unlockCharacter('${character.id}')">
+                SBLOCCA (1000 Frammenti d'Etere)
+                </button>`;
+    }
+    return "";
+}
+
 </script>
 
 
@@ -9488,6 +10742,16 @@ document.addEventListener('DOMContentLoaded', ()=>{
   });
 });
 
+
+function renderUnlockButton(character){
+    if(character.locked){
+        return `<button onclick="unlockCharacter('${character.id}')">
+                SBLOCCA (1000 Frammenti d'Etere)
+                </button>`;
+    }
+    return "";
+}
+
 </script>
 
 <!-- Injected JS: compact grid selection behaviour -->
@@ -9538,6 +10802,16 @@ document.addEventListener('DOMContentLoaded', function(){
     });
   });
 });
+
+function renderUnlockButton(character){
+    if(character.locked){
+        return `<button onclick="unlockCharacter('${character.id}')">
+                SBLOCCA (1000 Frammenti d'Etere)
+                </button>`;
+    }
+    return "";
+}
+
 </script>
 
 
@@ -9579,6 +10853,16 @@ document.addEventListener('DOMContentLoaded', function(){
     }, true);
   });
 });
+
+function renderUnlockButton(character){
+    if(character.locked){
+        return `<button onclick="unlockCharacter('${character.id}')">
+                SBLOCCA (1000 Frammenti d'Etere)
+                </button>`;
+    }
+    return "";
+}
+
 </script>
 
 
@@ -9616,6 +10900,16 @@ document.addEventListener('DOMContentLoaded', function(){
     });
   }catch(e){}
 });
+
+function renderUnlockButton(character){
+    if(character.locked){
+        return `<button onclick="unlockCharacter('${character.id}')">
+                SBLOCCA (1000 Frammenti d'Etere)
+                </button>`;
+    }
+    return "";
+}
+
 </script>
 
 
@@ -9646,6 +10940,16 @@ document.addEventListener('DOMContentLoaded', function(){
     }
   }
 });
+
+function renderUnlockButton(character){
+    if(character.locked){
+        return `<button onclick="unlockCharacter('${character.id}')">
+                SBLOCCA (1000 Frammenti d'Etere)
+                </button>`;
+    }
+    return "";
+}
+
 </script>
 
 
@@ -9700,6 +11004,16 @@ try{
     }
   }
 });
+
+function renderUnlockButton(character){
+    if(character.locked){
+        return `<button onclick="unlockCharacter('${character.id}')">
+                SBLOCCA (1000 Frammenti d'Etere)
+                </button>`;
+    }
+    return "";
+}
+
 </script>
 
 
@@ -9783,6 +11097,49 @@ function saveEther(){ try{ localStorage.setItem(ETHER_KEY,String(ether)); }catch
 function saveEtherClaims(){ try{ localStorage.setItem(ETHER_CLAIMS_KEY, JSON.stringify(etherClaims)); }catch(e){} }
 function updateEther(){ if(etherEl) etherEl.textContent=String(ether); }
 updateEther();
+
+/* ===== PERSONAGGI ACQUISTABILI CON ETERE ===== */
+const CHAR_PURCHASES_KEY = "pf_char_purchases_v1";
+function loadCharPurchases(){
+  try{ return JSON.parse(localStorage.getItem(CHAR_PURCHASES_KEY) || "{}") || {}; }
+  catch(e){ return {}; }
+}
+function saveCharPurchases(obj){
+  try{ localStorage.setItem(CHAR_PURCHASES_KEY, JSON.stringify(obj||{})); }catch(e){}
+}
+let charPurchases = loadCharPurchases();
+function isCharPurchased(id){ return !!(charPurchases && charPurchases[id]); }
+
+function unlockCosmoUI(){
+  try{
+    const card=document.getElementById('card-cosmo');
+    const badge=document.getElementById('cosmoLockBadge');
+    if(card) card.classList.remove('disabled');
+    if(badge) badge.style.display='none';
+  }catch(e){}
+}
+function refreshCosmoPurchaseState(){
+  if(isCharPurchased('cosmo')) unlockCosmoUI();
+}
+refreshCosmoPurchaseState();
+
+function tryPurchaseCosmo(){
+  const COST = 1000;
+  if(isCharPurchased('cosmo')) return true;
+  if((ether||0) < COST) return false;
+
+  ether = Math.max(0, Math.floor(ether||0) - COST);
+  saveEther();
+  updateEther();
+
+  charPurchases = charPurchases || {};
+  charPurchases.cosmo = true;
+  saveCharPurchases(charPurchases);
+  try{ if(typeof setCosmoUnlocked==='function') setCosmoUnlocked(); }catch(e){}
+      unlockCosmoUI();
+  return true;
+}
+
 /* ===== BONUS ETERE: +50 per ogni personaggio con RECORD >= 50.000 (una sola volta per personaggio) ===== */
 const ETHER_RECORD50K_CLAIMS_KEY = "pf_ether_record50k_claims_v1";
 
@@ -10151,6 +11508,16 @@ function updateRoadBtnGlow(){
 updateRoadBtnGlow();
 setInterval(updateRoadBtnGlow, 650);
 
+
+function renderUnlockButton(character){
+    if(character.locked){
+        return `<button onclick="unlockCharacter('${character.id}')">
+                SBLOCCA (1000 Frammenti d'Etere)
+                </button>`;
+    }
+    return "";
+}
+
 </script>
 
 <script>
@@ -10203,6 +11570,16 @@ document.addEventListener('DOMContentLoaded', function(){
     if(e.key === 'Escape') closeModal();
   });
 });
+
+function renderUnlockButton(character){
+    if(character.locked){
+        return `<button onclick="unlockCharacter('${character.id}')">
+                SBLOCCA (1000 Frammenti d'Etere)
+                </button>`;
+    }
+    return "";
+}
+
 </script>
 
 <script>
@@ -10243,7 +11620,52 @@ document.addEventListener('DOMContentLoaded', function(){
     if(e.key === 'Escape') closeModal();
   });
 });
+
+function renderUnlockButton(character){
+    if(character.locked){
+        return `<button onclick="unlockCharacter('${character.id}')">
+                SBLOCCA (1000 Frammenti d'Etere)
+                </button>`;
+    }
+    return "";
+}
+
 </script>
+
+<script id="cosmo-buy-logic-patch">
+document.addEventListener("DOMContentLoaded", function(){
+
+  function updateCosmoBuyButton(){
+    const btn = document.getElementById("cosmoShopBuyBtn");
+    const etherEl = document.getElementById("etherCount");
+    if(!btn || !etherEl) return;
+
+    const ether = parseInt(etherEl.textContent || "0");
+    if(ether < 1000){
+      btn.classList.add("disabled");
+      btn.disabled = true;
+    }else{
+      btn.classList.remove("disabled");
+      btn.disabled = false;
+    }
+  }
+
+  const modal = document.getElementById("cosmoShopModal");
+  if(modal){
+    const observer = new MutationObserver(updateCosmoBuyButton);
+    observer.observe(modal, {attributes:true, attributeFilter:["style","class"]});
+  }
+
+  const etherEl = document.getElementById("etherCount");
+  if(etherEl){
+    const observer2 = new MutationObserver(updateCosmoBuyButton);
+    observer2.observe(etherEl, {childList:true});
+  }
+
+  updateCosmoBuyButton();
+});
+</script>
+
 </body>
 
 
@@ -10261,18 +11683,47 @@ const unlockMessages = {
   bane: "Personaggio BLOCCATO\nSblocca facendo 50.000\ncon PDOR",
   hendel: "personaggio BLOCCATO  si sblocca facendo 50.000 con Bane",
   kaerith: "Personaggio BLOCCATO\nsi sblocca facendo 40.000 con Hendel"
+  ,
+  cosmo: "Personaggio BLOCCATO\nSblocca acquistandolo\ncon 1000 Frammenti d'Etere"
 };
 
 const lockBox = document.getElementById('lockMessage');
 const lockText = document.getElementById('lockText');
-document.getElementById('lockCloseBtn').onclick = ()=>lockBox.style.display='none';
+document.getElementById('lockCloseBtn').onclick = ()=>{ try{ lockBox.style.display='none'; }catch(e){} try{ const b=document.getElementById('lockBuyBtn'); if(b){ b.style.display='none'; b.onclick=null; } }catch(e){} try{ if(lockText) lockText.innerText=''; }catch(e){} };
 
 document.querySelectorAll('.char-grid button[data-target]').forEach(btn=>{
   btn.addEventListener('click',()=>{
     const id = btn.dataset.target;
     const card = document.getElementById('card-'+id);
-    if(card && card.classList.contains('disabled')){
+    if(card && card.classList.contains('disabled') && !(id==='cosmo' && isCharPurchased('cosmo'))){
       lockText.innerText = unlockMessages[id] || "Personaggio BLOCCATO\nSblocca facendo un record di 70.000 con un personaggio";
+
+      // show purchase button only for Cosmo
+      const buyBtn=document.getElementById('lockBuyBtn');
+      if(buyBtn){
+        buyBtn.style.display = (id==='cosmo') ? 'inline-block' : 'none';
+        if(id==='cosmo'){
+          buyBtn.textContent='COMPRA (1000)';
+          buyBtn.onclick = ()=>{
+            const ok = tryPurchaseCosmo();
+            if(ok){
+              try{ lockBox.style.display='none'; }catch(e){}
+              try{
+                const card2=document.getElementById('card-cosmo');
+                if(card2){
+                  document.querySelectorAll('.character-card').forEach(c=>c.classList.remove('selected'));
+                  card2.classList.add('selected');
+                  selectedCharacter='cosmo';
+                  updateMenuStatsDisplay('cosmo');
+                }
+              }catch(e){}
+            }else{
+              lockText.innerText = "Etere insufficiente\nServono 1000 frammenti";
+            }
+          };
+        }
+      }
+
       lockBox.style.display = 'block';
     }
   });
@@ -10311,6 +11762,157 @@ document.querySelectorAll('.char-grid button[data-target]').forEach(btn=>{
   });
 });
 
+
+function renderUnlockButton(character){
+    if(character.locked){
+        return `<button onclick="unlockCharacter('${character.id}')">
+                SBLOCCA (1000 Frammenti d'Etere)
+                </button>`;
+    }
+    return "";
+}
+
+</script>
+
+
+<!-- === COSMO PURCHASE POPUP FIX (v39) === -->
+<script>
+document.addEventListener('DOMContentLoaded', function(){
+  const COSMO_PURCHASE_KEY = "pf_purchase_cosmo_v1";
+  const COSMO_COST = 1000;
+
+  function isCosmoUnlocked(){
+  try{
+    // Prefer the unified purchases registry if present
+    if(typeof isCharPurchased === 'function'){
+      try{ if(isCharPurchased('cosmo')) return true; }catch(e){}
+    }
+    // Fallback to legacy key (if any)
+    return localStorage.getItem(COSMO_PURCHASE_KEY) === "1";
+  }catch(e){
+    return false;
+  }
+}
+
+function setCosmoUnlocked(){
+    try{ localStorage.setItem(COSMO_PURCHASE_KEY, "1"); }catch(e){}
+  }
+
+  function applyCosmoUI(){
+    const card = document.getElementById('card-cosmo');
+    const badge = document.getElementById('cosmoLockBadge');
+    const btn = document.querySelector('.char-grid button[data-target="cosmo"]');
+    const unlocked = isCosmoUnlocked();
+
+    if(card){
+      if(unlocked) card.classList.remove('disabled');
+      else card.classList.add('disabled');
+    }
+    if(badge){
+      badge.style.display = unlocked ? 'none' : 'block';
+    }
+    if(btn){
+      if(unlocked){
+        btn.classList.remove('locked');
+      }else{
+        btn.classList.add('locked'); // keep clickable (we intercept click)
+        btn.disabled = false;
+      }
+    }
+  }
+
+  function openCosmoLockPopup(){
+    const lockBox = document.getElementById('lockMessage');
+    const lockText = document.getElementById('lockText');
+    const buyBtn = document.getElementById('lockBuyBtn');
+    if(!lockBox || !lockText) return;
+
+    lockText.innerText = "Personaggio BLOCCATO\\nSblocca acquistandolo\\ncon " + COSMO_COST + " Frammenti d'Etere";
+    if(buyBtn){
+      buyBtn.style.display = 'inline-block';
+      buyBtn.textContent = "COMPRA (" + COSMO_COST + ")";
+      buyBtn.onclick = function(){
+        if(tryPurchaseCosmo()){
+          try{ lockBox.style.display='none'; }catch(e){}
+          // auto-select after purchase (optional, keeps UX smooth)
+          try{
+            const gridBtn = document.querySelector('.char-grid button[data-target="cosmo"]');
+            if(gridBtn){
+              document.querySelectorAll('.char-grid button').forEach(b=>b.classList.remove('selected'));
+              gridBtn.classList.add('selected');
+            }
+            // sync selection state
+            if(typeof window.selectedCharacter !== 'undefined') window.selectedCharacter = 'cosmo';
+            if(typeof selectedCharacter !== 'undefined') selectedCharacter = 'cosmo';
+            if(typeof updateMenuStatsDisplay === "function") updateMenuStatsDisplay('cosmo');
+          }catch(e){}
+        }else{
+          lockText.innerText = "Etere insufficiente\\nServono " + COSMO_COST + " frammenti";
+        }
+      };
+    }
+    lockBox.style.display = 'block';
+  }
+
+  function tryPurchaseCosmo(){
+    try{
+      // 'ether' is the game's currency variable in this file
+      const current = Math.max(0, Math.floor(Number(window.ether) || Number(ether) || 0));
+      if(current < COSMO_COST) return false;
+
+      const next = current - COSMO_COST;
+
+      // write back to both window.ether and local scope if present
+      try{ window.ether = next; }catch(e){}
+      try{ ether = next; }catch(e){}
+
+      // persist via existing helpers
+      if(typeof saveEther === "function") saveEther();
+      if(typeof updateEther === "function") updateEther();
+
+      setCosmoUnlocked();
+      applyCosmoUI();
+      return true;
+    }catch(e){
+      return false;
+    }
+  }
+
+  // initial UI sync
+  applyCosmoUI();
+
+  // Intercept COSMO click in CAPTURE phase so other handlers can't swallow it
+  document.querySelectorAll('.char-grid button[data-target="cosmo"]').forEach(function(btn){
+    btn.addEventListener('click', function(e){
+      if(isCosmoUnlocked()) return; // allow normal selection flow
+      e.preventDefault();
+      e.stopPropagation();
+      e.stopImmediatePropagation();
+      openCosmoLockPopup();
+    }, true);
+  });
+
+  // Also intercept potential clicks on the hidden big card (safety)
+  const cosmoCard = document.getElementById('card-cosmo');
+  if(cosmoCard){
+    cosmoCard.addEventListener('click', function(e){
+      if(isCosmoUnlocked()) return;
+      e.preventDefault();
+      e.stopPropagation();
+      openCosmoLockPopup();
+    }, true);
+  }
+
+  // When closing popup, ensure buy button hides (avoid stale)
+  const closeBtn = document.getElementById('lockCloseBtn');
+  if(closeBtn){
+    closeBtn.addEventListener('click', function(e){
+      try{ e.preventDefault(); e.stopPropagation(); }catch(err){}
+      try{ const lockBox = document.getElementById('lockMessage'); if(lockBox) lockBox.style.display='none'; }catch(err){}
+      try{ const buyBtn = document.getElementById('lockBuyBtn'); if(buyBtn) buyBtn.style.display='none'; }catch(err){}
+    });
+  }
+});
 </script>
 
 </html>
