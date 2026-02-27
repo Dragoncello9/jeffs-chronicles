@@ -1067,6 +1067,20 @@
 }
 
 
+
+/* ===== Mission Base Badge ===== */
+.mission-base{
+  margin-left:6px;
+  padding:2px 6px;
+  border-radius:999px;
+  font-family:'Press Start 2P', monospace;
+  font-size:8px;
+  background:rgba(189,189,189,0.16);
+  border:1px solid rgba(189,189,189,0.70);
+  color:#bdbdbd;
+  text-shadow:0 0 6px rgba(189,189,189,0.25);
+}
+
 /* ===== TOTAL SCORE HIGHLIGHT ===== */
 .total-score,
 #totalScore,
@@ -1480,6 +1494,93 @@
 }
 </style>
 
+<style id="menu-top-left-buttons-style">
+/* ===== MAIN MENU: top-left back + settings ===== */
+#mainMenu{ position:absolute; } /* ensure absolute children anchor correctly */
+
+.menu-top-left{
+  position:absolute;
+  top:18px;   /* allineato all'HUD dei Frammenti d'Etere */
+  left:18px;
+  display:none; /* appare solo quando il menu è attivo */
+  gap:10px;
+  z-index:25;
+}
+
+.menu-top-left .menu-icon-btn{
+  width:48px;
+  height:48px;
+  border-radius:12px;
+  border:3px solid rgba(255,255,255,0.85);
+  font-family:'Press Start 2P', cursive;
+  font-size:20px;
+  line-height:1;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  cursor:pointer;
+  user-select:none;
+  box-shadow:0 6px 0 rgba(0,0,0,0.55), 0 0 16px rgba(255,255,255,0.10);
+}
+
+#menuBackBtn{
+  background:linear-gradient(180deg, rgba(231,76,60,0.98), rgba(192,57,43,0.98));
+  border-color:rgba(231,76,60,0.95);
+  color:#130202;
+}
+
+#menuSettingsBtn{
+  background:linear-gradient(180deg, rgba(220,220,220,0.96), rgba(140,140,140,0.96));
+  border-color:rgba(255,255,255,0.85);
+  color:#111;
+}
+
+.menu-top-left .menu-icon-btn:hover{
+  transform:translateY(-1px);
+  filter:brightness(1.04);
+}
+.menu-top-left .menu-icon-btn:active{
+  transform:translateY(3px);
+  box-shadow:0 3px 0 rgba(0,0,0,0.55), 0 0 14px rgba(255,255,255,0.08);
+}
+
+/* Settings modal (small) */
+#menuSettingsModal{ display:none; }
+#menuSettingsModal.show{ display:flex; }
+#menuSettingsModal .guide-modal-content{
+  max-width:560px;
+  width:min(560px,92vw);
+  border-radius:16px;
+}
+#menuSettingsModal .ms-title{
+  font-family:'Press Start 2P', cursive;
+  font-size:14px;
+  color:#cfd8dc;
+  text-shadow:1px 1px 2px #000;
+  margin-bottom:10px;
+}
+#menuSettingsModal .ms-body{
+  font-family:'VT323', monospace;
+  font-size:18px;
+  line-height:1.55;
+  color:#ddd;
+}
+#menuSettingsModal .ms-body ul{ margin:10px 0 0 18px; }
+#menuSettingsModal .ms-body li{ margin:6px 0; }
+#menuSettingsModal .ms-k{
+  display:inline-block;
+  min-width:86px;
+  padding:2px 8px;
+  border-radius:10px;
+  border:1px solid rgba(255,255,255,0.28);
+  background:rgba(0,0,0,0.28);
+  color:#fff;
+  font-family:'Press Start 2P', monospace;
+  font-size:10px;
+  margin-right:8px;
+}
+</style>
+
 </head>
 
 
@@ -1538,6 +1639,17 @@ font-family:'Press Start 2P', cursive;color:#7fffd4;text-shadow:1px 1px 2px #000
 style="width:56px;height:56px;image-rendering:pixelated;display:block;">
 <span id="etherCount" style="font-size:28px;">0</span>
 </div>
+
+<div class="menu-top-left" id="menuTopLeft" aria-hidden="true">
+  <button class="menu-icon-btn" id="menuBackBtn" type="button" title="Torna alla selezione difficoltà">
+<svg width="18" height="18" viewBox="0 0 24 24" fill="#000000" xmlns="http://www.w3.org/2000/svg">
+  <path d="M15 6L9 12L15 18" stroke="#000000" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>
+</button>
+  <button class="menu-icon-btn" id="menuSettingsBtn" type="button" title="Impostazioni / Comandi">⚙️</button>
+</div>
+
+
 <!-- Etere Info Modal -->
 <div class="guide-modal" id="etherInfoModal" aria-hidden="true">
   <div class="guide-modal-content" role="dialog" aria-modal="true" aria-labelledby="etherInfoTitle">
@@ -1572,6 +1684,26 @@ style="width:56px;height:56px;image-rendering:pixelated;display:block;">
 
 
 
+
+<!-- Menu Settings Modal -->
+<div class="guide-modal" id="menuSettingsModal" aria-hidden="true" style="display:none;">
+  <div class="guide-modal-content" role="dialog" aria-modal="true" aria-labelledby="menuSettingsTitle">
+    <button class="guide-close" id="menuSettingsCloseBtn" type="button" aria-label="Chiudi">✕</button>
+    <div class="ms-title" id="menuSettingsTitle">IMPOSTAZIONI • COMANDI</div>
+    <div class="ms-body">
+      <div style="opacity:0.95;">Tasti principali:</div>
+      <ul>
+        <li><span class="ms-k">W A S D</span>Muoversi</li>
+        <li><span class="ms-k">J</span>Attacco base</li>
+        <li><span class="ms-k">K</span>Super</li>
+        <li><span class="ms-k">SPAZIO</span>Dash / Schivata</li>
+        <li><span class="ms-k">ESC</span>Metti in pausa / Riprendi</li>
+        <li><span class="ms-k">H</span>Metti in pausa / Riprendi (alternativo)</li>
+      </ul>
+      <div style="margin-top:10px;opacity:0.9;">In partita puoi anche usare il pulsante ⏸ accanto al timer.</div>
+    </div>
+  </div>
+</div>
 
 <div class="score" id="scoreDisplay" style="display:none;">Score: 0</div>
 <div class="score" id="killsDisplay" style="display:none; top:52px;">Kill: 0</div>
@@ -1809,7 +1941,7 @@ style="height:1.9em;display:block;image-rendering:pixelated;">
 
 
 
-<p style="margin-top:-6px;font-size:14px;color:#ddd;text-align:center;max-width:420px;margin-left:auto;margin-right:auto;"><span style='display:block;text-align:center;line-height:1.4;'><span style='display:block;text-align:center;line-height:1.2;font-size:12px;letter-spacing:0.5px;'>WASD = Muovi • J = Attacco<br>K = Super • Spazio = Schivata</span></span></p>
+<p style="margin-top:-6px;font-size:14px;color:#ddd;text-align:center;max-width:420px;margin-left:auto;margin-right:auto;"><span style='display:block;text-align:center;line-height:1.4;'><span style='display:block;text-align:center;line-height:1.2;font-size:12px;letter-spacing:0.5px;'></span></span></p>
 </div>
 
 <!-- Account Level Screen -->
@@ -2317,6 +2449,8 @@ bgDefault.style.backgroundPosition=bgDark.style.backgroundPosition='center';
 
 let gameState='start';
 let selectedCharacter=null;
+let lastSuperUseCountTs=0; // debounce conteggio super (ms)
+
 let player=null;
 let currentLevel=0;
 let score=0;
@@ -2388,7 +2522,7 @@ function addKill(n=1){
   }
 
   // mission progress (account level)
-  try{ accountOnKill(selectedCharacter, n); }catch(e){}
+  try{ accountOnKill((player && player.type) ? player.type : selectedCharacter, n); }catch(e){}
 
   // matchKills mission update (solo in UNA partita: non accumula tra run)
 try{
@@ -2516,7 +2650,7 @@ function drawBossRings(now){
     ctx.save();
     ctx.globalAlpha = 0.55*(1-t);
     ctx.lineWidth = 8;
-    ctx.strokeStyle = 'rgba(255,255,0,0.85)';
+    ctx.shadowColor = '#000000'; ctx.shadowBlur = 25; ctx.strokeStyle = 'rgba(255,255,0,0.85)';
     ctx.beginPath();
     ctx.arc(r.x, r.y, radius, 0, Math.PI*2);
     ctx.stroke();
@@ -2576,7 +2710,7 @@ function drawMagicZone(now){
   grad.addColorStop(0, 'rgba(255,0,255,0.55)');
   grad.addColorStop(0.5, 'rgba(0,229,255,0.35)');
   grad.addColorStop(1, 'rgba(255,241,118,0.08)');
-  ctx.fillStyle = grad;
+  ctx.shadowColor = '#000000'; ctx.shadowBlur = 25; ctx.fillStyle = grad;
   ctx.beginPath();
   ctx.arc(magicZone.x, magicZone.y, magicZone.radius, 0, Math.PI*2);
   
@@ -2588,11 +2722,11 @@ ctx.fill();
   // rings
   ctx.globalAlpha = 0.55;
   ctx.lineWidth = 6 + 6*pulse;
-  ctx.strokeStyle = 'rgba(255,0,255,0.55)';
+  ctx.shadowColor = '#000000'; ctx.shadowBlur = 25; ctx.strokeStyle = 'rgba(255,0,255,0.55)';
   ctx.beginPath(); ctx.arc(magicZone.x, magicZone.y, magicZone.radius*(0.35+0.05*pulse), 0, Math.PI*2); ctx.stroke();
-  ctx.strokeStyle = 'rgba(0,229,255,0.55)';
+  ctx.shadowColor = '#000000'; ctx.shadowBlur = 25; ctx.strokeStyle = 'rgba(0,229,255,0.55)';
   ctx.beginPath(); ctx.arc(magicZone.x, magicZone.y, magicZone.radius*(0.65+0.06*(1-pulse)), 0, Math.PI*2); ctx.stroke();
-  ctx.strokeStyle = 'rgba(255,241,118,0.55)';
+  ctx.shadowColor = '#000000'; ctx.shadowBlur = 25; ctx.strokeStyle = 'rgba(255,241,118,0.55)';
   ctx.beginPath(); ctx.arc(magicZone.x, magicZone.y, magicZone.radius, 0, Math.PI*2); ctx.stroke();
 
   ctx.restore();
@@ -2644,7 +2778,7 @@ function startPdorOrbs(owner, now){
 
   // visual burst
   if(owner){
-    createParticles(owner.x+owner.width/2, owner.y+owner.height/2, '#ffffff', 36, 6);
+    createParticles(owner.x+owner.width/2, owner.y+owner.height/2, '#000000', 36, 6);
   }
 }
 
@@ -2729,7 +2863,7 @@ function updatePdorOrbs(now){
           const dmg = 27;
           const _final = applyEnemyDamage(e, dmg);
           showDamageNumber(e.x, e.y, _final);
-          createParticles(ex, ey, '#ffffff', 10, 4);
+          createParticles(ex, ey, '#000000', 10, 4);
 
           _applyEnemyTempSlow(e, 0.5, 1000);
 
@@ -2770,7 +2904,7 @@ function drawPdorOrbs(now){
     grad.addColorStop(0, 'rgba(255,255,255,1)');
     grad.addColorStop(0.4, 'rgba(255,255,255,0.8)');
     grad.addColorStop(1, 'rgba(255,255,255,0)');
-    ctx.fillStyle = grad;
+    ctx.shadowColor = '#000000'; ctx.shadowBlur = 25; ctx.fillStyle = grad;
 
     ctx.beginPath();
     ctx.arc(orb.x, orb.y, 7 + 2*pulse, 0, Math.PI*2);
@@ -2785,7 +2919,7 @@ ctx.fill();
       const a = 0.40 + 0.25*Math.sin((now - p.born)/90);
       ctx.globalAlpha = a;
       ctx.lineWidth = 3;
-      ctx.strokeStyle = 'rgba(255,255,255,0.95)';
+      ctx.shadowColor = '#000000'; ctx.shadowBlur = 25; ctx.strokeStyle = 'rgba(255,255,255,0.95)';
       ctx.beginPath();
       ctx.arc(orb.x, orb.y, p.r, 0, Math.PI*2);
       ctx.stroke();
@@ -3207,7 +3341,7 @@ const ACCOUNT_DEFAULT = {
   xpNeed: 100,
   totalXp: 0,
   schema: 2,
-  stats: { totalKills:0, superUses:0, pickups:0, totalGoldPickups:0, bestMatchKills:0, totalDamage:0, totalScore:0, totalHeal:0 },
+  stats: {totalKills:0, superUses:0, pickups:0, totalGoldPickups:0, bestMatchKills:0, totalDamage:0, totalScore:0, totalHeal:0, jimmySuperKills:0, jimmySuperUses:0, rooneySuperUses:0, jeffSuperUses:0, voltryxSuperUses:0, kouvagiaSuperUses:0, salsySuperUses:0, tempostormSuperUses:0, marzSuperUses:0, hecateSuperUses:0, marcusSuperUses:0, lucienSuperUses:0, pdorSuperUses:0, baneSuperUses:0, hendelSuperUses:0, kaerithSuperUses:0, cosmoSuperUses:0 },
   missions: [
   // 1000 kill missions
   { id:"m_jimmy_1000",    char:"jimmy",    target:1000, progress:0, xpReward:120, claimed:false, difficulty:null },
@@ -3223,6 +3357,7 @@ const ACCOUNT_DEFAULT = {
   { id:"m_tempostorm_1000", char:"tempostorm", target:1000, progress:0, xpReward:200, claimed:false, difficulty:"mid" },
   { id:"m_marz_1000",       char:"marz",       target:1000, progress:0, xpReward:200, claimed:false, difficulty:"mid" },
   { id:"m_hecate_1000",     char:"hecate",     target:1000, progress:0, xpReward:200, claimed:false, difficulty:"mid" },
+  { id:"m_cosmo_1000",      char:"cosmo",      target:1000, progress:0, xpReward:200, claimed:false, difficulty:"mid" },
 
   { id:"m_marcus_1000",   char:"marcus",   target:1000, progress:0, xpReward:200, claimed:false, difficulty:"mid" },
   { id:"m_lucien_1000",   char:"lucien",   target:1000, progress:0, xpReward:200, claimed:false, difficulty:"mid" },
@@ -3232,6 +3367,41 @@ const ACCOUNT_DEFAULT = {
   { id:"m_kaerith_1000",  char:"kaerith",  target:1000, progress:0, xpReward:200, claimed:false, difficulty:"mid" },
 
   // FACILE (verde) - 100 XP
+  // Missioni FACILI personaggio (100 XP): 500 kill con lo stesso personaggio
+  { id:"e_bane_500", char:"bane", target:500, progress:0, xpReward:100, claimed:false, difficulty:"easy" },
+  { id:"e_cosmo_500", char:"cosmo", target:500, progress:0, xpReward:100, claimed:false, difficulty:"easy" },
+  { id:"e_hecate_500", char:"hecate", target:500, progress:0, xpReward:100, claimed:false, difficulty:"easy" },
+  { id:"e_hendel_500", char:"hendel", target:500, progress:0, xpReward:100, claimed:false, difficulty:"easy" },
+  { id:"e_jeff_500", char:"jeff", target:500, progress:0, xpReward:100, claimed:false, difficulty:"easy" },
+  { id:"e_jimmy_500", char:"jimmy", target:500, progress:0, xpReward:100, claimed:false, difficulty:"easy" },
+  { id:"e_jimmy_super_50", title:"Uccidi 50 nemici con la super di Jimmy", type:"jimmySuperKills", target:50, progress:0, xpReward:100, claimed:false, difficulty:"easy" },
+  { id:"e_kaerith_500", char:"kaerith", target:500, progress:0, xpReward:100, claimed:false, difficulty:"easy" },
+  { id:"e_kouvagia_500", char:"kouvagia", target:500, progress:0, xpReward:100, claimed:false, difficulty:"easy" },
+  { id:"e_lucien_500", char:"lucien", target:500, progress:0, xpReward:100, claimed:false, difficulty:"easy" },
+  { id:"e_marcus_500", char:"marcus", target:500, progress:0, xpReward:100, claimed:false, difficulty:"easy" },
+  { id:"e_marz_500", char:"marz", target:500, progress:0, xpReward:100, claimed:false, difficulty:"easy" },
+  { id:"e_pdor_500", char:"pdor", target:500, progress:0, xpReward:100, claimed:false, difficulty:"easy" },
+  { id:"e_rooney_500", char:"rooney", target:500, progress:0, xpReward:100, claimed:false, difficulty:"easy" },
+  { id:"e_salsy_500", char:"salsy", target:500, progress:0, xpReward:100, claimed:false, difficulty:"easy" },
+  { id:"e_tempostorm_500", char:"tempostorm", target:500, progress:0, xpReward:100, claimed:false, difficulty:"easy" },
+  { id:"e_voltryx_500", char:"voltryx", target:500, progress:0, xpReward:100, claimed:false, difficulty:"easy" },
+  // Missioni FACILI (100 XP): usa la SUPER 40 volte (accumulabile)
+  { id:"e_jimmy_super_40", type:"charSuperUses", char:"jimmy", target:40, progress:0, xpReward:100, claimed:false, difficulty:"easy" },
+  { id:"e_rooney_super_40", type:"charSuperUses", char:"rooney", target:40, progress:0, xpReward:100, claimed:false, difficulty:"easy" },
+  { id:"e_jeff_super_40", type:"charSuperUses", char:"jeff", target:40, progress:0, xpReward:100, claimed:false, difficulty:"easy" },
+  { id:"e_voltryx_super_40", type:"charSuperUses", char:"voltryx", target:40, progress:0, xpReward:100, claimed:false, difficulty:"easy" },
+  { id:"e_kouvagia_super_40", type:"charSuperUses", char:"kouvagia", target:40, progress:0, xpReward:100, claimed:false, difficulty:"easy" },
+  { id:"e_salsy_super_40", type:"charSuperUses", char:"salsy", target:40, progress:0, xpReward:100, claimed:false, difficulty:"easy" },
+  { id:"e_tempostorm_super_40", type:"charSuperUses", char:"tempostorm", target:40, progress:0, xpReward:100, claimed:false, difficulty:"easy" },
+  { id:"e_marz_super_40", type:"charSuperUses", char:"marz", target:40, progress:0, xpReward:100, claimed:false, difficulty:"easy" },
+  { id:"e_hecate_super_40", type:"charSuperUses", char:"hecate", target:40, progress:0, xpReward:100, claimed:false, difficulty:"easy" },
+  { id:"e_marcus_super_40", type:"charSuperUses", char:"marcus", target:40, progress:0, xpReward:100, claimed:false, difficulty:"easy" },
+  { id:"e_lucien_super_40", type:"charSuperUses", char:"lucien", target:40, progress:0, xpReward:100, claimed:false, difficulty:"easy" },
+  { id:"e_pdor_super_40", type:"charSuperUses", char:"pdor", target:40, progress:0, xpReward:100, claimed:false, difficulty:"easy" },
+  { id:"e_bane_super_40", type:"charSuperUses", char:"bane", target:40, progress:0, xpReward:100, claimed:false, difficulty:"easy" },
+  { id:"e_hendel_super_40", type:"charSuperUses", char:"hendel", target:40, progress:0, xpReward:100, claimed:false, difficulty:"easy" },
+  { id:"e_kaerith_super_40", type:"charSuperUses", char:"kaerith", target:40, progress:0, xpReward:100, claimed:false, difficulty:"easy" },
+  { id:"e_cosmo_super_40", type:"charSuperUses", char:"cosmo", target:40, progress:0, xpReward:100, claimed:false, difficulty:"easy" },
   { id:"e_totalKills_500",    type:"totalKills", target:500,  progress:0, xpReward:100, claimed:false, difficulty:"easy" },
   { id:"e_matchKills_75",     type:"matchKills", target:75,   progress:0, xpReward:100, claimed:false, difficulty:"easy" },
   { id:"e_bossLevel10",       type:"bossLevel",  target:1,    progress:0, xpReward:100, claimed:false, difficulty:"easy", levelTarget:10 },
@@ -3247,6 +3417,7 @@ const ACCOUNT_DEFAULT = {
   { id:"m_totalHeal_50000",   title:"Recupera 50000 HP (totali)",   type:"totalHeal", target:50000,  progress:0, xpReward:200, claimed:false, difficulty:"mid" },
 
 // COMPLICATA (rosso) - 300 XP
+{ id:"h_jimmy_super_750", title:"Uccidi 750 nemici con la super di Jimmy", type:"jimmySuperKills", target:750, progress:0, xpReward:300, claimed:false, difficulty:"hard" },
 { id:"h_level20_clear",    type:"reachLevel",      target:1,    progress:0, xpReward:300, claimed:false, difficulty:"hard", levelTarget:20 },
 { id:"h_totalKills_10000", type:"totalKills",      target:10000, progress:0, xpReward:300, claimed:false, difficulty:"hard" },
 { id:"h_level15_noSuper",  type:"noSuperToLevel",  target:1,    progress:0, xpReward:300, claimed:false, difficulty:"hard", levelTarget:15 },
@@ -3305,7 +3476,7 @@ function recalcAccountFromTotalXp(showAnim){
 
 function syncMissionsFromStats(){
   try{
-    if(!accountState.stats) accountState.stats = { totalKills:0, superUses:0, pickups:0, totalGoldPickups:0, bestMatchKills:0, totalDamage:0, totalScore:0, totalHeal:0 };
+    if(!accountState.stats) accountState.stats = { totalKills:0, superUses:0, pickups:0, totalGoldPickups:0, bestMatchKills:0, totalDamage:0, totalScore:0, totalHeal:0, jimmySuperKills:0, jimmySuperUses:0, rooneySuperUses:0, jeffSuperUses:0, voltryxSuperUses:0, kouvagiaSuperUses:0, salsySuperUses:0, tempostormSuperUses:0, marzSuperUses:0, hecateSuperUses:0, marcusSuperUses:0, lucienSuperUses:0, pdorSuperUses:0, baneSuperUses:0, hendelSuperUses:0, kaerithSuperUses:0, cosmoSuperUses:0 };
 
     for(const m of accountState.missions){
       if(!m || m.claimed) continue;
@@ -3318,6 +3489,12 @@ function syncMissionsFromStats(){
       else if(m.type==='totalDamage') m.progress = Math.min(m.target, Math.floor(accountState.stats.totalDamage||0));
       else if(m.type==='totalScore')  m.progress = Math.min(m.target, Math.floor(accountState.stats.totalScore||0));
       else if(m.type==='totalHeal')   m.progress = Math.min(m.target, Math.floor(accountState.stats.totalHeal||0));
+      else if(m.type==='jimmySuperKills') m.progress = Math.min(m.target, Math.floor(accountState.stats.jimmySuperKills||0));
+      else if(m.type==='charSuperUses'){
+        const k = (m.char ? (String(m.char)+'SuperUses') : null);
+        m.progress = Math.min(m.target, Math.floor((k && accountState.stats && accountState.stats[k])||0));
+      }
+      else if(accountState.stats && m.type && (m.type in accountState.stats)) m.progress = Math.min(m.target, Math.floor(accountState.stats[m.type]||0));
       else if(m.type==='recordScore') m.progress = Math.min(m.target, Math.floor((records && records[m.char])||0));
     }
   }catch(e){}
@@ -3361,6 +3538,23 @@ function loadAccount(){
         totalDamage: Math.max(0, Math.floor(a.stats.totalDamage||0)),
         totalScore: Math.max(0, Math.floor(a.stats.totalScore||0)),
         totalHeal: Math.max(0, Math.floor(a.stats.totalHeal||0)),
+        jimmySuperKills: Math.max(0, Math.floor(a.stats.jimmySuperKills||0)),
+        jimmySuperUses: Math.max(0, Math.floor(a.stats.jimmySuperUses||0)),
+        rooneySuperUses: Math.max(0, Math.floor(a.stats.rooneySuperUses||0)),
+        jeffSuperUses: Math.max(0, Math.floor(a.stats.jeffSuperUses||0)),
+        voltryxSuperUses: Math.max(0, Math.floor(a.stats.voltryxSuperUses||0)),
+        kouvagiaSuperUses: Math.max(0, Math.floor(a.stats.kouvagiaSuperUses||0)),
+        salsySuperUses: Math.max(0, Math.floor(a.stats.salsySuperUses||0)),
+        tempostormSuperUses: Math.max(0, Math.floor(a.stats.tempostormSuperUses||0)),
+        marzSuperUses: Math.max(0, Math.floor(a.stats.marzSuperUses||0)),
+        hecateSuperUses: Math.max(0, Math.floor(a.stats.hecateSuperUses||0)),
+        marcusSuperUses: Math.max(0, Math.floor(a.stats.marcusSuperUses||0)),
+        lucienSuperUses: Math.max(0, Math.floor(a.stats.lucienSuperUses||0)),
+        pdorSuperUses: Math.max(0, Math.floor(a.stats.pdorSuperUses||0)),
+        baneSuperUses: Math.max(0, Math.floor(a.stats.baneSuperUses||0)),
+        hendelSuperUses: Math.max(0, Math.floor(a.stats.hendelSuperUses||0)),
+        kaerithSuperUses: Math.max(0, Math.floor(a.stats.kaerithSuperUses||0)),
+        cosmoSuperUses: Math.max(0, Math.floor(a.stats.cosmoSuperUses||0)),
       };
     }
 
@@ -3588,6 +3782,8 @@ function missionTitle(m){
   if(m.type==='noSuperToLevel') return `Supera il livello ${m.levelTarget||15} senza usare la super`;
   if(m.type==='noDamageToLevel') return `Subisci 0 danni fino al livello ${m.levelTarget||15}`;
   if(m.type==='superUses') return `Usa la super ${m.target} volte (totali)`;
+  if(m.type==='charSuperUses') return `Utilizza la super di ${charLabel(m.char)} ${m.target} volte`;
+  if(m.type==='jimmySuperKills') return `Uccidi ${m.target} nemici con la super di Jimmy`;
   if(m.type==='pickups') return `Raccogli ${m.target} pickup (totali)`;
   if(m.type==='totalHeal') return `Recupera ${m.target} HP (totali)`;
   if(m.type==='recordScore') return `Raggiungi record di ${m.target} con ${charLabel(m.char)}`;
@@ -3686,7 +3882,8 @@ const missionsSorted = (() => {
 
     const title=document.createElement("div");
     title.className="m-title";
-    const badge = (m.difficulty==='easy') ? "<span class='mission-easy'>FACILE</span>" : (m.difficulty==='mid') ? "<span class='mission-mid'>INTERMEDIA</span>" : (m.difficulty==='hard') ? "<span class='mission-hard'>COMPLICATA</span>" : (m.difficulty==='mythic') ? "<span class='mission-mythic'>MITICA</span>" : "";
+    const isBaseMission = (m && m.char && !m.type && ['jimmy','rooney','jeff'].includes(m.char));
+    const badge = isBaseMission ? "<span class='mission-base'>BASE</span>" : (m.difficulty==='easy') ? "<span class='mission-easy'>FACILE</span>" : (m.difficulty==='mid') ? "<span class='mission-mid'>INTERMEDIA</span>" : (m.difficulty==='hard') ? "<span class='mission-hard'>COMPLICATA</span>" : (m.difficulty==='mythic') ? "<span class='mission-mythic'>MITICA</span>" : "";
     if(m.char && !m.type){
       title.innerHTML = `Fai ${m.target} kill con ${charLabel(m.char)} ${badge}`;
     } else {
@@ -3750,13 +3947,26 @@ const missionsSorted = (() => {
 function accountOnKill(charType, n=1){
   n = Math.max(1, Math.floor(n||1));
   // stats
-  if(!accountState.stats) accountState.stats = { totalKills:0, superUses:0, pickups:0, totalGoldPickups:0, bestMatchKills:0, totalDamage:0, totalScore:0, totalHeal:0 };
+  if(!accountState.stats) accountState.stats = { totalKills:0, superUses:0, pickups:0, totalGoldPickups:0, bestMatchKills:0, totalDamage:0, totalScore:0, totalHeal:0, jimmySuperKills:0 };
   accountState.stats.totalKills = Math.max(0, Math.floor(accountState.stats.totalKills||0)) + n;
 
-  // character kill missions
+  
+
+  // Jimmy: kills fatti durante la SUPER (conteggio dedicato per missioni)
+  try{
+    if(player && player.type==='jimmy' && player.isDoingSuper){
+      accountState.stats.jimmySuperKills = Math.max(0, Math.floor(accountState.stats.jimmySuperKills||0)) + n;
+      for(const m of accountState.missions){
+        if(m && !m.claimed && m.type==='jimmySuperKills'){
+          m.progress = Math.min(m.target, Math.floor(accountState.stats.jimmySuperKills||0));
+        }
+      }
+    }
+  }catch(e){}
+// character kill missions (solo missioni kill: quelle senza 'type')
   for(const m of accountState.missions){
     if(m.claimed) continue;
-    if(m.char && m.char===charType){
+    if(m.char && m.char===charType && !m.type){
       m.progress = Math.min(m.target, (m.progress||0) + n);
     }
   }
@@ -3857,13 +4067,24 @@ function accountOnBossLevel(level){
 }
 function accountOnSuperUsed(){
   try{
+    const now = Date.now();
+    if(now - (lastSuperUseCountTs||0) < 250) return; // evita conteggi multipli ravvicinati
+    lastSuperUseCountTs = now;
     runUsedSuper=true;
-    if(!accountState.stats) accountState.stats = { totalKills:0, superUses:0, pickups:0, totalGoldPickups:0, bestMatchKills:0, totalDamage:0, totalScore:0, totalHeal:0 };
+    if(!accountState.stats) accountState.stats = { totalKills:0, superUses:0, pickups:0, totalGoldPickups:0, bestMatchKills:0, totalDamage:0, totalScore:0, totalHeal:0 , jimmySuperKills:0, jimmySuperUses:0, rooneySuperUses:0, jeffSuperUses:0, voltryxSuperUses:0, kouvagiaSuperUses:0, salsySuperUses:0, tempostormSuperUses:0, marzSuperUses:0, hecateSuperUses:0, marcusSuperUses:0, lucienSuperUses:0, pdorSuperUses:0, baneSuperUses:0, hendelSuperUses:0, kaerithSuperUses:0, cosmoSuperUses:0 };
     accountState.stats.superUses = Math.max(0, Math.floor(accountState.stats.superUses||0)) + 1;
+    const chKey = (player && player.type) ? String(player.type) : ((typeof selectedCharacter!=='undefined' && selectedCharacter) ? String(selectedCharacter) : null);
+    const statKey = chKey ? (chKey + 'SuperUses') : null;
+    if(statKey){
+      accountState.stats[statKey] = Math.max(0, Math.floor(accountState.stats[statKey]||0)) + 1;
+    }
     for(const m of accountState.missions){
       if(m.claimed) continue;
       if(m.type==='superUses'){
         m.progress = Math.min(m.target, Math.floor(accountState.stats.superUses||0));
+      }
+      if(statKey && m.type==='charSuperUses' && m.char===chKey){
+        m.progress = Math.min(m.target, Math.floor(accountState.stats[statKey]||0));
       }
     }
     saveAccount();
@@ -4456,13 +4677,13 @@ function drawIraFX(){
     const t = b.life / b.maxLife; // 1 -> 0
     ctx.save();
     ctx.globalAlpha = 0.55 * t;
-    ctx.strokeStyle = '#7a0019';
+    ctx.shadowColor = '#000000'; ctx.shadowBlur = 25; ctx.strokeStyle = '#7a0019';
     ctx.lineWidth = 6 * t + 1;
     ctx.beginPath();
     ctx.arc(b.x, b.y, b.r, 0, Math.PI*2);
     ctx.stroke();
     ctx.globalAlpha = 0.25 * t;
-    ctx.strokeStyle = '#ff1b3a';
+    ctx.shadowColor = '#000000'; ctx.shadowBlur = 25; ctx.strokeStyle = '#ff1b3a';
     ctx.lineWidth = 10 * t + 2;
     ctx.beginPath();
     ctx.arc(b.x, b.y, b.r*1.12, 0, Math.PI*2);
@@ -4726,7 +4947,7 @@ function spawnProjectile(opts){
   const p={
     x:opts.x,y:opts.y,vx:opts.vx||0,vy:opts.vy||0,
     damage:opts.damage||10,created:Date.now(),
-    ttl:opts.ttl||3000,color:opts.color||'#fff',
+    ttl:opts.ttl||3000,color:opts.color||'#000000',
     radius:opts.radius||6,friendly:!!opts.friendly,
     aoeRadius:opts.aoeRadius||0,aoeFullDamage:!!opts.aoeFullDamage,homing:!!opts.homing,
     speed:opts.speed||Math.hypot(opts.vx||0,opts.vy||0)||6,
@@ -4926,7 +5147,7 @@ function updateProjectiles(){
                 // nudge forward to avoid re-hitting instantly
                 p.x += p.vx*0.35;
                 p.y += p.vy*0.35;
-                createParticles(p.x,p.y,'#ffffff',6,3);
+                createParticles(p.x,p.y,'#000000',6,3);
                 return true; // keep projectile alive
               }
             }
@@ -5024,7 +5245,7 @@ ctx.fill();
 
         // subtle inner highlight
         ctx.globalAlpha = 0.25;
-        ctx.strokeStyle = 'rgba(255,255,255,0.8)';
+        ctx.shadowColor = '#000000'; ctx.shadowBlur = 25; ctx.strokeStyle = 'rgba(255,255,255,0.8)';
         ctx.lineWidth = Math.max(1.5, W*0.12);
         ctx.stroke();
         ctx.globalAlpha = 1;
@@ -5081,7 +5302,7 @@ ctx.fill();
       ctx.lineWidth = Math.max(6, (p.radius||8) * 2.2);
       ctx.lineJoin = 'round';
       ctx.lineCap = 'round';
-      ctx.strokeStyle = p.color || '#b19cff';
+      ctx.shadowColor = '#000000'; ctx.shadowBlur = 25; ctx.strokeStyle = p.color || '#b19cff';
       ctx.beginPath();
       for(let i = -Math.floor(segs/2); i <= Math.floor(segs/2); i++){
         const u = i * step;
@@ -5213,14 +5434,14 @@ function drawLasers(){
     if(!active){
       // charge preview
       ctx.globalAlpha = 0.55;
-      ctx.strokeStyle = 'rgba(255,255,255,0.7)';
+      ctx.shadowColor = '#000000'; ctx.shadowBlur = 25; ctx.strokeStyle = 'rgba(255,255,255,0.7)';
       ctx.lineWidth = Math.max(6, L.width*0.5);
       ctx.beginPath(); ctx.moveTo(L.x,L.y); ctx.lineTo(x2,y2); ctx.stroke();
       ctx.globalAlpha = 1;
     } else {
       // active beam
       ctx.globalAlpha = (L.kind==='photon') ? 0.92 : 0.75;
-      ctx.strokeStyle = (L.kind==='photon') ? 'rgba(243,156,18,0.9)' : 'rgba(52,152,219,0.9)';
+      ctx.shadowColor = '#000000'; ctx.shadowBlur = 25; ctx.strokeStyle = (L.kind==='photon') ? 'rgba(243,156,18,0.9)' : 'rgba(52,152,219,0.9)';
       ctx.lineWidth = L.width;
       ctx.beginPath(); ctx.moveTo(L.x,L.y); ctx.lineTo(x2,y2); ctx.stroke();
 
@@ -5444,7 +5665,7 @@ function applyPickupEffect(playerRef,type){
     playerRef.speed = playerRef._baseSpeed * 1.25;
     playerRef.speedBuffUntil = Date.now() + 3000;
     playerRef.stellarGlowUntil = Date.now() + 1000;
-    createParticles(playerRef.x, playerRef.y, '#ffffff', 36, 5);
+    createParticles(playerRef.x, playerRef.y, '#000000', 36, 5);
   } else if(type==='gold'){
     const _beforeHp = playerRef.hp;
     playerRef.hp=playerRef.maxHP;
@@ -5482,7 +5703,7 @@ function applyPickupEffect(playerRef,type){
       e.iceDps = 2;
       e.iceLastTick = Date.now();
     });
-    createParticles(playerRef.x,playerRef.y,'#ffffff',40);
+    createParticles(playerRef.x,playerRef.y,'#000000',40);
   } else if(type==='malus'){
     playerRef.poisonUntil=Date.now()+10000;
     playerRef.poisonTickLast=Date.now();
@@ -6527,15 +6748,62 @@ if(this.type==='kaerith' && this._kaerithFireUntil && Date.now() < this._kaerith
     else if(this.attackType==='punch'){
       if(this.type==='rooney'){
         const multipliers=[1,1.15,1.25];
-        for(let i=0;i<3;i++){
+        // 360° aimbot:
+        // - Aim: punta SEMPRE verso il nemico più vicino (anche fuori range), per coerenza visiva.
+        // - Hit: applica danno SOLO se il nemico è entro range.
+        const pcx=this.x+this.width/2, pcy=this.y+this.height/2;
+
+        // Aim target (qualunque distanza)
+        let aimTarget=null; let aimDist=Infinity;
+        enemies.forEach(enemy=>{
+          const ecx=enemy.x+enemy.width/2, ecy=enemy.y+enemy.height/2;
+          const dist=Math.hypot(ecx-pcx, ecy-pcy);
+          if(dist<aimDist){ aimDist=dist; aimTarget=enemy; }
+        });
+        this._rooneyAimTarget = aimTarget || null;
+
+        // Locked target per il danno (entro range)
+        let lockedTarget=null; let lockedDist=this.range;
+        enemies.forEach(enemy=>{
+          const ecx=enemy.x+enemy.width/2, ecy=enemy.y+enemy.height/2;
+          const dist=Math.hypot(ecx-pcx, ecy-pcy);
+          if(dist<=lockedDist){ lockedDist=dist; lockedTarget=enemy; }
+        });
+for(let i=0;i<3;i++){
           setTimeout(((idx)=>{
             return ()=>{
-              let closestEnemy=null;let closestDist=this.range+40;
-              enemies.forEach(enemy=>{
-                const dx=enemy.x-this.x;const dy=enemy.y-this.y;
-                const dist=Math.hypot(dx,dy);
-                if(dist<closestDist){closestDist=dist;closestEnemy=enemy}
-              });
+              // usa bersaglio bloccato se valido, altrimenti ri-seleziona entro range (centri)
+              const pcx2=this.x+this.width/2, pcy2=this.y+this.height/2;
+              // aggiorna aim verso il nemico più vicino (anche fuori range)
+              try{
+                let aim=null; let aimD=Infinity;
+                for(const e of enemies){
+                  const ex=e.x+e.width/2, ey=e.y+e.height/2;
+                  const d=Math.hypot(ex-pcx2, ey-pcy2);
+                  if(d<aimD){ aimD=d; aim=e; }
+                }
+                this._rooneyAimTarget = aim || this._rooneyAimTarget || null;
+              }catch(e){}
+
+              let closestEnemy = (lockedTarget && lockedTarget.hp>0) ? lockedTarget : null;
+
+              if(closestEnemy){
+                const ecx=closestEnemy.x+closestEnemy.width/2, ecy=closestEnemy.y+closestEnemy.height/2;
+                const dist=Math.hypot(ecx-pcx2, ecy-pcy2);
+                if(dist>this.range) closestEnemy=null;
+              }
+
+              if(!closestEnemy){
+                let closestDist=this.range;
+                enemies.forEach(enemy=>{
+                  const ecx=enemy.x+enemy.width/2, ecy=enemy.y+enemy.height/2;
+                  const dist=Math.hypot(ecx-pcx2, ecy-pcy2);
+                  if(dist<=closestDist){closestDist=dist;closestEnemy=enemy}
+                });
+                lockedTarget = closestEnemy || null;
+                this._rooneyAimTarget = lockedTarget;
+              }
+
               if(closestEnemy){
                 const baseDmg=this.damage;
                 const dmg=Math.round(baseDmg * multipliers[idx] * this.attackBuffMultiplier);
@@ -7403,8 +7671,8 @@ else if(this.attackType==='tempostormLaser'){
 
       // handle (brown) — closer
       ctx.globalAlpha = 0.55;
-      ctx.fillStyle = '#b07a56';
-      ctx.strokeStyle = '#000';
+      ctx.shadowColor = '#000000'; ctx.shadowBlur = 25; ctx.fillStyle = '#b07a56';
+      ctx.shadowColor = '#000000'; ctx.shadowBlur = 25; ctx.strokeStyle = '#000';
       ctx.lineWidth = 6;
       ctx.beginPath();
       ctx.rect(H.handleStart, -H.handleW/2, H.handleLen, H.handleW);
@@ -7417,8 +7685,8 @@ ctx.fill();
 
       // head (orange) — farther
       ctx.globalAlpha = 0.60;
-      ctx.fillStyle = '#ff7f1f';
-      ctx.strokeStyle = '#000';
+      ctx.shadowColor = '#000000'; ctx.shadowBlur = 25; ctx.fillStyle = '#ff7f1f';
+      ctx.shadowColor = '#000000'; ctx.shadowBlur = 25; ctx.strokeStyle = '#000';
       ctx.lineWidth = 7;
       const hs = H.headSize;
       ctx.beginPath();
@@ -7480,7 +7748,7 @@ ctx.fill();
   ctx.shadowBlur = 25;
 
       ctx.globalAlpha = 0.45;
-      ctx.fillStyle = 'rgba(255,255,255,0.6)';
+      ctx.shadowColor = '#000000'; ctx.shadowBlur = 25; ctx.fillStyle = 'rgba(255,255,255,0.6)';
       ctx.beginPath();
       ctx.arc(cx, cy, Math.max(this.width,this.height)*0.65, 0, Math.PI*2);
       
@@ -7505,7 +7773,7 @@ ctx.fill();
     if(this.shieldActive&&!this.shieldBroken){
       ctx.beginPath();ctx.strokeStyle='rgba(127,219,255,0.85)';ctx.lineWidth=6;
       ctx.arc(this.x+this.width/2,this.y+this.height/2,Math.max(this.width,this.height),0,Math.PI*2);ctx.stroke();
-      ctx.fillStyle='#fff';ctx.fillRect(this.x,this.y-16,this.width,6);
+      ctx.fillStyle='#000000';ctx.fillRect(this.x,this.y-16,this.width,6);
       ctx.fillStyle='#7fdbff';ctx.fillRect(this.x,this.y-16,this.width*(this.shieldDurability/this.shieldMaxDurability),6)
     }
 
@@ -7522,17 +7790,25 @@ ctx.fill();
           const fistW  = 34;         // thickness of the fist end
           const fistL  = 34;         // length of the fist end
 
-          // trova bersaglio più vicino (entro range+40)
+          // trova bersaglio (preferisci quello bloccato dall'attacco, se valido entro range)
           let tx=null, ty=null;
-          let closestDist=this.range+40;
-          for(const e of enemies){
-            const ex=e.x+e.width/2, ey=e.y+e.height/2;
-            const dx=ex-cx, dy=ey-cy;
-            const dist=Math.hypot(dx,dy);
-            if(dist<closestDist){ closestDist=dist; tx=ex; ty=ey; }
-          }
+          const pcxR=cx, pcyR=cy;
 
-          const ang = (tx!==null) ? Math.atan2(ty-cy, tx-cx) : (this.facingRight?0:Math.PI);
+          if(this._rooneyAimTarget && this._rooneyAimTarget.hp>0){
+            const e=this._rooneyAimTarget;
+            const ex=e.x+e.width/2, ey=e.y+e.height/2;
+            // punta comunque verso il nemico, anche se fuori range
+            tx=ex; ty=ey;
+          }
+if(tx===null){
+            let closestDist=Infinity;
+            for(const e of enemies){
+              const ex=e.x+e.width/2, ey=e.y+e.height/2;
+              const dist=Math.hypot(ex-pcxR, ey-pcyR);
+              if(dist<=closestDist){ closestDist=dist; tx=ex; ty=ey; this._rooneyAimTarget=e; }
+            }
+          }
+const ang = (tx!==null) ? Math.atan2(ty-cy, tx-cx) : (this.facingRight?0:Math.PI);
 
           ctx.save();
           ctx.translate(cx, cy);
@@ -7982,7 +8258,7 @@ class Enemy{
         const r=(this.fanRange||260);
         ctx.save();
         ctx.globalAlpha = 0.22;
-        ctx.fillStyle = 'rgba(255,255,0,0.9)';
+        ctx.shadowColor = '#000000'; ctx.shadowBlur = 25; ctx.fillStyle = 'rgba(255,255,0,0.9)';
         ctx.beginPath();
         ctx.moveTo(cx,cy);
         ctx.arc(cx,cy,r, (this.swingAngle||0)-(this.fanHalfAngle||Math.PI/2), (this.swingAngle||0)+(this.fanHalfAngle||Math.PI/2));
@@ -8001,7 +8277,7 @@ class Enemy{
       const isMarked = (this.salsyMarkUntil && now < this.salsyMarkUntil) || (!!this._cosmoMark);
       if(isMarked){
         ctx.save();
-        ctx.fillStyle = '#000';
+        ctx.shadowColor = '#000000'; ctx.shadowBlur = 25; ctx.fillStyle = '#000';
         ctx.beginPath();
         ctx.arc(this.x+this.width/2, this.y-18, 5, 0, Math.PI*2);
         
@@ -8059,7 +8335,7 @@ class ShooterEnemy extends Enemy{
       const isMarked = (this.salsyMarkUntil && now < this.salsyMarkUntil) || (!!this._cosmoMark);
       if(isMarked){
         ctx.save();
-        ctx.fillStyle = '#000';
+        ctx.shadowColor = '#000000'; ctx.shadowBlur = 25; ctx.fillStyle = '#000';
         ctx.beginPath();
         ctx.arc(this.x+this.width/2, this.y-18, 5, 0, Math.PI*2);
         
@@ -8149,7 +8425,7 @@ class ArcherEnemy extends Enemy{
       const isMarked = (this.salsyMarkUntil && now < this.salsyMarkUntil) || (!!this._cosmoMark);
       if(isMarked){
         ctx.save();
-        ctx.fillStyle = '#000';
+        ctx.shadowColor = '#000000'; ctx.shadowBlur = 25; ctx.fillStyle = '#000';
         ctx.beginPath();
         ctx.arc(this.x+this.width/2, this.y-18, 5, 0, Math.PI*2);
         
@@ -8306,7 +8582,7 @@ ctx.fill();
       const isMarked = (this.salsyMarkUntil && now < this.salsyMarkUntil) || (!!this._cosmoMark);
       if(isMarked){
         ctx.save();
-        ctx.fillStyle = '#000';
+        ctx.shadowColor = '#000000'; ctx.shadowBlur = 25; ctx.fillStyle = '#000';
         ctx.beginPath();
         ctx.arc(this.x+this.width/2, this.y-18, 5, 0, Math.PI*2);
         
@@ -8368,7 +8644,7 @@ class AttackReturnEnemy extends Enemy{
       const isMarked = (this.salsyMarkUntil && now < this.salsyMarkUntil) || (!!this._cosmoMark);
       if(isMarked){
         ctx.save();
-        ctx.fillStyle = '#000';
+        ctx.shadowColor = '#000000'; ctx.shadowBlur = 25; ctx.fillStyle = '#000';
         ctx.beginPath();
         ctx.arc(this.x+this.width/2, this.y-18, 5, 0, Math.PI*2);
         
@@ -8448,7 +8724,7 @@ class BossEnemy extends Enemy{
       const isMarked = (this.salsyMarkUntil && now < this.salsyMarkUntil) || (!!this._cosmoMark);
       if(isMarked){
         ctx.save();
-        ctx.fillStyle = '#000';
+        ctx.shadowColor = '#000000'; ctx.shadowBlur = 25; ctx.fillStyle = '#000';
         ctx.beginPath();
         ctx.arc(this.x+this.width/2, this.y-18, 5, 0, Math.PI*2);
         
@@ -8683,7 +8959,7 @@ class Boss5Enemy extends Enemy{
       const isMarked = (this.salsyMarkUntil && now < this.salsyMarkUntil) || (!!this._cosmoMark);
       if(isMarked){
         ctx.save();
-        ctx.fillStyle = '#000';
+        ctx.shadowColor = '#000000'; ctx.shadowBlur = 25; ctx.fillStyle = '#000';
         ctx.beginPath();
         ctx.arc(this.x+this.width/2, this.y-18, 5, 0, Math.PI*2);
         
@@ -8907,7 +9183,7 @@ function drawKaerithFireOverlay(now){
   const t = 1 - Math.max(0, Math.min(1, (player._kaerithFireUntil - now)/9000));
   ctx.save();
   ctx.globalAlpha = 0.18 + 0.10*Math.sin(now/70);
-  ctx.fillStyle = '#ff3d00';
+  ctx.shadowColor = '#000000'; ctx.shadowBlur = 25; ctx.fillStyle = '#ff3d00';
   ctx.fillRect(0,0,canvas.width,canvas.height);
 
   // “lingue” di fuoco stilizzate (righe verticali random)
@@ -8922,7 +9198,7 @@ function drawKaerithFireOverlay(now){
 
   // embers
   ctx.globalAlpha = 0.22;
-  ctx.fillStyle = '#ffd180';
+  ctx.shadowColor = '#000000'; ctx.shadowBlur = 25; ctx.fillStyle = '#ffd180';
   for(let i=0;i<28;i++){
     const x = (Math.random()*canvas.width)|0;
     const y = (Math.random()*canvas.height)|0;
@@ -8970,28 +9246,28 @@ function drawRooneyAreaFX(now){
 
     ctx.save();
     ctx.globalAlpha = 0.28*a;
-    ctx.fillStyle = 'rgba(255,40,40,0.30)';
+    ctx.shadowColor = '#000000'; ctx.shadowBlur = 25; ctx.fillStyle = 'rgba(255,40,40,0.30)';
     ctx.fillRect(left, top, size, size);
 
     ctx.globalAlpha = (0.85*a);
     ctx.lineWidth = 6 + 3*pulse;
     ctx.shadowColor = 'rgba(255,0,0,0.65)';
     ctx.shadowBlur = 22;
-    ctx.strokeStyle = 'rgba(255,60,60,0.95)';
+    ctx.shadowColor = '#000000'; ctx.shadowBlur = 25; ctx.strokeStyle = 'rgba(255,60,60,0.95)';
     ctx.setLineDash([10, 8]);
     ctx.strokeRect(left, top, size, size);
     // inner glow
     ctx.globalAlpha = 0.45*a;
     ctx.setLineDash([]);
     ctx.lineWidth = 3 + 2*pulse;
-    ctx.strokeStyle = 'rgba(255,0,0,0.55)';
+    ctx.shadowColor = '#000000'; ctx.shadowBlur = 25; ctx.strokeStyle = 'rgba(255,0,0,0.55)';
     ctx.strokeRect(left+10, top+10, size-20, size-20);
     ctx.setLineDash([]);
 
     // inner "cracks"
     ctx.globalAlpha = 0.55*a;
     ctx.lineWidth = 1.8;
-    ctx.strokeStyle = 'rgba(40,0,0,0.9)';
+    ctx.shadowColor = '#000000'; ctx.shadowBlur = 25; ctx.strokeStyle = 'rgba(40,0,0,0.9)';
     for(const seg of (fx.cracks||[])){
       ctx.globalAlpha = 0.45*a*seg[4];
       ctx.beginPath();
@@ -9002,7 +9278,7 @@ function drawRooneyAreaFX(now){
 
     // dust ring
     ctx.globalAlpha = 0.18*a;
-    ctx.strokeStyle = 'rgba(255,120,120,0.85)';
+    ctx.shadowColor = '#000000'; ctx.shadowBlur = 25; ctx.strokeStyle = 'rgba(255,120,120,0.85)';
     ctx.lineWidth = 2;
     ctx.strokeRect(left+6, top+6, size-12, size-12);
 
@@ -9105,7 +9381,7 @@ function updateCosmoMarks(now){
       const baseExpl = isMini ? 26 : 58;
       const dmg = baseExpl * (burst ? 1.6 : 1.0) * (player && player.type==='cosmo' ? (player.attackBuffMultiplier||1) * (player._cosmoDmgMult||1) : 1);
       const dealt = applyEnemyDamage(e, dmg);
-      createParticles(e.x+e.width/2, e.y+e.height/2, '#ffffff', isMini?16:28, 6);
+      createParticles(e.x+e.width/2, e.y+e.height/2, '#000000', isMini?16:28, 6);
       showDamageNumber(e.x, e.y, dealt);
 
       // slow
@@ -9215,7 +9491,7 @@ function updateCosmoSingularity(now){
       const d=Math.hypot(ex-orb.x, ey-orb.y);
       if(d<=aoe){
         const dealt=applyEnemyDamage(e, base+bonus*(1-d/aoe));
-        createParticles(ex,ey,'#ffffff',28,7);
+        createParticles(ex,ey,'#000000',28,7);
         showDamageNumber(e.x,e.y,dealt);
       }
     }
@@ -9245,7 +9521,7 @@ function drawCosmoSingularity(){
   grad.addColorStop(0.6, 'rgba(0,0,0,0.75)');
   grad.addColorStop(1, 'rgba(0,0,0,0)');
 
-  ctx.fillStyle = grad;
+  ctx.shadowColor = '#000000'; ctx.shadowBlur = 25; ctx.fillStyle = grad;
   ctx.beginPath();
   ctx.arc(orb.x, orb.y, orb.r + 4*pulse, 0, Math.PI*2);
   
@@ -9256,7 +9532,7 @@ ctx.fill();
 
   // solid core
   ctx.shadowBlur = 0;
-  ctx.fillStyle = 'rgba(0,0,0,1)';
+  ctx.shadowColor = '#000000'; ctx.shadowBlur = 25; ctx.fillStyle = 'rgba(0,0,0,1)';
   ctx.beginPath();
   ctx.arc(orb.x, orb.y, Math.max(6, orb.r - 6 + 2*pulse), 0, Math.PI*2);
   
@@ -9294,7 +9570,7 @@ function drawCosmoTrails(){
   for(const t of window.cosmoTrails){
     const a = Math.max(0, (t.until-now)/500);
     ctx.globalAlpha = 0.35*a;
-    ctx.fillStyle = 'rgba(184,230,255,0.85)';
+    ctx.shadowColor = '#000000'; ctx.shadowBlur = 25; ctx.fillStyle = 'rgba(184,230,255,0.85)';
     ctx.beginPath();
     ctx.arc(t.x, t.y, 55, 0, Math.PI*2);
     
@@ -9399,7 +9675,7 @@ return;
   if(iraScreenFlash>0){
     ctx.save();
     ctx.globalAlpha = Math.min(0.35, iraScreenFlash/40);
-    ctx.fillStyle = '#7a0019';
+    ctx.shadowColor = '#000000'; ctx.shadowBlur = 25; ctx.fillStyle = '#7a0019';
     ctx.fillRect(0,0,canvas.width,canvas.height);
     ctx.restore();
   }
@@ -9482,6 +9758,7 @@ function triggerEvolutionThenNextLevel(charType){
 }
 
 window.addEventListener('keydown',e=>{
+  if(e.repeat) return; // evita conteggi multipli per pressione prolungata
   const k=e.key.toLowerCase();
   keys[k]=true;
   if(k==='j'&&gameState==='playing'){ if(player && player.type!=='kaerith'){ player.attack(); } }
@@ -9601,12 +9878,16 @@ function updateMenuStatsDisplay(char){
     // default view
     startScreen.style.display='block';
     mainMenu.style.display='none';
+    if(menuTopLeft) menuTopLeft.style.display='none';
+    if(menuTopLeft) menuTopLeft.setAttribute('aria-hidden','true');
     gameState='start';
   }
   function goToMenu(mode){
     setDifficulty(mode);
     if(startScreen) startScreen.style.display='none';
     if(mainMenu) mainMenu.style.display='block';
+    if(menuTopLeft) menuTopLeft.style.display='flex';
+    if(menuTopLeft) menuTopLeft.setAttribute('aria-hidden','false');
     gameState='menu';
     updateMenuRecordsDisplay();
     try{ applyBronzeCharBorders(); }catch(e){}
@@ -9616,7 +9897,68 @@ function updateMenuStatsDisplay(char){
   window.goToMenu = goToMenu;
 })();
 
+// ===== MAIN MENU: back to difficulty + settings modal =====
+(function(){
+  const startScreen = document.getElementById('startScreen');
+  const mainMenu = document.getElementById('mainMenu');
+  const menuTopLeft = document.getElementById('menuTopLeft');
+
+  const backBtn = document.getElementById('menuBackBtn');
+  const setBtn  = document.getElementById('menuSettingsBtn');
+
+  const modal   = document.getElementById('menuSettingsModal');
+  const closeBtn= document.getElementById('menuSettingsCloseBtn');
+
+  if(backBtn){
+    backBtn.addEventListener('click', ()=>{
+      // close small popups if open
+      try{
+        const lockBox=document.getElementById('lockMessage');
+        if(lockBox) lockBox.style.display='none';
+      }catch(e){}
+      try{
+        const cosmo=document.getElementById('cosmoShopModal');
+        if(cosmo) cosmo.style.display='none';
+      }catch(e){}
+      if(mainMenu) mainMenu.style.display='none';
+      if(menuTopLeft) menuTopLeft.style.display='none';
+      if(menuTopLeft) menuTopLeft.setAttribute('aria-hidden','true');
+      if(startScreen) startScreen.style.display='block';
+      if(typeof gameState !== 'undefined') gameState='start';
+    });
+  }
+
+  function showSettings(){
+    if(!modal) return;
+    modal.style.display='flex';
+    modal.classList.add('show');
+    modal.setAttribute('aria-hidden','false');
+    if(closeBtn) closeBtn.focus();
+  }
+  function hideSettings(){
+    if(!modal) return;
+    modal.style.display='none';
+    modal.classList.remove('show');
+    modal.setAttribute('aria-hidden','true');
+    if(setBtn) setBtn.focus();
+  }
+
+  if(setBtn) setBtn.addEventListener('click', (e)=>{ e.preventDefault(); showSettings(); });
+  if(closeBtn) closeBtn.addEventListener('click', (e)=>{ e.preventDefault(); hideSettings(); });
+  if(modal) modal.addEventListener('click', (e)=>{ if(e.target === modal) hideSettings(); });
+
+  document.addEventListener('keydown', (e)=>{
+    if(e.key === 'Escape' && modal && modal.style.display === 'flex'){
+      hideSettings();
+    }
+  });
+})();
+
+
+
 document.getElementById('startBtn').addEventListener('click',()=>{
+  const menuTopLeft = document.getElementById('menuTopLeft');
+  if(menuTopLeft){ menuTopLeft.style.display='none'; menuTopLeft.setAttribute('aria-hidden','true'); }
   if(!selectedCharacter)selectedCharacter='jimmy';
   updateMenuRecordsDisplay();
   startGame();
@@ -9839,7 +10181,7 @@ function drawFuriaWaves(){
     ctx.save();
     ctx.globalAlpha = alpha;
     ctx.lineWidth = 10;
-    ctx.strokeStyle = 'rgba(255,0,255,0.95)';
+    ctx.shadowColor = '#000000'; ctx.shadowBlur = 25; ctx.strokeStyle = 'rgba(255,0,255,0.95)';
     ctx.beginPath();
     ctx.arc(w.x, w.y, r, 0, Math.PI*2);
     ctx.stroke();
@@ -9854,7 +10196,7 @@ function drawFuriaWaves(){
     // Core ripple
     ctx.globalAlpha = alpha*0.25;
     ctx.lineWidth = 6;
-    ctx.strokeStyle = 'rgba(255,180,255,0.9)';
+    ctx.shadowColor = '#000000'; ctx.shadowBlur = 25; ctx.strokeStyle = 'rgba(255,180,255,0.9)';
     ctx.beginPath();
     ctx.arc(w.x, w.y, Math.max(0, r*0.65), 0, Math.PI*2);
     ctx.stroke();
@@ -10530,7 +10872,7 @@ Player.prototype.attack = function(){
       vx,vy,speed,
       damage:baseDmg,
       ttl:1600,
-      color:'#ffffff',
+      color:'#000000',
       radius:10,
       friendly:true,
       shape:'rect',
@@ -10539,7 +10881,7 @@ Player.prototype.attack = function(){
       angle:ang,
       meta:{ pdorChain:true, hitsLeft:5, hitRefs:[] }
     });
-    createParticles(cx,cy,'#ffffff',10,4);
+    createParticles(cx,cy,'#000000',10,4);
     return true;
   }
 
