@@ -1731,7 +1731,7 @@ style="height:1.9em;display:block;image-rendering:pixelated;">
   <h2>Scegli la modalità</h2>
   <p style="margin-top:10px;font-size:15px;color:#ddd;line-height:1.4;">
     <strong>Difficile</strong>: gioco originale.<br>
-    <strong>Facile</strong>: cure tra i livelli (+25% ogni livello, <em>cura totale</em> ogni 5° livello) ma <em>punteggio dimezzato</em>.
+    <strong>Facile</strong>: cure tra i livelli (+25% ogni livello, <em>cura totale</em> ogni 5° livello), nemici più lenti e danni inflitti dai nemici ridotti ma <em>punteggio dimezzato</em>.
   </p>
   <div class="start-row" style="margin-top:18px;flex-wrap:wrap;">
     <button class="btn" id="modeHardBtn" type="button">MODALITÀ DIFFICILE</button>
@@ -12026,7 +12026,7 @@ const unlockMessages = {
   hendel: "personaggio BLOCCATO  si sblocca facendo 50.000 con Bane",
   kaerith: "Personaggio BLOCCATO\nsi sblocca facendo 40.000 con Hendel"
   ,
-  cosmo: "Personaggio BLOCCATO\nSblocca acquistandolo\ncon 1000 Frammenti d'Etere"
+  cosmo: "Personaggio BLOCCATO Sblocca acquistandolo con 1000 Frammenti d'Etere"
 };
 
 const lockBox = document.getElementById('lockMessage');
@@ -12060,7 +12060,7 @@ document.querySelectorAll('.char-grid button[data-target]').forEach(btn=>{
                 }
               }catch(e){}
             }else{
-              lockText.innerText = "Etere insufficiente\nServono 1000 frammenti";
+              lockText.innerText = "Etere insufficiente Servono 1000 frammenti";
             }
           };
         }
