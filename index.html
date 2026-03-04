@@ -52,6 +52,7 @@
     .score{position:absolute;top:18px;right:18px;color:#f39c12;font-size:22px;text-shadow:2px 2px 4px #000;z-index:10}
     .timer{position:absolute;top:18px;left:50%;transform:translateX(-50%);font-size:32px;color:#f39c12;text-shadow:2px 2px 4px #000;z-index:10}
     .level-indicator{position:absolute;top:60px;left:50%;transform:translateX(-50%);font-size:18px;z-index:10}
+    .moon-phase-indicator{position:absolute;top:86px;left:50%;transform:translateX(-50%);font-size:26px;z-index:10;color:#90caf9;font-family:'Press Start 2P', cursive;text-shadow:2px 2px 4px #000;letter-spacing:1px}
     .super-cooldown{position:absolute;top:100px;left:18px;font-size:14px;color:#f39c12;z-index:10}
 
     .evo-banner{
@@ -1729,6 +1730,7 @@ style="width:56px;height:56px;image-rendering:pixelated;display:block;">
 <div class="score" id="killsDisplay" style="display:none; top:52px;">Kill: 0</div>
 <div class="timer-wrap" id="timerWrap" style="display:none;"><div class="timer" id="timerDisplay">45</div><button class="pause-btn" id="pauseBtn" title="Pausa">⏸</button></div>
 <div class="level-indicator" id="levelDisplay" style="display:none;">Level 1</div>
+<div class="moon-phase-indicator" id="moonPhaseDisplay" style="display:none;"></div>
 
 <div class="evo-banner" id="evoBanner" style="display:none;">
 <div id="evoBannerText">EVOLUTO!</div>
@@ -2118,6 +2120,14 @@ style="height:1.9em;display:block;image-rendering:pixelated;">
   <img class="hud-pickup-icon" src="https://i.postimg.cc/gc37yNS8/LETTERA.png" alt="LETTERA D'AMORE" loading="lazy"/>
   <div><strong>LETTERA D'AMORE</strong>: attiva lo stato <strong>ESTASI</strong> per <strong>15s</strong>. Durante ESTASI, il <strong>7%</strong> dei danni inflitti ai nemici viene convertito in <strong>cura</strong> che ripristina gli HP del personaggio. Nel riquadro BONUS appare <strong>ESTASI</strong> con timer in <span style="color:chocolate"><strong>marrone cioccolato</strong></span>.</div>
 </li>
+
+<li class="hud-pickup-item">
+  <img class="hud-pickup-icon" src="https://i.postimg.cc/h4C2168Q/mezzaluna.png" alt="Mezzaluna" loading="lazy"/>
+  <div><strong>Mezzaluna</strong>: attiva un <strong>Ciclo Lunare</strong> di <strong>12s</strong> (3 fasi da 4s) i cui effetti <strong>si accumulano</strong>. Durante tutto il ciclo, ogni nemico colpito (anche con <strong>SUPER</strong>) riceve il <strong>Marchio di Mezzaluna</strong> finché il bonus è attivo (sopra il nemico appare una piccola <strong>mezzaluna luminosa</strong>).<br>
+  <strong>Fase 1 — Luna Crescente (0–4s)</strong>: nemici marchiati <strong>−25% velocità</strong>, giocatore <strong>+25% velocità</strong>.<br>
+  <strong>Fase 2 — Luna Piena (4–8s)</strong>: mantiene la Fase 1 e aggiunge nemici marchiati <strong>−25% danno</strong>, giocatore <strong>+25% danno</strong>.<br>
+  <strong>Fase 3 — Luna Calante (8–12s)</strong>: mantiene le fasi precedenti e aggiunge <strong>drenaggio vitale</strong> progressivo (ogni secondo sui nemici marchiati: <strong>15% → 10% → 7% → 5%</strong> dei loro HP massimi; il giocatore si cura con le <strong>stesse percentuali</strong> sui propri HP massimi). Se un nemico marchiato muore, genera un’<strong>esplosione lunare</strong> che danneggia i nemici vicini.</div>
+</li>
 <li class="hud-pickup-item">
     <img class="hud-pickup-icon" src="https://i.postimg.cc/85XW9S0V/stellarbonus.png" alt="StellarBonus" loading="lazy"/>
     <div><strong>StellarBonus</strong>: <strong>+100 HP</strong> (fino al massimo) e <strong>+25% velocità</strong> per <strong>3s</strong>. Inoltre il personaggio emana un <strong>bagliore bianco</strong> per <strong>1s</strong>. Nel HUD lo riconosci come buff di velocità.</div>
@@ -2351,7 +2361,7 @@ style="height:1.9em;display:block;image-rendering:pixelated;">
 <li>Ogni personaggio è forte se usato nel modo giusto.</li>
 </ul>
 <h3>✴️ EVOLUZIONI </h3>
-<p>rappresentano una fase avanzata del combattimento e si attivano automaticamente durante la partita. Non sono potenziamenti temporanei, ma un vero e proprio cambiamento nello stile di gioco del personaggio.</p> <p><strong>Quando avvengono</strong>: dopo aver superato un boss avanzato (oltre metà progressione), il personaggio entra nello stato <em>Evoluto</em>. L’evoluzione viene annunciata a schermo con un banner dedicato.</p> <p><strong>Filosofia delle evoluzioni</strong>: le evoluzioni <u>non aumentano direttamente HP, velocità o danno base</u>. Al contrario, sbloccano <strong>passive speciali</strong> che premiano l’uso intelligente delle meccaniche del personaggio. Questo mantiene il gioco bilanciato e strategico.</p> <h4>Effetti generali</h4> <ul> <li>L’evoluzione dura per il resto della partita.</li> <li>Ogni personaggio ottiene un <strong>vantaggio unico</strong>, coerente con il suo ruolo.</li> <li>Le evoluzioni premiano precisione, timing e gestione dei nemici.</li> </ul> <h4>⚙️ Evoluzioni attuali</h4> <p><strong>🔫 Jimmy – Predatore Evoluto</strong><br/> Jimmy carica la <strong>Super più velocemente (+25%)</strong> e il <strong>cooldown dell’attacco base è ridotto del 15%</strong>.</p>
+<p>rappresentano una fase avanzata del combattimento e si attivano automaticamente durante la partita. Non sono potenziamenti temporanei, ma un vero e proprio cambiamento nello stile di gioco del personaggio.</p> <p><strong>Quando avvengono</strong>: dopo aver superato il boss del <strong>Livello 15</strong> (e da quel punto in poi), il personaggio può entrare nello stato <em>Evoluto</em> <strong>solo se</strong> il tuo <strong>RECORD</strong> con quel personaggio è <strong>&ge; 100.000</strong> (vale solo per i personaggi che dispongono di un’evoluzione). L’evoluzione viene annunciata a schermo con un banner dedicato.</p> <p><strong>Filosofia delle evoluzioni</strong>: le evoluzioni <u>non aumentano direttamente HP, velocità o danno base</u>. Al contrario, sbloccano <strong>passive speciali</strong> che premiano l’uso intelligente delle meccaniche del personaggio. Questo mantiene il gioco bilanciato e strategico.</p> <h4>Effetti generali</h4> <ul> <li>L’evoluzione dura per il resto della partita.</li> <li>Ogni personaggio ottiene un <strong>vantaggio unico</strong>, coerente con il suo ruolo.</li> <li>Le evoluzioni premiano precisione, timing e gestione dei nemici.</li> </ul> <h4>⚙️ Evoluzioni attuali</h4> <p><strong>🔫 Jimmy – Predatore Evoluto</strong><br/> Jimmy carica la <strong>Super più velocemente (+25%)</strong> e il <strong>cooldown dell’attacco base è ridotto del 15%</strong>.</p>
 <p><strong>🐱 Rooney – Impatto Brutale</strong><br/> Il <strong>primo colpo</strong> inflitto a ogni nemico infligge <strong>+50% danni</strong>.</p>
 <p><strong>🗡️ Jeff – Rigenerazione da Combattimento</strong><br/> Ogni nemico ucciso cura Jeff di <strong>5 HP</strong>.</p> <p><em>Nota:</em> i personaggi sbloccabili avanzati potrebbero ottenere evoluzioni dedicate in futuro.</p> <h4> Consigli strategici</h4> <ul> <li>Sfrutta l’evoluzione per cambiare approccio: da difensivo a aggressivo (o viceversa).</li> <li>Dopo l’evoluzione, eliminare i nemici velocemente diventa ancora più importante per massimizzare punteggio e controllo.</li> <li>Le evoluzioni non rendono invincibili: il posizionamento resta fondamentale.</li> </ul> <p><strong>Le evoluzioni sono il momento in cui Jeff’s Chronicles premia davvero la padronanza del personaggio.</strong></p>
 <h3>🏁 CONCLUSIONE</h3>
@@ -2382,6 +2392,22 @@ style="height:1.9em;display:block;image-rendering:pixelated;">
 const HP_MULT=1.40;
 const DAMAGE_MULT=0.85;
 const SUPER_DAMAGE_MULT=0.8;
+// ===== Evolution gating =====
+const EVOLUTION_MIN_LEVEL = 15; // from this level onward
+const EVOLUTION_MIN_RECORD = 100000; // record required per character
+
+function characterHasEvolution(charType){
+  try{ return !!(characterStats && characterStats[charType] && characterStats[charType].evolution); }
+  catch(e){ return false; }
+}
+function getRecordForCharacter(charType){
+  try{ return Math.max(0, Math.floor(Number((records && records[charType])||0) || 0)); }
+  catch(e){ return 0; }
+}
+function isEvolutionUnlocked(charType){
+  return getRecordForCharacter(charType) >= EVOLUTION_MIN_RECORD;
+}
+
 const JEFF_SUPER_RADIUS=Math.round(320*0.8);
 const GOLD_PROB=0.05;
 const JEFF_ATTACK_RANGE_MULT=0.8;
@@ -2661,6 +2687,7 @@ const PICKUP_WEIGHTED = [
     ['ice', 1],
     ['ira', 1],
     ['letteraAmore', 1],
+    ['mezzaluna', 1],
     ['arcoAntico', 0.6],
     ['malus', 0.25], // nerfed
   ];
@@ -3101,6 +3128,7 @@ const pickupImgs={
   malus: new Image(),
   ira: new Image(),
   letteraAmore: new Image(),
+  mezzaluna: new Image(),
 };
 pickupImgs.heal.src='https://i.postimg.cc/c4jNccLC/heal.png';
 pickupImgs.shield.src='https://i.postimg.cc/9XnS3QHh/shield.png';
@@ -3112,6 +3140,7 @@ pickupImgs.stellar.src='https://i.postimg.cc/85XW9S0V/stellarbonus.png';
 pickupImgs.malus.src='https://i.postimg.cc/tT1cJKFm/malus.png';
 pickupImgs.ira.src='https://i.postimg.cc/xT3j1R9T/IRAA.png';
 pickupImgs.letteraAmore.src='https://i.postimg.cc/gc37yNS8/LETTERA.png';
+pickupImgs.mezzaluna = pickupImgs.mezzaluna || new Image(); pickupImgs.mezzaluna.src='https://i.postimg.cc/h4C2168Q/mezzaluna.png';
 pickupImgs.furia = new Image(); pickupImgs.furia.src='https://i.postimg.cc/BvCsTjYD/furia.png';
 pickupImgs.ice = new Image(); pickupImgs.ice.src='https://i.postimg.cc/GmF1RB1k/ice.png';
 
@@ -3258,6 +3287,7 @@ const characterStats={
     range:600,
     cooldown:800,
     name:'Jimmy',
+    evolution:true,
     attackType:'grapple',
     superCooldown:7000,
     superDuration:3000
@@ -3269,6 +3299,7 @@ const characterStats={
     range:150,
     cooldown:520,
     name:'Rooney',
+    evolution:true,
     attackType:'punch',
     superCooldown:13000,
     superDuration:750
@@ -3280,6 +3311,7 @@ const characterStats={
     range:Math.round(320*JEFF_ATTACK_RANGE_MULT),
     cooldown:700,
     name:'Jeff',
+    evolution:true,
     attackType:'sword',
     superCooldown:11000,
     superDuration:2800
@@ -4896,6 +4928,83 @@ function drawParticles(){
   ctx.globalAlpha=1
 }
 
+/* --- Melee swing slash VFX (sword-like circular sweep inside melee telegraphs) --- */
+function _easeInOutQuad(t){ return (t<0.5) ? (2*t*t) : (1 - Math.pow(-2*t+2,2)/2); }
+
+// Draw a circular slash that travels across the telegraphed melee sector.
+// reverse=true flips the sweep direction (useful when aiming left).
+function drawCircularSlash(cx,cy,range,angle,arcWidth,startTime,durationMs,color,reverse){
+  const now=Date.now();
+  const dur=Math.max(1, durationMs||260);
+  let t=(now-(startTime||now))/dur;
+  if(t<0) return;
+  if(t>1) t=1;
+
+  const eased=_easeInOutQuad(t);
+  const u = reverse ? (1-eased) : eased;
+
+  const a0=angle-arcWidth/2;
+  const a1=angle+arcWidth/2;
+  const seg=Math.min(1.25, Math.max(0.60, arcWidth*0.52));
+  const r=Math.max(26, range*0.82);
+
+  ctx.save();
+
+  // Clip to the sector so the slash stays inside the attack area
+  ctx.beginPath();
+  ctx.moveTo(cx,cy);
+  ctx.arc(cx,cy,range,a0,a1,false);
+  ctx.closePath();
+  ctx.clip();
+
+  ctx.globalCompositeOperation='lighter';
+  ctx.lineCap='round';
+
+  // Motion trail
+  for(let k=0;k<5;k++){
+    const uu=u - k*0.07;
+    if(uu<0) continue;
+    const ang=a0 + (a1-a0)*uu;
+    const alpha=Math.max(0, 0.34 - k*0.06) * (1 - t*0.25);
+    ctx.globalAlpha=alpha;
+    ctx.strokeStyle=color;
+    ctx.lineWidth=Math.max(5, 18 - k*2.6);
+    ctx.shadowColor=color;
+    ctx.shadowBlur=18;
+    ctx.beginPath();
+    ctx.arc(cx,cy,r,ang-seg/2,ang+seg/2,false);
+    ctx.stroke();
+  }
+
+  // Bright edge (white highlight)
+  const ang=a0 + (a1-a0)*u;
+  ctx.shadowBlur=10;
+  ctx.shadowColor='rgba(255,255,255,0.85)';
+  ctx.globalAlpha=0.85;
+  ctx.strokeStyle='rgba(255,255,255,0.85)';
+  ctx.lineWidth=5;
+  ctx.beginPath();
+  ctx.arc(cx,cy,r*0.99,ang-seg/2,ang+seg/2,false);
+  ctx.stroke();
+
+  // Tiny sparks (subtle)
+  ctx.shadowBlur=0;
+  ctx.globalAlpha=0.55;
+  ctx.fillStyle='rgba(255,255,255,0.75)';
+  for(let s=0;s<4;s++){
+    const jitter=(Math.random()-0.5)*0.18;
+    const rr = r - 8 - Math.random()*18;
+    const aa = ang + jitter;
+    const px = cx + Math.cos(aa)*rr;
+    const py = cy + Math.sin(aa)*rr;
+    ctx.fillRect(px,py,2.2,2.2);
+  }
+
+  ctx.restore();
+}
+
+
+
 // --- IRA kill FX (Bane SUPER) ---
 let iraFxBursts = []; // radial glows on kill
 let iraScreenFlash = 0; // frames
@@ -5336,7 +5445,7 @@ function drawArcoAntico(now){
   // Aura (always visible) — color changes with active seal
   ctx.save();
   ctx.shadowColor = '#000000';
-  ctx.shadowBlur = 18;
+  ctx.shadowBlur = 28;
 
   // fill
   ctx.globalAlpha = 0.14 + 0.10*fx;
@@ -5504,9 +5613,21 @@ function applyEnemyDamage(enemy, baseDmg){
     mult=1.5; // EVO: Rooney first hit +50% damage
     enemy._rooneyFirstHit=true;
   }
-  const finalDmg = Math.max(0, Math.round(baseDmg * mult * markMult(enemy) * getAncientWarMult(Date.now(), enemy)));
-  enemy._lastHitAt = Date.now();
+  const _nowD=Date.now();
+  // MEZZALUNA: qualsiasi nemico colpito viene marchiato finché il bonus è attivo (anche con SUPER)
+  try{
+    if(typeof player!=='undefined' && player && player.mezzalunaUntil && _nowD < player.mezzalunaUntil){
+      enemy.mezzalunaMarkUntil = player.mezzalunaUntil;
+    }
+  }catch(e){}
+  const _moonMult = (typeof _mezzalunaPlayerDamageMult==='function') ? _mezzalunaPlayerDamageMult(_nowD) : 1;
+  const finalDmg = Math.max(0, Math.round(baseDmg * mult * _moonMult * markMult(enemy) * getAncientWarMult(_nowD, enemy)));
+
+  enemy._lastHitAt = _nowD;
   enemy.hp -= finalDmg;
+
+  // MEZZALUNA: se un nemico marchiato muore -> esplosione lunare
+  try{ if(enemy.hp<=0) _mezzalunaLunarExplosion(enemy); }catch(e){}
 
   // ESTASI (LETTERA D'AMORE): 7% dei danni inflitti cura il personaggio
   try{
@@ -5530,6 +5651,166 @@ function applyEnemyDamage(enemy, baseDmg){
   return finalDmg;
 }
 
+
+// ===== MEZZALUNA (bonus) =====
+function _mezzalunaIsActive(now, p){
+  p = p || (typeof player!=='undefined' ? player : null);
+  return !!(p && p.mezzalunaUntil && now < p.mezzalunaUntil);
+}
+function _mezzalunaPhase(now, p){
+  p = p || (typeof player!=='undefined' ? player : null);
+  if(!_mezzalunaIsActive(now, p)) return 0;
+  const start = (p.mezzalunaStart!=null) ? p.mezzalunaStart : (p.mezzalunaUntil - 12000);
+  const elapsed = Math.max(0, now - start);
+  if(elapsed < 4000) return 1;
+  if(elapsed < 8000) return 2;
+  return 3;
+}
+function _enemyHasMezzalunaMark(e, now){
+  return !!(e && e.mezzalunaMarkUntil && now < e.mezzalunaMarkUntil && _mezzalunaIsActive(now));
+}
+function _mezzalunaEnemySpeedMult(e, now){
+  // Phase 1+ : marked enemies -25% speed
+  return (_enemyHasMezzalunaMark(e, now) ? 0.75 : 1);
+}
+function _mezzalunaEnemyOutgoingDamageMult(e, now){
+  // Phase 2+ : marked enemies -25% outgoing damage
+  const ph = _mezzalunaPhase(now);
+  return (ph>=2 && _enemyHasMezzalunaMark(e, now)) ? 0.75 : 1;
+}
+function _mezzalunaPlayerDamageMult(now){
+  // Phase 2+ : player +25% damage dealt
+  const ph = _mezzalunaPhase(now);
+  return (ph>=2) ? 1.25 : 1;
+}
+function drawMezzalunaMarkOnEnemy(e){
+  const now=Date.now();
+  if(!_enemyHasMezzalunaMark(e, now)) return;
+  const img = (typeof pickupImgs!=='undefined') ? (pickupImgs.mezzaluna || pickupImgs.mezzaaluna) : null;
+  const cx = e.x + e.width/2;
+  const cy = e.y - 26;
+  ctx.save();
+  const pulse = 0.85 + 0.15*Math.sin(now/160);
+  ctx.globalAlpha = 0.95*pulse;
+  ctx.shadowColor = 'rgba(144,202,249,0.95)';
+  ctx.shadowBlur = 28;
+  if(img && img.complete && img.naturalWidth>0){
+    const s = 42*pulse;
+    ctx.drawImage(img, cx - s/2, cy - s/2, s, s);
+  } else {
+    ctx.fillStyle = 'rgba(144,202,249,0.9)';
+    ctx.beginPath();
+    ctx.arc(cx, cy, 12*pulse, 0, Math.PI*2);
+    ctx.fill();
+  }
+  ctx.restore();
+}
+function _mezzalunaLunarExplosion(deadEnemy){
+  // On death of a marked enemy: lunar explosion damages nearby enemies
+  const now=Date.now();
+  if(!deadEnemy || deadEnemy._mezzalunaExploded) return;
+  if(!_enemyHasMezzalunaMark(deadEnemy, now)) return;
+  deadEnemy._mezzalunaExploded = true;
+
+  const cx = deadEnemy.x + deadEnemy.width/2;
+  const cy = deadEnemy.y + deadEnemy.height/2;
+  const R = 140;
+
+  // damage scales with victim maxHP (bounded)
+  const base = Math.max(25, Math.round((deadEnemy.maxHP||120) * 0.15));
+  const dmg = Math.min(220, base);
+
+  createParticles(cx,cy,'#90caf9',44,6);
+  createParticles(cx,cy,'#e3f2fd',26,5);
+
+  for(let i=enemies.length-1;i>=0;i--){
+    const e=enemies[i];
+    if(!e || e===deadEnemy || e.hp<=0) continue;
+    const ex=e.x+e.width/2, ey=e.y+e.height/2;
+    const d=Math.hypot(ex-cx, ey-cy);
+    if(d<=R){
+      const dealt = applyEnemyDamage(e, dmg);
+      if(dealt>0) showDamageNumber(e.x,e.y,dealt);
+      createParticles(ex,ey,'#90caf9',14,5);
+      if(e.hp<=0){
+        // chain removal handled by caller in its own loops, so here we don't splice to avoid double-splice.
+        // mark for cleanup - existing loops will remove when they see hp<=0.
+      }
+    }
+  }
+}
+function updateMezzaluna(now, playerRef){
+  if(!playerRef) return;
+
+  const start = (playerRef.mezzalunaStart!=null) ? playerRef.mezzalunaStart
+               : (playerRef.mezzalunaUntil!=null ? (playerRef.mezzalunaUntil - 12000) : now);
+  const elapsed = Math.max(0, now - start);
+
+  if(!_mezzalunaIsActive(now, playerRef)){
+    playerRef.mezzalunaPhase = 0;
+    playerRef._mezzalunaDrainLast = 0;
+    playerRef._mezzalunaDrainStep = 0;
+    return;
+  }
+
+  playerRef.mezzalunaPhase = _mezzalunaPhase(now, playerRef);
+
+  // Speed buff: do not downgrade other speed buffs
+  playerRef.speed = Math.max(playerRef.speed, playerRef._baseSpeed * 1.25);
+
+  // Phase 3 — Luna Calante (8–12s):
+  // Tick "per secondo" durante i secondi 9/10/11/12 del bonus:
+  // t=8s -> 15%, t=9s -> 10%, t=10s -> 7%, t=11s -> 5%.
+  // Nemici: perdono % dei LORO maxHP. Player: si cura % dei SUOI maxHP (una sola volta per tick).
+  if(playerRef.mezzalunaPhase === 3){
+    const pcts = [0.15, 0.10, 0.07, 0.05];
+    const thresholds = [8000, 9000, 10000, 11000]; // ms since start
+    if(playerRef._mezzalunaDrainStep==null) playerRef._mezzalunaDrainStep = 0;
+
+    while(playerRef._mezzalunaDrainStep < 4 && elapsed >= thresholds[playerRef._mezzalunaDrainStep]){
+      const pct = pcts[playerRef._mezzalunaDrainStep];
+      playerRef._mezzalunaDrainStep += 1;
+
+      // heal player (once per tick)
+      const healAmt = Math.max(0, Math.round((playerRef.maxHP||0) * pct));
+      if(healAmt>0){
+        const _before = playerRef.hp;
+        playerRef.hp = Math.min(playerRef.maxHP, playerRef.hp + healAmt);
+        const _delta = playerRef.hp - _before;
+        if(_delta>0){
+          try{ accountOnHeal(_delta); }catch(e){}
+          createParticles(playerRef.x+playerRef.width/2, playerRef.y+playerRef.height/2, '#90caf9', 10, 4);
+        }
+      }
+
+      // drain marked enemies (exact % of their maxHP each tick)
+      for(let i=enemies.length-1;i>=0;i--){
+        const e=enemies[i];
+        if(!e || e.hp<=0) continue;
+        if(!_enemyHasMezzalunaMark(e, now)) continue;
+
+        const dmg = Math.max(1, Math.round((e.maxHP||e.hp||1) * pct));
+        e._lastHitAt = now;
+        e.hp -= dmg;
+
+        // feedback
+        try{ showDamageNumber(e.x, e.y, dmg); }catch(err){}
+        createParticles(e.x+e.width/2, e.y+e.height/2, '#90caf9', 10, 4);
+
+        if(e.hp<=0){
+          _mezzalunaLunarExplosion(e);
+          createParticles(e.x,e.y,'#fff176',30,6);
+          dropStellarBonusAtIndexIfNeeded(i);
+          enemies.splice(i,1);
+          applyScore(100*currentLevel);
+          addKill();
+          if(player && player._baneSuperOnKill) player._baneSuperOnKill();
+        }
+      }
+    }
+  }
+}
+// =============================
 
 // --- VOLTRYX orange energy FX (projectiles/super impacts) ---
 let voltryxFxBursts = [];   // expanding orange rings
@@ -5604,6 +5885,102 @@ function drawVoltryxFX(){
 }
 
 function shakeScreen(){shakeAmount=8}
+
+/* --- COSMO SUPER: cosmic black explosion FX --- */
+let cosmoFxBursts = [];   // expanding dark rings
+let cosmoFxShards = [];   // streaking void sparks
+let cosmoScreenFlash = 0; // frames
+
+function createCosmoExplosionFX(x,y,scale=1){
+  const s = Math.max(0.7, Math.min(2.8, scale||1));
+
+  // Dense cosmic-black debris
+  createParticles(x,y,'#05000b',Math.round(120*s),5);
+  createParticles(x,y,'#0a0016',Math.round(95*s),4);
+  createParticles(x,y,'#000000',Math.round(70*s),6);
+
+  // Streaking shards (mystic "void" streaks)
+  const n = Math.round(26*s);
+  for(let i=0;i<n;i++){
+    const ang = Math.random()*Math.PI*2;
+    const sp  = (2.2 + Math.random()*6.2) * s;
+    const life = Math.round(26 + Math.random()*14);
+    cosmoFxShards.push({
+      x, y,
+      vx: Math.cos(ang)*sp,
+      vy: Math.sin(ang)*sp,
+      life, maxLife: life,
+      w: 1 + Math.random()*2,
+      len: 10 + Math.random()*18
+    });
+  }
+
+  // Expanding rings
+  for(let k=0;k<4;k++){
+    const life = Math.round((22 + k*6) * s);
+    cosmoFxBursts.push({
+      x, y,
+      r: (18*s) + k*(14*s),
+      vr: (8*s) + k*(2.2*s),
+      life, maxLife: life
+    });
+  }
+
+  cosmoScreenFlash = Math.max(cosmoScreenFlash, Math.round(30*s));
+}
+
+function updateCosmoExplosionFX(){
+  cosmoFxBursts = cosmoFxBursts.filter(b=>{
+    b.r += b.vr;
+    b.life--;
+    return b.life>0;
+  });
+
+  cosmoFxShards = cosmoFxShards.filter(p=>{
+    p.x += p.vx; p.y += p.vy;
+    p.vx *= 0.96; p.vy *= 0.96;
+    p.life--;
+    return p.life>0;
+  });
+
+  if(cosmoScreenFlash>0) cosmoScreenFlash--;
+}
+
+function drawCosmoExplosionFX(){
+  // Rings (behind)
+  cosmoFxBursts.forEach(b=>{
+    const a = Math.max(0, b.life/(b.maxLife||1));
+    ctx.save();
+    ctx.globalAlpha = Math.min(0.55, 0.12 + a*0.5);
+    ctx.shadowColor = 'rgba(0,0,0,1)';
+    ctx.shadowBlur  = 42;
+    ctx.strokeStyle = 'rgba(10,0,22,'+(0.14 + a*0.65)+')';
+    ctx.lineWidth   = Math.max(2, 8*a);
+    ctx.beginPath();
+    ctx.arc(b.x, b.y, b.r, 0, Math.PI*2);
+    ctx.stroke();
+    ctx.restore();
+  });
+
+  // Shards (foreground)
+  cosmoFxShards.forEach(p=>{
+    const a = Math.max(0, p.life/(p.maxLife||1));
+    const vlen = Math.hypot(p.vx,p.vy)||1;
+    const nx = p.vx/vlen, ny = p.vy/vlen;
+
+    ctx.save();
+    ctx.globalAlpha = Math.min(0.9, 0.22 + a*0.7);
+    ctx.shadowColor = 'rgba(0,0,0,1)';
+    ctx.shadowBlur  = 18;
+    ctx.strokeStyle = 'rgba(5,0,11,'+(0.12 + a*0.7)+')';
+    ctx.lineWidth   = p.w;
+    ctx.beginPath();
+    ctx.moveTo(p.x - nx*p.len, p.y - ny*p.len);
+    ctx.lineTo(p.x + nx*p.len*0.2, p.y + ny*p.len*0.2);
+    ctx.stroke();
+    ctx.restore();
+  });
+}
 
 
 // --- MARZ mystical bolts FX (3 variants) ---
@@ -5688,7 +6065,7 @@ function drawMarzBolt(p){
     ctx.lineWidth = 2.2;
     ctx.strokeStyle = _hexToRgbaSimple('#ffffff', 0.62);
     ctx.shadowColor = '#ffffff';
-    ctx.shadowBlur = 18;
+    ctx.shadowBlur = 28;
     ctx.stroke();
 
     // inner core
@@ -5764,7 +6141,7 @@ function drawMarzBolt(p){
     ctx.lineWidth = 2.0;
     ctx.strokeStyle = _hexToRgbaSimple('#ffffff', 0.55);
     ctx.shadowColor = '#fff9c4';
-    ctx.shadowBlur = 18;
+    ctx.shadowBlur = 28;
     ctx.stroke();
 
     // glyph spike (diamond)
@@ -6143,7 +6520,7 @@ function drawProjectiles(){
 
       // glow
       ctx.shadowColor = 'rgba(180, 90, 255, 0.85)';
-      ctx.shadowBlur = 18;
+      ctx.shadowBlur = 28;
 
       if(img && img.complete && img.naturalWidth>0){
         ctx.drawImage(img, -size/2, -size/2, size, size);
@@ -6267,7 +6644,7 @@ ctx.fill();
         ctx.lineWidth = Math.max(1, W*0.08);
         ctx.strokeStyle = 'rgba(255,255,255,0.85)';
         ctx.shadowColor = '#ffffff';
-        ctx.shadowBlur = 18;
+        ctx.shadowBlur = 28;
         for(let a=0;a<2;a++){
           ctx.beginPath();
           const seg=6;
@@ -6371,7 +6748,7 @@ ctx.globalAlpha = 1;
       ctx.lineWidth = 2.2;
       ctx.strokeStyle = 'rgba(255,255,255,0.70)';
       ctx.shadowColor = '#ffe0b2';
-      ctx.shadowBlur = 18;
+      ctx.shadowBlur = 28;
       for(let k=0;k<2;k++){
         const rr = r*1.25 + k*3;
         const a0 = t + k*1.7;
@@ -6454,7 +6831,7 @@ ctx.fill();
       // Aura ring (aoeRadius) with light pulsing
       ctx.globalAlpha = 0.65;
       ctx.shadowColor = '#ff6d00';
-      ctx.shadowBlur = 18;
+      ctx.shadowBlur = 28;
       ctx.strokeStyle = 'rgba(255,109,0,'+(0.25 + 0.25*Math.sin(tt*1.8))+')';
       ctx.lineWidth = 4;
       ctx.beginPath();
@@ -6761,32 +7138,75 @@ function updateTempBeams(){
 }
 
 function drawTempBeams(){
+  const now = Date.now();
   tempBeams.forEach(B=>{
     const x1=B.x1, y1=B.y1, x2=B.x2, y2=B.y2;
+    const age = now - B.created;
+    const t = age * 0.012;
+
+    // photon-like beam: one single stroke with bloom + travelling sparkles (no extra aim line)
+    const flick = 0.85 + 0.15*Math.sin(t*3.2);
+    const w = B.width * (1.05 + 0.08*Math.sin(t*2.1));
+
     ctx.save();
     ctx.lineCap='round';
+    ctx.globalCompositeOperation='lighter';
+    ctx.globalAlpha = 0.95;
 
-    // glow
-    ctx.globalAlpha=0.22;
-    ctx.strokeStyle='#00b0ff';
-    ctx.lineWidth=B.width*2.4;
-    ctx.beginPath(); ctx.moveTo(x1,y1); ctx.lineTo(x2,y2); ctx.stroke();
+    const g = ctx.createLinearGradient(x1,y1,x2,y2);
+    g.addColorStop(0,    'rgba(0,176,255,0.05)');
+    g.addColorStop(0.12, 'rgba(0,229,255,'+(0.55*flick)+')');
+    g.addColorStop(0.50, 'rgba(129,212,250,'+(0.95*flick)+')');
+    g.addColorStop(0.88, 'rgba(0,176,255,'+(0.55*flick)+')');
+    g.addColorStop(1,    'rgba(0,176,255,0.05)');
 
-    // core
-    ctx.globalAlpha=0.85;
-    ctx.strokeStyle='#4fc3f7';
-    ctx.lineWidth=B.width;
-    ctx.beginPath(); ctx.moveTo(x1,y1); ctx.lineTo(x2,y2); ctx.stroke();
+    ctx.strokeStyle = g;
+    ctx.lineWidth = w;
+    ctx.shadowColor = 'rgba(128,216,255,0.95)';
+    ctx.shadowBlur = 42;
 
-    // white highlight
-    ctx.globalAlpha=0.65;
-    ctx.strokeStyle='rgba(255,255,255,0.9)';
-    ctx.lineWidth=Math.max(2, B.width*0.22);
-    ctx.beginPath(); ctx.moveTo(x1,y1); ctx.lineTo(x2,y2); ctx.stroke();
+    ctx.beginPath();
+    ctx.moveTo(x1,y1);
+    ctx.lineTo(x2,y2);
+    ctx.stroke();
+
+    // "photons" moving along the beam
+    const dx=x2-x1, dy=y2-y1;
+    const L=Math.hypot(dx,dy)||1;
+    const ux=dx/L, uy=dy/L;
+
+    const n = 6;
+    for(let k=0;k<n;k++){
+      const p = ((t*0.18) + k/n) % 1;
+      const px = x1 + dx*p;
+      const py = y1 + dy*p;
+
+      // small perpendicular jitter for an electric/photon shimmer
+      const jig = (Math.sin(t*5.3 + k*1.7))*2.2;
+      const sxp = px + (-uy)*jig;
+      const syp = py + (ux)*jig;
+
+      ctx.globalAlpha = 0.55;
+      ctx.fillStyle = 'rgba(255,255,255,0.85)';
+      ctx.shadowColor = 'rgba(255,255,255,0.85)';
+      ctx.shadowBlur = 28;
+      ctx.beginPath();
+      ctx.arc(sxp,syp, Math.max(2.2, w*0.10), 0, Math.PI*2);
+      ctx.fill();
+
+      ctx.globalAlpha = 0.32;
+      ctx.fillStyle = 'rgba(129,212,250,0.95)';
+      ctx.shadowColor = 'rgba(0,176,255,0.95)';
+      ctx.shadowBlur = 22;
+      ctx.beginPath();
+      ctx.arc(sxp,syp, Math.max(3.2, w*0.16), 0, Math.PI*2);
+      ctx.fill();
+    }
 
     ctx.restore();
   });
 }
+
 
 function spawnPickup(x,y,type,value=0){
   // Small collectible pickup (compatible with updatePickups / drawPickups)
@@ -6835,6 +7255,7 @@ const PICKUP_RENDER_SCALE = {
   stellar: 1.35,
   ira: 1.35,
   letteraAmore: 1.35,
+  mezzaluna: 1.35,
   arcoAntico: 1.35
 };
 
@@ -6863,6 +7284,8 @@ function drawPickups(){
       else if(p.type==='speed')ctx.fillStyle='#3498db';
       else if(p.type==='shieldPickup')ctx.fillStyle='#7fdbff';
       else if(p.type==='ira')ctx.fillStyle='#ff6f00';
+      else if(p.type==='letteraAmore')ctx.fillStyle='chocolate';
+      else if(p.type==='mezzaluna')ctx.fillStyle='#90caf9';
       else if(p.type==='arcoAntico')ctx.fillStyle='#c0c0c0';
       else if(p.type==='malus')ctx.fillStyle='#8b0000';
       ctx.beginPath();
@@ -6955,6 +7378,18 @@ function applyPickupEffect(playerRef,type){
     playerRef.estasiUntil = now + 15000;
     // feedback visivo (marrone cioccolato)
     createParticles(playerRef.x+playerRef.width/2, playerRef.y+playerRef.height/2, 'chocolate', 34, 5);
+  } else if(type==='mezzaluna'){
+    // MEZZALUNA: ciclo lunare 12s (3 fasi da 4s). I nemici colpiti vengono marchiati finché il bonus è attivo.
+    const now = Date.now();
+    playerRef.mezzalunaStart = now;
+    playerRef.mezzalunaUntil = now + 12000;
+    playerRef.mezzalunaPhase = 1;
+    playerRef._mezzalunaDrainLast = 0;
+    playerRef._mezzalunaDrainStep = 0;
+
+    // feedback visivo iniziale (aura lunare)
+    createParticles(playerRef.x+playerRef.width/2, playerRef.y+playerRef.height/2, '#90caf9', 46, 6);
+
   } else if(type==='shieldPickup'){
     playerRef.pickupShieldUntil=Date.now()+6000;
     playerRef.invulnerable=true;
@@ -7128,6 +7563,11 @@ class Player{
           this.speed = this._baseSpeed;
         }
       }
+    }
+
+    // Mezzaluna: +25% speed durante tutto il ciclo (non degrada altri buff)
+    if(this.mezzalunaUntil && now < this.mezzalunaUntil){
+      this.speed = Math.max(this.speed, this._baseSpeed * 1.25);
     }
 
     if(this.pickupShieldUntil && now>this.pickupShieldUntil){this.pickupShieldUntil=0;this.invulnerable=false}
@@ -7933,7 +8373,8 @@ if(this.type==='kaerith' && this._kaerithFireUntil && Date.now() < this._kaerith
 
     // integrate velocity
 
-    this.x+=this.vx;this.y+=this.vy;
+        const _ms= (typeof _mezzalunaEnemySpeedMult==='function') ? _mezzalunaEnemySpeedMult(this, Date.now()) : 1;
+    this.x+=this.vx*_ms;this.y+=this.vy*_ms;
     if(!keys['a']&&!keys['d']&&!this.isDashing&&!this.isGrappling)this.vx*=0.86;
     if(!keys['w']&&!keys['s']&&!this.isGrappling)this.vy*=0.86;
 
@@ -9084,6 +9525,15 @@ else if(this.attackType==='tempostormLaser'){
       return;
     }
 
+    // MEZZALUNA: fase 2+ -> nemici marchiati infliggono -25% danno
+    try{
+      const now=Date.now();
+      if(attacker && attacker.mezzalunaMarkUntil && now < attacker.mezzalunaMarkUntil && this.mezzalunaUntil && now < this.mezzalunaUntil){
+        const ph = (typeof _mezzalunaPhase==='function') ? _mezzalunaPhase(now, this) : 0;
+        if(ph>=2){ damage = Math.round(Number(damage) * 0.75); }
+      }
+    }catch(e){}
+
     // apply damage to Hendel (or any player)
     this.hp-=damage;
     if(!isFinite(this.hp)) this.hp = 0;
@@ -9394,6 +9844,7 @@ const ang = (tx!==null) ? Math.atan2(ty-cy, tx-cx) : (this.facingRight?0:Math.PI
         ctx.fill();
         ctx.shadowBlur = 0;
         ctx.stroke();
+        drawCircularSlash(cx, cy, this.range, angle, arcWidth, this.attackTime, 260, 'rgba(155,89,182,0.95)', !this.facingRight);
       }else if(this.attackType==='salsySword'){
         // Visual telegraph: Salsy fan slash area
         const angle=this.facingRight?0:Math.PI;const arcWidth=Math.PI*1.35;
@@ -9410,6 +9861,7 @@ ctx.shadowBlur = 25;
 
 ctx.fill();
         ctx.stroke();
+        drawCircularSlash(this.x+this.width/2, this.y+this.height/2, this.range, angle, arcWidth, this.attackTime, 260, 'rgba(241,196,15,0.95)', !this.facingRight);
       }else if(this.attackType==='axeattack'){
         // Visual area: Bane axe swing (270°)
         const angle=this.facingRight?0:Math.PI;const arcWidth=Math.PI*1.5;
@@ -9426,6 +9878,7 @@ ctx.shadowBlur = 25;
 
 ctx.fill();
         ctx.stroke();
+        drawCircularSlash(this.x+this.width/2, this.y+this.height/2, this.range, angle, arcWidth, this.attackTime, 260, 'rgba(231,76,60,0.95)', !this.facingRight);
       }else if(this.attackType==='lucienBlade'){
         // Visual area: Lucien 4-hit close-range blade fan
         const angle=(typeof this._lucienAimAngle==='number')?this._lucienAimAngle:(this.facingRight?0:Math.PI);const arcWidth=Math.PI*1.05;
@@ -9442,6 +9895,7 @@ ctx.shadowBlur = 25;
 
 ctx.fill();
         ctx.stroke();
+        drawCircularSlash(this.x+this.width/2, this.y+this.height/2, this.range, angle, arcWidth, this.attackTime, 260, 'rgba(200,230,255,0.95)', (Math.cos(angle)<0));
       }else if(this.attackType==='hybrid'){
         ctx.strokeStyle='rgba(243,156,18,0.6)';ctx.lineWidth=6;
         ctx.beginPath();
@@ -9449,11 +9903,7 @@ ctx.fill();
         ctx.stroke();
       }
       else if(this.attackType==='tempostormLaser'){
-        const sx=this.x+this.width/2, sy=this.y+this.height/2;
-        const tx = sx + (this.facingRight?1:-1)*this.range;
-        const ty = sy;
-        ctx.strokeStyle='rgba(79,195,247,0.75)';ctx.lineWidth=7;
-        ctx.beginPath();ctx.moveTo(sx,sy);ctx.lineTo(tx,ty);ctx.stroke();
+        // Tempostorm: nessuna "mira" extra qui. Il laser reale viene disegnato dal VFX (tempBeams).
       }
       ctx.restore()
     }
@@ -9829,7 +10279,8 @@ this.speed=cfg.enemySpeed;
       }
     }
 
-    this.x+=this.vx;this.y+=this.vy;
+        const _ms= (typeof _mezzalunaEnemySpeedMult==='function') ? _mezzalunaEnemySpeedMult(this, Date.now()) : 1;
+    this.x+=this.vx*_ms;this.y+=this.vy*_ms;
     // boundaries
     if(this.x<0)this.x=0;if(this.x+this.width>canvas.width)this.x=canvas.width-this.width;
     if(this.y<0)this.y=0;if(this.y+this.height>canvas.height-30)this.y=canvas.height-30-this.height;
@@ -9883,7 +10334,10 @@ ctx.fill();
         ctx.restore();
       }
     }catch(e){}
-  }
+  
+    // Mezzaluna mark (crescente luminosa)
+    try{ drawMezzalunaMarkOnEnemy(this); }catch(e){}
+}
 }
 
 class ShooterEnemy extends Enemy{
@@ -9917,7 +10371,8 @@ class ShooterEnemy extends Enemy{
     if(dist<220){const nx=dx/(dist||1);const ny=dy/(dist||1);this.vx=-nx*this.speed;this.vy=-ny*this.speed}
     else if(dist>360){const nx=dx/(dist||1);const ny=dy/(dist||1);this.vx=nx*this.speed;this.vy=ny*this.speed}
     else{this.vx*=0.9;this.vy*=0.9}
-    this.x+=this.vx;this.y+=this.vy;
+        const _ms= (typeof _mezzalunaEnemySpeedMult==='function') ? _mezzalunaEnemySpeedMult(this, Date.now()) : 1;
+    this.x+=this.vx*_ms;this.y+=this.vy*_ms;
     if(this.x<0)this.x=0;if(this.x+this.width>canvas.width)this.x=canvas.width-this.width;
     if(this.y<0)this.y=0;if(this.y+this.height>canvas.height-30)this.y=canvas.height-30-this.height;
     if(Date.now()-this.lastShoot>this.shootCooldown){
@@ -9956,7 +10411,10 @@ ctx.shadowBlur = 25;
 ctx.fill();
         ctx.restore();
       }
-    }catch(e){}  }
+    }catch(e){}  
+    // Mezzaluna mark (crescente luminosa)
+    try{ drawMezzalunaMarkOnEnemy(this); }catch(e){}
+}
 }
 
 
@@ -10048,7 +10506,10 @@ ctx.shadowBlur = 25;
 ctx.fill();
         ctx.restore();
       }
-    }catch(e){}  }
+    }catch(e){}  
+    // Mezzaluna mark (crescente luminosa)
+    try{ drawMezzalunaMarkOnEnemy(this); }catch(e){}
+}
 }
 
 class GlacialEnemy extends Enemy{
@@ -10206,7 +10667,10 @@ ctx.shadowBlur = 25;
 ctx.fill();
         ctx.restore();
       }
-    }catch(e){}  }
+    }catch(e){}  
+    // Mezzaluna mark (crescente luminosa)
+    try{ drawMezzalunaMarkOnEnemy(this); }catch(e){}
+}
 }
 
 
@@ -10259,7 +10723,8 @@ class AttackReturnEnemy extends Enemy{
         this.vx=nx*this.speed;this.vy=ny*this.speed
       }else{this.vx=0;this.vy=0;this.state='idle'}
     }
-    this.x+=this.vx;this.y+=this.vy;
+        const _ms= (typeof _mezzalunaEnemySpeedMult==='function') ? _mezzalunaEnemySpeedMult(this, Date.now()) : 1;
+    this.x+=this.vx*_ms;this.y+=this.vy*_ms;
     if(this.x<0)this.x=0;if(this.x+this.width>canvas.width)this.x=canvas.width-this.width;
     if(this.y<0)this.y=0;if(this.y+this.height>canvas.height-30)this.y=canvas.height-30-this.height;
   }
@@ -10288,7 +10753,10 @@ ctx.shadowBlur = 25;
 ctx.fill();
         ctx.restore();
       }
-    }catch(e){}  }
+    }catch(e){}  
+    // Mezzaluna mark (crescente luminosa)
+    try{ drawMezzalunaMarkOnEnemy(this); }catch(e){}
+}
 }
 
 class BossEnemy extends Enemy{
@@ -10334,7 +10802,8 @@ class BossEnemy extends Enemy{
         }
       }
     }
-    this.x+=this.vx;this.y+=this.vy;
+        const _ms= (typeof _mezzalunaEnemySpeedMult==='function') ? _mezzalunaEnemySpeedMult(this, Date.now()) : 1;
+    this.x+=this.vx*_ms;this.y+=this.vy*_ms;
     if(this.x<0)this.x=0;if(this.x+this.width>canvas.width)this.x=canvas.width-this.width;
     if(this.y<0)this.y=0;if(this.y+this.height>canvas.height-30)this.y=canvas.height-30-this.height;
     if(Date.now()-this.lastSuper>this.superCooldown){
@@ -10368,7 +10837,10 @@ ctx.shadowBlur = 25;
 ctx.fill();
         ctx.restore();
       }
-    }catch(e){}  }
+    }catch(e){}  
+    // Mezzaluna mark (crescente luminosa)
+    try{ drawMezzalunaMarkOnEnemy(this); }catch(e){}
+}
 }
 class Boss5Enemy extends Enemy{
   constructor(type,level){
@@ -10645,7 +11117,10 @@ ctx.fill();
       ctx.stroke();
       ctx.restore();
     }
-  }
+  
+    // Mezzaluna mark (crescente luminosa)
+    try{ drawMezzalunaMarkOnEnemy(this); }catch(e){}
+}
 }
 
 
@@ -10925,55 +11400,139 @@ function drawRooneyAreaFX(now){
 window.cosmoShots = window.cosmoShots || [];
 function addCosmoShot(x1,y1,x2,y2){
   try{
-    window.cosmoShots.push({x1,y1,x2,y2,start:Date.now(),ttl:140});
+    const now = Date.now();
+
+    // Pre-generate broken segments so the beam feels irregular in both length and continuity
+    const segs=[];
+    let p=0;
+    const n = 5 + Math.floor(Math.random()*3); // 5–7 segments
+    for(let i=0;i<n;i++){
+      const segLen = 0.10 + Math.random()*0.18;
+      const gapLen = 0.03 + Math.random()*0.10;
+      const s0 = p;
+      const s1 = Math.min(1, p + segLen);
+      segs.push([s0, s1, Math.random()*Math.PI*2, 0.65 + Math.random()*0.70]);
+      p = s1 + gapLen;
+      if(p>=0.96) break;
+    }
+
+    window.cosmoShots.push({
+      x1,y1,x2,y2,
+      start: now,
+      ttl: 170,
+      segs,
+      amp: 0.10 + Math.random()*0.16,
+      phase: Math.random()*Math.PI*2
+    });
   }catch(e){}
 }
+
 function drawCosmoShots(now){
   const arr = window.cosmoShots;
   if(!arr || !arr.length) return;
   now = now || Date.now();
+
   for(let i=arr.length-1;i>=0;i--){
     const s=arr[i];
-    const t=(now-s.start)/(s.ttl||140);
+    const t=(now-s.start)/(s.ttl||170);
     if(t>=1){ arr.splice(i,1); continue; }
+
     const a = Math.max(0, 1-t);
-    const wob = Math.sin((now-s.start)/26)*2.2;
+
+    const dx = s.x2 - s.x1;
+    const dy = s.y2 - s.y1;
+    const L = Math.hypot(dx,dy) || 1;
+    const ux = dx / L, uy = dy / L;
+    const nx = -uy, ny = ux;
+
+    // Irregular beam reach (flickering length)
+    const flick = Math.sin((now-s.start)/19 + (s.phase||0)) * (s.amp||0.15);
+    const reach = Math.max(0.55, Math.min(1.0, 0.93 + flick - t*0.10));
 
     ctx.save();
-    ctx.globalAlpha = 0.85*a;
     ctx.lineCap='round';
 
-    // outer glow
-    ctx.strokeStyle='rgba(139,211,255,0.65)';
-    ctx.lineWidth = 10 + wob;
+    // Segmented "dark energy" beam (blu scuro quasi nero)
+    const segs = (s.segs && s.segs.length) ? s.segs : [[0, reach, 0, 1]];
+    for(const seg of segs){
+      let f0 = seg[0], f1 = seg[1];
+
+      // Animate segment endpoints (subtle drifting)
+      const drift = Math.sin((now-s.start)/23 + seg[2]) * 0.035;
+      f0 = Math.max(0, Math.min(1, f0 + drift));
+      f1 = Math.max(0, Math.min(1, f1 + drift));
+      if(f0>f1){ const tmp=f0; f0=f1; f1=tmp; }
+
+      f1 = Math.min(f1, reach);
+      if(f1<=0 || f0>=reach) continue;
+
+      // Mystical wobble (perpendicular)
+      const wob = Math.sin((now-s.start)/17 + seg[2]) * 2.6;
+      const off = wob * (0.6 + 0.4*Math.sin((now-s.start)/41 + seg[2]));
+
+      const xA = s.x1 + ux*L*f0 + nx*off;
+      const yA = s.y1 + uy*L*f0 + ny*off;
+      const xB = s.x1 + ux*L*f1 + nx*off;
+      const yB = s.y1 + uy*L*f1 + ny*off;
+
+      // Outer "void glow"
+      ctx.globalAlpha = 0.55*a*(seg[3]||1);
+      ctx.shadowColor = 'rgba(40,90,255,0.18)';
+      ctx.shadowBlur = 22;
+      ctx.strokeStyle = 'rgba(6,10,22,0.78)'; // near-black navy
+      ctx.lineWidth = 14 + 2*Math.sin((now-s.start)/29 + seg[2]);
+      ctx.beginPath(); ctx.moveTo(xA,yA); ctx.lineTo(xB,yB); ctx.stroke();
+
+      // Inner rim (dark blue energy)
+      ctx.globalAlpha = 0.85*a*(seg[3]||1);
+      ctx.shadowColor = 'rgba(35,110,255,0.22)';
+      ctx.shadowBlur = 28;
+      ctx.strokeStyle = 'rgba(12,28,85,0.80)';
+      ctx.lineWidth = 7.5;
+      ctx.beginPath(); ctx.moveTo(xA,yA); ctx.lineTo(xB,yB); ctx.stroke();
+
+      // Core (almost black)
+      ctx.globalAlpha = 0.95*a*(seg[3]||1);
+      ctx.shadowBlur = 0;
+      ctx.strokeStyle = 'rgba(3,6,18,0.96)';
+      ctx.lineWidth = 2.4;
+      ctx.beginPath(); ctx.moveTo(xA,yA); ctx.lineTo(xB,yB); ctx.stroke();
+    }
+
+    // Dark motes running along the beam (subtle, non-"laser")
+    for(let k=0;k<3;k++){
+      const p = (((now - s.start) / (s.ttl||170)) + k*0.23 + (s.phase||0)/6) % 1;
+      const f = Math.min(reach, Math.max(0, p*reach));
+      const j = Math.sin((now-s.start)/13 + k*2.1 + (s.phase||0)) * 3.5;
+
+      const mx = s.x1 + ux*L*f + nx*j;
+      const my = s.y1 + uy*L*f + ny*j;
+
+      ctx.globalAlpha = 0.33*a;
+      ctx.fillStyle = 'rgba(60,140,255,0.18)';
+      ctx.shadowColor = 'rgba(45,120,255,0.22)';
+      ctx.shadowBlur = 16;
+      ctx.beginPath();
+      ctx.arc(mx, my, 5.5, 0, Math.PI*2);
+      ctx.fill();
+    }
+
+    // Endpoint "void pulse"
+    const ex = s.x1 + ux*L*reach;
+    const ey = s.y1 + uy*L*reach;
+    ctx.globalAlpha = 0.45*a;
+    ctx.shadowColor = 'rgba(40,110,255,0.18)';
+    ctx.shadowBlur = 20;
+    ctx.strokeStyle='rgba(10,24,70,0.65)';
+    ctx.lineWidth = 2;
     ctx.beginPath();
-    ctx.moveTo(s.x1,s.y1);
-    ctx.lineTo(s.x2,s.y2);
+    ctx.arc(ex, ey, 6 + 2*Math.sin((now-s.start)/18), 0, Math.PI*2);
     ctx.stroke();
-
-    // core
-    ctx.globalAlpha = 0.95*a;
-    ctx.strokeStyle='rgba(255,255,255,0.92)';
-    ctx.lineWidth = 3.2;
-    ctx.beginPath();
-    ctx.moveTo(s.x1,s.y1);
-    ctx.lineTo(s.x2,s.y2);
-    ctx.stroke();
-
-    // endpoint spark
-    ctx.globalAlpha = 0.65*a;
-    ctx.fillStyle='rgba(255,255,255,0.95)';
-    ctx.beginPath();
-    ctx.arc(s.x2, s.y2, 5 + 2*Math.sin((now-s.start)/18), 0, Math.PI*2);
-    
-ctx.shadowColor = '#000000';
-ctx.shadowBlur = 25;
-
-ctx.fill();
 
     ctx.restore();
   }
 }
+
 
 
 /* ===== COSMO SYSTEMS: Marchio Cosmico + Singolarità ===== */
@@ -11095,7 +11654,11 @@ function updateCosmoSingularity(now){
       // Always-on pull even at long range, with aggressive ramp-up near the center.
       // Enemies can still move, but the drag + ramp makes the center eventually win.
       let pull = (0.12 + Math.pow(t, 1.32) * 3.2) * 2;
-      if (pull > 7.4) pull = 7.4;
+      // 1s before the super explodes, the attraction doubles
+      const _timeLeft = (orb.until||0) - now2;
+      if(_timeLeft <= 1000){ pull *= 2; }
+      const _pullCap = (_timeLeft <= 1000) ? 14.8 : 7.4;
+      if (pull > _pullCap) pull = _pullCap;
       e.x += (dx/(dist||1))*pull;
       e.y += (dy/(dist||1))*pull;
       // drag inside the field (simulated resistance)
@@ -11127,12 +11690,15 @@ function updateCosmoSingularity(now){
       const d=Math.hypot(ex-orb.x, ey-orb.y);
       if(d<=aoe){
         const dealt=applyEnemyDamage(e, base+bonus*(1-d/aoe));
-        createParticles(ex,ey,'#000000',28,7);
+        createParticles(ex,ey,'#05000b',56,7);
+        createParticles(ex,ey,'#000000',38,8);
         showDamageNumber(e.x,e.y,dealt);
       }
     }
-    createParticles(orb.x,orb.y,'#b8e6ff',90,8);
-    shakeAmount = Math.max(shakeAmount, 12);
+    createCosmoExplosionFX(orb.x, orb.y, 2.25);
+    createParticles(orb.x,orb.y,'#05000b',160,6);
+    createParticles(orb.x,orb.y,'#000000',120,7);
+    shakeAmount = Math.max(shakeAmount, 16);
     orb.active=false;
   }
 }
@@ -11234,6 +11800,7 @@ return;
 
   if(player) player.update();
   if(player) updateArcoAntico(now, player);
+  if(player) updateMezzaluna(now, player);
     updateHendelCrush();
   enemies.forEach(e=>{e.update(player); clampToPlayBounds(e, 2);});
   updateCosmoMarks(now);
@@ -11246,6 +11813,7 @@ return;
   updateParticles();
   updateIraFX();
   updateVoltryxFX();
+  updateCosmoExplosionFX();
   updateProjectiles();
   updateLasers();
   updateTempBeams();
@@ -11266,9 +11834,10 @@ return;
     if(!levelAdvanceLock){
       levelAdvanceLock=true;
 
-      // Evolution trigger: after defeating Boss at Level 15 (boss3), only Jimmy/Rooney/Jeff evolve permanently from Level 16 onward
-      const canEvolve = player && (player.type==='jimmy' || player.type==='rooney' || player.type==='jeff');
-      if(gameState==='playing' && currentLevel===15 && canEvolve && !player.evolved){
+      // Evolution trigger: from Level 15 onward, only for characters with evolution enabled and RECORD >= 100.000
+      const canEvolve = player && characterHasEvolution(player.type);
+      const evoUnlocked = player && isEvolutionUnlocked(player.type);
+      if(gameState==='playing' && currentLevel>=EVOLUTION_MIN_LEVEL && canEvolve && evoUnlocked && !player.evolved){
         triggerEvolutionThenNextLevel(player.type);
       } else {
         setTimeout(()=>{
@@ -11304,6 +11873,7 @@ return;
   drawTempBeams();
   drawFuriaWaves();
   drawVoltryxFX();
+  drawCosmoExplosionFX();
   drawIraFX();
   drawParticles();
   drawHendelCrush();
@@ -11329,6 +11899,15 @@ return;
     ctx.restore();
   }
 
+
+  // COSMO super: cosmic-black screen pulse
+  if(cosmoScreenFlash>0){
+    ctx.save();
+    ctx.globalAlpha = Math.min(0.38, cosmoScreenFlash/34);
+    ctx.shadowColor = '#000000'; ctx.shadowBlur = 35; ctx.fillStyle = '#05000b';
+    ctx.fillRect(0,0,canvas.width,canvas.height);
+    ctx.restore();
+  }
   if(player){
     document.getElementById('hpText').textContent=Math.max(0,Math.round(player.hp));
     document.getElementById('hpFill').style.width=Math.max(0,Math.round((player.hp/player.maxHP)*100))+'%';
@@ -11364,6 +11943,13 @@ if(bonusBox){
   // ESTASI (LETTERA D'AMORE): marrone cioccolato
   add('ESTASI', player.estasiUntil, 'chocolate');
 
+  // MEZZALUNA: ciclo lunare (mostra fase)
+  if(player.mezzalunaUntil && player.mezzalunaUntil>nowT){
+    const ph = (typeof _mezzalunaPhase==='function') ? _mezzalunaPhase(nowT, player) : 1;
+    const name = (ph===1)?'LUNA CRESCENTE':(ph===2)?'LUNA PIENA':'LUNA CALANTE';
+    add('MEZZALUNA', player.mezzalunaUntil, '#90caf9');
+  }
+
   // Bane SUPER: mantieni indicazione separata per evitare doppio "IRA" quando Bane raccoglie il bonus
   if(player.type==='bane'){
     add('<span class="ira-glow">IRA SUPER</span>', player.baneSuperUntil, '#ff9800'); // arancione (Bane)
@@ -11386,6 +11972,21 @@ if(bonusBox){
   }
 }
 // ===============================================
+// MEZZALUNA: mostra la fase in grande sotto il livello corrente
+const moonPhaseEl = document.getElementById('moonPhaseDisplay');
+if(moonPhaseEl){
+  const nowP = Date.now();
+  if(player.mezzalunaUntil && player.mezzalunaUntil > nowP){
+    const ph = (typeof _mezzalunaPhase==='function') ? _mezzalunaPhase(nowP, player) : 1;
+    const name = (ph===1)?'LUNA CRESCENTE':(ph===2)?'LUNA PIENA':'LUNA CALANTE';
+    moonPhaseEl.style.display='block';
+    moonPhaseEl.textContent = name;
+  }else{
+    moonPhaseEl.style.display='none';
+    moonPhaseEl.textContent = '';
+  }
+}
+
   if(player.attackBuffUntil) document.getElementById('atkBuffDisplay').textContent=Math.max(0,Math.ceil((player.attackBuffUntil-Date.now())/1000))+'s';
   else document.getElementById('atkBuffDisplay').textContent='0s';
 }
@@ -12098,15 +12699,18 @@ if(btn) btn.addEventListener("click", openAccountMenu);
 
 
 function renderUnlockButton(character){
-    if(character.locked){
-        return `<button onclick="unlockCharacter('${character.id}')">
-                SBLOCCA (1000 Frammenti d'Etere)
-                </button>`;
-    }
-    return "";
+  if(!character || !character.locked) return "";
+  // Solo Cosmo si sblocca con Etere: gli altri mostrano solo i requisiti.
+  if(character.id==='cosmo'){
+    const cost = (typeof COSMO_COST!=='undefined' && COSMO_COST) ? COSMO_COST : (window.COSMO_COST||3000);
+    return `<button onclick="unlockCharacter('cosmo')">
+            SBLOCCA (${cost} Frammenti d'Etere)
+            </button>`;
+  }
+  return `<button onclick="unlockCharacter('${character.id}')">
+          REQUISITI SBLOCCO
+          </button>`;
 }
-
-
 function showCosmoShopModal(){
   const modal = document.getElementById('cosmoShopModal');
   if(!modal) return;
@@ -12217,14 +12821,18 @@ document.querySelectorAll('.char-grid button[data-target]').forEach(btn=>{
 
 
 function renderUnlockButton(character){
-    if(character.locked){
-        return `<button onclick="unlockCharacter('${character.id}')">
-                SBLOCCA (1000 Frammenti d'Etere)
-                </button>`;
-    }
-    return "";
+  if(!character || !character.locked) return "";
+  // Solo Cosmo si sblocca con Etere: gli altri mostrano solo i requisiti.
+  if(character.id==='cosmo'){
+    const cost = (typeof COSMO_COST!=='undefined' && COSMO_COST) ? COSMO_COST : (window.COSMO_COST||3000);
+    return `<button onclick="unlockCharacter('cosmo')">
+            SBLOCCA (${cost} Frammenti d'Etere)
+            </button>`;
+  }
+  return `<button onclick="unlockCharacter('${character.id}')">
+          REQUISITI SBLOCCO
+          </button>`;
 }
-
 </script>
 
 
@@ -12286,14 +12894,18 @@ document.querySelectorAll('.char-grid button[data-target]').forEach(btn=>{
 
 
 function renderUnlockButton(character){
-    if(character.locked){
-        return `<button onclick="unlockCharacter('${character.id}')">
-                SBLOCCA (1000 Frammenti d'Etere)
-                </button>`;
-    }
-    return "";
+  if(!character || !character.locked) return "";
+  // Solo Cosmo si sblocca con Etere: gli altri mostrano solo i requisiti.
+  if(character.id==='cosmo'){
+    const cost = (typeof COSMO_COST!=='undefined' && COSMO_COST) ? COSMO_COST : (window.COSMO_COST||3000);
+    return `<button onclick="unlockCharacter('cosmo')">
+            SBLOCCA (${cost} Frammenti d'Etere)
+            </button>`;
+  }
+  return `<button onclick="unlockCharacter('${character.id}')">
+          REQUISITI SBLOCCO
+          </button>`;
 }
-
 </script>
 
 
@@ -12342,14 +12954,18 @@ document.querySelectorAll('.char-grid button[data-target]').forEach(btn=>{
 
 
 function renderUnlockButton(character){
-    if(character.locked){
-        return `<button onclick="unlockCharacter('${character.id}')">
-                SBLOCCA (1000 Frammenti d'Etere)
-                </button>`;
-    }
-    return "";
+  if(!character || !character.locked) return "";
+  // Solo Cosmo si sblocca con Etere: gli altri mostrano solo i requisiti.
+  if(character.id==='cosmo'){
+    const cost = (typeof COSMO_COST!=='undefined' && COSMO_COST) ? COSMO_COST : (window.COSMO_COST||3000);
+    return `<button onclick="unlockCharacter('cosmo')">
+            SBLOCCA (${cost} Frammenti d'Etere)
+            </button>`;
+  }
+  return `<button onclick="unlockCharacter('${character.id}')">
+          REQUISITI SBLOCCO
+          </button>`;
 }
-
 </script>
 
 
@@ -12437,14 +13053,18 @@ function renderUnlockButton(character){
 })();
 
 function renderUnlockButton(character){
-    if(character.locked){
-        return `<button onclick="unlockCharacter('${character.id}')">
-                SBLOCCA (1000 Frammenti d'Etere)
-                </button>`;
-    }
-    return "";
+  if(!character || !character.locked) return "";
+  // Solo Cosmo si sblocca con Etere: gli altri mostrano solo i requisiti.
+  if(character.id==='cosmo'){
+    const cost = (typeof COSMO_COST!=='undefined' && COSMO_COST) ? COSMO_COST : (window.COSMO_COST||3000);
+    return `<button onclick="unlockCharacter('cosmo')">
+            SBLOCCA (${cost} Frammenti d'Etere)
+            </button>`;
+  }
+  return `<button onclick="unlockCharacter('${character.id}')">
+          REQUISITI SBLOCCO
+          </button>`;
 }
-
 </script>
 
 
@@ -12777,14 +13397,18 @@ document.addEventListener('DOMContentLoaded', ()=>{
 
 
 function renderUnlockButton(character){
-    if(character.locked){
-        return `<button onclick="unlockCharacter('${character.id}')">
-                SBLOCCA (1000 Frammenti d'Etere)
-                </button>`;
-    }
-    return "";
+  if(!character || !character.locked) return "";
+  // Solo Cosmo si sblocca con Etere: gli altri mostrano solo i requisiti.
+  if(character.id==='cosmo'){
+    const cost = (typeof COSMO_COST!=='undefined' && COSMO_COST) ? COSMO_COST : (window.COSMO_COST||3000);
+    return `<button onclick="unlockCharacter('cosmo')">
+            SBLOCCA (${cost} Frammenti d'Etere)
+            </button>`;
+  }
+  return `<button onclick="unlockCharacter('${character.id}')">
+          REQUISITI SBLOCCO
+          </button>`;
 }
-
 </script>
 
 <!-- Injected JS: compact grid selection behaviour -->
@@ -12837,14 +13461,18 @@ document.addEventListener('DOMContentLoaded', function(){
 });
 
 function renderUnlockButton(character){
-    if(character.locked){
-        return `<button onclick="unlockCharacter('${character.id}')">
-                SBLOCCA (1000 Frammenti d'Etere)
-                </button>`;
-    }
-    return "";
+  if(!character || !character.locked) return "";
+  // Solo Cosmo si sblocca con Etere: gli altri mostrano solo i requisiti.
+  if(character.id==='cosmo'){
+    const cost = (typeof COSMO_COST!=='undefined' && COSMO_COST) ? COSMO_COST : (window.COSMO_COST||3000);
+    return `<button onclick="unlockCharacter('cosmo')">
+            SBLOCCA (${cost} Frammenti d'Etere)
+            </button>`;
+  }
+  return `<button onclick="unlockCharacter('${character.id}')">
+          REQUISITI SBLOCCO
+          </button>`;
 }
-
 </script>
 
 
@@ -12888,14 +13516,18 @@ document.addEventListener('DOMContentLoaded', function(){
 });
 
 function renderUnlockButton(character){
-    if(character.locked){
-        return `<button onclick="unlockCharacter('${character.id}')">
-                SBLOCCA (1000 Frammenti d'Etere)
-                </button>`;
-    }
-    return "";
+  if(!character || !character.locked) return "";
+  // Solo Cosmo si sblocca con Etere: gli altri mostrano solo i requisiti.
+  if(character.id==='cosmo'){
+    const cost = (typeof COSMO_COST!=='undefined' && COSMO_COST) ? COSMO_COST : (window.COSMO_COST||3000);
+    return `<button onclick="unlockCharacter('cosmo')">
+            SBLOCCA (${cost} Frammenti d'Etere)
+            </button>`;
+  }
+  return `<button onclick="unlockCharacter('${character.id}')">
+          REQUISITI SBLOCCO
+          </button>`;
 }
-
 </script>
 
 
@@ -12935,14 +13567,18 @@ document.addEventListener('DOMContentLoaded', function(){
 });
 
 function renderUnlockButton(character){
-    if(character.locked){
-        return `<button onclick="unlockCharacter('${character.id}')">
-                SBLOCCA (1000 Frammenti d'Etere)
-                </button>`;
-    }
-    return "";
+  if(!character || !character.locked) return "";
+  // Solo Cosmo si sblocca con Etere: gli altri mostrano solo i requisiti.
+  if(character.id==='cosmo'){
+    const cost = (typeof COSMO_COST!=='undefined' && COSMO_COST) ? COSMO_COST : (window.COSMO_COST||3000);
+    return `<button onclick="unlockCharacter('cosmo')">
+            SBLOCCA (${cost} Frammenti d'Etere)
+            </button>`;
+  }
+  return `<button onclick="unlockCharacter('${character.id}')">
+          REQUISITI SBLOCCO
+          </button>`;
 }
-
 </script>
 
 
@@ -12975,14 +13611,18 @@ document.addEventListener('DOMContentLoaded', function(){
 });
 
 function renderUnlockButton(character){
-    if(character.locked){
-        return `<button onclick="unlockCharacter('${character.id}')">
-                SBLOCCA (1000 Frammenti d'Etere)
-                </button>`;
-    }
-    return "";
+  if(!character || !character.locked) return "";
+  // Solo Cosmo si sblocca con Etere: gli altri mostrano solo i requisiti.
+  if(character.id==='cosmo'){
+    const cost = (typeof COSMO_COST!=='undefined' && COSMO_COST) ? COSMO_COST : (window.COSMO_COST||3000);
+    return `<button onclick="unlockCharacter('cosmo')">
+            SBLOCCA (${cost} Frammenti d'Etere)
+            </button>`;
+  }
+  return `<button onclick="unlockCharacter('${character.id}')">
+          REQUISITI SBLOCCO
+          </button>`;
 }
-
 </script>
 
 
@@ -13039,14 +13679,18 @@ try{
 });
 
 function renderUnlockButton(character){
-    if(character.locked){
-        return `<button onclick="unlockCharacter('${character.id}')">
-                SBLOCCA (1000 Frammenti d'Etere)
-                </button>`;
-    }
-    return "";
+  if(!character || !character.locked) return "";
+  // Solo Cosmo si sblocca con Etere: gli altri mostrano solo i requisiti.
+  if(character.id==='cosmo'){
+    const cost = (typeof COSMO_COST!=='undefined' && COSMO_COST) ? COSMO_COST : (window.COSMO_COST||3000);
+    return `<button onclick="unlockCharacter('cosmo')">
+            SBLOCCA (${cost} Frammenti d'Etere)
+            </button>`;
+  }
+  return `<button onclick="unlockCharacter('${character.id}')">
+          REQUISITI SBLOCCO
+          </button>`;
 }
-
 </script>
 
 
@@ -13543,14 +14187,18 @@ setInterval(updateRoadBtnGlow, 650);
 
 
 function renderUnlockButton(character){
-    if(character.locked){
-        return `<button onclick="unlockCharacter('${character.id}')">
-                SBLOCCA (1000 Frammenti d'Etere)
-                </button>`;
-    }
-    return "";
+  if(!character || !character.locked) return "";
+  // Solo Cosmo si sblocca con Etere: gli altri mostrano solo i requisiti.
+  if(character.id==='cosmo'){
+    const cost = (typeof COSMO_COST!=='undefined' && COSMO_COST) ? COSMO_COST : (window.COSMO_COST||3000);
+    return `<button onclick="unlockCharacter('cosmo')">
+            SBLOCCA (${cost} Frammenti d'Etere)
+            </button>`;
+  }
+  return `<button onclick="unlockCharacter('${character.id}')">
+          REQUISITI SBLOCCO
+          </button>`;
 }
-
 </script>
 
 <script>
@@ -13605,14 +14253,18 @@ document.addEventListener('DOMContentLoaded', function(){
 });
 
 function renderUnlockButton(character){
-    if(character.locked){
-        return `<button onclick="unlockCharacter('${character.id}')">
-                SBLOCCA (1000 Frammenti d'Etere)
-                </button>`;
-    }
-    return "";
+  if(!character || !character.locked) return "";
+  // Solo Cosmo si sblocca con Etere: gli altri mostrano solo i requisiti.
+  if(character.id==='cosmo'){
+    const cost = (typeof COSMO_COST!=='undefined' && COSMO_COST) ? COSMO_COST : (window.COSMO_COST||3000);
+    return `<button onclick="unlockCharacter('cosmo')">
+            SBLOCCA (${cost} Frammenti d'Etere)
+            </button>`;
+  }
+  return `<button onclick="unlockCharacter('${character.id}')">
+          REQUISITI SBLOCCO
+          </button>`;
 }
-
 </script>
 
 <script>
@@ -13655,14 +14307,18 @@ document.addEventListener('DOMContentLoaded', function(){
 });
 
 function renderUnlockButton(character){
-    if(character.locked){
-        return `<button onclick="unlockCharacter('${character.id}')">
-                SBLOCCA (1000 Frammenti d'Etere)
-                </button>`;
-    }
-    return "";
+  if(!character || !character.locked) return "";
+  // Solo Cosmo si sblocca con Etere: gli altri mostrano solo i requisiti.
+  if(character.id==='cosmo'){
+    const cost = (typeof COSMO_COST!=='undefined' && COSMO_COST) ? COSMO_COST : (window.COSMO_COST||3000);
+    return `<button onclick="unlockCharacter('cosmo')">
+            SBLOCCA (${cost} Frammenti d'Etere)
+            </button>`;
+  }
+  return `<button onclick="unlockCharacter('${character.id}')">
+          REQUISITI SBLOCCO
+          </button>`;
 }
-
 </script>
 
 <script id="cosmo-buy-logic-patch">
@@ -13711,9 +14367,7 @@ const unlockMessages = {
   tempostorm: "Personaggio BLOCCATO\nSblocca facendo 65.000 punti\ncon tutti i personaggi precedenti",
   marz: "Personaggio BLOCCATO\nSblocca facendo 70.000 punti\ncon tutti i personaggi precedenti",
   hecate: "Personaggio BLOCCATO\nSblocca facendo 75.000 punti\ncon tutti i personaggi precedenti",
-  lucien: "Personaggio BLOCCATO
-Sblocca facendo 50.000 punti
-con MARCUS",
+  lucien: "Personaggio BLOCCATO\nSblocca facendo 50.000 punti\ncon MARCUS",
   pdor: "Personaggio BLOCCATO\nsi sblocca facendo 50.000\ncon marcus e lucien",
   bane: "Personaggio BLOCCATO\nSblocca facendo 50.000\ncon PDOR",
   hendel: "personaggio BLOCCATO  si sblocca facendo 50.000 con Bane",
@@ -13721,6 +14375,23 @@ con MARCUS",
   ,
   cosmo: "Personaggio BLOCCATO Sblocca acquistandolo con 3000 Frammenti d'Etere"
 };
+
+function unlockCharacter(charId){
+  try{
+    if(charId==='cosmo'){
+      // apertura shop Cosmo
+      if(typeof showCosmoShopModal==='function'){ showCosmoShopModal(); return; }
+    }
+    const msg = (typeof unlockMessages!=='undefined' && unlockMessages && unlockMessages[charId]) ? unlockMessages[charId] : "Personaggio BLOCCATO";
+    const box = document.getElementById('lockMessage');
+    const txt = document.getElementById('lockText');
+    if(box && txt){
+      txt.innerText = msg;
+      box.style.display = 'block';
+    }
+  }catch(e){}
+}
+
 
 const lockBox = document.getElementById('lockMessage');
 const lockText = document.getElementById('lockText');
@@ -13799,14 +14470,18 @@ document.querySelectorAll('.char-grid button[data-target]').forEach(btn=>{
 
 
 function renderUnlockButton(character){
-    if(character.locked){
-        return `<button onclick="unlockCharacter('${character.id}')">
-                SBLOCCA (1000 Frammenti d'Etere)
-                </button>`;
-    }
-    return "";
+  if(!character || !character.locked) return "";
+  // Solo Cosmo si sblocca con Etere: gli altri mostrano solo i requisiti.
+  if(character.id==='cosmo'){
+    const cost = (typeof COSMO_COST!=='undefined' && COSMO_COST) ? COSMO_COST : (window.COSMO_COST||3000);
+    return `<button onclick="unlockCharacter('cosmo')">
+            SBLOCCA (${cost} Frammenti d'Etere)
+            </button>`;
+  }
+  return `<button onclick="unlockCharacter('${character.id}')">
+          REQUISITI SBLOCCO
+          </button>`;
 }
-
 </script>
 
 
