@@ -251,6 +251,26 @@
 }
 .guide-body h3{color:#f39c12;margin-top:12px}
 .guide-body p, .guide-body ul{font-size:14px;line-height:1.45;color:#ddd}
+.guide-body .hud-pickup-list{
+  list-style:none;
+  padding-left:0;
+  margin-top:10px;
+}
+.guide-body .hud-pickup-item{
+  display:flex;
+  gap:10px;
+  align-items:flex-start;
+  margin:10px 0;
+}
+.guide-body .hud-pickup-icon{
+  width:34px;height:34px;
+  image-rendering:pixelated;
+  border:2px solid rgba(255,255,255,0.35);
+  border-radius:6px;
+  background:rgba(0,0,0,0.25);
+  flex:0 0 auto;
+}
+
 
 /* === Bestiario (nemici + boss) === */
 .enemy-guide-content{max-width:1020px;}
@@ -1672,9 +1692,9 @@ style="width:56px;height:56px;image-rendering:pixelated;display:block;">
     <button class="guide-close" id="cosmoShopCloseBtn" type="button" aria-label="Chiudi">✕</button>
     <div class="ether-title" id="cosmoShopTitle" style="color:#7fffd4;">COSMO 🌀</div>
     <div class="ether-body" style="font-size:18px;">
-      <div style="margin-bottom:10px;">Acquista <b>Cosmo</b> per <b>1000</b> Frammenti d'Etere.</div>
+      <div style="margin-bottom:10px;">Acquista <b>Cosmo</b> per <b>3000</b> Frammenti d'Etere.</div>
       <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:14px;">
-        <button class="btn btn-mini" id="cosmoShopBuyBtn" type="button">COMPRA (1000)</button>
+        <button class="btn btn-mini" id="cosmoShopBuyBtn" type="button">COMPRA (3000)</button>
         <button class="btn btn-mini" id="cosmoShopOkBtn" type="button" style="background:#555;">OK</button>
       </div>
       <div id="cosmoShopHint" style="margin-top:12px;opacity:0.9;color:#ddd;"></div>
@@ -1855,8 +1875,8 @@ style="height:1.9em;display:block;image-rendering:pixelated;">
 <div class="lock-badge" id="marcusLockBadge">LOCKED</div>
 </div>
 
-<!-- Lucien card (locked until record Marcus > 25.000) -->
-<div class="character-card disabled" data-char="lucien" id="card-lucien" title="Sblocca facendo più di 25.000 punti con Marcus">
+<!-- Lucien card (locked until record Marcus >= 50.000) -->
+<div class="character-card disabled" data-char="lucien" id="card-lucien" title="Sblocca facendo almeno 50.000 punti con Marcus">
 <h3>LUCIEN</h3>
 <p>"🗺️"</p>
 <div class="menu-stats"><span class="stat" id="menu-hp-lucien">100 XP</span><span class="spacer"> </span><span class="stat" id="menu-dmg-lucien">100 XP</span></div>
@@ -1903,8 +1923,8 @@ style="height:1.9em;display:block;image-rendering:pixelated;">
 <div class="record-badge" id="record-kaerith">Record: 0</div>
 <div class="lock-badge" id="kaerithLockBadge">LOCKED</div>
 
-<!-- Cosmo card (locked: purchase with 1000 ether) -->
-<div class="character-card disabled" data-char="cosmo" id="card-cosmo" title="Sblocca comprandolo con 1000 Frammenti d'Etere">
+<!-- Cosmo card (locked: purchase with 3000 ether) -->
+<div class="character-card disabled" data-char="cosmo" id="card-cosmo" title="Sblocca comprandolo con 3000 Frammenti d'Etere">
 <h3>COSMO 🌀</h3>
 <p>"🌀"</p>
 <div class="menu-stats"><span class="stat" id="menu-hp-cosmo">100 XP</span><span class="spacer"> </span><span class="stat" id="menu-dmg-cosmo">100 XP</span></div>
@@ -2056,6 +2076,62 @@ style="height:1.9em;display:block;image-rendering:pixelated;">
 </ul>
 <h3>4) INTERFACCIA (HUD)</h3>
 <p>Durante la partita sono sempre visibili: HP e barra della vita, timer del livello, livello corrente, cooldown della super, punteggio totale e indicatori di buff attivi. Tenere d’occhio il timer e la super è fondamentale per sopravvivere nei livelli avanzati.</p>
+<p><strong>Pickup (bonus e malus)</strong>: alcuni attivano un <strong>timer nel riquadro BONUS</strong> (icona + conteggio), altri sono <strong>istantanei</strong>. Elenco:</p>
+<ul class="hud-pickup-list">
+<li class="hud-pickup-item">
+  <img class="hud-pickup-icon" src="https://i.postimg.cc/c4jNccLC/heal.png" alt="Heal" loading="lazy"/>
+  <div><strong>Heal</strong>: cura il <strong>25%</strong> degli HP massimi (effetto istantaneo). Nel HUD non compare un timer: vedi solo gli HP salire.</div>
+</li>
+<li class="hud-pickup-item">
+  <img class="hud-pickup-icon" src="https://i.postimg.cc/cHjVcxsS/ATK.png" alt="Atk" loading="lazy"/>
+  <div><strong>Atk</strong>: aumenta il danno del <strong>+60%</strong> (moltiplicatore <strong>×1,6</strong>) per <strong>10s</strong>. Nel riquadro BONUS appare <strong>ATK</strong> con timer.</div>
+</li>
+<li class="hud-pickup-item">
+  <img class="hud-pickup-icon" src="https://i.postimg.cc/3rss4xSD/Super.png" alt="Super" loading="lazy"/>
+  <div><strong>Super</strong>: ricarica immediatamente la super (cooldown azzerato). Nel HUD la super risulta subito <strong>Ready</strong>, senza timer dedicato.</div>
+</li>
+<li class="hud-pickup-item">
+  <img class="hud-pickup-icon" src="https://i.postimg.cc/DzCV8QHb/speed.png" alt="Speed" loading="lazy"/>
+  <div><strong>Speed</strong>: aumenta la velocità di movimento del <strong>+50%</strong> (moltiplicatore <strong>×1,5</strong>) per <strong>7s</strong>. Nel riquadro BONUS appare <strong>SPEED</strong> con timer.</div>
+</li>
+<li class="hud-pickup-item">
+  <img class="hud-pickup-icon" src="https://i.postimg.cc/9XnS3QHh/shield.png" alt="Shield" loading="lazy"/>
+  <div><strong>Shield</strong>: rende <strong>invulnerabili</strong> per <strong>6s</strong>. Nel riquadro BONUS appare <strong>SCUDO</strong> con timer.</div>
+</li>
+<li class="hud-pickup-item">
+  <img class="hud-pickup-icon" src="https://i.postimg.cc/wjVZGc6h/gold.png" alt="Gold" loading="lazy"/>
+  <div><strong>Gold</strong>: <strong>cura totale</strong>, <strong>super pronta</strong> e buff <strong>ATK ×2</strong> per <strong>15s</strong>. Nel riquadro BONUS vedrai il timer <strong>ATK</strong>.</div>
+</li>
+<li class="hud-pickup-item">
+  <img class="hud-pickup-icon" src="https://i.postimg.cc/tT1cJKFm/malus.png" alt="Malus" loading="lazy"/>
+  <div><strong>Malus</strong>: applica <strong>Poison</strong> per <strong>10s</strong> (tick di <strong>1 danno/s</strong>). Nel riquadro BONUS compare <strong>POISON</strong> con timer.</div>
+</li>
+<li class="hud-pickup-item">
+  <img class="hud-pickup-icon" src="https://i.postimg.cc/BvCsTjYD/furia.png" alt="Furia" loading="lazy"/>
+  <div><strong>Furia</strong>: genera <strong>3 onde ad area</strong> (sempre più grandi) che infliggono <strong>20 danni</strong> ciascuna e attiva una rigenerazione di <strong>+10 HP/s</strong> per <strong>10s</strong>. Nel riquadro BONUS appare <strong>FURIA</strong> con timer.</div>
+</li>
+<li class="hud-pickup-item">
+  <img class="hud-pickup-icon" src="https://i.postimg.cc/GmF1RB1k/ice.png" alt="Ice" loading="lazy"/>
+  <div><strong>Ice</strong>: rallenta drasticamente i nemici presenti e applica un effetto di gelo con danno nel tempo (<strong>2 danni/s</strong> per <strong>17s</strong>). L’effetto è percepibile dal comportamento dei nemici; non sempre ha un timer dedicato nel riquadro BONUS.</div>
+</li>
+<li class="hud-pickup-item">
+  <img class="hud-pickup-icon" src="https://i.postimg.cc/gc37yNS8/LETTERA.png" alt="LETTERA D'AMORE" loading="lazy"/>
+  <div><strong>LETTERA D'AMORE</strong>: attiva lo stato <strong>ESTASI</strong> per <strong>15s</strong>. Durante ESTASI, il <strong>7%</strong> dei danni inflitti ai nemici viene convertito in <strong>cura</strong> che ripristina gli HP del personaggio. Nel riquadro BONUS appare <strong>ESTASI</strong> con timer in <span style="color:chocolate"><strong>marrone cioccolato</strong></span>.</div>
+</li>
+<li class="hud-pickup-item">
+    <img class="hud-pickup-icon" src="https://i.postimg.cc/85XW9S0V/stellarbonus.png" alt="StellarBonus" loading="lazy"/>
+    <div><strong>StellarBonus</strong>: <strong>+100 HP</strong> (fino al massimo) e <strong>+25% velocità</strong> per <strong>3s</strong>. Inoltre il personaggio emana un <strong>bagliore bianco</strong> per <strong>1s</strong>. Nel HUD lo riconosci come buff di velocità.</div>
+  </li>
+<li class="hud-pickup-item">
+    <img class="hud-pickup-icon" src="https://i.postimg.cc/xT3j1R9T/IRAA.png" alt="IRA" loading="lazy"/>
+    <div><strong>IRA</strong>: per <strong>6s</strong> ottieni <strong>+25% velocità</strong> e il <strong>cooldown dell’attacco base</strong> viene ridotto del <strong>75%</strong> (attacchi molto più rapidamente). Nel HUD appare un timer “IRA”.</div>
+  </li>
+<li class="hud-pickup-item">
+    <img class="hud-pickup-icon" src="https://i.postimg.cc/g0nG4b80/ARCOANTICO.png" alt="Arco Antico" loading="lazy"/>
+    <div><strong>Arco Antico</strong>: crea una <strong>colonna al centro</strong> per <strong>12s</strong> (ha <strong>480 HP</strong>). L’aura attorno alla colonna rallenta i nemici vicini del <strong>20%</strong>. Ogni <strong>3s</strong> attiva un sigillo casuale per <strong>3s</strong> <em>(solo per le entità dentro l’aura attorno alla colonna)</em>: <strong>Tempo</strong> (rallenta i nemici nell’aura dell’<strong>80%</strong>), <strong>Guerra</strong> (i nemici nell’aura subiscono <strong>danni doppi</strong>), <strong>Vita</strong> (rigeneri <strong>15 HP/s</strong> solo se resti nell’aura). Se la colonna scade <em>senza subire danni</em>, ottieni una <strong>Benedizione Antica</strong> permanente: <strong>+5% danno</strong> (stackabile). Se la colonna viene distrutta, esplode e gli effetti terminano subito. Nel HUD appare un timer “ARCO ANTICO”.</div>
+  </li>
+</ul>
+
 <h3>5) MOVIMENTO E DASH</h3>
 <p>Il movimento è libero in 8 direzioni.</p>
 <p><strong>Dash / Schivata</strong>: è uno scatto rapido che rende più difficile essere colpiti. Ha un cooldown breve. Serve per evitare attacchi corpo a corpo, schivare proiettili e laser e riposizionarsi rapidamente. Alcuni personaggi hanno dash più lunghi o più veloci rispetto ad altri.</p>
@@ -2079,6 +2155,7 @@ style="height:1.9em;display:block;image-rendering:pixelated;">
 <li><strong>Malus</strong>: applica poison.</li>
 <li><strong>Furia</strong>: emana 3 grandi onde ad area (sempre più grandi) che infliggono <strong>20 danni</strong> ciascuna; inoltre cura <strong>+10 HP/s</strong> per <strong>10s</strong>.</li>
 <li><strong>Ice</strong>: rallenta drasticamente <strong>tutti i nemici presenti</strong> (effetto permanente fino alla loro morte) e infligge <strong>2 danni/s</strong> per <strong>17s</strong>.</li>
+<li><strong>LETTERA D'AMORE</strong>: attiva <strong>ESTASI</strong> per <strong>15s</strong>. Durante ESTASI, il <strong>7%</strong> dei danni inflitti ai nemici ti cura (lifesteal) ripristinando gli HP.</li>
 </ul>
 <p>Usare correttamente i pickup può ribaltare completamente una partita.</p>
 <h3>10) PERSONAGGI – FUNZIONALITÀ E MECCANICHE</h3>
@@ -2172,7 +2249,7 @@ style="height:1.9em;display:block;image-rendering:pixelated;">
 <p><strong>Ruolo</strong>: tiratrice a lunga distanza + sustain tramite Super.</p>
 <p><strong>Statistiche</strong>: 325 HP, dash identico a Voltryx.</p>
 <p><strong>Attacco base</strong>: scocca una <strong>freccia a lunghissima distanza</strong> che infligge il danno maggiore al <strong>primo nemico colpito</strong>. Nel punto d’impatto la freccia si <strong>divide istantaneamente</strong> (effetto visivo) in <strong>tre frecce</strong> che cercano e colpiscono <strong>altri nemici</strong> (non quello già colpito).</p>
-<p><strong>Super – Richiamo Lunare</strong>: si cura di <strong>5 HP per ogni nemico presente</strong> nell’arena al momento dell’attivazione. Inoltre richiama tre lupi che attaccano i nemici con morsi letali il richiamo puo essere attivato piu volte ma in campo ci possono essere massimo 3 lupi</p>
+<p><strong>Super – Richiamo Lunare</strong>: si cura di <strong>5 HP per ogni nemico presente</strong> nell’arena al momento dell’attivazione. Inoltre richiama tre lupi che attaccano i nemici con morsi letali il richiamo puo essere attivato piu volte ma in campo ci possono essere massimo 5 lupi</p>
 <p><strong>Sblocco</strong>: 75.000 punti con tutti i personaggi precedenti.</p>
 </div>
 
@@ -2205,7 +2282,7 @@ style="height:1.9em;display:block;image-rendering:pixelated;">
 
 <div id="guide-lucien-locked" style="margin-top:10px;padding:10px;border:2px dashed rgba(255,255,255,0.35);background:rgba(255,255,255,0.05);">
   <h4>🗺️ LUCIEN</h4>
-  <p><em>Questo personaggio si sblocca facendo un record con <strong>Marcus</strong> superiore a <strong>25.000 punti</strong>. La descrizione completa apparirà automaticamente appena lo sblocchi.</em></p>
+  <p><em>Questo personaggio si sblocca facendo un record con <strong>Marcus</strong> di almeno <strong>50.000 punti</strong>. La descrizione completa apparirà automaticamente appena lo sblocchi.</em></p>
 </div>
 <div id="guide-lucien" style="display:none;">
   <h4>🗺️ LUCIEN</h4>
@@ -2214,7 +2291,7 @@ style="height:1.9em;display:block;image-rendering:pixelated;">
   <p><strong>Attacco base – Lama Rapida</strong>: 4 colpi <strong>molto ravvicinati</strong> da <strong>15</strong> danni ciascuno (stile Salsy ma più “a raffica” e a distanza più corta).</p>
   <p><strong>Super – Furto di Bonus</strong>: Lucien “ruba” <strong>5 bonus casuali</strong> e li rilascia attorno a sé: sono <strong>prendibili</strong> dal personaggio. La Super <strong>non</strong> può generare bonus che ricaricano la Super (quindi niente <strong>Gold</strong> e niente <strong>ricarica Super</strong>).</p>
   <p><strong>Stile consigliato</strong>: entra rapido, scarica i 4 colpi e usa la Super per trasformare il fight in vantaggio di buff.</p>
-  <p><strong>Sblocco</strong>: record con Marcus &gt; 25.000.</p>
+  <p><strong>Sblocco</strong>: record con Marcus ≥ 50.000.</p>
 </div>
 <div id="guide-pdor" style="display:none;">
   <h4>🪄 PDOR</h4>
@@ -2427,15 +2504,30 @@ const ctx=canvas.getContext('2d');
 
 function getPlayBounds(){
   // Limiti reali del campo giocabile (non per forza identici al canvas).
-  // Rispetta il margine HUD in basso e, se attivo, lo shrink di Hendel Crush.
+  // Rispetta il margine HUD in basso e restringe leggermente l'arena così che i nemici
+  // non finiscano sui bordi (e non "spariscano" ai lati).
   const bottomLimit = canvas.height-30;
-  let b = {left:0, top:0, right:canvas.width, bottom:bottomLimit};
 
-  // Hendel Crush: NON restringere l'arena del player (evita che Hendel venga trascinato al centro)
+  // Restringimento leggero del campo (tweakabile)
+  const insetX = 26;
+  const insetY = 20;
+
+  let b = {left: insetX, top: insetY, right: canvas.width - insetX, bottom: bottomLimit - insetY};
+
+  // Hendel Crush: NON restringere ulteriormente l'arena del player (evita che Hendel venga trascinato al centro).
   // La spinta verso il centro e il DoT sono già applicati ai nemici in updateHendelCrush().
-
   return b;
 }
+
+function clampToPlayBounds(ent, extra=0){
+  if(!ent) return;
+  const B = getPlayBounds();
+  const left = B.left + extra, top = B.top + extra;
+  const right = B.right - extra, bottom = B.bottom - extra;
+  ent.x = Math.max(left, Math.min(right - (ent.width||0), ent.x));
+  ent.y = Math.max(top,  Math.min(bottom - (ent.height||0), ent.y));
+}
+
 
 const bgDefault=document.getElementById('bgDefault');
 const bgDark=document.getElementById('bgDark');
@@ -2494,6 +2586,9 @@ function setDifficulty(mode){
     const ld=document.getElementById('levelDisplay'); if(ld) ld.style.display='none';
     const sc=document.getElementById('superCooldown'); if(sc) sc.style.display='none';
     enemies=[];particles=[];projectiles=[];lasers=[];tempBeams=[];pickups=[];wolves=[];
+
+    if(typeof pdorOrbSets!=='undefined' && pdorOrbSets) pdorOrbSets.length=0;
+  ancientColumn=null; ancientSealSlowUntil=0; ancientSealWarUntil=0;
     player=null;
     // ripristina HUD frammenti d'etere (menu)
     const etherUI=document.getElementById('etherHud');
@@ -2527,12 +2622,17 @@ function addKill(n=1){
   // matchKills mission update (solo in UNA partita: non accumula tra run)
 try{
   let shouldSave=false;
-  for(const m of missionsSorted){
-    if(m.claimed) continue;
+
+  // NOTE: non usare missionsSorted qui (è locale al renderer). Iteriamo lo stato reale.
+  const list = (accountState && Array.isArray(accountState.missions)) ? accountState.missions : [];
+  for(const m of list){
+    if(!m || m.claimed) continue;
     if(m.type==='matchKills'){
       if(matchKills >= m.target){
-        m.progress = m.target;
-        shouldSave=true; // salva solo quando completata
+        if(m.progress !== m.target){
+          m.progress = m.target;
+          shouldSave=true; // salva solo quando completata
+        }
       }else{
         // progress temporaneo per UI (non persistente)
         m.progress = Math.max(0, Math.min(m.target, matchKills));
@@ -2550,8 +2650,8 @@ const BONUS_HIT_RADIUS = 26; // was ~18
 const MALUS_HIT_RADIUS = 18;
 
 // Lower malus probability (weighted pick)
-function pickRandomPickupType(){
-  const weighted = [
+// Single source of truth for normal pickup/bonus types (drops + Lucien SUPER)
+const PICKUP_WEIGHTED = [
     ['heal', 1],
     ['atk', 1],
     ['super', 1],
@@ -2559,8 +2659,13 @@ function pickRandomPickupType(){
     ['shieldPickup', 1],
     ['furia', 1],
     ['ice', 1],
+    ['ira', 1],
+    ['letteraAmore', 1],
+    ['arcoAntico', 0.6],
     ['malus', 0.25], // nerfed
   ];
+function pickRandomPickupType(){
+  const weighted = PICKUP_WEIGHTED;
   let sum = 0;
   for (const [,w] of weighted) sum += w;
   let r = Math.random() * sum;
@@ -2591,52 +2696,72 @@ function spawnBossRing(opts){
 
 function updateBossRings(now){
   if(!player) return;
+
   bossRings = bossRings.filter(r=>{
     const t=(now-r.created)/(r.ttl||900);
     if(t>=1) return false;
 
     const cx=r.x, cy=r.y;
-    const px=player.x+player.width/2;
-    const py=player.y+player.height/2;
-    const dist=Math.hypot(px-cx, py-cy);
     const radius=(r.maxR||300)*t;
     const band=16;
 
-    // damage once when wave reaches player
-    if(!r.hit && dist <= radius+band){
-      r.hit=true;
-      player.takeDamage(r.damage, r.owner||null);
+    // Utility: damage a target once when wave reaches it
+    function hitTargetOnce(key, target){
+      if(!target) return;
+      if(r[key]) return;
+      const tx=target.x+target.width/2;
+      const ty=target.y+target.height/2;
+      const dist=Math.hypot(tx-cx, ty-cy);
+      if(dist <= radius+band){
+        r[key]=true;
+        // Prefer takeDamage when available (player + Arco Antico both have it)
+        if(target && typeof target.takeDamage==='function') target.takeDamage(r.damage, r.owner||null);
+        else if(target && typeof target.hp==='number') target.hp -= (r.damage||0);
+        createParticles(target.x, target.y, '#f1c40f', 18, 4);
 
-      // pull towards center (instant + short acceleration)
-      const dx=cx-px, dy=cy-py;
-      const d=Math.hypot(dx,dy)||1;
-      const nx=dx/d, ny=dy/d;
-      player.vx += nx*(r.pull||3);
-      player.vy += ny*(r.pull||3);
-      createParticles(player.x,player.y,'#f1c40f',18,4);
+        // Pull effect applies only to the real player (not wolves/colonna)
+        if(target === player){
+          const dx=cx-tx, dy=cy-ty;
+          const d=Math.hypot(dx,dy)||1;
+          const nx=dx/d, ny=dy/d;
+          player.vx += nx*(r.pull||3);
+          player.vy += ny*(r.pull||3);
 
-      // EXTRA: small positional pull on hit (Lv 20 Boss ring)
-      try{
-        if((typeof currentLevel!=='undefined' && currentLevel===20) && (r.owner && r.owner.type==='boss20')){
-          const nudge = 34; // "un po"
-          player.x += nx*nudge;
-          player.y += ny*nudge;
-          // clamp into arena
-          if(player.x<0) player.x=0;
-          if(player.y<0) player.y=0;
-          if(player.x+player.width>canvas.width) player.x=canvas.width-player.width;
-          if(player.y+player.height>canvas.height-30) player.y=canvas.height-30-player.height;
+          // EXTRA: small positional pull on hit (Lv 20 Boss ring)
+          try{
+            if((typeof currentLevel!=='undefined' && currentLevel===20) && (r.owner && r.owner.type==='boss20')){
+              const nudge = 34; // "un po"
+              player.x += nx*nudge;
+              player.y += ny*nudge;
+              // clamp into arena
+              if(player.x<0) player.x=0;
+              if(player.y<0) player.y=0;
+              if(player.x+player.width>canvas.width) player.x=canvas.width-player.width;
+              if(player.y+player.height>canvas.height-30) player.y=canvas.height-30-player.height;
+            }
+          }catch(e){}
         }
-      }catch(e){}
+      }
     }
 
-    // mild continuous pull while inside wave reach
-    if(dist <= radius+60){
-      const dx=cx-px, dy=cy-py;
-      const d=Math.hypot(dx,dy)||1;
-      player.vx += (dx/d)*0.12;
-      player.vy += (dy/d)*0.12;
+    // Hit player + (optional) Arco Antico
+    hitTargetOnce('hitPlayer', player);
+    if(typeof ancientColumn!=='undefined' && ancientColumn && ancientColumn.hp>0 && now < (ancientColumn.endsAt||0)){
+      hitTargetOnce('hitColumn', ancientColumn);
     }
+
+    // mild continuous pull while inside wave reach (player only)
+    try{
+      const px=player.x+player.width/2;
+      const py=player.y+player.height/2;
+      const distP=Math.hypot(px-cx, py-cy);
+      if(distP <= radius+60){
+        const dx=cx-px, dy=cy-py;
+        const d=Math.hypot(dx,dy)||1;
+        player.vx += (dx/d)*0.12;
+        player.vy += (dy/d)*0.12;
+      }
+    }catch(e){}
 
     return true;
   });
@@ -2740,13 +2865,15 @@ function isPointInsideMagicZone(x,y){
 }
 
 
-// --- PDOR SUPER: 7 luminous orbiting rings (slow + damage) ---
-let pdorOrbs = null;
+// --- PDOR SUPER: luminous orbiting rings (slow + damage) ---
+// Stackable: se PDOR usa la Super due volte di seguito, i cerchi si accumulano (fino a 2 set attivi).
+let pdorOrbSets = []; // array di set { endsAt, orbs: [...] }
+
 function startPdorOrbs(owner, now){
   const durationMs = 8000;
   const count = 7;
 
-  pdorOrbs = {
+  const set = {
     ownerType: owner && owner.type,
     startsAt: now,
     endsAt: now + durationMs,
@@ -2763,7 +2890,7 @@ function startPdorOrbs(owner, now){
     const ang0 = Math.random()*Math.PI*2;
     const angSpeed = (Math.random()<0.5?-1:1) * (0.036 + Math.random()*0.028); // rad/ms
 
-    pdorOrbs.orbs.push({
+    set.orbs.push({
       cx, cy,
       orbitR,
       ang: ang0,
@@ -2775,6 +2902,10 @@ function startPdorOrbs(owner, now){
       hitCd: new Map()
     });
   }
+
+  // Accumula (max 2 set contemporanei, come richiesto).
+  pdorOrbSets.push(set);
+  if(pdorOrbSets.length > 2) pdorOrbSets.splice(0, pdorOrbSets.length - 2);
 
   // visual burst
   if(owner){
@@ -2797,22 +2928,7 @@ function _applyEnemyTempSlow(enemy, factor, untilMs){
 }
 
 function updatePdorOrbs(now){
-  if(!pdorOrbs) return;
-
-  if(now >= pdorOrbs.endsAt){
-    // restore any remaining pdor slow
-    for(const e of enemies){
-      if(e && e._pdorSlowUntil){
-        if(typeof e._pdorSpeedBefore === 'number') e.speed = e._pdorSpeedBefore;
-        e._pdorSpeedBefore = undefined;
-        e._pdorSlowUntil = 0;
-      }
-    }
-    pdorOrbs = null;
-    return;
-  }
-
-  // restore expired slow effects
+  // restore expired slow effects (sempre, anche se non ci sono cerchi attivi)
   for(const e of enemies){
     if(e && e._pdorSlowUntil && now >= e._pdorSlowUntil){
       if(typeof e._pdorSpeedBefore === 'number') e.speed = e._pdorSpeedBefore;
@@ -2821,6 +2937,16 @@ function updatePdorOrbs(now){
     }
   }
 
+  if(!pdorOrbSets || pdorOrbSets.length===0) return;
+
+  // rimuovi set scaduti
+  for(let s=pdorOrbSets.length-1;s>=0;s--){
+    if(now >= pdorOrbSets[s].endsAt){
+      pdorOrbSets.splice(s,1);
+    }
+  }
+  if(pdorOrbSets.length===0) return;
+
   const ringThickness = 7;      // "molto ristrette"
   const emitEvery = 180;        // ms
   const pulseSpeed = 0.24;      // px/ms
@@ -2828,101 +2954,104 @@ function updatePdorOrbs(now){
   const pulseMin = 10;          // px
   const perTargetHitCd = 180;   // ms (per orb)
 
-  for(const orb of pdorOrbs.orbs){
-    orb.ang += orb.angSpeed;
-    orb.x = orb.cx + Math.cos(orb.ang)*orb.orbitR;
-    orb.y = orb.cy + Math.sin(orb.ang)*orb.orbitR;
+  for(const set of pdorOrbSets){
+    for(const orb of set.orbs){
+      orb.ang += orb.angSpeed;
+      orb.x = orb.cx + Math.cos(orb.ang)*orb.orbitR;
+      orb.y = orb.cy + Math.sin(orb.ang)*orb.orbitR;
 
-    // emit pulses
-    if(now - orb.lastEmit >= emitEvery){
-      orb.lastEmit = now;
-      orb.pulses.push({ r: pulseMin, born: now });
-    }
-
-    // advance pulses
-    for(let p=orb.pulses.length-1;p>=0;p--){
-      const pulse = orb.pulses[p];
-      pulse.r += pulseSpeed * (now - (pulse._lastNow||now));
-      pulse._lastNow = now;
-      if(pulse.r > pulseMax){
-        orb.pulses.splice(p,1);
-        continue;
+      // emit pulses
+      if(now - orb.lastEmit >= emitEvery){
+        orb.lastEmit = now;
+        orb.pulses.push({ r: pulseMin, born: now });
       }
 
-      // collision with enemies on the ring band
-      for(let i=enemies.length-1;i>=0;i--){
-        const e=enemies[i];
-        if(!e) continue;
-        const ex=e.x+e.width/2, ey=e.y+e.height/2;
-        const d=Math.hypot(ex-orb.x, ey-orb.y);
-        if(Math.abs(d - pulse.r) <= ringThickness){
-          const last = orb.hitCd.get(e) || 0;
-          if(now - last < perTargetHitCd) continue;
-          orb.hitCd.set(e, now);
+      // advance pulses
+      for(let p=orb.pulses.length-1;p>=0;p--){
+        const pulse = orb.pulses[p];
+        pulse.r += pulseSpeed * (now - (pulse._lastNow||now));
+        pulse._lastNow = now;
+        if(pulse.r > pulseMax){
+          orb.pulses.splice(p,1);
+          continue;
+        }
 
-          const dmg = 27;
-          const _final = applyEnemyDamage(e, dmg);
-          showDamageNumber(e.x, e.y, _final);
-          createParticles(ex, ey, '#000000', 10, 4);
+        // collision with enemies on the ring band
+        for(let i=enemies.length-1;i>=0;i--){
+          const e=enemies[i];
+          if(!e) continue;
+          const ex=e.x+e.width/2, ey=e.y+e.height/2;
+          const d=Math.hypot(ex-orb.x, ey-orb.y);
+          if(Math.abs(d - pulse.r) <= ringThickness){
+            const last = orb.hitCd.get(e) || 0;
+            if(now - last < perTargetHitCd) continue;
+            orb.hitCd.set(e, now);
 
-          _applyEnemyTempSlow(e, 0.5, 1000);
+            const dmg = 27;
+            const _final = applyEnemyDamage(e, dmg);
+            showDamageNumber(e.x, e.y, _final);
+            createParticles(ex, ey, '#000000', 10, 4);
 
-          if(e.hp<=0){
-            createParticles(e.x,e.y,'#fff176',30,6);
-            dropStellarBonusAtIndexIfNeeded(i);
-            enemies.splice(i,1);
-            applyScore(100*currentLevel);
-          addKill(); }
+            _applyEnemyTempSlow(e, 0.5, 1000);
+
+            if(e.hp<=0){
+              createParticles(e.x,e.y,'#fff176',30,6);
+              dropStellarBonusAtIndexIfNeeded(i);
+              enemies.splice(i,1);
+              applyScore(100*currentLevel);
+            addKill(); }
+          }
         }
       }
-    }
 
-    // keep hit map small
-    if(orb.hitCd.size>90){
-      // prune old entries
-      for(const [k,t] of orb.hitCd.entries()){
-        if(!k || now-t>1500) orb.hitCd.delete(k);
+      // keep hit map small
+      if(orb.hitCd.size>90){
+        // prune old entries
+        for(const [k,t] of orb.hitCd.entries()){
+          if(!k || now-t>1500) orb.hitCd.delete(k);
+        }
       }
     }
   }
 }
 
 function drawPdorOrbs(now){
-  if(!pdorOrbs) return;
+  if(!pdorOrbSets || pdorOrbSets.length===0) return;
 
   ctx.save();
   ctx.globalCompositeOperation='lighter';
   ctx.shadowColor = 'rgba(255,255,255,0.9)';
   ctx.shadowBlur = 25;
 
+  for(const set of pdorOrbSets){
+    for(const orb of set.orbs){
+      // core glow
+      const pulse = 0.55 + 0.45*Math.sin((now+orb.cx)/240);
+      ctx.globalAlpha = 0.55 + 0.25*pulse;
+      const grad = ctx.createRadialGradient(orb.x, orb.y, 0, orb.x, orb.y, 30);
+      grad.addColorStop(0, 'rgba(255,255,255,1)');
+      grad.addColorStop(0.4, 'rgba(255,255,255,0.8)');
+      grad.addColorStop(1, 'rgba(255,255,255,0)');
+      ctx.shadowColor = '#000000'; ctx.shadowBlur = 25; ctx.fillStyle = grad;
 
-  for(const orb of pdorOrbs.orbs){
-    // core glow
-    const pulse = 0.55 + 0.45*Math.sin((now+orb.cx)/240);
-    ctx.globalAlpha = 0.55 + 0.25*pulse;
-    const grad = ctx.createRadialGradient(orb.x, orb.y, 0, orb.x, orb.y, 30);
-    grad.addColorStop(0, 'rgba(255,255,255,1)');
-    grad.addColorStop(0.4, 'rgba(255,255,255,0.8)');
-    grad.addColorStop(1, 'rgba(255,255,255,0)');
-    ctx.shadowColor = '#000000'; ctx.shadowBlur = 25; ctx.fillStyle = grad;
+      ctx.beginPath();
+      ctx.arc(orb.x, orb.y, 7 + 2*pulse, 0, Math.PI*2);
 
-    ctx.beginPath();
-    ctx.arc(orb.x, orb.y, 7 + 2*pulse, 0, Math.PI*2);
-    
 ctx.shadowColor = '#000000';
 ctx.shadowBlur = 25;
 
 ctx.fill();
 
-    // pulses (thin circles)
-    for(const p of orb.pulses){
-      const a = 0.40 + 0.25*Math.sin((now - p.born)/90);
-      ctx.globalAlpha = a;
-      ctx.lineWidth = 3;
-      ctx.shadowColor = '#000000'; ctx.shadowBlur = 25; ctx.strokeStyle = 'rgba(255,255,255,0.95)';
-      ctx.beginPath();
-      ctx.arc(orb.x, orb.y, p.r, 0, Math.PI*2);
-      ctx.stroke();
+      // pulses (thin circles)
+      for(const p of orb.pulses){
+        const a = 0.40 + 0.25*Math.sin((now - p.born)/90);
+        ctx.globalAlpha = a;
+        ctx.lineWidth = 3;
+        ctx.shadowColor = '#000000'; ctx.shadowBlur = 25; ctx.strokeStyle = 'rgba(255,255,255,0.95)';
+        ctx.beginPath();
+        ctx.arc(orb.x, orb.y, p.r, 0, Math.PI*2);
+        ctx.stroke();
+      }
     }
   }
 
@@ -2942,7 +3071,7 @@ const images={rooney:new Image(),jimmy:new Image(),jeff:new Image(),voltryx:new 
 images.rooney.src='https://i.postimg.cc/Vs0G7ZPV/rooneyy.png';
 images.jimmy.src='https://i.postimg.cc/13Qzjdn4/jimmyy.png';
 images.jeff.src='https://i.postimg.cc/gkQN3v7R/jeff-(1).png';
-images.voltryx.src='https://i.postimg.cc/GhjK4WCy/Voltryxx.png';
+images.voltryx.src='https://i.postimg.cc/bv85Bbs4/voltryx-(1).png';
 images.kouvagia.src='https://i.postimg.cc/gj1xjk0G/kouvagiaa-(1).png';
 images.salsy.src='https://i.ibb.co/20zSkjsB/salsy.png';
 images.tempostorm.src='https://i.postimg.cc/mkzj763m/tempostorm.png';
@@ -2970,6 +3099,8 @@ const pickupImgs={
   gold: new Image(),
   stellar: new Image(),
   malus: new Image(),
+  ira: new Image(),
+  letteraAmore: new Image(),
 };
 pickupImgs.heal.src='https://i.postimg.cc/c4jNccLC/heal.png';
 pickupImgs.shield.src='https://i.postimg.cc/9XnS3QHh/shield.png';
@@ -2977,10 +3108,20 @@ pickupImgs.speed.src='https://i.postimg.cc/DzCV8QHb/speed.png';
 pickupImgs.atk.src='https://i.postimg.cc/cHjVcxsS/ATK.png';
 pickupImgs.super.src='https://i.postimg.cc/3rss4xSD/Super.png';
 pickupImgs.gold.src='https://i.postimg.cc/wjVZGc6h/gold.png';
-pickupImgs.stellar.src='https://i.postimg.cc/7hhNdJpp/bossbonus.png';
+pickupImgs.stellar.src='https://i.postimg.cc/85XW9S0V/stellarbonus.png';
 pickupImgs.malus.src='https://i.postimg.cc/tT1cJKFm/malus.png';
+pickupImgs.ira.src='https://i.postimg.cc/xT3j1R9T/IRAA.png';
+pickupImgs.letteraAmore.src='https://i.postimg.cc/gc37yNS8/LETTERA.png';
 pickupImgs.furia = new Image(); pickupImgs.furia.src='https://i.postimg.cc/BvCsTjYD/furia.png';
 pickupImgs.ice = new Image(); pickupImgs.ice.src='https://i.postimg.cc/GmF1RB1k/ice.png';
+
+// --- Marcus projectile sprite (musical note) ---
+const marcusNoteImg = new Image();
+marcusNoteImg.src = 'data:image/png;base64,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';
+
+
+// --- Arco Antico pickup + colonna ---
+pickupImgs.arcoAntico = new Image(); pickupImgs.arcoAntico.src='https://i.postimg.cc/g0nG4b80/ARCOANTICO.png';
 
 function getPickupImage(type){
   // internal type names
@@ -3206,7 +3347,7 @@ const characterStats={
     speed:6,
     damage:15,
     range:650,
-    cooldown:900,
+    cooldown:500,
     name:'Marcus',
     attackType:'marcusStream',
     superCooldown:27000,
@@ -3229,7 +3370,7 @@ const characterStats={
     speed:5.5,
     damage:42,
     range:700,
-    cooldown:180,
+    cooldown:420,
     name:'Pdor',
     attackType:'pdorDart',
     superCooldown:16000,
@@ -3276,7 +3417,7 @@ const characterStats={
   hecate:{
     hp:425,
     speed:7.5,
-    damage:52,
+    damage:57,
     range:990,
     cooldown:900,
     name:'Hècate',
@@ -3303,35 +3444,36 @@ const characterStats={
 
 
 const levelConfigs=[
-  {enemyType:'slime',enemyHP:45,enemyDamage:9,enemySpeed:2*0.75,time:45,enemyCount:4},
-  {enemyType:'slime',enemyHP:50,enemyDamage:10,enemySpeed:2*0.75,time:45,enemyCount:9 },
-  {enemyType:'drone',enemyHP:40,enemyDamage:11,enemySpeed:3*0.75,time:40,enemyCount:6},
-  {enemyType:'drone',enemyHP:40,enemyDamage:12,enemySpeed:3*0.75,time:40,enemyCount:7},
-  {enemyType:'boss1',enemyHP:150,enemyDamage:20,enemySpeed:2.8*0.75,time:60,enemyCount:1},
-  {enemyType:'mech',enemyHP:60,enemyDamage:16,enemySpeed:2.5*0.75,time:35,enemyCount:7},
-  {enemyType:'shadow',enemyHP:50,enemyDamage:17,enemySpeed:4*0.75,time:30,enemyCount:6},
-  {enemyType:'shadow',enemyHP:52,enemyDamage:18,enemySpeed:4 *0.75,time:30,enemyCount:6},
-  {enemyType:'mech',enemyHP:65,enemyDamage:16,enemySpeed:2.5*0.75,time:35,enemyCount:8},
-  {enemyType:'boss2',enemyHP:300,enemyDamage:27,enemySpeed:3*0.75,time:60,enemyCount:1},
-  {enemyType:'shooter',enemyHP:45,enemyDamage:20,enemySpeed:2.5*0.75,time:45,enemyCount:5},
-  {enemyType:'shooter',enemyHP:45,enemyDamage:21,enemySpeed:2.7*0.75,time:45,enemyCount:7},
-  {enemyType:'attacker',enemyHP:90,enemyDamage:17,enemySpeed:3.2*0.75,time:50,enemyCount:5},
-  {enemyType:'attacker',enemyHP:99,enemyDamage:19,enemySpeed:3.4*0.75,time:60,enemyCount:6},
-  {enemyType:'boss3',enemyHP:666,enemyDamage:33,enemySpeed:2.4*0.75,time:100,enemyCount:1}
-  ,{enemyType:'veleno',enemyHP:60,enemyDamage:13,enemySpeed:2.8*0.75,time:50,enemyCount:7} // Level 16
-  ,{enemyType:'veleno',enemyHP:70,enemyDamage:15,enemySpeed:2.9*0.75,time:50,enemyCount:9} // Level 17
-  ,{enemyType:'oneyes',enemyHP:55,enemyDamage:8,enemySpeed:2.1*0.75,time:55,enemyCount:4} // Level 18
-  ,{enemyType:'oneyes',enemyHP:60,enemyDamage:9,enemySpeed:2.3*0.75,time:55,enemyCount:5} // Level 19
-  ,{enemyType:'boss4',enemyHP:900,enemyDamage:30,enemySpeed:4.2,time:180,enemyCount:1} // Level 20
-  ,{enemyType:'archer',enemyHP:78,enemyDamage:14,enemySpeed:2.3*0.75,time:65,enemyCount:4} // Level 21 (Ice)
-  ,{enemyType:'archer',enemyHP:86,enemyDamage:15,enemySpeed:2.4*0.75,time:65,enemyCount:5} // Level 22 (Ice)
-  ,{enemyType:'glacial',enemyHP:150,enemyDamage:22,enemySpeed:2.3*0.75,time:70,enemyCount:2} // Level 23 (Ice)
-  ,{enemyType:'glacial',enemyHP:165,enemyDamage:24,enemySpeed:2.4*0.75,time:80,enemyCount:3} // Level 24 (Ice)
-
-  ,{enemyType:'boss5',enemyHP:800,enemyDamage:32,enemySpeed:2.2*0.75,time:200,enemyCount:1} // Level 25 (Boss V)
+  {enemyType:'slime',enemyHP:60,enemyDamage:12,enemySpeed:1.85,time:45,enemyCount:4}, // Level 1
+  {enemyType:'slime',enemyHP:75,enemyDamage:14,enemySpeed:1.95,time:45,enemyCount:9}, // Level 2
+  {enemyType:'drone',enemyHP:80,enemyDamage:18,enemySpeed:3.3,time:40,enemyCount:6}, // Level 3
+  {enemyType:'drone',enemyHP:90,enemyDamage:22,enemySpeed:3.6,time:40,enemyCount:7}, // Level 4
+  {enemyType:'boss1',enemyHP:450,enemyDamage:40,enemySpeed:4.0,time:60,enemyCount:1}, // Level 5
+  {enemyType:'mech',enemyHP:150,enemyDamage:35,enemySpeed:3.5,time:35,enemyCount:7}, // Level 6
+  {enemyType:'shadow',enemyHP:130,enemyDamage:33,enemySpeed:6.15,time:30,enemyCount:6}, // Level 7
+  {enemyType:'shadow',enemyHP:150,enemyDamage:38,enemySpeed:6.5,time:30,enemyCount:6}, // Level 8
+  {enemyType:'mech',enemyHP:200,enemyDamage:38,enemySpeed:4.5,time:35,enemyCount:8}, // Level 9
+  {enemyType:'boss2',enemyHP:1000,enemyDamage:70,enemySpeed:5.9,time:60,enemyCount:1}, // Level 10
+  {enemyType:'shooter',enemyHP:150,enemyDamage:31,enemySpeed:4.75,time:45,enemyCount:5}, // Level 11
+  {enemyType:'shooter',enemyHP:175,enemyDamage:34,enemySpeed:5.0,time:45,enemyCount:7}, // Level 12
+  {enemyType:'attacker',enemyHP:325,enemyDamage:45,enemySpeed:7.08,time:50,enemyCount:5}, // Level 13
+  {enemyType:'attacker',enemyHP:350,enemyDamage:50,enemySpeed:7.91,time:60,enemyCount:6}, // Level 14
+  {enemyType:'boss3',enemyHP:2200,enemyDamage:104,enemySpeed:5.85,time:100,enemyCount:1}, // Level 15
+  {enemyType:'veleno',enemyHP:300,enemyDamage:15,enemySpeed:6.8,time:50,enemyCount:7}, // Level 16
+  {enemyType:'veleno',enemyHP:350,enemyDamage:15,enemySpeed:7.0,time:50,enemyCount:9}, // Level 17
+  {enemyType:'oneyes',enemyHP:350,enemyDamage:27,enemySpeed:5.85,time:55,enemyCount:4}, // Level 18
+  {enemyType:'oneyes',enemyHP:400,enemyDamage:27,enemySpeed:6.0,time:55,enemyCount:5}, // Level 19
+  {enemyType:'boss4',enemyHP:2500,enemyDamage:30,enemySpeed:5.0,time:180,enemyCount:1}, // Level 20
+  {enemyType:'archer',enemyHP:400,enemyDamage:45,enemySpeed:5.75,time:65,enemyCount:4}, // Level 21
+  {enemyType:'archer',enemyHP:450,enemyDamage:55,enemySpeed:6.0,time:65,enemyCount:5}, // Level 22
+  {enemyType:'glacial',enemyHP:1000,enemyDamage:22,enemySpeed:7.68,time:70,enemyCount:2}, // Level 23
+  {enemyType:'glacial',enemyHP:1155,enemyDamage:22,enemySpeed:8.28,time:80,enemyCount:3}, // Level 24
+  {enemyType:'boss5',enemyHP:2500,enemyDamage:20,enemySpeed:4.5,time:200,enemyCount:1} // Level 25
 ];
 
 const RECORDS_KEY='pf_records_v19';
+let records = null; // initialized later (avoid TDZ for mission sync)
+
 
 /* ===== Account Level System (v1) ===== */
 const ACCOUNT_KEY = "pf_account_v1";
@@ -3340,6 +3482,7 @@ const ACCOUNT_DEFAULT = {
   xp: 0,
   xpNeed: 100,
   totalXp: 0,
+  missionXpAwarded: 0, // xp gained from mission rewards (reconciled from claim ledger)
   schema: 2,
   stats: {totalKills:0, superUses:0, pickups:0, totalGoldPickups:0, bestMatchKills:0, totalDamage:0, totalScore:0, totalHeal:0, jimmySuperKills:0, jimmySuperUses:0, rooneySuperUses:0, jeffSuperUses:0, voltryxSuperUses:0, kouvagiaSuperUses:0, salsySuperUses:0, tempostormSuperUses:0, marzSuperUses:0, hecateSuperUses:0, marcusSuperUses:0, lucienSuperUses:0, pdorSuperUses:0, baneSuperUses:0, hendelSuperUses:0, kaerithSuperUses:0, cosmoSuperUses:0 },
   missions: [
@@ -3348,86 +3491,86 @@ const ACCOUNT_DEFAULT = {
   { id:"m_rooney_1000",   char:"rooney",   target:1000, progress:0, xpReward:120, claimed:false, difficulty:null },
   { id:"m_jeff_1000",     char:"jeff",     target:1000, progress:0, xpReward:120, claimed:false, difficulty:null },
 
-  // INTERMEDIA (giallo) - 200 XP
-  { id:"m_goldpickups_50", title:"Raccogli 50 Pickups Gold (totali)", type:"goldPickups", target:50, progress:0, xpReward:200, claimed:false, difficulty:"mid" },
+  // INTERMEDIA (giallo) - 300 XP
+  { id:"m_goldpickups_50", title:"Raccogli 50 Pickups Gold (totali)", type:"goldPickups", target:50, progress:0, xpReward:300, claimed:false, difficulty:"mid" },
 
-  { id:"m_voltryx_1000",    char:"voltryx",    target:1000, progress:0, xpReward:200, claimed:false, difficulty:"mid" },
-  { id:"m_kouvagia_1000",   char:"kouvagia",   target:1000, progress:0, xpReward:200, claimed:false, difficulty:"mid" },
-  { id:"m_salsy_1000",      char:"salsy",      target:1000, progress:0, xpReward:200, claimed:false, difficulty:"mid" },
-  { id:"m_tempostorm_1000", char:"tempostorm", target:1000, progress:0, xpReward:200, claimed:false, difficulty:"mid" },
-  { id:"m_marz_1000",       char:"marz",       target:1000, progress:0, xpReward:200, claimed:false, difficulty:"mid" },
-  { id:"m_hecate_1000",     char:"hecate",     target:1000, progress:0, xpReward:200, claimed:false, difficulty:"mid" },
-  { id:"m_cosmo_1000",      char:"cosmo",      target:1000, progress:0, xpReward:200, claimed:false, difficulty:"mid" },
+  { id:"m_voltryx_1000",    char:"voltryx",    target:1000, progress:0, xpReward:300, claimed:false, difficulty:"mid" },
+  { id:"m_kouvagia_1000",   char:"kouvagia",   target:1000, progress:0, xpReward:300, claimed:false, difficulty:"mid" },
+  { id:"m_salsy_1000",      char:"salsy",      target:1000, progress:0, xpReward:300, claimed:false, difficulty:"mid" },
+  { id:"m_tempostorm_1000", char:"tempostorm", target:1000, progress:0, xpReward:300, claimed:false, difficulty:"mid" },
+  { id:"m_marz_1000",       char:"marz",       target:1000, progress:0, xpReward:300, claimed:false, difficulty:"mid" },
+  { id:"m_hecate_1000",     char:"hecate",     target:1000, progress:0, xpReward:300, claimed:false, difficulty:"mid" },
+  { id:"m_cosmo_1000",      char:"cosmo",      target:1000, progress:0, xpReward:300, claimed:false, difficulty:"mid" },
 
-  { id:"m_marcus_1000",   char:"marcus",   target:1000, progress:0, xpReward:200, claimed:false, difficulty:"mid" },
-  { id:"m_lucien_1000",   char:"lucien",   target:1000, progress:0, xpReward:200, claimed:false, difficulty:"mid" },
-  { id:"m_pdor_1000",     char:"pdor",     target:1000, progress:0, xpReward:200, claimed:false, difficulty:"mid" },
-  { id:"m_bane_1000",     char:"bane",     target:1000, progress:0, xpReward:200, claimed:false, difficulty:"mid" },
-  { id:"m_hendel_1000",   char:"hendel",   target:1000, progress:0, xpReward:200, claimed:false, difficulty:"mid" },
-  { id:"m_kaerith_1000",  char:"kaerith",  target:1000, progress:0, xpReward:200, claimed:false, difficulty:"mid" },
+  { id:"m_marcus_1000",   char:"marcus",   target:1000, progress:0, xpReward:300, claimed:false, difficulty:"mid" },
+  { id:"m_lucien_1000",   char:"lucien",   target:1000, progress:0, xpReward:300, claimed:false, difficulty:"mid" },
+  { id:"m_pdor_1000",     char:"pdor",     target:1000, progress:0, xpReward:300, claimed:false, difficulty:"mid" },
+  { id:"m_bane_1000",     char:"bane",     target:1000, progress:0, xpReward:300, claimed:false, difficulty:"mid" },
+  { id:"m_hendel_1000",   char:"hendel",   target:1000, progress:0, xpReward:300, claimed:false, difficulty:"mid" },
+  { id:"m_kaerith_1000",  char:"kaerith",  target:1000, progress:0, xpReward:300, claimed:false, difficulty:"mid" },
 
-  // FACILE (verde) - 100 XP
+  // FACILE (verde) - 150 XP
   // Missioni FACILI personaggio (100 XP): 500 kill con lo stesso personaggio
-  { id:"e_bane_500", char:"bane", target:500, progress:0, xpReward:100, claimed:false, difficulty:"easy" },
-  { id:"e_cosmo_500", char:"cosmo", target:500, progress:0, xpReward:100, claimed:false, difficulty:"easy" },
-  { id:"e_hecate_500", char:"hecate", target:500, progress:0, xpReward:100, claimed:false, difficulty:"easy" },
-  { id:"e_hendel_500", char:"hendel", target:500, progress:0, xpReward:100, claimed:false, difficulty:"easy" },
-  { id:"e_jeff_500", char:"jeff", target:500, progress:0, xpReward:100, claimed:false, difficulty:"easy" },
-  { id:"e_jimmy_500", char:"jimmy", target:500, progress:0, xpReward:100, claimed:false, difficulty:"easy" },
-  { id:"e_jimmy_super_50", title:"Uccidi 50 nemici con la super di Jimmy", type:"jimmySuperKills", target:50, progress:0, xpReward:100, claimed:false, difficulty:"easy" },
-  { id:"e_kaerith_500", char:"kaerith", target:500, progress:0, xpReward:100, claimed:false, difficulty:"easy" },
-  { id:"e_kouvagia_500", char:"kouvagia", target:500, progress:0, xpReward:100, claimed:false, difficulty:"easy" },
-  { id:"e_lucien_500", char:"lucien", target:500, progress:0, xpReward:100, claimed:false, difficulty:"easy" },
-  { id:"e_marcus_500", char:"marcus", target:500, progress:0, xpReward:100, claimed:false, difficulty:"easy" },
-  { id:"e_marz_500", char:"marz", target:500, progress:0, xpReward:100, claimed:false, difficulty:"easy" },
-  { id:"e_pdor_500", char:"pdor", target:500, progress:0, xpReward:100, claimed:false, difficulty:"easy" },
-  { id:"e_rooney_500", char:"rooney", target:500, progress:0, xpReward:100, claimed:false, difficulty:"easy" },
-  { id:"e_salsy_500", char:"salsy", target:500, progress:0, xpReward:100, claimed:false, difficulty:"easy" },
-  { id:"e_tempostorm_500", char:"tempostorm", target:500, progress:0, xpReward:100, claimed:false, difficulty:"easy" },
-  { id:"e_voltryx_500", char:"voltryx", target:500, progress:0, xpReward:100, claimed:false, difficulty:"easy" },
+  { id:"e_bane_500", char:"bane", target:500, progress:0, xpReward:150, claimed:false, difficulty:"easy" },
+  { id:"e_cosmo_500", char:"cosmo", target:500, progress:0, xpReward:150, claimed:false, difficulty:"easy" },
+  { id:"e_hecate_500", char:"hecate", target:500, progress:0, xpReward:150, claimed:false, difficulty:"easy" },
+  { id:"e_hendel_500", char:"hendel", target:500, progress:0, xpReward:150, claimed:false, difficulty:"easy" },
+  { id:"e_jeff_500", char:"jeff", target:500, progress:0, xpReward:150, claimed:false, difficulty:"easy" },
+  { id:"e_jimmy_500", char:"jimmy", target:500, progress:0, xpReward:150, claimed:false, difficulty:"easy" },
+  { id:"e_jimmy_super_50", title:"Uccidi 50 nemici con la super di Jimmy", type:"jimmySuperKills", target:50, progress:0, xpReward:150, claimed:false, difficulty:"easy" },
+  { id:"e_kaerith_500", char:"kaerith", target:500, progress:0, xpReward:150, claimed:false, difficulty:"easy" },
+  { id:"e_kouvagia_500", char:"kouvagia", target:500, progress:0, xpReward:150, claimed:false, difficulty:"easy" },
+  { id:"e_lucien_500", char:"lucien", target:500, progress:0, xpReward:150, claimed:false, difficulty:"easy" },
+  { id:"e_marcus_500", char:"marcus", target:500, progress:0, xpReward:150, claimed:false, difficulty:"easy" },
+  { id:"e_marz_500", char:"marz", target:500, progress:0, xpReward:150, claimed:false, difficulty:"easy" },
+  { id:"e_pdor_500", char:"pdor", target:500, progress:0, xpReward:150, claimed:false, difficulty:"easy" },
+  { id:"e_rooney_500", char:"rooney", target:500, progress:0, xpReward:150, claimed:false, difficulty:"easy" },
+  { id:"e_salsy_500", char:"salsy", target:500, progress:0, xpReward:150, claimed:false, difficulty:"easy" },
+  { id:"e_tempostorm_500", char:"tempostorm", target:500, progress:0, xpReward:150, claimed:false, difficulty:"easy" },
+  { id:"e_voltryx_500", char:"voltryx", target:500, progress:0, xpReward:150, claimed:false, difficulty:"easy" },
   // Missioni FACILI (100 XP): usa la SUPER 40 volte (accumulabile)
-  { id:"e_jimmy_super_40", type:"charSuperUses", char:"jimmy", target:40, progress:0, xpReward:100, claimed:false, difficulty:"easy" },
-  { id:"e_rooney_super_40", type:"charSuperUses", char:"rooney", target:40, progress:0, xpReward:100, claimed:false, difficulty:"easy" },
-  { id:"e_jeff_super_40", type:"charSuperUses", char:"jeff", target:40, progress:0, xpReward:100, claimed:false, difficulty:"easy" },
-  { id:"e_voltryx_super_40", type:"charSuperUses", char:"voltryx", target:40, progress:0, xpReward:100, claimed:false, difficulty:"easy" },
-  { id:"e_kouvagia_super_40", type:"charSuperUses", char:"kouvagia", target:40, progress:0, xpReward:100, claimed:false, difficulty:"easy" },
-  { id:"e_salsy_super_40", type:"charSuperUses", char:"salsy", target:40, progress:0, xpReward:100, claimed:false, difficulty:"easy" },
-  { id:"e_tempostorm_super_40", type:"charSuperUses", char:"tempostorm", target:40, progress:0, xpReward:100, claimed:false, difficulty:"easy" },
-  { id:"e_marz_super_40", type:"charSuperUses", char:"marz", target:40, progress:0, xpReward:100, claimed:false, difficulty:"easy" },
-  { id:"e_hecate_super_40", type:"charSuperUses", char:"hecate", target:40, progress:0, xpReward:100, claimed:false, difficulty:"easy" },
-  { id:"e_marcus_super_40", type:"charSuperUses", char:"marcus", target:40, progress:0, xpReward:100, claimed:false, difficulty:"easy" },
-  { id:"e_lucien_super_40", type:"charSuperUses", char:"lucien", target:40, progress:0, xpReward:100, claimed:false, difficulty:"easy" },
-  { id:"e_pdor_super_40", type:"charSuperUses", char:"pdor", target:40, progress:0, xpReward:100, claimed:false, difficulty:"easy" },
-  { id:"e_bane_super_40", type:"charSuperUses", char:"bane", target:40, progress:0, xpReward:100, claimed:false, difficulty:"easy" },
-  { id:"e_hendel_super_40", type:"charSuperUses", char:"hendel", target:40, progress:0, xpReward:100, claimed:false, difficulty:"easy" },
-  { id:"e_kaerith_super_40", type:"charSuperUses", char:"kaerith", target:40, progress:0, xpReward:100, claimed:false, difficulty:"easy" },
-  { id:"e_cosmo_super_40", type:"charSuperUses", char:"cosmo", target:40, progress:0, xpReward:100, claimed:false, difficulty:"easy" },
-  { id:"e_totalKills_500",    type:"totalKills", target:500,  progress:0, xpReward:100, claimed:false, difficulty:"easy" },
-  { id:"e_matchKills_75",     type:"matchKills", target:75,   progress:0, xpReward:100, claimed:false, difficulty:"easy" },
-  { id:"e_bossLevel10",       type:"bossLevel",  target:1,    progress:0, xpReward:100, claimed:false, difficulty:"easy", levelTarget:10 },
-  { id:"e_superUses_50",      type:"superUses",  target:50,   progress:0, xpReward:100, claimed:false, difficulty:"easy" },
-  { id:"e_pickups_100",       type:"pickups",    target:100,  progress:0, xpReward:100, claimed:false, difficulty:"easy" },
-  { id:"e_totalKills_1000",   type:"totalKills",  target:1000,  progress:0, xpReward:100, claimed:false, difficulty:"easy" },
-  { id:"e_totalHeal_5000",    title:"Recupera 5000 HP (totali)",    type:"totalHeal", target:5000,   progress:0, xpReward:100, claimed:false, difficulty:"easy" },
-  { id:"e_record_jimmy_40000", type:"recordScore", char:"jimmy", target:40000, progress:0, xpReward:100, claimed:false, difficulty:"easy" },
-  { id:"e_record_jeff_40000",  type:"recordScore", char:"jeff",  target:40000, progress:0, xpReward:100, claimed:false, difficulty:"easy" },
-  { id:"e_record_rooney_40000",type:"recordScore", char:"rooney",target:40000, progress:0, xpReward:100, claimed:false, difficulty:"easy" },
-  { id:"e_totalScore_175000",  type:"totalScore", target:175000, progress:0, xpReward:100, claimed:false, difficulty:"easy" },
-  { id:"m_totalScore_500000",  type:"totalScore", target:500000, progress:0, xpReward:200, claimed:false, difficulty:"mid" },
-  { id:"m_totalHeal_50000",   title:"Recupera 50000 HP (totali)",   type:"totalHeal", target:50000,  progress:0, xpReward:200, claimed:false, difficulty:"mid" },
+  { id:"e_jimmy_super_40", type:"charSuperUses", char:"jimmy", target:40, progress:0, xpReward:150, claimed:false, difficulty:"easy" },
+  { id:"e_rooney_super_40", type:"charSuperUses", char:"rooney", target:40, progress:0, xpReward:150, claimed:false, difficulty:"easy" },
+  { id:"e_jeff_super_40", type:"charSuperUses", char:"jeff", target:40, progress:0, xpReward:150, claimed:false, difficulty:"easy" },
+  { id:"e_voltryx_super_40", type:"charSuperUses", char:"voltryx", target:40, progress:0, xpReward:150, claimed:false, difficulty:"easy" },
+  { id:"e_kouvagia_super_40", type:"charSuperUses", char:"kouvagia", target:40, progress:0, xpReward:150, claimed:false, difficulty:"easy" },
+  { id:"e_salsy_super_40", type:"charSuperUses", char:"salsy", target:40, progress:0, xpReward:150, claimed:false, difficulty:"easy" },
+  { id:"e_tempostorm_super_40", type:"charSuperUses", char:"tempostorm", target:40, progress:0, xpReward:150, claimed:false, difficulty:"easy" },
+  { id:"e_marz_super_40", type:"charSuperUses", char:"marz", target:40, progress:0, xpReward:150, claimed:false, difficulty:"easy" },
+  { id:"e_hecate_super_40", type:"charSuperUses", char:"hecate", target:40, progress:0, xpReward:150, claimed:false, difficulty:"easy" },
+  { id:"e_marcus_super_40", type:"charSuperUses", char:"marcus", target:40, progress:0, xpReward:150, claimed:false, difficulty:"easy" },
+  { id:"e_lucien_super_40", type:"charSuperUses", char:"lucien", target:40, progress:0, xpReward:150, claimed:false, difficulty:"easy" },
+  { id:"e_pdor_super_40", type:"charSuperUses", char:"pdor", target:40, progress:0, xpReward:150, claimed:false, difficulty:"easy" },
+  { id:"e_bane_super_40", type:"charSuperUses", char:"bane", target:40, progress:0, xpReward:150, claimed:false, difficulty:"easy" },
+  { id:"e_hendel_super_40", type:"charSuperUses", char:"hendel", target:40, progress:0, xpReward:150, claimed:false, difficulty:"easy" },
+  { id:"e_kaerith_super_40", type:"charSuperUses", char:"kaerith", target:40, progress:0, xpReward:150, claimed:false, difficulty:"easy" },
+  { id:"e_cosmo_super_40", type:"charSuperUses", char:"cosmo", target:40, progress:0, xpReward:150, claimed:false, difficulty:"easy" },
+  { id:"e_totalKills_500",    type:"totalKills", target:500,  progress:0, xpReward:150, claimed:false, difficulty:"easy" },
+  { id:"e_matchKills_75",     type:"matchKills", target:75,   progress:0, xpReward:150, claimed:false, difficulty:"easy" },
+  { id:"e_bossLevel10",       type:"bossLevel",  target:1,    progress:0, xpReward:150, claimed:false, difficulty:"easy", levelTarget:10 },
+  { id:"e_superUses_50",      type:"superUses",  target:50,   progress:0, xpReward:150, claimed:false, difficulty:"easy" },
+  { id:"e_pickups_100",       type:"pickups",    target:100,  progress:0, xpReward:150, claimed:false, difficulty:"easy" },
+  { id:"e_totalKills_1000",   type:"totalKills",  target:1000,  progress:0, xpReward:150, claimed:false, difficulty:"easy" },
+  { id:"e_totalHeal_5000",    title:"Recupera 5000 HP (totali)",    type:"totalHeal", target:5000,   progress:0, xpReward:150, claimed:false, difficulty:"easy" },
+  { id:"e_record_jimmy_40000", type:"recordScore", char:"jimmy", target:40000, progress:0, xpReward:150, claimed:false, difficulty:"easy" },
+  { id:"e_record_jeff_40000",  type:"recordScore", char:"jeff",  target:40000, progress:0, xpReward:150, claimed:false, difficulty:"easy" },
+  { id:"e_record_rooney_40000",type:"recordScore", char:"rooney",target:40000, progress:0, xpReward:150, claimed:false, difficulty:"easy" },
+  { id:"e_totalScore_175000",  type:"totalScore", target:175000, progress:0, xpReward:150, claimed:false, difficulty:"easy" },
+  { id:"m_totalScore_500000",  type:"totalScore", target:500000, progress:0, xpReward:300, claimed:false, difficulty:"mid" },
+  { id:"m_totalHeal_50000",   title:"Recupera 50000 HP (totali)",   type:"totalHeal", target:50000,  progress:0, xpReward:300, claimed:false, difficulty:"mid" },
 
-// COMPLICATA (rosso) - 300 XP
-{ id:"h_jimmy_super_750", title:"Uccidi 750 nemici con la super di Jimmy", type:"jimmySuperKills", target:750, progress:0, xpReward:300, claimed:false, difficulty:"hard" },
-{ id:"h_level20_clear",    type:"reachLevel",      target:1,    progress:0, xpReward:300, claimed:false, difficulty:"hard", levelTarget:20 },
-{ id:"h_totalKills_10000", type:"totalKills",      target:10000, progress:0, xpReward:300, claimed:false, difficulty:"hard" },
-{ id:"h_level15_noSuper",  type:"noSuperToLevel",  target:1,    progress:0, xpReward:300, claimed:false, difficulty:"hard", levelTarget:15 },
-{ id:"h_level15_noDamage", type:"noDamageToLevel", target:1,    progress:0, xpReward:300, claimed:false, difficulty:"hard", levelTarget:15 },
+// COMPLICATA (rosso) - 450 XP
+{ id:"h_jimmy_super_750", title:"Uccidi 750 nemici con la super di Jimmy", type:"jimmySuperKills", target:750, progress:0, xpReward:450, claimed:false, difficulty:"hard" },
+{ id:"h_level20_clear",    type:"reachLevel",      target:1,    progress:0, xpReward:450, claimed:false, difficulty:"hard", levelTarget:20 },
+{ id:"h_totalKills_10000", type:"totalKills",      target:10000, progress:0, xpReward:450, claimed:false, difficulty:"hard" },
+{ id:"h_level15_noSuper",  type:"noSuperToLevel",  target:1,    progress:0, xpReward:450, claimed:false, difficulty:"hard", levelTarget:15 },
+{ id:"h_level15_noDamage", type:"noDamageToLevel", target:1,    progress:0, xpReward:450, claimed:false, difficulty:"hard", levelTarget:15 },
 
 // Danni (totali)
-{ id:"e_totalDmg_10000",  type:"totalDamage", target:10000,   progress:0, xpReward:100, claimed:false, difficulty:"easy" },
-{ id:"m_totalDmg_100000", type:"totalDamage", target:100000,  progress:0, xpReward:200, claimed:false, difficulty:"mid" },
-{ id:"h_totalDmg_2000000",type:"totalDamage", target:2000000, progress:0, xpReward:300, claimed:false, difficulty:"hard" },
-{ id:"h_totalHeal_500000",  title:"Recupera 500000 HP (totali)",  type:"totalHeal", target:500000, progress:0, xpReward:300, claimed:false, difficulty:"hard" },
+{ id:"e_totalDmg_10000",  type:"totalDamage", target:10000,   progress:0, xpReward:150, claimed:false, difficulty:"easy" },
+{ id:"m_totalDmg_100000", type:"totalDamage", target:100000,  progress:0, xpReward:300, claimed:false, difficulty:"mid" },
+{ id:"h_totalDmg_2000000",type:"totalDamage", target:2000000, progress:0, xpReward:450, claimed:false, difficulty:"hard" },
+{ id:"h_totalHeal_500000",  title:"Recupera 500000 HP (totali)",  type:"totalHeal", target:500000, progress:0, xpReward:450, claimed:false, difficulty:"hard" },
 
 
   // MITICA (platino) - 300 XP
@@ -3437,9 +3580,11 @@ const ACCOUNT_DEFAULT = {
 };
 
 function xpNeedForLevel(level){
-  // XP necessario per passare dal livello 'level' al successivo
+  // Curva potenza 1.75: XP(n) = baseXP × n^1.75
+  // XP necessario per passare dal livello 'level' al successivo.
   level = Math.max(1, Math.floor(level||1));
-  return Math.max(100, 100 * Math.pow(2, level-1));
+  const baseXP = 100;
+  return Math.max(100, Math.floor(baseXP * Math.pow(level, 1.75)));
 }
 
 function xpNeedForLevelOld(level){
@@ -3453,7 +3598,7 @@ function xpNeedForLevelOld(level){
 }
 
 function recalcAccountFromTotalXp(showAnim){
-  // Deriva level/xp/xpNeed dalla totalXp usando la curva attuale (100,200,400,...)
+  // Deriva level/xp/xpNeed dalla totalXp usando la curva potenza 1.75 (baseXP × n^1.75)
   const prevLevel = accountState.level;
   let total = Math.max(0, Math.floor(accountState.totalXp||0));
   let lvl = 1;
@@ -3517,6 +3662,7 @@ function loadAccount(){
     // Source of truth: totalXp
     if(typeof a.totalXp==="number"){
       out.totalXp = Math.max(0, Math.floor(a.totalXp));
+      if(typeof a.missionXpAwarded==="number") out.missionXpAwarded = Math.max(0, Math.floor(a.missionXpAwarded||0));
     }else{
       // Migrazione intelligente: ricostruisci TOTAL XP dalla vecchia curva (1.2+12) + livello + xp correnti
       // Esempio reale: livello 3 con 118/170 => 100 + 132 + 118 = 350 totalXP
@@ -3599,10 +3745,12 @@ function normalizeAccountProgress(showAnim){
 
 let accountState = loadAccount();
 
-/* === MISSIONS CLAIM-ONCE (stable) === */
+/* === MISSIONS CLAIM/PAYOUT (robust across refresh) === */
 const MISSION_CLAIMS_KEY = "pf_mission_claims_v2";
-function missionKey(m){
-  // Deterministic key even if ids are missing/duplicated
+const MISSION_PAYOUTS_KEY = "pf_mission_payouts_v1";
+
+// Legacy key used in older builds (kept for migration)
+function legacyMissionKey(m){
   const type = (m && (m.type ?? "base")) + "";
   const char = (m && (m.char ?? "")) + "";
   const diff = (m && (m.difficulty ?? "")) + "";
@@ -3610,6 +3758,13 @@ function missionKey(m){
   const title = (m && (m.title ?? m.name ?? "")) + "";
   return [type,char,diff,target,title].join("|");
 }
+
+// Stable key: prefer explicit id (most robust), fallback to legacy composite key
+function missionKey(m){
+  if(m && typeof m.id==="string" && m.id.trim()) return m.id.trim();
+  return legacyMissionKey(m);
+}
+
 function loadMissionClaims(){
   try{
     const raw = localStorage.getItem(MISSION_CLAIMS_KEY);
@@ -3620,26 +3775,106 @@ function loadMissionClaims(){
 function saveMissionClaims(set){
   try{ localStorage.setItem(MISSION_CLAIMS_KEY, JSON.stringify(Array.from(set))); }catch(e){}
 }
+
+// Payout ledger: key -> xpAmount (source of truth to ensure rewards are never lost)
+function loadMissionPayouts(){
+  try{
+    const raw = localStorage.getItem(MISSION_PAYOUTS_KEY);
+    const obj = raw ? JSON.parse(raw) : {};
+    return (obj && typeof obj==="object" && !Array.isArray(obj)) ? obj : {};
+  }catch(e){ return {}; }
+}
+function saveMissionPayouts(obj){
+  try{ localStorage.setItem(MISSION_PAYOUTS_KEY, JSON.stringify(obj||{})); }catch(e){}
+}
+
 let missionClaims = loadMissionClaims();
+let missionPayouts = loadMissionPayouts();
+
+// Migrate stored keys (legacy composite -> stable id)
+(function migrateMissionKeys(){
+  try{
+    if(!accountState || !Array.isArray(accountState.missions)) return;
+
+    let changedClaims = false;
+    let changedPayouts = false;
+
+    for(const m of accountState.missions){
+      if(!m) continue;
+
+      const idKey = (m && typeof m.id==="string" && m.id.trim()) ? m.id.trim() : null;
+      const legacyKey = legacyMissionKey(m);
+
+      // If we don't have an id, keep using legacy.
+      if(!idKey) continue;
+
+      // claims migration
+      if(missionClaims && missionClaims.has(legacyKey) && !missionClaims.has(idKey)){
+        missionClaims.add(idKey);
+        missionClaims.delete(legacyKey);
+        changedClaims = true;
+      }
+
+      // payouts migration
+      if(missionPayouts && (legacyKey in missionPayouts) && !(idKey in missionPayouts)){
+        missionPayouts[idKey] = missionPayouts[legacyKey];
+        delete missionPayouts[legacyKey];
+        changedPayouts = true;
+      }
+    }
+
+    if(changedClaims) saveMissionClaims(missionClaims);
+    if(changedPayouts) saveMissionPayouts(missionPayouts);
+  }catch(e){}
+})();
 
 function applyMissionClaimsToState(){
   try{
     if(!accountState || !Array.isArray(accountState.missions)) return;
     for(const m of accountState.missions){
       if(!m) continue;
-      const k = missionKey(m);
-      if(missionClaims.has(k)){
-        m.claimed = true;
-      }
+
       // ensure id exists (nice-to-have for debugging/UI)
       if(!m.id || typeof m.id!=="string" || !m.id.trim()){
-        m.id = k;
+        m.id = legacyMissionKey(m);
+      }
+
+      const k = missionKey(m);
+      if((missionClaims && missionClaims.has(k)) || (missionPayouts && (k in missionPayouts))){
+        m.claimed = true;
       }
     }
   }catch(e){}
 }
 
+// Reconcile: if a mission is marked claimed/paid in the ledger but XP was not persisted (refresh/close),
+// we re-add the missing XP once, based on the ledger sum.
+function reconcileMissionPayouts(){
+  try{
+    const payouts = (missionPayouts && typeof missionPayouts==="object") ? missionPayouts : {};
+    let sum = 0;
+    for(const k in payouts){
+      const v = Math.max(0, Math.floor(payouts[k]||0));
+      if(v>0) sum += v;
+    }
+
+    if(typeof accountState.missionXpAwarded!=="number"){
+      accountState.missionXpAwarded = 0;
+    }
+    accountState.missionXpAwarded = Math.max(0, Math.floor(accountState.missionXpAwarded||0));
+
+    if(sum > accountState.missionXpAwarded){
+      const delta = sum - accountState.missionXpAwarded;
+      accountState.missionXpAwarded = sum;
+      accountState.totalXp = Math.max(0, Math.floor(accountState.totalXp||0)) + delta;
+      recalcAccountFromTotalXp(false);
+      saveAccount();
+    }
+  }catch(e){}
+}
+
 applyMissionClaimsToState();
+reconcileMissionPayouts();
 
 normalizeAccountProgress(false);
 let matchKills=0;
@@ -3872,7 +4107,8 @@ const missionsSorted = (() => {
 
   for(const m of missionsSorted){
     const done = m.progress >= m.target;
-    const claimed = !!m.claimed || (missionClaims && missionClaims.has(missionKey(m)));
+    const kNow = missionKey(m);
+    const claimed = !!m.claimed || (missionClaims && missionClaims.has(kNow)) || (missionPayouts && (kNow in missionPayouts));
 
     const row=document.createElement("div");
     row.className="mission";
@@ -3883,7 +4119,7 @@ const missionsSorted = (() => {
     const title=document.createElement("div");
     title.className="m-title";
     const isBaseMission = (m && m.char && !m.type && ['jimmy','rooney','jeff'].includes(m.char));
-    const badge = isBaseMission ? "<span class='mission-base'>BASE</span>" : (m.difficulty==='easy') ? "<span class='mission-easy'>FACILE</span>" : (m.difficulty==='mid') ? "<span class='mission-mid'>INTERMEDIA</span>" : (m.difficulty==='hard') ? "<span class='mission-hard'>COMPLICATA</span>" : (m.difficulty==='mythic') ? "<span class='mission-mythic'>MITICA</span>" : "";
+    const badge = isBaseMission ? "<span class='mission-base'>BASE</span>" : (m.difficulty==='easy') ? "<span class='mission-easy'>SEMPLICE</span>" : (m.difficulty==='mid') ? "<span class='mission-mid'>INTERMEDIA</span>" : (m.difficulty==='hard') ? "<span class='mission-hard'>COMPLICATA</span>" : (m.difficulty==='mythic') ? "<span class='mission-mythic'>MITICA</span>" : "";
     if(m.char && !m.type){
       title.innerHTML = `Fai ${m.target} kill con ${charLabel(m.char)} ${badge}`;
     } else {
@@ -3925,12 +4161,31 @@ const missionsSorted = (() => {
       btn.disabled=false;
       btn.addEventListener("click", ()=>{
         const key = missionKey(m);
-        if(missionClaims && missionClaims.has(key)) return; // already claimed
-        if(missionClaims){ missionClaims.add(key); saveMissionClaims(missionClaims); }
-        m.claimed=true;
+
+        // Already paid/claimed (robust)
+        if(missionPayouts && (key in missionPayouts)) return;
+
+        const reward = Math.max(0, Math.floor(m.xpReward||0));
+
+        // 1) Write payout ledger first: prevents "claimed but no XP" after refresh/close
+        if(!missionPayouts || typeof missionPayouts!=="object") missionPayouts = {};
+        missionPayouts[key] = reward;
+        saveMissionPayouts(missionPayouts);
+
+        // 2) Mark claimed (both systems for backward compatibility)
+        if(missionClaims){
+          missionClaims.add(key);
+          saveMissionClaims(missionClaims);
+        }
+        m.claimed = true;
+
+        // 3) Apply XP and persist
+        accountState.missionXpAwarded = Math.max(0, Math.floor(accountState.missionXpAwarded||0)) + reward;
+        accountState.totalXp = Math.max(0, Math.floor(accountState.totalXp||0)) + reward;
+        recalcAccountFromTotalXp(true);
         saveAccount();
-        showXpFloat(`+${m.xpReward} XP`);
-        applyAccountXp(m.xpReward);
+
+        showXpFloat(`+${reward} XP`);
         refreshAccountUi(true);
       });
     }else{
@@ -4140,7 +4395,7 @@ function accountOnPickupCollected(pickupType){
 // Backward compatibility: try older keys used by previous versions
 const LEGACY_RECORDS_KEYS = ['pf_records_v18','pf_records_v17','pf_records_v16','pf_records_v15','pf_records'];
 // bumped key to include tempostormnclude salsy + new unlock rules // bumped key to include voltryx
-let records=loadRecords();
+records = loadRecords();
 // === SANITIZZAZIONE RECORD (fix bug Marz -> Hècate) ===
 (function sanitizeRecords(){
   if(!records) return;
@@ -4157,6 +4412,8 @@ let records=loadRecords();
   }
 })();
 
+// Re-sync missions now that records are available (recordScore, etc.)
+try{ syncMissionsFromStats(); saveAccount(); }catch(e){}
 
 function loadRecords(){
   const base={jimmy:0,rooney:0,jeff:0,voltryx:0,kouvagia:0,salsy:0,tempostorm:0,marz:0,hecate:0,marcus:0,lucien:0,pdor:0,bane:0,hendel:0,kaerith:0,cosmo:0};
@@ -4443,7 +4700,7 @@ function marcusUnlockedAny(){
   }
 }
 function lucienUnlocked(){
-  return (records.marcus||0) > 25000;
+  return (records.marcus||0) >= 50000;
 }
 function updateLucienUnlockUI(){
   const card=document.getElementById('card-lucien');
@@ -4458,7 +4715,7 @@ function updateLucienUnlockUI(){
   }else{
     card.classList.add('disabled');
     setLockBadgeState(badge, true);
-    card.title='Sblocca facendo un record con Marcus superiore a 25.000 punti';
+    card.title='Sblocca facendo almeno 50.000 punti con Marcus';
   }
 }
 
@@ -4705,12 +4962,12 @@ function showDamageNumber(x,y,dmg){
 }
 
 // ===== Lupi amichevoli (HÈCATE SUPER) =====
-const WOLF_MAX = 3;
+const WOLF_MAX = 5; // max lupi contemporanei a schermo
 class Wolf{
   constructor(x,y){
     this.x=x; this.y=y;
     this.width=72; this.height=72;
-    this.maxHP=51;
+    this.maxHP=102;
     this.hp=this.maxHP;
     this.maxHp=this.maxHP; // alias for legacy code
     this.speed=3.5; // movimento rapido ma non OP
@@ -4881,6 +5138,8 @@ function updateWolves(){
   if(!wolves || wolves.length===0) return;
   // remove dead
   wolves = wolves.filter(w => w && w.hp>0);
+  // hard cap (safety)
+  if(wolves.length > WOLF_MAX) wolves = wolves.slice(0, WOLF_MAX);
   for(const w of wolves) w.update();
 }
 
@@ -4889,26 +5148,347 @@ function drawWolves(){
   for(const w of wolves) w.draw();
 }
 
+
+
+// ===================== ARCO ANTICO (COLONNA) =====================
+let ancientColumn = null;            // {x,y,width,height,hp,maxHP,endsAt,nextSealAt,auraRadius,touched,takeDamage()}
+let ancientSealSlowUntil = 0;        // Sigillo del Tempo: slow enemies in aura 80%
+let ancientSealWarUntil = 0;         // Sigillo della Guerra: enemies in aura take double damage
+
+function isInArcoAnticoAura(entity){
+  try{
+    if(!ancientColumn || !entity) return false;
+    const cx = ancientColumn.x + ancientColumn.width/2;
+    const cy = ancientColumn.y + ancientColumn.height/2;
+    const ex = (entity.x||0) + (entity.width||0)/2;
+    const ey = (entity.y||0) + (entity.height||0)/2;
+    const d  = Math.hypot(ex - cx, ey - cy);
+    return d <= (ancientColumn.auraRadius||0);
+  }catch(e){ return false; }
+}
+
+function getAncientWarMult(now, enemy){
+  // Sigillo della Guerra: applica solo ai nemici dentro l'aura dell'Arco Antico
+  return (ancientSealWarUntil && now < ancientSealWarUntil && isInArcoAnticoAura(enemy)) ? 2 : 1;
+}
+
+function activateArcoAntico(playerRef){
+  const now = Date.now();
+  // reset any previous Arco Antico effects
+  ancientSealSlowUntil = 0;
+  ancientSealWarUntil = 0;
+  if(playerRef){ playerRef.ancientLifeUntil = 0; playerRef.ancientLifeLastTick = 0; }
+  const size = Math.min(canvas.width, canvas.height) * 0.55;
+  const w = Math.max(220, Math.min(420, size));
+  const h = w;
+  const x = canvas.width/2 - w/2;
+  const y = Math.max(20, (canvas.height-60)/2 - h/2);
+
+  ancientColumn = {
+    x, y, width:w, height:h,
+    maxHP:480, hp:480,
+    created: now,
+    endsAt: now + 12000,
+    nextSealAt: now + 3000,
+    auraRadius: Math.max(220, w*0.72),
+    touched: false,
+    lastSeal: null,
+    lastSealFxUntil: 0,
+    isDashing:false,
+
+    takeDamage: function(dmg, src){
+      const d = Math.max(1, Math.round(dmg||1));
+      this.touched = true;
+      this.hp -= d;
+      createParticles(this.x+this.width/2, this.y+this.height/2, '#c0c0c0', 10, 4);
+
+      if(this.hp <= 0){
+        this.hp = 0;
+        const cx = this.x+this.width/2, cy = this.y+this.height/2;
+        const R = Math.max(180, (this.auraRadius||240)*0.8);
+        const explosionDmg = Math.round(180 + (currentLevel||1)*8);
+
+        for(let i=enemies.length-1;i>=0;i--){
+          const e=enemies[i];
+          const ex=e.x+e.width/2, ey=e.y+e.height/2;
+          const dist=Math.hypot(ex-cx, ey-cy);
+          if(dist<=R){
+            const dealt = applyEnemyDamage(e, explosionDmg);
+            if(dealt>0) showDamageNumber(e.x,e.y,dealt);
+            createParticles(e.x,e.y,'#ffcc80',16,5);
+            if(e.hp<=0){
+              createParticles(e.x,e.y,'#fff176',30,6);
+              dropStellarBonusAtIndexIfNeeded(i);
+              enemies.splice(i,1);
+              applyScore(100*currentLevel);
+              addKill();
+            }
+          }
+        }
+        createParticles(cx,cy,'#ffd54f',80,7);
+        shakeScreen();
+
+        // clear effects immediately
+        ancientSealSlowUntil = 0;
+        ancientSealWarUntil = 0;
+        try{ if(typeof player!=='undefined' && player) player.ancientLifeUntil = 0; }catch(e){}
+
+        ancientColumn = null;
+      }
+    }
+  };
+
+  createParticles(ancientColumn.x+ancientColumn.width/2, ancientColumn.y+ancientColumn.height/2, '#c0c0c0', 60, 6);
+}
+
+function updateArcoAntico(now, playerRef){
+  if(!ancientColumn) return;
+
+  // Expire at 12s
+  if(now >= ancientColumn.endsAt){
+    if(ancientColumn.hp>0 && !ancientColumn.touched && playerRef){
+      // “Benedizione Antica” permanente: +5% danno fino a fine partita (stackabile)
+      if(playerRef._baseDamage==null) playerRef._baseDamage = playerRef.damage;
+      playerRef.ancientBlessingStacks = (playerRef.ancientBlessingStacks||0) + 1;
+      playerRef.damage = playerRef._baseDamage * (1 + 0.05*(playerRef.ancientBlessingStacks||0));
+      createParticles(playerRef.x+playerRef.width/2, playerRef.y+playerRef.height/2, '#fff176', 40, 6);
+    }
+
+    // end effects
+    ancientSealSlowUntil = 0;
+    ancientSealWarUntil = 0;
+    if(playerRef) playerRef.ancientLifeUntil = 0;
+    ancientColumn = null;
+    return;
+  }
+
+  // Every 3s trigger one seal for 3s
+  if(now >= (ancientColumn.nextSealAt||0)){
+    ancientColumn.nextSealAt = now + 3000;
+
+    const cx = ancientColumn.x+ancientColumn.width/2;
+    const cy = ancientColumn.y+ancientColumn.height/2;
+
+    const r = Math.floor(Math.random()*3);
+    if(r===0){
+      // Sigillo del Tempo → rallenta i nemici nell'aura dell'80%
+      ancientSealSlowUntil = now + 3000;
+      ancientColumn.lastSeal = 'tempo';
+      ancientColumn.lastSealFxStart = now;
+      ancientColumn.lastSealFxUntil = now + 1400;
+      ancientColumn.lastSealFlashUntil = now + 260;
+      createParticles(cx,cy,'#4fc3f7',70,6);
+    }else if(r===1){
+      // Sigillo della Guerra → danni doppi ai nemici nell'aura
+      ancientSealWarUntil = now + 3000;
+      ancientColumn.lastSeal = 'guerra';
+      ancientColumn.lastSealFxStart = now;
+      ancientColumn.lastSealFxUntil = now + 1400;
+      ancientColumn.lastSealFlashUntil = now + 260;
+      createParticles(cx,cy,'#ff5252',70,6);
+    }else{
+      // Sigillo della Vita → rigenera 15 hp al secondo
+      if(playerRef){
+        playerRef.ancientLifeUntil = now + 3000;
+        playerRef.ancientLifeLastTick = now;
+      }
+      ancientColumn.lastSeal = 'vita';
+      ancientColumn.lastSealFxStart = now;
+      ancientColumn.lastSealFxUntil = now + 1400;
+      ancientColumn.lastSealFlashUntil = now + 260;
+      createParticles(cx,cy,'#2ecc71',70,6);
+    }
+  }
+}
+
+function drawArcoAntico(now){
+  if(!ancientColumn) return;
+
+  const img = pickupImgs.arcoAntico;
+  const x=ancientColumn.x, y=ancientColumn.y, w=ancientColumn.width, h=ancientColumn.height;
+  const cx=x+w/2, cy=y+h/2;
+
+  // Which seal is currently active (drives aura color)
+  let activeSeal = null;
+  if(ancientSealSlowUntil && now < ancientSealSlowUntil) activeSeal = 'tempo';
+  else if(ancientSealWarUntil && now < ancientSealWarUntil) activeSeal = 'guerra';
+  else {
+    try{
+      if(typeof player!=='undefined' && player && player.ancientLifeUntil && now < player.ancientLifeUntil) activeSeal = 'vita';
+    }catch(e){}
+  }
+  if(!activeSeal) activeSeal = ancientColumn.lastSeal;
+
+  const sealCol = (activeSeal==='tempo') ? 'rgba(79,195,247,' :
+                  (activeSeal==='guerra') ? 'rgba(255,82,82,' :
+                  (activeSeal==='vita') ? 'rgba(46,204,113,' :
+                  'rgba(192,192,192,';
+
+  // Seal change animation intensity
+  let fx = 0;
+  if(ancientColumn.lastSeal && now < (ancientColumn.lastSealFxUntil||0)){
+    const st = (ancientColumn.lastSealFxStart||now);
+    const dur = Math.max(1, (ancientColumn.lastSealFxUntil||0) - st);
+    const t = Math.max(0, Math.min(1, (now - st) / dur));
+    fx = 1 - t; // 1 -> 0
+  }
+
+  // Aura (always visible) — color changes with active seal
+  ctx.save();
+  ctx.shadowColor = '#000000';
+  ctx.shadowBlur = 18;
+
+  // fill
+  ctx.globalAlpha = 0.14 + 0.10*fx;
+  ctx.fillStyle = sealCol + '0.85)';
+  ctx.beginPath();
+  ctx.arc(cx, cy, ancientColumn.auraRadius, 0, Math.PI*2);
+  ctx.fill();
+
+  // edge
+  ctx.globalAlpha = 0.45 + 0.25*fx;
+  ctx.strokeStyle = sealCol + '0.95)';
+  ctx.lineWidth = 5 + 4*fx;
+  ctx.beginPath();
+  ctx.arc(cx, cy, ancientColumn.auraRadius, 0, Math.PI*2);
+  ctx.stroke();
+
+  // subtle inner rings (readability)
+  ctx.globalAlpha = 0.12 + 0.10*fx;
+  ctx.lineWidth = 2;
+  for(let i=1;i<=2;i++){
+    ctx.beginPath();
+    ctx.arc(cx, cy, ancientColumn.auraRadius*(i/3), 0, Math.PI*2);
+    ctx.stroke();
+  }
+  ctx.restore();
+
+  // Central image (opaque-ish) with a short flash on seal swap
+  let imgAlpha = 0.38;
+  if(ancientColumn.lastSealFlashUntil && now < ancientColumn.lastSealFlashUntil){
+    const st = (ancientColumn.lastSealFxStart||now);
+    const dur = Math.max(1, (ancientColumn.lastSealFlashUntil||0) - st);
+    const t = Math.max(0, Math.min(1, (now - st) / dur));
+    imgAlpha = 0.62 - 0.22*t;
+  }
+  ctx.save();
+  ctx.globalAlpha = imgAlpha;
+  if(img && img.complete && img.naturalWidth>0){
+    ctx.drawImage(img, x, y, w, h);
+  }else{
+    ctx.shadowColor = '#000000'; ctx.shadowBlur = 25; ctx.fillStyle = 'rgba(220,220,220,0.55)';
+    ctx.fillRect(x,y,w,h);
+  }
+  ctx.restore();
+
+  // HP bar
+  const hpPct = Math.max(0, Math.min(1, ancientColumn.hp / ancientColumn.maxHP));
+  ctx.save();
+  ctx.globalAlpha = 0.90;
+  const barW = w*0.62, barH=10;
+  ctx.fillStyle='rgba(0,0,0,0.55)';
+  ctx.fillRect(cx-barW/2, y-22, barW, barH);
+  ctx.fillStyle= hpPct>0.5 ? '#2ecc71' : hpPct>0.25 ? '#f39c12' : '#e74c3c';
+  ctx.fillRect(cx-barW/2, y-22, barW*hpPct, barH);
+
+  // Stronger seal-swap animation
+  if(ancientColumn.lastSeal && now < (ancientColumn.lastSealFxUntil||0)){
+    const col = (ancientColumn.lastSeal==='tempo') ? 'rgba(79,195,247,0.95)' :
+                (ancientColumn.lastSeal==='guerra') ? 'rgba(255,82,82,0.95)' :
+                'rgba(46,204,113,0.95)';
+    const st = (ancientColumn.lastSealFxStart||now);
+    const dur = Math.max(1, (ancientColumn.lastSealFxUntil||0) - st);
+    const t = Math.max(0, Math.min(1, (now - st) / dur));
+
+    ctx.save();
+    ctx.shadowColor = '#000000'; ctx.shadowBlur = 25;
+    ctx.strokeStyle = col;
+
+    // 3 expanding rings
+    for(let k=0;k<3;k++){
+      const tt = Math.max(0, Math.min(1, (t + k*0.10)));
+      const rr = Math.max(w*0.16, w*0.16 + tt*(ancientColumn.auraRadius*0.55));
+      ctx.globalAlpha = (0.85 - k*0.18) * (1 - t);
+      ctx.lineWidth = Math.max(3, (10 - k*2) * (1.0 + 0.6*(1-t)));
+      ctx.beginPath();
+      ctx.arc(cx, cy, rr, 0, Math.PI*2);
+      ctx.stroke();
+    }
+
+    // starburst (quick, readable)
+    ctx.globalAlpha = 0.45*(1-t);
+    ctx.lineWidth = 2.5;
+    const spikes = 12;
+    const r1 = Math.max(40, w*0.20);
+    const r2 = r1 + 28 + 22*(1-t);
+    for(let i=0;i<spikes;i++){
+      const a = (i/spikes)*Math.PI*2 + t*1.2;
+      ctx.beginPath();
+      ctx.moveTo(cx + Math.cos(a)*r1, cy + Math.sin(a)*r1);
+      ctx.lineTo(cx + Math.cos(a)*r2, cy + Math.sin(a)*r2);
+      ctx.stroke();
+    }
+
+    ctx.restore();
+  }
+
+  ctx.restore();
+}
+
+function getArcoAnticoMoveSlowFactor(enemy, now){
+  let f = 1;
+
+  // Aura slow around the column
+  let inAura = false;
+  if(ancientColumn){
+    const cx=ancientColumn.x+ancientColumn.width/2;
+    const cy=ancientColumn.y+ancientColumn.height/2;
+    const ex=enemy.x+enemy.width/2;
+    const ey=enemy.y+enemy.height/2;
+    const d=Math.hypot(ex-cx, ey-cy);
+    inAura = (d <= (ancientColumn.auraRadius||0));
+    if(inAura) f *= 0.8; // -20%
+  }
+
+  // Time seal slow (solo dentro aura)
+  if(inAura && ancientSealSlowUntil && now < ancientSealSlowUntil) f *= 0.2; // -80%
+return f;
+}
+// ================================================================
+
+
 // I nemici attaccano i lupi se più vicini del player
 function getPreferredTarget(enemy, playerObj){
   try{
-    // Boss sempre focalizzati sul player (evita "zone sicure" quando i lupi attirano l'aggro)
-    if(enemy && typeof enemy.type==='string' && enemy.type.startsWith('boss')) return playerObj;
-    if(!wolves || wolves.length===0) return playerObj;
     if(!enemy || !playerObj) return playerObj;
 
-    const ex=enemy.x+enemy.width/2, ey=enemy.y+enemy.height/2;
-    const px=playerObj.x+playerObj.width/2, py=playerObj.y+playerObj.height/2;
-    const dp=Math.hypot(px-ex, py-ey);
+    const ex = enemy.x + enemy.width/2;
+    const ey = enemy.y + enemy.height/2;
+    const now = Date.now();
 
-    let best=null, bestD=1e9;
-    for(const w of wolves){
-      if(!w || w.hp<=0) continue;
-      const wx=w.x+w.width/2, wy=w.y+w.height/2;
-      const d=Math.hypot(wx-ex, wy-ey);
-      if(d<bestD){ bestD=d; best=w; }
+    // Candidate targets: player + (optional) Arco Antico + (optional) wolves
+    const candidates = [];
+    candidates.push(playerObj);
+
+    if(ancientColumn && now < (ancientColumn.endsAt||0) && ancientColumn.hp>0){
+      candidates.push(ancientColumn);
     }
-    return (best && bestD < dp) ? best : playerObj;
+
+    if(typeof wolves!=='undefined' && wolves && wolves.length){
+      for(const w of wolves){
+        if(w && w.hp>0) candidates.push(w);
+      }
+    }
+
+    let best = playerObj;
+    let bestD = 1e18;
+    for(const t of candidates){
+      const tx = t.x + t.width/2;
+      const ty = t.y + t.height/2;
+      const d = Math.hypot(tx - ex, ty - ey);
+      if(d < bestD){ bestD = d; best = t; }
+    }
+    return best;
   }catch(e){
     return playerObj;
   }
@@ -4924,15 +5504,296 @@ function applyEnemyDamage(enemy, baseDmg){
     mult=1.5; // EVO: Rooney first hit +50% damage
     enemy._rooneyFirstHit=true;
   }
-  const finalDmg = Math.max(0, Math.round(baseDmg * mult * markMult(enemy)));
+  const finalDmg = Math.max(0, Math.round(baseDmg * mult * markMult(enemy) * getAncientWarMult(Date.now(), enemy)));
   enemy._lastHitAt = Date.now();
   enemy.hp -= finalDmg;
+
+  // ESTASI (LETTERA D'AMORE): 7% dei danni inflitti cura il personaggio
+  try{
+    const now = Date.now();
+    if(typeof player!=='undefined' && player && player.estasiUntil && player.estasiUntil>now && finalDmg>0){
+      const heal = Math.max(0, Math.round(finalDmg * 0.07));
+      if(heal>0){
+        const _beforeHp = player.hp;
+        player.hp = Math.min(player.maxHP, player.hp + heal);
+        const _delta = player.hp - _beforeHp;
+        if(_delta>0){
+          try{ accountOnHeal(_delta); }catch(e){}
+          // feedback leggero (marrone cioccolato)
+          createParticles(player.x+player.width/2, player.y+player.height/2, 'chocolate', 6, 3);
+        }
+      }
+    }
+  }catch(e){}
+
   try{ accountOnDamageDealt(finalDmg); }catch(e){}
   return finalDmg;
 }
 
+
+// --- VOLTRYX orange energy FX (projectiles/super impacts) ---
+let voltryxFxBursts = [];   // expanding orange rings
+let voltryxScreenFlash = 0; // frames
+
+function createVoltryxExplosionFX(x,y,scale=1){
+  // Particle burst (orange energy)
+  const s = Math.max(0.6, Math.min(2.2, scale||1));
+  createParticles(x,y,'#ff6d00',Math.round(55*s),5);
+  createParticles(x,y,'#ff9100',Math.round(45*s),4);
+  createParticles(x,y,'#ffe0b2',Math.round(22*s),3);
+
+  // Expanding glow rings
+  for(let k=0;k<3;k++){
+    voltryxFxBursts.push({
+      x, y,
+      r: (16*s) + k*(12*s),
+      vr: (7*s) + k*(1.4*s),
+      life: Math.round((18 + k*6) * s),
+      maxLife: Math.round((18 + k*6) * s)
+    });
+  }
+
+  // Stronger shake/flash for bigger impacts
+  voltryxScreenFlash = Math.max(voltryxScreenFlash, Math.round(12*s));
+  try{ shakeAmount = Math.max(shakeAmount||0, 10*s); }catch(e){}
+}
+
+function emitVoltryxTrail(x,y,isSuper=false){
+  // Small shimmering sparks along the projectile path
+  const count = isSuper ? 4 : 2;
+  const spread = isSuper ? 8 : 5;
+  const spd = isSuper ? 2.2 : 1.6;
+  const life = isSuper ? 20 : 16;
+  for(let i=0;i<count;i++){
+    particles.push({
+      x:x + (Math.random()*2-1)*spread,
+      y:y + (Math.random()*2-1)*spread,
+      vx:(Math.random()-0.5)*spd,
+      vy:(Math.random()-0.5)*spd,
+      life: life,
+      color: (Math.random()<0.28 ? '#ffe0b2' : (isSuper ? '#ff6d00' : '#ff9100')),
+      size: (isSuper ? 3 : 2)
+    });
+  }
+}
+
+function updateVoltryxFX(){
+  voltryxFxBursts = voltryxFxBursts.filter(b=>{
+    b.r += b.vr;
+    b.life--;
+    return b.life>0;
+  });
+  if(voltryxScreenFlash>0) voltryxScreenFlash--;
+}
+
+function drawVoltryxFX(){
+  // Draw rings behind particles/projectiles
+  voltryxFxBursts.forEach(b=>{
+    const a = Math.max(0, b.life/(b.maxLife||1));
+    ctx.save();
+    ctx.globalAlpha = Math.min(0.5, 0.14 + a*0.45);
+    ctx.shadowColor = '#ff6d00';
+    ctx.shadowBlur = 28;
+    ctx.strokeStyle = 'rgba(255,145,0,'+(0.18 + a*0.65)+')';
+    ctx.lineWidth = Math.max(2, 6*a);
+    ctx.beginPath();
+    ctx.arc(b.x, b.y, b.r, 0, Math.PI*2);
+    ctx.stroke();
+    ctx.restore();
+  });
+}
+
 function shakeScreen(){shakeAmount=8}
 
+
+// --- MARZ mystical bolts FX (3 variants) ---
+function _hexToRgbaSimple(hex,a){
+  try{
+    if(!hex || typeof hex!=='string') return `rgba(255,255,255,${a})`;
+    if(hex[0]!=='#') return `rgba(255,255,255,${a})`;
+    let h = hex.slice(1);
+    if(h.length===3) h = h.split('').map(c=>c+c).join('');
+    const n = parseInt(h,16);
+    const r = (n>>16)&255, g=(n>>8)&255, b=n&255;
+    return `rgba(${r},${g},${b},${a})`;
+  }catch(e){
+    return `rgba(255,255,255,${a})`;
+  }
+}
+function emitMarzTrail(p){
+  try{
+    const idx = (p && p.meta && typeof p.meta.marzIdx==='number') ? p.meta.marzIdx : 0;
+    const col = p.color || '#ffffff';
+    const count = (idx===1?2: (idx===2?2:2));
+    const spread = (idx===2?7:6);
+    const spd = (idx===0?1.6:(idx===1?1.5:1.7));
+    const life = (idx===0?18:(idx===1?16:18));
+    for(let i=0;i<count;i++){
+      particles.push({
+        x:p.x + (Math.random()*2-1)*spread,
+        y:p.y + (Math.random()*2-1)*spread,
+        vx:(Math.random()-0.5)*spd,
+        vy:(Math.random()-0.5)*spd,
+        life: life,
+        color: (Math.random()<0.25 ? 'rgba(255,255,255,0.85)' : _hexToRgbaSimple(col, 0.85)),
+        size: (idx===2?3:2)
+      });
+    }
+  }catch(e){}
+}
+function drawMarzBolt(p){
+  const idx = (p && p.meta && typeof p.meta.marzIdx==='number') ? p.meta.marzIdx : 0;
+  const col = p.color || '#ffffff';
+  const now = Date.now();
+  const t = (now - (p.created||now)) * 0.006;
+  const pulse = 0.86 + 0.14*Math.sin(t*3.1 + idx*1.7);
+  const R = Math.max(9, (p.radius||7)*1.35) * pulse;
+
+  ctx.save();
+  ctx.translate(p.x, p.y);
+  ctx.globalCompositeOperation = 'lighter';
+
+  // soft outer glow
+  const g = ctx.createRadialGradient(0,0,0,0,0,R*2.8);
+  g.addColorStop(0, 'rgba(255,255,255,0.75)');
+  g.addColorStop(0.22, _hexToRgbaSimple(col, 0.55));
+  g.addColorStop(0.55, _hexToRgbaSimple(col, 0.22));
+  g.addColorStop(1, _hexToRgbaSimple(col, 0.00));
+  ctx.fillStyle = g;
+  ctx.shadowColor = col;
+  ctx.shadowBlur = 28;
+  ctx.beginPath(); ctx.arc(0,0,R*2.2,0,Math.PI*2); ctx.fill();
+
+  // helpers
+  function drawStar(rOuter, rInner, points){
+    ctx.beginPath();
+    for(let i=0;i<points*2;i++){
+      const ang = (i*Math.PI)/points;
+      const rr = (i%2===0)?rOuter:rInner;
+      const x = Math.cos(ang)*rr;
+      const y = Math.sin(ang)*rr;
+      if(i===0) ctx.moveTo(x,y); else ctx.lineTo(x,y);
+    }
+    ctx.closePath();
+  }
+
+  if(idx===0){
+    // Magenta: rotating sigil star (hexagram vibe)
+    ctx.rotate(t*1.8);
+    ctx.shadowBlur = 22;
+    ctx.fillStyle = _hexToRgbaSimple(col, 0.48);
+    drawStar(R*1.15, R*0.50, 6);
+    ctx.fill();
+
+    ctx.lineWidth = 2.2;
+    ctx.strokeStyle = _hexToRgbaSimple('#ffffff', 0.62);
+    ctx.shadowColor = '#ffffff';
+    ctx.shadowBlur = 18;
+    ctx.stroke();
+
+    // inner core
+    const gg = ctx.createRadialGradient(-R*0.1,-R*0.1,0,0,0,R*1.05);
+    gg.addColorStop(0,'rgba(255,255,255,0.95)');
+    gg.addColorStop(0.5,_hexToRgbaSimple(col,0.75));
+    gg.addColorStop(1,_hexToRgbaSimple(col,0.15));
+    ctx.fillStyle=gg;
+    ctx.shadowColor=col;
+    ctx.shadowBlur=18;
+    ctx.beginPath(); ctx.arc(0,0,R*0.72,0,Math.PI*2); ctx.fill();
+
+    // orbiting sparks
+    ctx.globalAlpha = 0.8;
+    ctx.fillStyle = 'rgba(255,255,255,0.85)';
+    for(let k=0;k<3;k++){
+      const a = t*2.6 + k*(Math.PI*2/3);
+      ctx.fillRect(Math.cos(a)*R*1.55, Math.sin(a)*R*1.55, 2.2, 2.2);
+    }
+    ctx.globalAlpha = 1;
+  } else if(idx===1){
+    // Cyan: rune ring + rotating triangles
+    ctx.rotate(-t*1.4);
+
+    ctx.lineWidth = 2.2;
+    ctx.strokeStyle = _hexToRgbaSimple(col, 0.65);
+    ctx.shadowColor = col;
+    ctx.shadowBlur = 20;
+    ctx.beginPath(); ctx.arc(0,0,R,0,Math.PI*2); ctx.stroke();
+
+    // runes (small triangles) around
+    for(let k=0;k<7;k++){
+      const a = t*1.7 + k*(Math.PI*2/7);
+      const ox = Math.cos(a)*R*1.15;
+      const oy = Math.sin(a)*R*1.15;
+      ctx.save();
+      ctx.translate(ox,oy);
+      ctx.rotate(a + Math.PI/2);
+      ctx.fillStyle = _hexToRgbaSimple(col, 0.55);
+      ctx.shadowBlur = 16;
+      ctx.beginPath();
+      ctx.moveTo(0,-5);
+      ctx.lineTo(4.2,4.6);
+      ctx.lineTo(-4.2,4.6);
+      ctx.closePath();
+      ctx.fill();
+      ctx.restore();
+    }
+
+    // central orb (pulsing)
+    const gg = ctx.createRadialGradient(-R*0.2,-R*0.2,0,0,0,R*1.05);
+    gg.addColorStop(0,'rgba(255,255,255,0.95)');
+    gg.addColorStop(0.45,_hexToRgbaSimple(col,0.72));
+    gg.addColorStop(1,_hexToRgbaSimple(col,0.12));
+    ctx.fillStyle=gg;
+    ctx.shadowColor=col;
+    ctx.shadowBlur=18;
+    ctx.beginPath(); ctx.arc(0,0,R*0.72,0,Math.PI*2); ctx.fill();
+  } else {
+    // Yellow: crescent sigil + glyph spike
+    ctx.rotate(t*1.1);
+
+    // crescent body
+    ctx.shadowBlur = 22;
+    ctx.fillStyle = _hexToRgbaSimple(col, 0.50);
+    ctx.beginPath();
+    ctx.arc(-R*0.18, 0, R*0.95, -Math.PI*0.70, Math.PI*0.70);
+    ctx.arc(R*0.52, 0, R*0.65, Math.PI*0.70, -Math.PI*0.70, true);
+    ctx.closePath();
+    ctx.fill();
+
+    // outline shimmer
+    ctx.lineWidth = 2.0;
+    ctx.strokeStyle = _hexToRgbaSimple('#ffffff', 0.55);
+    ctx.shadowColor = '#fff9c4';
+    ctx.shadowBlur = 18;
+    ctx.stroke();
+
+    // glyph spike (diamond)
+    ctx.save();
+    ctx.rotate(Math.sin(t*1.5)*0.12);
+    ctx.fillStyle = _hexToRgbaSimple(col, 0.60);
+    ctx.shadowColor = col;
+    ctx.shadowBlur = 16;
+    ctx.beginPath();
+    ctx.moveTo(0, -R*1.35);
+    ctx.lineTo(R*0.28, -R*0.92);
+    ctx.lineTo(0, -R*0.60);
+    ctx.lineTo(-R*0.28, -R*0.92);
+    ctx.closePath();
+    ctx.fill();
+    ctx.restore();
+
+    // small rotating dots
+    ctx.globalAlpha = 0.8;
+    ctx.fillStyle = 'rgba(255,255,255,0.85)';
+    for(let k=0;k<4;k++){
+      const a = t*2.2 + k*(Math.PI*2/4);
+      ctx.fillRect(Math.cos(a)*R*1.35, Math.sin(a)*R*1.35, 2.2, 2.2);
+    }
+    ctx.globalAlpha = 1;
+  }
+
+  ctx.restore();
+}
 // Extended projectile to support friendly, AoE, homing, pulse damage
 
 
@@ -4966,6 +5827,27 @@ function spawnProjectile(opts){
     excludeRef:opts.excludeRef||null
   };
   projectiles.push(p);
+}
+
+function projectileHitsAABB(p, rx, ry, rw, rh){
+  if(!p) return false;
+  const cx = p.x, cy = p.y;
+
+  // Effective hit radius:
+  // - circles: p.radius
+  // - rect projectiles: bounding circle of (w,h)
+  let r = Math.max(0, p.radius||0);
+  if(p.shape==='rect'){
+    const hw = (p.w||0)*0.5;
+    const hh = (p.h||0)*0.5;
+    r = Math.max(r, Math.hypot(hw, hh));
+  }
+
+  const closestX = (cx < rx) ? rx : (cx > rx+rw) ? (rx+rw) : cx;
+  const closestY = (cy < ry) ? ry : (cy > ry+rh) ? (ry+rh) : cy;
+  const dx = cx - closestX;
+  const dy = cy - closestY;
+  return (dx*dx + dy*dy) <= (r*r + 0.0001);
 }
 
 function updateProjectiles(){
@@ -5018,6 +5900,16 @@ function updateProjectiles(){
     p.x+=p.vx;
     p.y+=p.vy;
 
+    // Voltryx energy trail
+    if(p.friendly && p.meta && (p.meta.voltryxBase || p.meta.voltryxSuper)){
+      emitVoltryxTrail(p.x, p.y, !!p.meta.voltryxSuper || !!p.isVoltryxSuper);
+    }
+
+    // Marz mystical trail
+    if(p.friendly && p.meta && p.meta.marz){
+      emitMarzTrail(p);
+    }
+
     // Bounds
     const aliveInBounds = p.x>=-60 && p.x<=canvas.width+60 && p.y>=-60 && p.y<=canvas.height+60;
 
@@ -5056,7 +5948,11 @@ function updateProjectiles(){
         const dist=Math.hypot(dx,dy);
         if(dist <= (p.radius + Math.max(e.width,e.height)/2)*0.8){
           // impact
-          if(p.aoeRadius>0){
+          // Voltryx SUPER: orange impact FX (il colpo base usa solo trail/scintille)
+          if(p.isVoltryxSuper){
+            createVoltryxExplosionFX(p.x, p.y, 1.85);
+          }
+if(p.aoeRadius>0){
             // area explosion
             for(let j=enemies.length-1;j>=0;j--){
               const ee=enemies[j];
@@ -5101,7 +5997,8 @@ function updateProjectiles(){
                   x:impactX,y:impactY,vx,vy,speed,
                   damage:splitDmg,ttl:520,color:'#c5cae9',
                   radius:6,friendly:true,
-                  shape:'rect',w:18,h:4,angle:Math.atan2(vy,vx),
+                  shape:'arrow',w:22,h:6,angle:Math.atan2(vy,vx),
+                  meta:{type:'hecateSplit'},
                   excludeRef:e
                 });
                 createParticles(impactX,impactY,'#c5cae9',6,3);
@@ -5147,7 +6044,7 @@ function updateProjectiles(){
                 // nudge forward to avoid re-hitting instantly
                 p.x += p.vx*0.35;
                 p.y += p.vy*0.35;
-                createParticles(p.x,p.y,'#000000',6,3);
+                createParticles(p.x,p.y,'#ffd400',6,3);
                 return true; // keep projectile alive
               }
             }
@@ -5158,17 +6055,30 @@ function updateProjectiles(){
       }
     }else{
       // enemy projectiles hit player
-      if(player && p.x>player.x && p.x<player.x+player.width && p.y>player.y && p.y<player.y+player.height){
-        if(typeof p.onHitPlayer==='function'){ try{ p.onHitPlayer(player); }catch(e){} }
-        player.takeDamage(p.damage, p.source || null);
+      if(player && projectileHitsAABB(p, player.x, player.y, player.width, player.height)){
+        // During invulnerability/shields, ignore projectile side-effects (slow, etc.) but still consume the projectile.
+        const inv = !!(player.invulnerable || (player.pickupShieldUntil && Date.now()<player.pickupShieldUntil));
+        if(!inv){
+          if(typeof p.onHitPlayer==='function'){ try{ p.onHitPlayer(player); }catch(e){} }
+          player.takeDamage(p.damage, p.source || null);
+        }
         return false;
       }
 
+
+
+      // enemy projectiles can hit Arco Antico (colonna)
+      if(ancientColumn && ancientColumn.hp>0){
+        if(projectileHitsAABB(p, ancientColumn.x, ancientColumn.y, ancientColumn.width, ancientColumn.height)){
+          try{ ancientColumn.takeDamage(p.damage, p.source||null); }catch(e){}
+          return false;
+        }
+      }
       // enemy projectiles can hit wolves (Hècate summon)
       if(wolves && wolves.length){
         for(const w of wolves){
           if(!w || w.hp<=0) continue;
-          if(p.x>w.x && p.x<w.x+w.width && p.y>w.y && p.y<w.y+w.height){
+          if(projectileHitsAABB(p, w.x, w.y, w.width, w.height)){
             // apply damage to wolf
             w.hp -= Math.max(1, Math.round(p.damage));
             createParticles(w.x+w.width/2, w.y+w.height/2, '#90caf9', 10, 4);
@@ -5205,6 +6115,11 @@ function updateProjectiles(){
       createParticles(p.x,p.y,'#ffa726',18,5);
     }
 
+    // Voltryx SUPER: big orange explosion when the orb expires (visual-only)
+    if(!alive && p.isVoltryxSuper){
+      createVoltryxExplosionFX(p.x, p.y, 2.15);
+    }
+
     return alive;
   });
 }
@@ -5212,6 +6127,103 @@ function updateProjectiles(){
 function drawProjectiles(){
   projectiles.forEach(p=>{
     ctx.globalAlpha = p.isVoltryxSuper ? 0.8 : 1;
+
+    // Marcus: each of the 3 projectiles is a musical note sprite
+    if(p.meta && p.meta.marcus){
+      const img = (typeof marcusNoteImg!=='undefined') ? marcusNoteImg : null;
+      const ang = Math.atan2(p.vy||0, p.vx||1);
+
+      // subtle pulse to make the sprite feel "alive"
+      const t = (Date.now() - (p.created||0)) * 0.012;
+      const size = 44 + 3.5*Math.sin(t);
+
+      ctx.save();
+      ctx.translate(p.x, p.y);
+      ctx.rotate(ang);
+
+      // glow
+      ctx.shadowColor = 'rgba(180, 90, 255, 0.85)';
+      ctx.shadowBlur = 18;
+
+      if(img && img.complete && img.naturalWidth>0){
+        ctx.drawImage(img, -size/2, -size/2, size, size);
+      } else {
+        ctx.fillStyle = '#ffffff';
+        ctx.font = `${Math.round(size)}px Arial`;
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.fillText('♪', 0, 0);
+      }
+
+      ctx.restore();
+      ctx.globalAlpha = 1;
+      return;
+    }
+
+
+    // Hècate arrows: render like a real arrow (shaft + head + fletching)
+    if(p.shape==='arrow'){
+      const ang = (p.angle!==null && !Number.isNaN(p.angle)) ? p.angle : Math.atan2(p.vy||0, p.vx||0);
+      const L = p.w || 26;
+      const W = p.h || 6;
+
+      const head = Math.max(7, L*0.28);
+      const feather = Math.max(6, L*0.18);
+      const shaftLen = Math.max(6, L - head - 1);
+      const shaftW = Math.max(2.2, W*0.28);
+
+      const t = (Date.now() - (p.created||0)) * 0.02;
+      const pulse = 0.5 + 0.5*Math.sin(t);
+
+      ctx.save();
+      ctx.translate(p.x, p.y);
+      ctx.rotate(ang);
+
+      // soft magical tint (keeps readability on dark backgrounds)
+      ctx.shadowColor = p.color || '#c5cae9';
+      ctx.shadowBlur = 10 + pulse*18;
+
+      // shaft (wood)
+      ctx.fillStyle = '#8d6e63';
+      ctx.fillRect(-L/2, -shaftW/2, shaftLen, shaftW);
+
+      // head (metal)
+      ctx.fillStyle = '#cfd8dc';
+      ctx.beginPath();
+      ctx.moveTo(-L/2 + shaftLen, -W*0.55);
+      ctx.lineTo(L/2, 0);
+      ctx.lineTo(-L/2 + shaftLen, W*0.55);
+      ctx.closePath();
+      ctx.fill();
+
+      // fletching (tinted by projectile color)
+      const fcol = p.color || '#c5cae9';
+      const tailX = -L/2;
+      ctx.shadowBlur = 8 + pulse*10;
+      ctx.fillStyle = fcol;
+      ctx.beginPath();
+      ctx.moveTo(tailX, 0);
+      ctx.lineTo(tailX + feather, -W*0.55);
+      ctx.lineTo(tailX + feather*0.7, 0);
+      ctx.lineTo(tailX + feather, W*0.55);
+      ctx.closePath();
+      ctx.fill();
+
+      // subtle highlight
+      ctx.shadowBlur = 0;
+      ctx.globalAlpha = 0.35;
+      ctx.strokeStyle = 'rgba(255,255,255,0.70)';
+      ctx.lineWidth = 1;
+      ctx.beginPath();
+      ctx.moveTo(-L/2 + 1, -shaftW*0.22);
+      ctx.lineTo(-L/2 + shaftLen - 2, -shaftW*0.22);
+      ctx.stroke();
+      ctx.globalAlpha = 1;
+
+      ctx.restore();
+      ctx.globalAlpha = 1;
+      return;
+    }
 
     // Archer arrows (small elongated hits)
     if(p.shape==='rect'){
@@ -5238,16 +6250,48 @@ function drawProjectiles(){
         ctx.quadraticCurveTo(L*0.15, -W*0.75, L/2, 0);
         ctx.closePath();
         
-ctx.shadowColor = '#000000';
-ctx.shadowBlur = 25;
+ctx.shadowColor = '#ffd400';
+ctx.shadowBlur = 32;
 
 ctx.fill();
 
         // subtle inner highlight
-        ctx.globalAlpha = 0.25;
-        ctx.shadowColor = '#000000'; ctx.shadowBlur = 25; ctx.strokeStyle = 'rgba(255,255,255,0.8)';
-        ctx.lineWidth = Math.max(1.5, W*0.12);
+        ctx.globalAlpha = 0.35;
+        ctx.shadowColor = '#fff9c4'; ctx.shadowBlur = 36; ctx.strokeStyle = 'rgba(255,255,255,0.95)';
+        ctx.lineWidth = Math.max(1.2, W*0.10);
         ctx.stroke();
+
+        // electric arcs
+        const _t = (Date.now() + (p.created||0)) * 0.02;
+        ctx.globalAlpha = 0.9;
+        ctx.lineWidth = Math.max(1, W*0.08);
+        ctx.strokeStyle = 'rgba(255,255,255,0.85)';
+        ctx.shadowColor = '#ffffff';
+        ctx.shadowBlur = 18;
+        for(let a=0;a<2;a++){
+          ctx.beginPath();
+          const seg=6;
+          for(let s=0;s<=seg;s++){
+            const u = -L/2 + (L*s/seg);
+            const wob = (Math.sin(_t*2.4 + a*3.1 + s*1.7) + Math.sin(_t*3.6 + a*2.2 + s*2.9))*0.5;
+            const off = wob * (W*0.45);
+            const py = off + (a===0 ? W*0.35 : -W*0.35);
+            if(s===0) ctx.moveTo(u, py); else ctx.lineTo(u, py);
+          }
+          ctx.stroke();
+        }
+
+        // tiny sparks
+        ctx.globalAlpha = 0.55;
+        ctx.shadowColor = '#ffd400';
+        ctx.shadowBlur = 12;
+        ctx.fillStyle = 'rgba(255,255,255,0.95)';
+        for(let k=0;k<3;k++){
+          const u = -L/2 + (L*((Math.sin(_t*1.7 + k*9.1)+1)/2));
+          const py = (Math.sin(_t*4.2 + k*7.3))*W*0.9;
+          ctx.fillRect(u, py, 2, 2);
+        }
+
         ctx.globalAlpha = 1;
       }else{
         // Rooney punch-style homogeneous flared end
@@ -5281,53 +6325,82 @@ ctx.shadowBlur = 25;
 ctx.fill();
       }
       ctx.restore();
-      
-    // Marcus wavy projectile visual (thick undulating line)
-    if(p.meta && p.meta.marcus){
-      const ang = Math.atan2(p.vy||0, p.vx||1);
-      const segs = 20;
-      const length = 120; // total length of the visible wave
-      const step = length / segs;
-      const amp = (p.meta && p.meta.amp) ? p.meta.amp : 14;
-      const freq = (p.meta && p.meta.freq) ? p.meta.freq : 0.9;
-      const phase = (p.meta && p.meta.phase) ? p.meta.phase : 0;
-      const nowT = Date.now();
-      const t2 = (nowT - (p.created||0)) / 1000;
-
-      const cx = p.x, cy = p.y;
-      const dxUnit = Math.cos(ang), dyUnit = Math.sin(ang);
-      const pxUnit = Math.cos(ang + Math.PI/2), pyUnit = Math.sin(ang + Math.PI/2);
-
-      ctx.save();
-      ctx.lineWidth = Math.max(6, (p.radius||8) * 2.2);
-      ctx.lineJoin = 'round';
-      ctx.lineCap = 'round';
-      ctx.shadowColor = '#000000'; ctx.shadowBlur = 25; ctx.strokeStyle = p.color || '#b19cff';
-      ctx.beginPath();
-      for(let i = -Math.floor(segs/2); i <= Math.floor(segs/2); i++){
-        const u = i * step;
-        const wobble = Math.sin((u * 0.06 * freq) + (t2 * freq) + phase);
-        const ox = pxUnit * wobble * amp;
-        const oy = pyUnit * wobble * amp;
-        const x = cx + dxUnit * u + ox;
-        const y = cy + dyUnit * u + oy;
-        if(i === -Math.floor(segs/2)) ctx.moveTo(x,y); else ctx.lineTo(x,y);
-      }
-      ctx.stroke();
-
-      ctx.globalAlpha = 0.14;
-      ctx.lineWidth = Math.max(10, (p.radius||8) * 3.0);
-      ctx.stroke();
-      ctx.globalAlpha = 1;
-      ctx.restore();
+ctx.globalAlpha = 1;
       return;
     }
 
-    ctx.globalAlpha = 1;
+
+    // Marz magic bolts: 3 mystical variants + animations
+    if(p.friendly && p.meta && p.meta.marz){
+      drawMarzBolt(p);
+      ctx.globalAlpha = 1;
       return;
     }
 
     // Default circular bullets
+    // Voltryx base shot: bright orange energy orb with animated arcs
+    if(p.meta && p.meta.voltryxBase){
+      const t = (Date.now() - (p.created||0)) * 0.012;
+      const r = Math.max(7, p.radius||10);
+      ctx.save();
+      ctx.globalCompositeOperation = 'lighter';
+
+      // Outer glow gradient
+      const g = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, r*2.4);
+      g.addColorStop(0, 'rgba(255,255,255,0.95)');
+      g.addColorStop(0.25, 'rgba(255,224,178,0.75)');
+      g.addColorStop(0.55, 'rgba(255,145,0,0.55)');
+      g.addColorStop(1, 'rgba(255,145,0,0)');
+      ctx.fillStyle = g;
+      ctx.shadowColor = '#ff9100';
+      ctx.shadowBlur = 32;
+      ctx.beginPath(); ctx.arc(p.x, p.y, r*2.1, 0, Math.PI*2); ctx.fill();
+
+      // Core
+      const g2 = ctx.createRadialGradient(p.x - r*0.2, p.y - r*0.2, 0, p.x, p.y, r*1.2);
+      g2.addColorStop(0, 'rgba(255,255,255,0.98)');
+      g2.addColorStop(0.35, 'rgba(255,224,178,0.95)');
+      g2.addColorStop(1, 'rgba(255,109,0,0.85)');
+      ctx.fillStyle = g2;
+      ctx.shadowColor = '#ff6d00';
+      ctx.shadowBlur = 22;
+      ctx.beginPath(); ctx.arc(p.x, p.y, r, 0, Math.PI*2); ctx.fill();
+
+      // Animated electric arcs
+      ctx.globalAlpha = 0.9;
+      ctx.lineWidth = 2.2;
+      ctx.strokeStyle = 'rgba(255,255,255,0.70)';
+      ctx.shadowColor = '#ffe0b2';
+      ctx.shadowBlur = 18;
+      for(let k=0;k<2;k++){
+        const rr = r*1.25 + k*3;
+        const a0 = t + k*1.7;
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, rr, a0, a0 + Math.PI*0.85);
+        ctx.stroke();
+      }
+
+      // Tiny sparks (short strokes)
+      ctx.globalAlpha = 0.65;
+      ctx.lineWidth = 1.6;
+      ctx.strokeStyle = 'rgba(255,224,178,0.85)';
+      ctx.shadowColor = '#ff9100';
+      ctx.shadowBlur = 14;
+      for(let s=0;s<3;s++){
+        const ang = t*1.8 + s*2.1;
+        const rr = r*1.6;
+        const x1 = p.x + Math.cos(ang)*rr;
+        const y1 = p.y + Math.sin(ang)*rr;
+        const x2 = p.x + Math.cos(ang)* (rr + 8);
+        const y2 = p.y + Math.sin(ang)* (rr + 8);
+        ctx.beginPath(); ctx.moveTo(x1,y1); ctx.lineTo(x2,y2); ctx.stroke();
+      }
+
+      ctx.restore();
+      ctx.globalAlpha = 1;
+      return;
+    }
+
     ctx.fillStyle=p.color;
     ctx.beginPath();
     ctx.arc(p.x,p.y,p.isVoltryxSuper ? 18 : p.radius,0,Math.PI*2);
@@ -5339,12 +6412,57 @@ ctx.fill();
     ctx.globalAlpha = 1;
 
     if(p.isVoltryxSuper){
-      // draw a soft aura
-      ctx.strokeStyle='rgba(243,156,18,0.5)';
-      ctx.lineWidth=4;
+      const tt = (Date.now() - (p.created||0)) * 0.010;
+      // Re-draw the super orb with richer animation (energy core + rotating arcs)
+      const R = 18;
+      ctx.save();
+      ctx.globalCompositeOperation = 'lighter';
+
+      const gg = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, R*2.8);
+      gg.addColorStop(0, 'rgba(255,255,255,0.92)');
+      gg.addColorStop(0.28, 'rgba(255,224,178,0.70)');
+      gg.addColorStop(0.55, 'rgba(255,109,0,0.55)');
+      gg.addColorStop(1, 'rgba(255,109,0,0)');
+      ctx.fillStyle = gg;
+      ctx.shadowColor = '#ff6d00';
+      ctx.shadowBlur = 40;
+      ctx.beginPath(); ctx.arc(p.x, p.y, R*2.4, 0, Math.PI*2); ctx.fill();
+
+      const gg2 = ctx.createRadialGradient(p.x - 3, p.y - 3, 0, p.x, p.y, R*1.35);
+      gg2.addColorStop(0, 'rgba(255,255,255,0.96)');
+      gg2.addColorStop(0.35, 'rgba(255,224,178,0.92)');
+      gg2.addColorStop(1, 'rgba(255,109,0,0.90)');
+      ctx.fillStyle = gg2;
+      ctx.shadowColor = '#ff9100';
+      ctx.shadowBlur = 26;
+      ctx.beginPath(); ctx.arc(p.x, p.y, R, 0, Math.PI*2); ctx.fill();
+
+      // Rotating arcs inside
+      ctx.globalAlpha = 0.9;
+      ctx.lineWidth = 3.2;
+      ctx.strokeStyle = 'rgba(255,255,255,0.65)';
+      ctx.shadowColor = '#ffe0b2';
+      ctx.shadowBlur = 20;
+      for(let k=0;k<3;k++){
+        const rr = R*0.75 + k*4.5;
+        const a0 = tt*1.5 + k*2.2;
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, rr, a0, a0 + Math.PI*0.75);
+        ctx.stroke();
+      }
+
+      // Aura ring (aoeRadius) with light pulsing
+      ctx.globalAlpha = 0.65;
+      ctx.shadowColor = '#ff6d00';
+      ctx.shadowBlur = 18;
+      ctx.strokeStyle = 'rgba(255,109,0,'+(0.25 + 0.25*Math.sin(tt*1.8))+')';
+      ctx.lineWidth = 4;
       ctx.beginPath();
-      ctx.arc(p.x,p.y,p.aoeRadius,0,Math.PI*2);
+      ctx.arc(p.x, p.y, p.aoeRadius, 0, Math.PI*2);
       ctx.stroke();
+
+      ctx.restore();
+      ctx.globalAlpha = 1;
     }
   });
 }
@@ -5352,22 +6470,66 @@ ctx.fill();
 
 // Laser hazards (OneEyes)
 function spawnLaser(opts){
-  // opts: {x,y,angle,length,width,ttl,damage,kind,chargeMs,chargedAt}
+  // opts: {x,y,angle,length,width,ttl,damage,kind,chargeMs,chargedAt,growSpeed,anchorToOwner}
+  const now = Date.now();
+  const maxLen = opts.length || 520;
+  const growSpeed = opts.growSpeed || 0; // px/sec (se 0, il laser è istantaneo)
+  const initialLen = growSpeed ? 0 : maxLen;
+
   lasers.push({
-    x:opts.x,y:opts.y,angle:opts.angle||0,length:opts.length||520,width:opts.width||14,
-    created:Date.now(),ttl:opts.ttl||1000,damage:opts.damage||15,
-    kind:opts.kind||'laser', chargeMs:opts.chargeMs||0, chargedAt:Date.now()+ (opts.chargeMs||0),
-    hitCooldown:220, lastHit:0,
+    x:opts.x, y:opts.y,
+    angle:opts.angle||0,
+    length:initialLen,
+    maxLength:maxLen,
+    growSpeed:growSpeed,
+    width:opts.width||14,
+    created:now,
+    ttl:opts.ttl||1000,
+    damage:opts.damage||15,
+    kind:opts.kind||'laser',
+    chargeMs:opts.chargeMs||0,
+    chargedAt: now + (opts.chargeMs||0),
+    hitCooldown:220,
+    lastHit:0,
     owner:opts.owner||opts.source||null,
+    // Se true, il laser resta agganciato al centro del nemico durante carica/attivo
+    anchorToOwner: (opts.anchorToOwner===undefined ? true : !!opts.anchorToOwner),
+    // Se true, aggiorna anche l'angolo verso il player durante la durata
     trackPlayer: !!opts.trackPlayer,
-    hitOnce:false
+    hitOnce:false,
+    lastUpdate: now
   });
+}
+
+function segmentIntersectsRect(x1,y1,x2,y2,rx,ry,rw,rh){
+  // Segment vs axis-aligned rectangle (Liang–Barsky). Returns true if intersects.
+  const dx = x2 - x1, dy = y2 - y1;
+  let t0 = 0, t1 = 1;
+  const p = [-dx, dx, -dy, dy];
+  const q = [x1 - rx, (rx+rw) - x1, y1 - ry, (ry+rh) - y1];
+
+  for(let i=0;i<4;i++){
+    const pi = p[i], qi = q[i];
+    if(pi === 0){
+      if(qi < 0) return false; // parallel outside
+    }else{
+      const r = qi / pi;
+      if(pi < 0){
+        if(r > t1) return false;
+        if(r > t0) t0 = r;
+      }else{
+        if(r < t0) return false;
+        if(r < t1) t1 = r;
+      }
+    }
+  }
+  return true;
 }
 
 function updateLasers(){
   const now=Date.now();
   lasers = lasers.filter(L=>{
-    // Aimbot 360° per boss: laser che segue il player durante la durata
+    // Anchor/Tracking
     if(L.trackPlayer && player){
       const ocx = (L.owner? (L.owner.x + L.owner.width/2) : L.x);
       const ocy = (L.owner? (L.owner.y + L.owner.height/2) : L.y);
@@ -5375,43 +6537,91 @@ function updateLasers(){
       const pcy = player.y + player.height/2;
       L.x = ocx; L.y = ocy;
       L.angle = Math.atan2(pcy-ocy, pcx-ocx);
+    } else if(L.owner && L.anchorToOwner){
+      // mantiene l'origine sul nemico che l'ha sparato
+      L.x = L.owner.x + L.owner.width/2;
+      L.y = L.owner.y + L.owner.height/2;
     }
+
     const alive = (now - L.created) < (L.ttl + (L.chargeMs||0));
     if(!alive) return false;
 
-    // During charge: no damage
+    // delta time per crescita progressiva
+    const dt = Math.max(0, now - (L.lastUpdate || now));
+    L.lastUpdate = now;
+
+    // Durante charge: niente danno (ma possiamo comunque mostrare la linea)
     const active = now >= L.chargedAt;
 
-    if(active && player){
-      // Collision: distance from player center to laser segment
-      const px = player.x + player.width/2;
-      const py = player.y + player.height/2;
+    // Crescita progressiva del fascio (laser schivabile)
+    if(active){
+      if(L.growSpeed && L.maxLength!=null){
+        const grow = (L.growSpeed * (dt/1000));
+        L.length = Math.min(L.maxLength, (L.length||0) + grow);
+      } else if(L.maxLength!=null){
+        L.length = L.maxLength;
+      }
+    } else {
+      if(L.growSpeed) L.length = 0;
+    }
 
+    if(active){
       const x2 = L.x + Math.cos(L.angle)*L.length;
       const y2 = L.y + Math.sin(L.angle)*L.length;
 
-      // projection
-      const vx = x2 - L.x, vy = y2 - L.y;
-      const wx = px - L.x, wy = py - L.y;
-      const c1 = wx*vx + wy*vy;
-      const c2 = vx*vx + vy*vy;
-      let t = c2 ? (c1 / c2) : 0;
-      t = Math.max(0, Math.min(1, t));
-      const cx = L.x + t*vx;
-      const cy = L.y + t*vy;
-      const dist = Math.hypot(px - cx, py - cy);
+      // Collision: laser can damage Arco Antico (capsule vs rectangle via expanded AABB)
+      if(ancientColumn && ancientColumn.hp>0){
+        const r = (L.width||14)/2;
+        const hitCol = segmentIntersectsRect(
+          L.x, L.y, x2, y2,
+          ancientColumn.x - r, ancientColumn.y - r,
+          ancientColumn.width + 2*r, ancientColumn.height + 2*r
+        );
 
-      if(dist <= (L.width/2 + Math.max(player.width, player.height)*0.20)){
-        // OneEyes: il danno può essere preso una sola volta per raggio
-        if(L.kind==='oneyes'){
-          if(!L.hitOnce){
-            L.hitOnce=true;
-            player.takeDamage(L.damage, L.owner || null);
+        if(hitCol){
+          if(L.kind==='oneyes'){
+            if(!L.colHitOnce){
+              L.colHitOnce = true;
+              try{ ancientColumn.takeDamage(L.damage, L.owner || null); }catch(e){}
+            }
+          }else{
+            if(!L.lastHitCol) L.lastHitCol = 0;
+            if(now - L.lastHitCol >= (L.hitCooldown||220)){
+              L.lastHitCol = now;
+              try{ ancientColumn.takeDamage(L.damage, L.owner || null); }catch(e){}
+            }
           }
-        } else {
-          if(now - L.lastHit >= L.hitCooldown){
-            L.lastHit = now;
-            player.takeDamage(L.damage, L.owner || null);
+        }
+      }
+
+      // Collision: distanza dal centro player al segmento del laser (lunghezza corrente)
+      if(player){
+        const px = player.x + player.width/2;
+        const py = player.y + player.height/2;
+
+        // projection
+        const vx = x2 - L.x, vy = y2 - L.y;
+        const wx = px - L.x, wy = py - L.y;
+        const c1 = wx*vx + wy*vy;
+        const c2 = vx*vx + vy*vy;
+        let t = c2 ? (c1 / c2) : 0;
+        t = Math.max(0, Math.min(1, t));
+        const cx = L.x + t*vx;
+        const cy = L.y + t*vy;
+        const dist = Math.hypot(px - cx, py - cy);
+
+        if(dist <= (L.width/2 + Math.max(player.width, player.height)*0.20)){
+          // OneEyes: il danno può essere preso una sola volta per raggio
+          if(L.kind==='oneyes'){
+            if(!L.hitOnce){
+              L.hitOnce=true;
+              player.takeDamage(L.damage, L.owner || null);
+            }
+          } else {
+            if(now - L.lastHit >= L.hitCooldown){
+              L.lastHit = now;
+              player.takeDamage(L.damage, L.owner || null);
+            }
           }
         }
       }
@@ -5425,30 +6635,56 @@ function drawLasers(){
   const now=Date.now();
   lasers.forEach(L=>{
     const active = now >= L.chargedAt;
-    const x2 = L.x + Math.cos(L.angle)*L.length;
-    const y2 = L.y + Math.sin(L.angle)*L.length;
+    const previewLen = (L.maxLength!=null ? L.maxLength : L.length);
+    const drawLen = active ? (L.length!=null ? L.length : previewLen) : previewLen;
+
+    const x2 = L.x + Math.cos(L.angle)*drawLen;
+    const y2 = L.y + Math.sin(L.angle)*drawLen;
 
     ctx.save();
     ctx.lineCap='round';
 
     if(!active){
-      // charge preview
-      ctx.globalAlpha = 0.55;
-      ctx.shadowColor = '#000000'; ctx.shadowBlur = 25; ctx.strokeStyle = 'rgba(255,255,255,0.7)';
-      ctx.lineWidth = Math.max(6, L.width*0.5);
-      ctx.beginPath(); ctx.moveTo(L.x,L.y); ctx.lineTo(x2,y2); ctx.stroke();
+      // charge preview (linea tratteggiata)
+      ctx.globalAlpha = 0.60;
+      ctx.shadowColor = '#000000';
+      ctx.shadowBlur = 25;
+      ctx.strokeStyle = 'rgba(255,255,255,0.75)';
+      ctx.lineWidth = Math.max(6, L.width*0.55);
+      ctx.setLineDash([12,10]);
+      ctx.beginPath();
+      ctx.moveTo(L.x,L.y);
+      ctx.lineTo(x2,y2);
+      ctx.stroke();
+      ctx.setLineDash([]);
       ctx.globalAlpha = 1;
     } else {
-      // active beam
-      ctx.globalAlpha = (L.kind==='photon') ? 0.92 : 0.75;
-      ctx.shadowColor = '#000000'; ctx.shadowBlur = 25; ctx.strokeStyle = (L.kind==='photon') ? 'rgba(243,156,18,0.9)' : 'rgba(52,152,219,0.9)';
+      // active beam (cresce man mano)
+      ctx.globalAlpha = (L.kind==='photon') ? 0.92 : 0.78;
+      ctx.shadowColor = '#000000';
+      ctx.shadowBlur = 25;
+      ctx.strokeStyle = (L.kind==='photon') ? 'rgba(243,156,18,0.9)' : 'rgba(52,152,219,0.92)';
       ctx.lineWidth = L.width;
-      ctx.beginPath(); ctx.moveTo(L.x,L.y); ctx.lineTo(x2,y2); ctx.stroke();
+      ctx.beginPath();
+      ctx.moveTo(L.x,L.y);
+      ctx.lineTo(x2,y2);
+      ctx.stroke();
 
       // glow
-      ctx.globalAlpha = 0.28;
-      ctx.lineWidth = L.width*1.9;
-      ctx.beginPath(); ctx.moveTo(L.x,L.y); ctx.lineTo(x2,y2); ctx.stroke();
+      ctx.globalAlpha = 0.30;
+      ctx.lineWidth = L.width*2.0;
+      ctx.beginPath();
+      ctx.moveTo(L.x,L.y);
+      ctx.lineTo(x2,y2);
+      ctx.stroke();
+      ctx.globalAlpha = 1;
+
+      // tip highlight (testa del laser)
+      ctx.globalAlpha = 0.55;
+      ctx.fillStyle = 'rgba(255,255,255,0.65)';
+      ctx.beginPath();
+      ctx.arc(x2,y2, Math.max(6, L.width*0.40), 0, Math.PI*2);
+      ctx.fill();
       ctx.globalAlpha = 1;
     }
 
@@ -5575,7 +6811,12 @@ function spawnPickupsForLevel(level){
   // Bonus pickups remain on the field when the level ends.
   if(level<4) return;
 
-  const count=1+Math.floor(Math.random()*2);
+  let count=1+Math.floor(Math.random()*2);
+
+  // Hard: -1/3 pickups spawn (i.e. keep 2/3)
+  if(difficultyMode==='hard'){
+    count = Math.max(0, Math.round(count * (2/3)));
+  }
   for(let i=0;i<count;i++){
     const isGold=Math.random()<GOLD_PROB;
     const type=isGold ? 'gold' : pickRandomPickupType();
@@ -5588,6 +6829,15 @@ function spawnPickupsForLevel(level){
     pickups.push({type,x,y,radius:18,hitRadius:hitR,created:Date.now(),ttl:20000});
   }
 }
+
+// Render scale per pickup (some icons have extra transparent padding and would look smaller)
+const PICKUP_RENDER_SCALE = {
+  stellar: 1.35,
+  ira: 1.35,
+  letteraAmore: 1.35,
+  arcoAntico: 1.35
+};
+
 function drawPickups(){
   pickups.forEach(p=>{
     const img = getPickupImage(p.type);
@@ -5597,8 +6847,9 @@ function drawPickups(){
     // - fallback to 28px
     const w = (p.w!=null)?p.w: (p.radius!=null)?(p.radius*2):28;
     const h = (p.h!=null)?p.h: (p.radius!=null)?(p.radius*2):28;
-    const dw = w*2;
-    const dh = h*2;
+    const scale = PICKUP_RENDER_SCALE[p.type] || 1;
+    const dw = w*2*scale;
+    const dh = h*2*scale;
 
     if(img && img.complete && img.naturalWidth>0){
       ctx.drawImage(img, p.x - dw/2, p.y - dh/2, dw, dh);
@@ -5611,6 +6862,8 @@ function drawPickups(){
       else if(p.type==='stellar')ctx.fillStyle='rgba(255,255,255,0.9)';
       else if(p.type==='speed')ctx.fillStyle='#3498db';
       else if(p.type==='shieldPickup')ctx.fillStyle='#7fdbff';
+      else if(p.type==='ira')ctx.fillStyle='#ff6f00';
+      else if(p.type==='arcoAntico')ctx.fillStyle='#c0c0c0';
       else if(p.type==='malus')ctx.fillStyle='#8b0000';
       ctx.beginPath();
       ctx.arc(p.x,p.y,(p.radius!=null)?p.radius:Math.min(w,h)/2,0,Math.PI*2);
@@ -5679,6 +6932,29 @@ function applyPickupEffect(playerRef,type){
     playerRef.speed=playerRef._baseSpeed*1.5;
     playerRef.speedBuffUntil=Date.now()+7000;
     createParticles(playerRef.x,playerRef.y,'#3498db',20);
+  } else if(type==='ira'){
+    // IRA: 6s — -75% cooldown colpo (cooldown * 0.25) +25% speed
+    const now=Date.now();
+    playerRef.iraUntil = now + 6000;
+
+    // speed: do not downgrade other buffs (keep the max)
+    playerRef.speed = Math.max(playerRef.speed, playerRef._baseSpeed * 1.25);
+
+    // cooldown: keep the fastest between current and IRA effect
+    if(typeof playerRef.cooldown === 'number' && playerRef._baseCooldown!=null){
+      if(typeof playerRef._iraPrevCooldown!=='number'){
+        playerRef._iraPrevCooldown = playerRef.cooldown;
+      }
+      playerRef.cooldown = Math.min(playerRef.cooldown, playerRef._baseCooldown * 0.25);
+    }
+
+    createParticles(playerRef.x+playerRef.width/2,playerRef.y+playerRef.height/2,'#ff6f00',28,5);
+  } else if(type==='letteraAmore'){
+    // LETTERA D'AMORE -> ESTASI: 15s lifesteal 7%
+    const now = Date.now();
+    playerRef.estasiUntil = now + 15000;
+    // feedback visivo (marrone cioccolato)
+    createParticles(playerRef.x+playerRef.width/2, playerRef.y+playerRef.height/2, 'chocolate', 34, 5);
   } else if(type==='shieldPickup'){
     playerRef.pickupShieldUntil=Date.now()+6000;
     playerRef.invulnerable=true;
@@ -5704,6 +6980,11 @@ function applyPickupEffect(playerRef,type){
       e.iceLastTick = Date.now();
     });
     createParticles(playerRef.x,playerRef.y,'#000000',40);
+  } else if(type==='arcoAntico'){
+    // Arco Antico: crea una colonna al centro (60 HP) per 12s.
+    // Aura: -20% velocità ai nemici vicini; ogni 3s attiva un Sigillo.
+    activateArcoAntico(playerRef);
+    createParticles(playerRef.x+playerRef.width/2, playerRef.y+playerRef.height/2, '#c0c0c0', 24, 5);
   } else if(type==='malus'){
     playerRef.poisonUntil=Date.now()+10000;
     playerRef.poisonTickLast=Date.now();
@@ -5724,7 +7005,9 @@ class Player{
     // Archer slow (temporary): stacks up to -15% total
     this._slowPct=0;
     this._slowUntil=0;
-    this.damage=s.damage;this.range=s.range;
+    this.damage=s.damage;this._baseDamage=s.damage;this.ancientBlessingStacks=0;
+    this.ancientLifeUntil=0;this.ancientLifeLastTick=0;
+    this.range=s.range;
     this.cooldown=s.cooldown;this.attackType=s.attackType;
     this._baseCooldown=s.cooldown;
     // Bane SUPER state
@@ -5748,6 +7031,8 @@ class Player{
     this._superHitDone=false;this._superPhase=0;
     this.shieldActive=false;this.shieldDurability=4;this.shieldMaxDurability=4;this.shieldBroken=false;this.shieldBrokenTime=0;this.shieldRegenMs=6000;
     this.attackBuffMultiplier=1;this.attackBuffUntil=0;this.speedBuffUntil=0;this.pickupShieldUntil=0;this.invulnerable=false;
+    // IRA pickup (temporary): -75% base attack cooldown +25% speed (6s)
+    this.iraUntil=0;this._iraPrevCooldown=undefined;
     this._dashSpeedMult=3;
     this._dashDuration=200;
 
@@ -5769,6 +7054,9 @@ class Player{
     this.poisonUntil=0;
     this.poisonTickLast=0;
     this.poisonTickDamage=1;
+
+    // ESTASI (LETTERA D'AMORE)
+    this.estasiUntil=0;
 
     // --- Evolution (after Boss level 15) ---
     this.evolved=false;
@@ -5859,6 +7147,30 @@ class Player{
       this.furiaHealUntil = 0;
     }
 
+
+
+    // Arco Antico: Sigillo della Vita (+15 HP/s for 3s) — SOLO se il player resta nell'aura
+    if(this.ancientLifeUntil && now < this.ancientLifeUntil){
+      if(!this.ancientLifeLastTick) this.ancientLifeLastTick = now;
+
+      const _inAura = (typeof isInArcoAnticoAura==='function') ? isInArcoAnticoAura(this) : false;
+
+      if(_inAura){
+        if(now - this.ancientLifeLastTick >= 1000){
+          this.ancientLifeLastTick = now;
+          const _beforeHp = this.hp;
+          this.hp = Math.min(this.maxHP, this.hp + 15);
+          try{ accountOnHeal(this.hp - _beforeHp); }catch(e){}
+          createParticles(this.x+this.width/2, this.y+this.height/2, '#2ecc71', 10, 3);
+        }
+      } else {
+        // Mantieni la cadenza dei tick anche fuori aura (niente heal fuori area)
+        this.ancientLifeLastTick = now;
+      }
+    } else {
+      this.ancientLifeLastTick = 0;
+      this.ancientLifeUntil = 0;
+    }
     // Jimmy jetpack passive
     if(this.type==='jimmy'){
       if(!this.isJetpacking && now-this.lastJetpack>=this.jetpackCooldown && !this.isDoingSuper){
@@ -5903,6 +7215,43 @@ class Player{
         } else {
           this.speed = this._baseSpeed;
         }
+      }
+    }
+
+
+    // IRA pickup: 6s — -75% cooldown colpo (cooldown * 0.25) +25% speed
+    if(this.iraUntil && now < this.iraUntil){
+      // keep the maximum speed (do not downgrade other buffs)
+      this.speed = Math.max(this.speed, this._baseSpeed * 1.25);
+
+      // keep the fastest cooldown between current and IRA effect
+      if(typeof this.cooldown==='number' && this._baseCooldown!=null){
+        this.cooldown = Math.min(this.cooldown, this._baseCooldown * 0.25);
+      }
+    } else if(this.iraUntil && now >= this.iraUntil){
+      // effect ended: restore baseline unless another effect is controlling it
+      this.iraUntil = 0;
+
+      // restore cooldown if not inside Bane SUPER window
+      if(!(this.type==='bane' && this.baneSuperUntil && now < this.baneSuperUntil)){
+        if(typeof this._iraPrevCooldown==='number'){
+          this.cooldown = this._iraPrevCooldown;
+        } else if(this._baseCooldown!=null){
+          this.cooldown = this._baseCooldown;
+        }
+      }
+      this._iraPrevCooldown = undefined;
+
+      // restore speed only if no other speed buff is currently active
+      const otherSpeedActive =
+        (this.speedBuffUntil && now < this.speedBuffUntil) ||
+        (this.type==='bane' && this.baneSuperSpeedUntil && now < this.baneSuperSpeedUntil) ||
+        (this.type==='salsy' && this.salsyBoostUntil && now < this.salsyBoostUntil) ||
+        (this.type==='jimmy' && this.isJetpacking && this.speedBuffUntil && now < this.speedBuffUntil);
+
+      const iraSpeed = this._baseSpeed * 1.25;
+      if(!otherSpeedActive){
+        if(this.speed <= iraSpeed + 0.0001) this.speed = this._baseSpeed;
       }
     }
 
@@ -6133,7 +7482,7 @@ class Player{
               for(const h of hits){
                 const share=h.w/sumW;
                 const raw=totalBase*share;
-                const dmg=Math.max(6, Math.round(raw * SUPER_DAMAGE_MULT * this.attackBuffMultiplier));
+                const dmg=Math.max(6, Math.round(raw * SUPER_DAMAGE_MULT * this.attackBuffMultiplier * 1.12));
                 const _final=applyEnemyDamage(h.enemy, dmg);
 
                 // Hit FX
@@ -6196,56 +7545,109 @@ class Player{
         // Jimmy SUPER rework:
         // - NON si aggrappa ai nemici (niente "stop" sul bersaglio).
         // - Jimmy li attraversa (pass-through) e applica lo stesso colpo/danni quando li raggiunge.
-        const chaseSpeed=this.speed*6;
-
-        // Se siamo nel "pass-through window", continua dritto nella direzione salvata
-        if(this._superGrapplePassUntil && now < this._superGrapplePassUntil){
-          this.vx=this._superGrappleDirX*chaseSpeed;
-          this.vy=this._superGrappleDirY*chaseSpeed;
+        // - FIX: hard timeout su superDuration + timeout per singolo bersaglio (evita blocchi contro shooter/laser).
+        if(elapsed >= (this.superDuration||0)){
+          this.endSuper();
         } else {
-          this._superGrapplePassUntil=0;
+          const chaseSpeed=this.speed*6;
 
-          if(this.superTargets.length>0){
-            const target=this.superTargets[0];
-            if(!enemies.includes(target)){
-              this.superTargets.shift();
-            } else {
-              const px=this.x+this.width/2, py=this.y+this.height/2;
-              const tx=target.x+target.width/2, ty=target.y+target.height/2;
-              const dx=tx-px;const dy=ty-py;
-              const dist=Math.hypot(dx,dy);
+          // Se siamo nel "pass-through window", continua dritto nella direzione salvata
+          if(this._superGrapplePassUntil && now < this._superGrapplePassUntil){
+            this.vx=this._superGrappleDirX*chaseSpeed;
+            this.vy=this._superGrappleDirY*chaseSpeed;
+          } else {
+            this._superGrapplePassUntil=0;
 
-              if(dist>50){
-                this.vx=(dx/(dist||1))*chaseSpeed;
-                this.vy=(dy/(dist||1))*chaseSpeed;
-              } else {
-                // hit once, then keep moving forward briefly (pass-through)
-                const base=120;
-                const mult=(this.type==='jimmy')?(SUPER_DAMAGE_MULT*JIMMY_SUPER_ADDITIONAL_MULT):SUPER_DAMAGE_MULT;
-                const dmg=Math.round(base*mult*this.attackBuffMultiplier*(this.baneSuperAttackMult||1)*(this.type==='jimmy'?2.0:1));
-                const _final=applyEnemyDamage(target, dmg);
-                createParticles(target.x,target.y,'#e74c3c',15,6);
-                showDamageNumber(target.x,target.y, _final);
-                if(target.hp<=0){
-                  createParticles(target.x,target.y,'#fff176',30,6);
-                  const idx=enemies.indexOf(target);
-                  if(idx>-1){dropStellarBonusAtIndexIfNeeded(idx);enemies.splice(idx,1);applyScore(100*currentLevel);addKill(); this._baneSuperOnKill();
-                }
-                }
-
-                // store direction and move through (no interaction/stop)
-                let nx=dx/(dist||1), ny=dy/(dist||1);
-                if(!isFinite(nx) || !isFinite(ny)){ nx=this.facingRight?1:-1; ny=0; }
-                this._superGrappleDirX=nx; this._superGrappleDirY=ny;
-                this._superGrapplePassUntil=now+160;
-
-                // next target
+            // Per-target timeout: se insegue lo stesso nemico troppo a lungo, lo salta
+            let skipChase=false;
+            if(this.superTargets.length>0){
+              const t0=this.superTargets[0];
+              const tid=(t0 && t0._id!=null)?t0._id:t0;
+              if(this._jimmySuperCurId!==tid){
+                this._jimmySuperCurId=tid;
+                this._jimmySuperCurSince=now;
+              }
+              if(this._jimmySuperCurSince && (now-this._jimmySuperCurSince)>850){
+                // skip target (prevents infinite chase vs ranged enemies)
                 this.superTargets.shift();
-                this._superPhase=Date.now();
+                this._jimmySuperCurId=null;
+                this._jimmySuperCurSince=0;
+
+                // small forward nudge to avoid "glue" feeling
+                let ax=(this.aimX!=null?this.aimX:(this.facingRight?1:-1));
+                let ay=(this.aimY!=null?this.aimY:0);
+                let al=Math.hypot(ax,ay)||1;
+                ax/=al; ay/=al;
+                this._superGrappleDirX=ax; this._superGrappleDirY=ay;
+                this._superGrapplePassUntil=now+140;
+                this.vx=ax*chaseSpeed;
+                this.vy=ay*chaseSpeed;
+                skipChase=true;
+              }
+            } else {
+              this._jimmySuperCurId=null;
+              this._jimmySuperCurSince=0;
+            }
+
+            if(!skipChase){
+              if(this.superTargets.length>0){
+                const target=this.superTargets[0];
+                if(!enemies.includes(target)){
+                  this.superTargets.shift();
+                  this._jimmySuperCurId=null;
+                  this._jimmySuperCurSince=0;
+                } else {
+                  const px=this.x+this.width/2, py=this.y+this.height/2;
+                  const tx=target.x+target.width/2, ty=target.y+target.height/2;
+                  const dx=tx-px;const dy=ty-py;
+                  const dist=Math.hypot(dx,dy);
+
+                  // Safety: avoid NaN lock
+                  if(!Number.isFinite(dx)||!Number.isFinite(dy)||!Number.isFinite(dist)){
+                    this.superTargets.shift();
+                    this._jimmySuperCurId=null;
+                    this._jimmySuperCurSince=0;
+                  } else if(dist>50){
+                    this.vx=(dx/(dist||1))*chaseSpeed;
+                    this.vy=(dy/(dist||1))*chaseSpeed;
+                  } else {
+                    // hit once, then keep moving forward briefly (pass-through)
+                    const base=120;
+                    const mult=(this.type==='jimmy')?(SUPER_DAMAGE_MULT*JIMMY_SUPER_ADDITIONAL_MULT):SUPER_DAMAGE_MULT;
+                    const dmg=Math.round(base*mult*this.attackBuffMultiplier*(this.baneSuperAttackMult||1)*(this.type==='jimmy'?2.0:1));
+                    const _final=applyEnemyDamage(target, dmg);
+                    createParticles(target.x,target.y,'#e74c3c',15,6);
+                    showDamageNumber(target.x,target.y, _final);
+                    if(target.hp<=0){
+                      createParticles(target.x,target.y,'#fff176',30,6);
+                      const idx=enemies.indexOf(target);
+                      if(idx>-1){dropStellarBonusAtIndexIfNeeded(idx);enemies.splice(idx,1);applyScore(100*currentLevel);addKill(); this._baneSuperOnKill();
+                    }
+                    }
+
+                    // store direction and move through (no interaction/stop)
+                    let nx=dx/(dist||1), ny=dy/(dist||1);
+                    // FIX: if we are exactly overlapped (nx=ny=0), fall back to aim/facing
+                    if(!isFinite(nx) || !isFinite(ny) || (Math.abs(nx)+Math.abs(ny))<0.001){
+                      nx=(this.aimX!=null?this.aimX:(this.facingRight?1:-1));
+                      ny=(this.aimY!=null?this.aimY:0);
+                      const l=Math.hypot(nx,ny)||1;
+                      nx/=l; ny/=l;
+                    }
+                    this._superGrappleDirX=nx; this._superGrappleDirY=ny;
+                    this._superGrapplePassUntil=now+160;
+
+                    // next target
+                    this.superTargets.shift();
+                    this._jimmySuperCurId=null;
+                    this._jimmySuperCurSince=0;
+                    this._superPhase=Date.now();
+                  }
+                }
+              } else {
+                if(now-this.superStartTime>=Math.min(this.superDuration,1200))this.endSuper();
               }
             }
-          } else {
-            if(now-this.superStartTime>=Math.min(this.superDuration,1200))this.endSuper();
           }
         }
       } else if(this.attackType==='sword'){
@@ -6436,20 +7838,29 @@ if(this.type==='kaerith' && this._kaerithFireUntil && Date.now() < this._kaerith
     const prog = Math.min(19, Math.round(4 + (elapsedSec * (15/8))));
     const dmg = Math.max(0, prog);
 
-    if(typeof enemies!=='undefined' && enemies && enemies.length){
-      for(const e of enemies){
-        if(e && typeof e.hp==='number' && e.hp>0){
-          e.hp -= dmg;
-          // piccolo feedback visivo (brace/ember)
-          createParticles(e.x+e.width/2, e.y+e.height/2, '#ff6d00', 6, 3);
+    if(dmg>0 && typeof enemies!=='undefined' && enemies && enemies.length){
+      // apply via applyEnemyDamage so it is accounted, shows numbers, and stays consistent with other damage modifiers
+      for(let i=enemies.length-1;i>=0;i--){
+        const e=enemies[i];
+        if(!e || typeof e.hp!=='number' || e.hp<=0) continue;
+
+        const dealt = applyEnemyDamage(e, dmg);
+        if(dealt>0) showDamageNumber(e.x, e.y, dealt);
+        // piccolo feedback visivo (brace/ember)
+        createParticles((e.x||0)+(e.width||0)/2, (e.y||0)+(e.height||0)/2, '#ff6d00', 6, 3);
+
+        if(e.hp<=0){
+          createParticles(e.x,e.y,'#fff176',30,6);
+          dropStellarBonusAtIndexIfNeeded(i);
+          enemies.splice(i,1);
+          applyScore(100*currentLevel);
+          addKill();
+          if(this && this._baneSuperOnKill) this._baneSuperOnKill();
         }
       }
     }
   }
 }
-
-
-
 // handle Hendel hammer sweep (clockwise 75°)
     if(this.type==='hendel' && this._hammerSwing){
       const H=this._hammerSwing;
@@ -6806,7 +8217,7 @@ for(let i=0;i<3;i++){
 
               if(closestEnemy){
                 const baseDmg=this.damage;
-                const dmg=Math.round(baseDmg * multipliers[idx] * this.attackBuffMultiplier);
+                const dmg=Math.round(baseDmg * multipliers[idx] * this.attackBuffMultiplier * 1.12);
                 const _dmg=dmg; const _final=applyEnemyDamage(closestEnemy,_dmg);
                 createParticles(closestEnemy.x,closestEnemy.y,'#e67e22',12,5);
                 showDamageNumber(closestEnemy.x,closestEnemy.y, _final);
@@ -6946,33 +8357,86 @@ for(let i=0;i<3;i++){
       });
 
 
-    } else if(this.attackType==='lucienBlade'){
-      // 4 colpi ravvicinati (15x4), stile simile a Salsy ma più vicino
-      const attackAngle=this.facingRight?0:Math.PI;
+    
+} else if(this.attackType==='lucienBlade'){
+      // Lucien — Lama Rapida: 4 colpi ravvicinati (15x4)
+      // FIX:
+      // - Aim 360°: l'angolo del colpo non dipende più solo da facingRight.
+      // - Aimbot: punta automaticamente al nemico più vicino (a qualunque distanza) per l'orientamento.
+      // - Hitbox robusta: usa centri (player/enemy) + iterazione reverse per evitare bug quando rimuovi nemici durante il loop.
       const arcWidth=Math.PI*1.05;
+
+      const getAimAngle = ()=>{
+        const pcx=this.x+this.width/2, pcy=this.y+this.height/2;
+
+        // Aimbot: scegli sempre il nemico più vicino per l'orientamento (anche se fuori range)
+        let aimTarget=null; let bestD=Infinity;
+        for(const e of enemies){
+          const ex=e.x+e.width/2, ey=e.y+e.height/2;
+          const d=Math.hypot(ex-pcx, ey-pcy);
+          if(d<bestD){ bestD=d; aimTarget=e; }
+        }
+
+        let ang=0;
+        if(aimTarget){
+          const tx=aimTarget.x+aimTarget.width/2, ty=aimTarget.y+aimTarget.height/2;
+          ang=Math.atan2(ty-pcy, tx-pcx);
+          this._lucienAimTarget = aimTarget;
+          this._lucienAimAngle = ang;
+          this.facingRight = (tx-pcx) >= 0;
+
+          // allinea anche aimX/aimY (utile per eventuali altre logiche/FX)
+          const ax=Math.cos(ang), ay=Math.sin(ang);
+          this.aimX=ax; this.aimY=ay;
+        } else {
+          // fallback: direzione di mira corrente (ultima direzione di movimento) oppure facingRight
+          const dirX=(this.aimX!=null ? this.aimX : (this.facingRight?1:-1));
+          const dirY=(this.aimY!=null ? this.aimY : 0);
+          const len=Math.hypot(dirX,dirY) || 1;
+          const ax=dirX/len, ay=dirY/len;
+          ang=Math.atan2(ay, ax);
+          this._lucienAimTarget = null;
+          this._lucienAimAngle = ang;
+          this.facingRight = ax >= 0;
+        }
+        return ang;
+      };
+
       const doSwing = ()=>{
-        enemies.forEach(enemy=>{
-          const dx=enemy.x-this.x;const dy=enemy.y-this.y;const dist=Math.hypot(dx,dy);
+        const attackAngle = getAimAngle();
+        const pcx=this.x+this.width/2, pcy=this.y+this.height/2;
+
+        for(let i=enemies.length-1;i>=0;i--){
+          const enemy=enemies[i];
+          const ecx=enemy.x+enemy.width/2, ecy=enemy.y+enemy.height/2;
+          const dx=ecx-pcx, dy=ecy-pcy;
+          const dist=Math.hypot(dx,dy);
+
+          if(dist>this.range) continue;
+
           const angle=Math.atan2(dy,dx);
           let angleDiff=angle-attackAngle;
           while(angleDiff>Math.PI)angleDiff-=Math.PI*2;
           while(angleDiff<-Math.PI)angleDiff+=Math.PI*2;
 
-          if(dist<this.range && Math.abs(angleDiff)<arcWidth/2+0.20){
+          if(Math.abs(angleDiff) < arcWidth/2 + 0.20){
             const base=15*this.attackBuffMultiplier*(this.baneSuperAttackMult||1);
-            const dmg=applyEnemyDamage(enemy, base);
+            const dealt=applyEnemyDamage(enemy, base);
             createParticles(enemy.x,enemy.y,'#c8e6ff',8,4);
-            showDamageNumber(enemy.x,enemy.y,dmg);
+            showDamageNumber(enemy.x,enemy.y,dealt);
+
             if(enemy.hp<=0){
               createParticles(enemy.x,enemy.y,'#fff176',30,6);
-              dropStellarBonusAtIndexIfNeeded(enemies.indexOf(enemy));
-              enemies.splice(enemies.indexOf(enemy),1);
+              dropStellarBonusAtIndexIfNeeded(i);
+              enemies.splice(i,1);
               applyScore(100*currentLevel);
-            addKill(); this._baneSuperOnKill();
-                }
+              addKill(); this._baneSuperOnKill();
+            }
           }
-        });
+        }
       };
+
+      // 4 hit rapidi: ricalcola la mira ad ogni swing (così non "manca" quando i nemici si spostano)
       doSwing();
       setTimeout(doSwing, 85);
       setTimeout(doSwing, 170);
@@ -7058,11 +8522,12 @@ for(let i=0;i<3;i++){
         spawnProjectile({
           x:this.x+this.width/2, y:this.y+this.height/2,
           vx, vy, speed,
-          damage:baseAoeDmg, ttl:2000, color:'#ffb74d',
-          radius:9, friendly:true, aoeRadius:110, aoeFullDamage:true, homing:false,
-          explodeOnExpire:true
+          damage:baseAoeDmg, ttl:2000, color:'#ff9100',
+          radius:10, friendly:true, aoeRadius:110, aoeFullDamage:true, homing:false,
+          explodeOnExpire:true,
+          meta:{voltryxBase:true}
         });
-        createParticles(this.x+this.width/2,this.y+this.height/2,'#ffa726',8,3);
+        createParticles(this.x+this.width/2,this.y+this.height/2,'#ff9100',14,3);
       } else {
         // Close: two quick punches, slightly less strong than Rooney
         const perPunchBase=50; // Rooney base ~60; Voltryx slightly less
@@ -7121,9 +8586,9 @@ else if(this.attackType==='hecateBow'){
     color:'#e0e0e0',
     radius:6,
     friendly:true,
-    shape:'rect',
-    w:22,
-    h:5,
+    shape:'arrow',
+    w:28,
+    h:7,
     angle:Math.atan2(vy,vx),
     meta:{type:'hecateMain', splitDamage: splitDmg}
   });
@@ -7192,6 +8657,7 @@ else if(this.attackType==='magic'){
       friendly:true,
       aoeRadius:0,
       homing:true,
+      meta:{marz:true, marzIdx:i},
       // IMPORTANT: lock each beam to its chosen target (3 different enemies if available)
       targetRef:t
     });
@@ -7344,7 +8810,7 @@ if(this.type==='hecate'){
     createParticles(this.x+this.width/2,this.y+this.height/2,'#c5cae9',16,5);
   }
 
-  // Spawn 3 wolves (max 3)
+  // Spawn 3 wolves (max 5)
   spawnWolvesNearPlayer(this, 3);
 
   shakeScreen();
@@ -7368,6 +8834,8 @@ if(now-this.lastSuper<this.superCooldown||this.isDoingSuper)return false;
       this._superGrapplePassUntil=0;
       this._superGrappleDirX=this.facingRight?1:-1;
       this._superGrappleDirY=0;
+      this._jimmySuperCurId=null;
+      this._jimmySuperCurSince=0;
     }
     else if(this.attackType==='punch'){
       createParticles(this.x+this.width/2,this.y+this.height/2,'#f39c12',20,6);
@@ -7393,26 +8861,73 @@ if(now-this.lastSuper<this.superCooldown||this.isDoingSuper)return false;
     }
 
     else if(this.attackType==='lucienBlade'){
-      // Lucien SUPER: spawn 5 collectible bonuses around him (NO gold, NO super-recharge).
-      // Bonuses are real pickups collectable by the player.
-      const allowedTypes = ['heal','atk','speed','shieldPickup','furia','ice'];
+      // Lucien SUPER: rilascia 5 bonus sempre tutti diversi.
+      // Esclusi: ricarica SUPER, GOLD e POISON (malus).
+      // Auto-discovery: prende tutti i bonus presenti nel gioco (PICKUP_WEIGHTED + pickupImgs) tranne quelli esclusi.
+      const excluded = new Set(['super','gold','malus']);
+      const typeSet = new Set();
+
+      try{
+        if(typeof PICKUP_WEIGHTED!=='undefined' && Array.isArray(PICKUP_WEIGHTED)){
+          for(const row of PICKUP_WEIGHTED){
+            if(Array.isArray(row) && row.length) typeSet.add(row[0]);
+          }
+        }
+      }catch(e){}
+
+      try{
+        if(typeof pickupImgs!=='undefined' && pickupImgs){
+          for(const k of Object.keys(pickupImgs)){
+            if(k==='shield') typeSet.add('shieldPickup');
+            else typeSet.add(k);
+          }
+        }
+      }catch(e){}
+
+      // sicurezza: non usare chiavi solo-grafica
+      typeSet.delete('shield');
+
+      const pool = Array.from(typeSet).filter(t=>!excluded.has(t));
+
+      // shuffle (Fisher-Yates) e prendi i primi 5 (tutti diversi)
+      for(let i=pool.length-1;i>0;i--){
+        const j=Math.floor(Math.random()*(i+1));
+        const tmp=pool[i]; pool[i]=pool[j]; pool[j]=tmp;
+      }
+      const chosen = pool.slice(0,5);
+
       const px = this.x + this.width/2;
       const py = this.y + this.height/2;
 
-      for(let i=0;i<5;i++){
-        const a = Math.random()*Math.PI*2;
+      // Spawn: distribuzione circolare con leggera randomizzazione
+      for(let i=0;i<chosen.length;i++){
+        const a = (i/Math.max(1,chosen.length))*Math.PI*2 + (Math.random()*0.5);
         const r = 60 + Math.random()*25;
-        const t = allowedTypes[Math.floor(Math.random()*allowedTypes.length)];
+        const t = chosen[i];
         const x = Math.max(40, Math.min(canvas.width-40, px + Math.cos(a)*r));
         const y = Math.max(40, Math.min(canvas.height-90, py + Math.sin(a)*r));
         spawnPickup(x, y, t);
         createParticles(x, y, '#80cbc4', 18, 4);
       }
+
+      // Fallback ultra-raro: se pool < 5 (impossibile avere 5 tutti diversi), completa con HEAL senza introdurre esclusi
+      if(chosen.length < 5){
+        for(let k=chosen.length; k<5; k++){
+          const a = Math.random()*Math.PI*2;
+          const r = 60 + Math.random()*25;
+          const x = Math.max(40, Math.min(canvas.width-40, px + Math.cos(a)*r));
+          const y = Math.max(40, Math.min(canvas.height-90, py + Math.sin(a)*r));
+          spawnPickup(x, y, 'heal');
+          createParticles(x, y, '#80cbc4', 18, 4);
+        }
+      }
+
       createParticles(px, py, '#80cbc4', 30, 6);
     }
 
 
-    else if(this.attackType==='kouvagia'){
+
+else if(this.attackType==='kouvagia'){
 
       // Kouvagia super: full heal + large knockback + tiny damage + visual FX
       this.hp=this.maxHP;
@@ -7441,16 +8956,17 @@ if(now-this.lastSuper<this.superCooldown||this.isDoingSuper)return false;
       shakeScreen();
     }
 else if(this.attackType==='hybrid'){
-     
+
       const dmgPerPulse = Math.round(120 * this.attackBuffMultiplier);
       spawnProjectile({
         x:this.x+this.width/2,y:this.y+this.height/2,
         vx:(this.facingRight?1:-1)*4,vy:0,speed:6,
-        damage:dmgPerPulse,ttl:this.superDuration,color:'#f39c12',
-        radius:14,friendly:true,aoeRadius:120,homing:true,
-        isVoltryxSuper:true,pulseInterval:260,lastPulse:0
+        damage:dmgPerPulse,ttl:this.superDuration,color:'#ff6d00',
+        radius:16,friendly:true,aoeRadius:120,homing:true,
+        isVoltryxSuper:true,pulseInterval:260,lastPulse:0,
+        meta:{voltryxSuper:true}
       });
-      createParticles(this.x+this.width/2,this.y+this.height/2,'#f39c12',26,6);
+      createParticles(this.x+this.width/2,this.y+this.height/2,'#ff6d00',40,6);
       shakeScreen();
     }
 
@@ -7539,9 +9055,22 @@ else if(this.attackType==='tempostormLaser'){
   }
 
   endSuper(){
+    const now=Date.now();
     this.isDoingSuper=false;this._superHitDone=false;this._lastSwordTick=null;
     this.superTargets=[];this.grappleTarget=null;this.isGrappling=false;
-    this.vx*=0.5;this.vy*=0.5;this.invulnerable=false;
+    this._superGrapplePassUntil=0;
+    this._jimmySuperCurId=null;
+    this._jimmySuperCurSince=0;
+    this.vx*=0.5;this.vy*=0.5;
+
+    // Don't cancel other legitimate invulnerability sources (pickup shield / Jimmy jetpack / Cosmo dash)
+    const keepInvul = !!(
+      (this.pickupShieldUntil && now < this.pickupShieldUntil) ||
+      (this.type==='jimmy' && this.isJetpacking && this.speedBuffUntil && now < this.speedBuffUntil) ||
+      (this.type==='cosmo' && this._cosmoInvulUntil && now < this._cosmoInvulUntil)
+    );
+    this.invulnerable = keepInvul;
+
     if(this.type==='jimmy')this.shieldActive=false
   }
 
@@ -7849,9 +9378,22 @@ const ang = (tx!==null) ? Math.atan2(ty-cy, tx-cx) : (this.facingRight?0:Math.PI
           ctx.stroke();
         }
       }else if(this.attackType==='sword'){
-        ctx.strokeStyle='rgba(155,89,182,0.6)';ctx.lineWidth=5;
-        const angle=this.facingRight?0:Math.PI;const arcWidth=Math.PI*1.2;
-        ctx.beginPath();ctx.arc(this.x+this.width/2,this.y+this.height/2,this.range,angle-arcWidth/2,angle+arcWidth/2);ctx.stroke()
+        // Jeff: visual telegraph migliorato (coerente con l'hitbox reale)
+        const cx=this.x+this.width/2, cy=this.y+this.height/2;
+        const angle=this.facingRight?0:Math.PI;
+        const arcWidth=Math.PI*1.6; // uguale alla logica di hit
+        ctx.fillStyle='rgba(155,89,182,0.18)';
+        ctx.strokeStyle='rgba(155,89,182,0.88)';
+        ctx.lineWidth=7;
+        ctx.beginPath();
+        ctx.moveTo(cx,cy);
+        ctx.arc(cx,cy,this.range,angle-arcWidth/2,angle+arcWidth/2);
+        ctx.closePath();
+        ctx.shadowColor = '#000000';
+        ctx.shadowBlur = 25;
+        ctx.fill();
+        ctx.shadowBlur = 0;
+        ctx.stroke();
       }else if(this.attackType==='salsySword'){
         // Visual telegraph: Salsy fan slash area
         const angle=this.facingRight?0:Math.PI;const arcWidth=Math.PI*1.35;
@@ -7886,7 +9428,7 @@ ctx.fill();
         ctx.stroke();
       }else if(this.attackType==='lucienBlade'){
         // Visual area: Lucien 4-hit close-range blade fan
-        const angle=this.facingRight?0:Math.PI;const arcWidth=Math.PI*1.05;
+        const angle=(typeof this._lucienAimAngle==='number')?this._lucienAimAngle:(this.facingRight?0:Math.PI);const arcWidth=Math.PI*1.05;
         ctx.fillStyle='rgba(200,230,255,0.13)';
         ctx.strokeStyle='rgba(200,230,255,0.82)';
         ctx.lineWidth=6;
@@ -8038,7 +9580,7 @@ ctx.fill();
 class Enemy{
   constructor(type,level){
     const cfg=levelConfigs[Math.max(0,Math.min(levelConfigs.length-1,level-1))];
-    const mult=1+0.15*level;
+    const mult=1; // stats per livello già finali (nessuna scala automatica)
     this.type=type;
     if(!window._enemyIdSeq) window._enemyIdSeq = 1;
     this._id = window._enemyIdSeq++;
@@ -8046,14 +9588,12 @@ class Enemy{
     this.y=Math.random()*(canvas.height-150)+50;
     this.width=Math.round(56*1.2);
     this.height=Math.round(56*1.2);
-    this.vx=(Math.random()-0.5)*cfg.enemySpeed*mult;
-    this.vy=(Math.random()-0.5)*cfg.enemySpeed*mult;
-    this.maxHP=Math.round(cfg.enemyHP*(1+0.25*level));
+    this.vx=(Math.random()-0.5)*cfg.enemySpeed;
+    this.vy=(Math.random()-0.5)*cfg.enemySpeed;
+    this.maxHP=Math.round(cfg.enemyHP);
     this.hp=this.maxHP;
-    const baseDamage=Math.round(cfg.enemyDamage*(1+0.20*level));
-    this.damage=(level>=7)?Math.round(baseDamage*0.8):baseDamage;
-    this.speed=cfg.enemySpeed*mult;
-    if(level===8)this.speed*=0.925;
+    this.damage=Math.round(cfg.enemyDamage);
+this.speed=cfg.enemySpeed;
     // Modalità FACILE: nemici più lenti (-10%) e meno danno (-20%)
     if(difficultyMode==='easy'){
       this.vx*=0.90; this.vy*=0.90;
@@ -8071,18 +9611,26 @@ class Enemy{
       this.attackCooldown=1600;
       this.keepAway=300;
       this.preferRange=520;
+      // Laser: ora schivabile (telegraph + crescita progressiva)
+      this.laserChargeMs = 150;      // telegraph molto breve (100-200ms)
+      this.laserMaxLen   = 650;
+      this.laserWidth    = 30;
+      this.laserTTL      = 1050;     // durata complessiva del fascio (dopo la carica)
+      // "Velocità di colpo": velocità di crescita del laser (px/sec)
+      // (valore moderato così si può schivare; scala leggermente col livello)
+      this.laserSpeed    = 3200 + Math.max(0, (level-18))*120; // costruzione rapidissima
     }
     if(this.type==='boss4'){
       this.width=Math.round(240*1.2);
       this.height=Math.round(240*1.2);
 
       // Override scaling: boss has fixed stats
-      this.maxHP=900;
+      this.maxHP=2500;
       this.hp=this.maxHP;
 
       this.damage=30;          // fan damage
       this.ringDamage=20;      // ring damage
-      this.speed=4.2;
+      this.speed=5.0;
       this.vx=(Math.random()-0.5)*this.speed;
       this.vy=(Math.random()-0.5)*this.speed;
 
@@ -8129,21 +9677,66 @@ class Enemy{
     let nx=dx/dist;
     let ny=dy/dist;
 
-    // OneEyes: keep distance + shoot lasers
+    // OneEyes: kite (allontanarsi) + dispersione tra OneEyes + laser schivabile
     if(this.type==='oneyes'){
-      // keep away if too close
-      if(dist < (this.keepAway||300)){
-        nx = -nx; ny = -ny;
-      } else if(dist > (this.preferRange||520)){
-        // slightly approach if too far
-        // nx,ny already towards player
-      } else {
-        // strafe / small drift
-        const t = nx; nx = -ny*0.7; ny = t*0.7;
+      const keep = (this.keepAway||300);
+      const prefer = (this.preferRange||520);
+
+      // direzione "via dal player"
+      const awayX = -nx, awayY = -ny;
+      let tanX = -awayY, tanY = awayX;
+
+      // slot angolare stabile per farli disporsi in posizioni diverse attorno al player
+      if(this._slotAngle==null){
+        const golden = 2.399963229728653; // golden angle (rad)
+        this._slotAngle = (this._id||0) * golden;
+      }
+      const myAng = Math.atan2(cy - py, cx - px); // angolo player->nemico
+      const targetAng = (this._slotAngle % (Math.PI*2));
+      const diff = Math.atan2(Math.sin(targetAng - myAng), Math.cos(targetAng - myAng));
+      const turn = (diff>=0) ? 1 : -1;
+
+      // Sempre provano ad aumentare la distanza, ma se sono già molto lontani orbitano (senza tornare verso il player)
+      let awayMul = 1.0;
+      let orbitMul = 0.85;
+      if(dist < keep){
+        awayMul = 1.35;
+        orbitMul = 0.25;
+      } else if(dist > prefer*1.35){
+        awayMul = 0.15;
+        orbitMul = 0.95;
+      } else if(dist > prefer*1.15){
+        awayMul = 0.45;
+        orbitMul = 0.90;
       }
 
-      this.vx = nx*this.speed;
-      this.vy = ny*this.speed;
+      // base move: outward + orbit verso lo slot (per non clumpare)
+      let mx = awayX*awayMul + tanX*turn*orbitMul;
+      let my = awayY*awayMul + tanY*turn*orbitMul;
+
+      // Separation: repulsione tra OneEyes per distribuirsi (anti-clumping)
+      let sepX=0, sepY=0;
+      for(let j=0;j<enemies.length;j++){
+        const o=enemies[j];
+        if(o!==this && o.type==='oneyes'){
+          const ocx=o.x+o.width/2, ocy=o.y+o.height/2;
+          const sx = (cx - ocx);
+          const sy = (cy - ocy);
+          const sd = Math.hypot(sx,sy);
+          if(sd>0 && sd<260){
+            const w = (260 - sd)/260;
+            sepX += (sx/sd)*w;
+            sepY += (sy/sd)*w;
+          }
+        }
+      }
+      mx += sepX*1.35;
+      my += sepY*1.35;
+
+      // normalize
+      const md = Math.hypot(mx,my)||1;
+      this.vx = (mx/md)*this.speed;
+      this.vy = (my/md)*this.speed;
 
       // shoot laser (1s duration), with higher cooldown
       if(dist>220 && (now-this.lastAttack)>this.attackCooldown){
@@ -8152,12 +9745,14 @@ class Enemy{
           owner:this,
           x:cx, y:cy,
           angle,
-          length:650,
-          width:18,
-          ttl:1000,
-          damage:15,
+          length:(this.laserMaxLen||650),
+          width:(this.laserWidth||30),
+          ttl:(this.laserTTL||1050),
+          damage:this.damage,
           kind:'oneyes',
-          chargeMs:0
+          chargeMs:(this.laserChargeMs||320),
+          growSpeed:(this.laserSpeed||950),
+          anchorToOwner:true
         });
         createParticles(cx,cy,'#74b9ff',16,4);
         this.lastAttack=now;
@@ -8292,7 +9887,23 @@ ctx.fill();
 }
 
 class ShooterEnemy extends Enemy{
-  constructor(type,level){super(type,level);this.shootCooldown=Math.max(600,1800-level*40);this.lastShoot=0;this.bulletSpeed=5+level*0.15}
+  constructor(type,level){
+    super(type,level);
+
+    this.lastShoot=0;
+
+    // Shot tuning per livello (valori "effettivi" in battaglia)
+    if(level===11){
+      this.shootCooldown=1360;
+      this.bulletSpeed=6.50;
+    }else if(level===12){
+      this.shootCooldown=1200;
+      this.bulletSpeed=6.60;
+    }else{
+      this.shootCooldown=Math.max(600,1800-level*40);
+      this.bulletSpeed=5+level*0.15;
+    }
+  }
   update(player){
     if(Date.now()<this.spawnFreezeUntil)return;
     if(this.stunnedUntil && Date.now() < this.stunnedUntil){
@@ -8315,7 +9926,7 @@ class ShooterEnemy extends Enemy{
       const vx=(dx/len)*this.bulletSpeed;const vy=(dy/len)*this.bulletSpeed;
       spawnProjectile({
         x:this.x+this.width/2,y:this.y+this.height/2,
-        vx,vy,damage:Math.max(1,Math.round(this.damage*0.6)),ttl:4000,
+        vx,vy,damage:Math.max(1,Math.round(this.damage)),ttl:4000,
         color:'#ffd54f',radius:6,friendly:false,source:this
       })
     }
@@ -8354,7 +9965,9 @@ class ArcherEnemy extends Enemy{
     super(type,level);
     this.shootCooldown=Math.max(650, 1250 - level*18);
     this.lastShoot=0;
-    this.arrowSpeed=9.2 + level*0.20;
+    if(level===21) this.arrowSpeed=10.40;
+    else if(level===22) this.arrowSpeed=11.60;
+    else this.arrowSpeed=9.2 + level*0.20;
     this.keepMin=520; // very far
     this.keepMax=700;
   }
@@ -8398,7 +10011,7 @@ class ArcherEnemy extends Enemy{
         vx, vy,
         friendly:false,
         source:this,
-        damage:Math.max(8, Math.round(this.damage*0.85)),
+        damage:Math.max(1, Math.round(this.damage)),
         ttl:3200,
         color:'#e0e0e0',
         radius:4,
@@ -8454,6 +10067,7 @@ class GlacialEnemy extends Enemy{
     this._lastRegenAt=0;
     this.keepMin=280;
     this.keepMax=440;
+    this.glacialBaseTick = (level===23 ? 20 : (level===24 ? 22 : Math.max(3, Math.round(this.damage*0.20))));
   }
   update(player){
     if(Date.now()<this.spawnFreezeUntil)return;
@@ -8526,7 +10140,7 @@ class GlacialEnemy extends Enemy{
         if(now - this._coneLastTick >= 250){
           this._coneLastTick = now;
           const insideSec = this._coneInsideMs/1000;
-          const base = Math.max(3, Math.round(this.damage*0.20));
+          const base = (this.glacialBaseTick!=null ? this.glacialBaseTick : Math.max(3, Math.round(this.damage*0.20)));
           const ramp = Math.round(insideSec * 2.2); // gradual increase
           const dmg = Math.min(22, base + ramp);
           player.takeDamage(dmg, this);
@@ -8597,7 +10211,27 @@ ctx.fill();
 
 
 class AttackReturnEnemy extends Enemy{
-  constructor(type,level){super(type,level);this.homeX=this.x;this.homeY=this.y;this.state='idle';this.attackRange=60;this.attackCooldown=2200;this.lastAttackTime=0;this.attackSpeed=this.speed*2.5}
+  constructor(type,level){
+    super(type,level);
+    this.homeX=this.x;
+    this.homeY=this.y;
+    this.state='idle';
+    // Range e velocità carica (valori "effettivi" in battaglia)
+    this.attackRange=40;   // hit range
+    this.engageRange=150;  // distanza per iniziare la carica
+
+    // Velocità colpo (carica) per livello
+    if(level===13) this.attackSpeed=17.70;
+    else if(level===14) this.attackSpeed=19.76;
+    else this.attackSpeed=this.speed*2.5;
+
+    if(difficultyMode==='easy'){
+      this.attackSpeed*=0.90;
+    }
+
+    this.attackCooldown=2200;
+    this.lastAttackTime=0;
+}
   update(player){
     if(Date.now()<this.spawnFreezeUntil)return;
     if(this.stunnedUntil && Date.now() < this.stunnedUntil){
@@ -8611,7 +10245,7 @@ class AttackReturnEnemy extends Enemy{
     if(this.state==='idle'){
       const wanderX=Math.sin(Date.now()/1000+this.homeX)*0.3;const wanderY=Math.cos(Date.now()/1000+this.homeY)*0.3;
       this.vx=wanderX*this.speed;this.vy=wanderY*this.speed;
-      if(distToPlayer<220&&Date.now()-this.lastAttackTime>this.attackCooldown)this.state='attack'
+      if(distToPlayer<(this.engageRange||220)&&Date.now()-this.lastAttackTime>this.attackCooldown)this.state='attack'
     }
     else if(this.state==='attack'){
       const nx=dx/(distToPlayer||1);const ny=dy/(distToPlayer||1);
@@ -8745,11 +10379,11 @@ class Boss5Enemy extends Enemy{
     this.height=Math.round(245*1.2);
 
     // Stat fisse richieste
-    this.maxHP=800;
-    this.hp=800;
+    this.maxHP=2500;
+    this.hp=this.maxHP;
 
     // "Non troppo veloce"
-    this.speed=2.99*0.75; // ~1.69 (leggermente più veloce)
+    this.speed=4.5;
 
     // Danno base (usato solo per eventuale contatto)
     this.damage=50;
@@ -8768,12 +10402,12 @@ class Boss5Enemy extends Enemy{
     this.lastSwingTick=0;
 
     // --- Passiva: ogni 28s respinge + cura 50 ---
-    this.passiveInterval=20000;
+    this.passiveInterval=10000;
     this.nextPassive=Date.now()+this.passiveInterval;
     this.passiveFxUntil=0;
 
     // Area della passiva/super (raggio)
-    this.passiveRadius=750; // aumentata
+    this.passiveRadius=850; // aumentata
   }
 
   startSwingTowards(player){
@@ -8806,7 +10440,7 @@ class Boss5Enemy extends Enemy{
     shakeScreen();
 
     // Cura boss
-    this.hp = Math.min(this.maxHP, this.hp + 80);
+    this.hp = Math.min(this.maxHP, this.hp + 120);
 
     // Effetto sul player SOLO se dentro l'area della super/passiva
     const px=player.x+player.width/2, py=player.y+player.height/2;
@@ -8822,7 +10456,7 @@ class Boss5Enemy extends Enemy{
 
       // Slow: -50% velocità per 2s
       if(player && typeof player.applySlow==='function'){
-        player.applySlow(0.60, 3200);
+        player.applySlow(0.50, 2000);
       }
 
       // clamp in arena
@@ -8870,7 +10504,7 @@ class Boss5Enemy extends Enemy{
 
     if(inside){
       this.lastSwingTick=now;
-      player.takeDamage(18, this);
+      player.takeDamage(20, this);
     }
   }
 
@@ -9085,6 +10719,8 @@ function startGame(){
   runUsedSuper=false; runTookDamage=false;
   player=new Player(selectedCharacter||'jimmy');
   enemies=[];particles=[];projectiles=[];lasers=[];tempBeams=[];pickups=[];wolves=[];
+
+  if(typeof pdorOrbSets!=='undefined' && pdorOrbSets) pdorOrbSets.length=0;
   spawnEnemiesForLevel(currentLevel);
   updateBackgroundForLevel(currentLevel);
   document.getElementById('mainMenu').style.display='none';
@@ -9458,8 +11094,8 @@ function updateCosmoSingularity(now){
       const t = Math.max(0, 1 - dist/orb.pullR);
       // Always-on pull even at long range, with aggressive ramp-up near the center.
       // Enemies can still move, but the drag + ramp makes the center eventually win.
-      let pull = 0.12 + Math.pow(t, 1.32) * 3.2;
-      if (pull > 3.7) pull = 3.7;
+      let pull = (0.12 + Math.pow(t, 1.32) * 3.2) * 2;
+      if (pull > 7.4) pull = 7.4;
       e.x += (dx/(dist||1))*pull;
       e.y += (dy/(dist||1))*pull;
       // drag inside the field (simulated resistance)
@@ -9597,8 +11233,9 @@ return;
   }
 
   if(player) player.update();
+  if(player) updateArcoAntico(now, player);
     updateHendelCrush();
-  enemies.forEach(e=>{e.update(player)});
+  enemies.forEach(e=>{e.update(player); clampToPlayBounds(e, 2);});
   updateCosmoMarks(now);
   updateCosmoSingularity(now);
   updateCosmoTrails(now);
@@ -9608,6 +11245,7 @@ return;
   updatePdorOrbs(now);
   updateParticles();
   updateIraFX();
+  updateVoltryxFX();
   updateProjectiles();
   updateLasers();
   updateTempBeams();
@@ -9655,6 +11293,7 @@ return;
   drawCosmoSingularity();
   drawCosmoTrails();
   drawRooneyAreaFX(now);
+  drawArcoAntico(now);
   enemies.forEach(e=>e.draw());
   drawBossRings(now);
   drawWolves();
@@ -9664,6 +11303,7 @@ return;
   drawLasers();
   drawTempBeams();
   drawFuriaWaves();
+  drawVoltryxFX();
   drawIraFX();
   drawParticles();
   drawHendelCrush();
@@ -9676,6 +11316,15 @@ return;
     ctx.save();
     ctx.globalAlpha = Math.min(0.35, iraScreenFlash/40);
     ctx.shadowColor = '#000000'; ctx.shadowBlur = 25; ctx.fillStyle = '#7a0019';
+    ctx.fillRect(0,0,canvas.width,canvas.height);
+    ctx.restore();
+  }
+
+  // VOLTRYX orange flash (impacts/super)
+  if(voltryxScreenFlash>0){
+    ctx.save();
+    ctx.globalAlpha = Math.min(0.32, voltryxScreenFlash/36);
+    ctx.shadowColor = '#000000'; ctx.shadowBlur = 25; ctx.fillStyle = '#ff6d00';
     ctx.fillRect(0,0,canvas.width,canvas.height);
     ctx.restore();
   }
@@ -9710,10 +11359,23 @@ if(bonusBox){
 
   add('SCUDO', player.pickupShieldUntil, '#7fdfff');   // azzurro chiaro
   add('SPEED', player.speedBuffUntil, '#3498db');      // blu
-  add('<span class="ira-glow">IRA</span>', player.baneSuperUntil, '#ff9800'); // arancione (Bane)
+  // IRA pickup (bonus): mostra come gli altri bonus
+  add('IRA', player.iraUntil, '#8A0C00');              // rosso scuro richiesto
+  // ESTASI (LETTERA D'AMORE): marrone cioccolato
+  add('ESTASI', player.estasiUntil, 'chocolate');
+
+  // Bane SUPER: mantieni indicazione separata per evitare doppio "IRA" quando Bane raccoglie il bonus
+  if(player.type==='bane'){
+    add('<span class="ira-glow">IRA SUPER</span>', player.baneSuperUntil, '#ff9800'); // arancione (Bane)
+  }
   add('FURIA', player.furiaHealUntil, '#ff00ff');      // fucsia
   add('ATK', player.attackBuffUntil, '#ff3b3b');       // rosso
   add('POISON', player.poisonUntil, '#4b0082');        // viola scuro
+
+  // Arco Antico (durata colonna)
+  if(typeof ancientColumn!=='undefined' && ancientColumn && ancientColumn.hp>0){
+    add('ARCO ANTICO', ancientColumn.endsAt, '#c0c0c0');
+  }
 
   if(rows.length){
     bonusBox.style.display='block';
@@ -9836,7 +11498,7 @@ document.querySelectorAll('.character-card').forEach(card=>{
       return;
     }
 
-    // COSMO purchase unlock (1000 Ether)
+    // COSMO purchase unlock (3000 Ether)
     if(char==='cosmo' && !isCharPurchased('cosmo')){
       // Cosmo is purchasable with Ether fragments (no generic "Personaggio BLOCCATO" popup)
       showCosmoShopModal();
@@ -9990,6 +11652,8 @@ document.getElementById('menuBtn').addEventListener('click',()=>{
   // chiudi end screen subito (ma resta la fly anim sopra)
   document.getElementById('endScreen').style.display='none';
   document.getElementById('mainMenu').style.display='block';
+  const menuTopLeft=document.getElementById('menuTopLeft');
+  if(menuTopLeft){ menuTopLeft.style.display='flex'; menuTopLeft.setAttribute('aria-hidden','false'); }
   gameState='menu';
   updateMenuRecordsDisplay();
 
@@ -10483,7 +12147,7 @@ function showCosmoShopModal(){
           updateMenuStatsDisplay('cosmo');
         }catch(e){}
       }else{
-        if(hint) hint.textContent = "Frammenti insufficienti: servono 1000.";
+        if(hint) hint.textContent = "Frammenti insufficienti: servono 3000.";
       }
     };
   }
@@ -10798,7 +12462,7 @@ if(typeof characterStats!=='undefined' && !characterStats.marcus){
     speed:5.4,
     damage:20,
     range:720,
-    cooldown:650,
+    cooldown:500,
     name:'Marcus',
     attackType:'marcusStream',
     superCooldown: 25000,
@@ -10828,6 +12492,13 @@ updateProjectiles = function(){
       p.x += p.vx * 0.06;
       p.y += p.vy * 0.06;
     }
+    if(p.meta && p.meta.pdorChain){
+      if(!p.meta._zapNext) p.meta._zapNext = now + Math.random()*60;
+      if(now >= p.meta._zapNext){
+        p.meta._zapNext = now + 45 + Math.random()*90;
+        createParticles(p.x, p.y, 'rgba(255,245,157,0.9)', 2, 2);
+      }
+    }
   }
 };
 
@@ -10842,7 +12513,7 @@ Player.prototype.attack = function(){
   if(this.type==='pdor'){
     const now = Date.now();
     if(!this._pdorLastShot) this._pdorLastShot = 0;
-    const cd = 420; // slower cadence between darts
+    const cd = (typeof this.cooldown==='number'?this.cooldown:420); // cadence (affected by IRA / buff)
     if(now - this._pdorLastShot < cd) return false;
     this._pdorLastShot = now;
 
@@ -10872,7 +12543,7 @@ Player.prototype.attack = function(){
       vx,vy,speed,
       damage:baseDmg,
       ttl:1600,
-      color:'#000000',
+      color:'#ffd400',
       radius:10,
       friendly:true,
       shape:'rect',
@@ -10881,7 +12552,7 @@ Player.prototype.attack = function(){
       angle:ang,
       meta:{ pdorChain:true, hitsLeft:5, hitRefs:[] }
     });
-    createParticles(cx,cy,'#000000',10,4);
+    createParticles(cx,cy,'#ffd400',10,4);
     return true;
   }
 
@@ -10891,7 +12562,7 @@ Player.prototype.attack = function(){
     const now = Date.now();
     if(!this._marcusLastShot) this._marcusLastShot = 0;
 
-    const cd = 500; // cooldown (nerf: slower attacks)
+    const cd = (typeof this.cooldown==='number'?this.cooldown:500); // cooldown (affected by IRA / buff)
     if(now - this._marcusLastShot < cd) return false;
     this._marcusLastShot = now;
     // ---- HEAL ON ATTACK (1% current HP, integer, min 1) ----
@@ -10931,7 +12602,7 @@ Player.prototype.attack = function(){
         damage:Math.round(20*this.attackBuffMultiplier*(this.baneSuperAttackMult||1)),
         ttl:900,            // long life = looks like beam/flow
         color:'#b19cff',
-        radius:10,          // thicker = stream feeling
+        radius:14,          // thicker = stream feeling
         friendly:true,
         meta:{marcus:true, phase:Math.random()*Math.PI*2}, wave:true, amp:16, freq:1.0
       });
@@ -11054,8 +12725,28 @@ function _applyMarcusConfusion(enemy){
     // avoid double-wrapping
     if(original && original.__marcusWrapped) return;
     const wrapped = function(playerRef){
-      if(_applyMarcusConfusion(this)) return;
-      return original.call(this, playerRef);
+      const ox = this.x, oy = this.y;
+      const didConfuse = _applyMarcusConfusion(this);
+      const res = didConfuse ? undefined : original.call(this, playerRef);
+
+      // Arco Antico slow: scale the movement delta (doesn't touch base speed)
+      try{
+        const now = Date.now();
+        const f = (typeof getArcoAnticoMoveSlowFactor==='function') ? getArcoAnticoMoveSlowFactor(this, now) : 1;
+        if(f!==1){
+          const dx = (this.x - ox);
+          const dy = (this.y - oy);
+          this.x = ox + dx*f;
+          this.y = oy + dy*f;
+          if(typeof this.vx==='number') this.vx *= f;
+          if(typeof this.vy==='number') this.vy *= f;
+          // boundaries
+          if(this.x<0)this.x=0;if(this.x+this.width>canvas.width)this.x=canvas.width-this.width;
+          if(this.y<0)this.y=0;if(this.y+this.height>canvas.height-30)this.y=canvas.height-30-this.height;
+        }
+      }catch(e){}
+
+      return res;
     };
     wrapped.__marcusWrapped = true;
     proto.update = wrapped;
@@ -11466,7 +13157,7 @@ function refreshCosmoPurchaseState(){
 refreshCosmoPurchaseState();
 
 function tryPurchaseCosmo(){
-  const COST = 1000;
+  const COST = 3000;
   if(isCharPurchased('cosmo')) return true;
   if((ether||0) < COST) return false;
 
@@ -11983,7 +13674,7 @@ document.addEventListener("DOMContentLoaded", function(){
     if(!btn || !etherEl) return;
 
     const ether = parseInt(etherEl.textContent || "0");
-    if(ether < 1000){
+    if(ether < 3000){
       btn.classList.add("disabled");
       btn.disabled = true;
     }else{
@@ -12020,13 +13711,15 @@ const unlockMessages = {
   tempostorm: "Personaggio BLOCCATO\nSblocca facendo 65.000 punti\ncon tutti i personaggi precedenti",
   marz: "Personaggio BLOCCATO\nSblocca facendo 70.000 punti\ncon tutti i personaggi precedenti",
   hecate: "Personaggio BLOCCATO\nSblocca facendo 75.000 punti\ncon tutti i personaggi precedenti",
-  lucien: "Personaggio BLOCCATO\nSblocca facendo un record con Marcus\nsuperiore a 25.000",
+  lucien: "Personaggio BLOCCATO
+Sblocca facendo 50.000 punti
+con MARCUS",
   pdor: "Personaggio BLOCCATO\nsi sblocca facendo 50.000\ncon marcus e lucien",
   bane: "Personaggio BLOCCATO\nSblocca facendo 50.000\ncon PDOR",
   hendel: "personaggio BLOCCATO  si sblocca facendo 50.000 con Bane",
   kaerith: "Personaggio BLOCCATO\nsi sblocca facendo 40.000 con Hendel"
   ,
-  cosmo: "Personaggio BLOCCATO Sblocca acquistandolo con 1000 Frammenti d'Etere"
+  cosmo: "Personaggio BLOCCATO Sblocca acquistandolo con 3000 Frammenti d'Etere"
 };
 
 const lockBox = document.getElementById('lockMessage');
@@ -12045,7 +13738,7 @@ document.querySelectorAll('.char-grid button[data-target]').forEach(btn=>{
       if(buyBtn){
         buyBtn.style.display = (id==='cosmo') ? 'inline-block' : 'none';
         if(id==='cosmo'){
-          buyBtn.textContent='COMPRA (1000)';
+          buyBtn.textContent='COMPRA (3000)';
           buyBtn.onclick = ()=>{
             const ok = tryPurchaseCosmo();
             if(ok){
@@ -12060,7 +13753,7 @@ document.querySelectorAll('.char-grid button[data-target]').forEach(btn=>{
                 }
               }catch(e){}
             }else{
-              lockText.innerText = "Etere insufficiente Servono 1000 frammenti";
+              lockText.innerText = "Etere insufficiente Servono 3000 frammenti";
             }
           };
         }
@@ -12121,7 +13814,7 @@ function renderUnlockButton(character){
 <script>
 document.addEventListener('DOMContentLoaded', function(){
   const COSMO_PURCHASE_KEY = "pf_purchase_cosmo_v1";
-  const COSMO_COST = 1000;
+  const COSMO_COST = 3000;
 
   function isCosmoUnlocked(){
   try{
