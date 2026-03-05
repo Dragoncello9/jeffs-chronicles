@@ -54,6 +54,26 @@
     .level-indicator{position:absolute;top:60px;left:50%;transform:translateX(-50%);font-size:18px;z-index:10}
     .moon-phase-indicator{position:absolute;top:86px;left:50%;transform:translateX(-50%);font-size:26px;z-index:10;color:#90caf9;font-family:'Press Start 2P', cursive;text-shadow:2px 2px 4px #000;letter-spacing:1px}
     .super-cooldown{position:absolute;top:100px;left:18px;font-size:14px;color:#f39c12;z-index:10}
+/* ===== HUD BARRE (SUPER + BONUS) ===== */
+.hud-super{margin-top:6px;font-family:'Press Start 2P', cursive}
+.hud-super-row{display:flex;align-items:center;gap:8px}
+.hud-super-label{font-size:12px;color:#ff9800}
+.hud-bar{width:110px;height:10px;border:2px solid #fff;background:rgba(0,0,0,0.35);overflow:hidden}
+.hud-bar-fill{height:100%;width:0%;background:#ff9800;transition:width 0.12s linear}
+.hud-super.ready .hud-bar-fill{animation:superBlink 0.6s steps(2,end) infinite}
+.hud-super-text{font-size:12px;color:#ff9800;min-width:60px;}
+.hud-super.ready .hud-super-text{animation:superBlink 0.6s steps(2,end) infinite}
+.bonus-secs{font-size:10px;color:#fff;min-width:54px;text-align:right;opacity:0.95}
+
+@keyframes superBlink{0%{opacity:1}50%{opacity:0.25}100%{opacity:1}}
+
+.hud-bonuses{margin-top:6px;font-family:'Press Start 2P', cursive;font-size:10px}
+.bonus-row{display:flex;align-items:center;gap:8px;margin-top:6px}
+.bonus-label{min-width:102px;display:inline-block}
+.bonus-bar{width:96px;height:8px;border:2px solid #fff;background:rgba(0,0,0,0.35);overflow:hidden}
+.bonus-fill{height:100%;width:100%;background:#fff;transition:width 0.12s linear}
+/* ===================================== */
+
 
     .evo-banner{
       position:absolute;left:50%;top:45%;
@@ -1645,8 +1665,8 @@ PUNTEGGIO TOTALE: 0
 <div class="ui-overlay" id="uiOverlay" style="display:none;">
 <div>HP: <span id="hpText">100</span></div>
 <div class="hp-bar"><div class="hp-fill" id="hpFill" style="width:100%"></div></div>
-<div id="superCooldown" style="margin-top:6px;font-size:12px;color:#fff;font-family:'Press Start 2P', cursive;;color:#ff9800;">Super: Ready</div>
-<div id="bonusTimers" style="margin-top:4px;font-size:11px;line-height:1.4;color:#fff;font-family:'Press Start 2P', cursive;display:none;"></div>
+<div id="superCooldown" class="hud-super"><div class="hud-super-row"><span class="hud-super-label">SUPER</span><div class="hud-bar" id="superBarWrap"><div id="superBarFill" class="hud-bar-fill"></div></div><span id="superCooldownText" class="hud-super-text" style="display:none;">0 sec</span></div></div>
+<div id="bonusTimers" class="hud-bonuses" style="display:none;"></div>
 
 
 
@@ -1722,6 +1742,17 @@ style="width:56px;height:56px;image-rendering:pixelated;display:block;">
         <li><span class="ms-k">H</span>Metti in pausa / Riprendi (alternativo)</li>
       </ul>
       <div style="margin-top:10px;opacity:0.9;">In partita puoi anche usare il pulsante ⏸ accanto al timer.</div>
+      <div style="margin-top:14px;opacity:0.95;">HUD in partita:</div>
+      <div style="margin-top:8px;display:flex;flex-direction:column;gap:6px;">
+        <label style="display:flex;align-items:center;gap:10px;cursor:pointer;">
+          <input type="radio" name="hudTimerMode" id="hudModeBars" value="bars">
+          <span>Barre (default)</span>
+        </label>
+        <label style="display:flex;align-items:center;gap:10px;cursor:pointer;">
+          <input type="radio" name="hudTimerMode" id="hudModeText" value="text">
+          <span>Secondi (xx sec)</span>
+        </label>
+      </div>
     </div>
   </div>
 </div>
@@ -2361,9 +2392,9 @@ style="height:1.9em;display:block;image-rendering:pixelated;">
 <li>Ogni personaggio è forte se usato nel modo giusto.</li>
 </ul>
 <h3>✴️ EVOLUZIONI </h3>
-<p>rappresentano una fase avanzata del combattimento e si attivano automaticamente durante la partita. Non sono potenziamenti temporanei, ma un vero e proprio cambiamento nello stile di gioco del personaggio.</p> <p><strong>Quando avvengono</strong>: dopo aver superato il boss del <strong>Livello 15</strong> (e da quel punto in poi), il personaggio può entrare nello stato <em>Evoluto</em> <strong>solo se</strong> il tuo <strong>RECORD</strong> con quel personaggio è <strong>&ge; 100.000</strong> (vale solo per i personaggi che dispongono di un’evoluzione). L’evoluzione viene annunciata a schermo con un banner dedicato.</p> <p><strong>Filosofia delle evoluzioni</strong>: le evoluzioni <u>non aumentano direttamente HP, velocità o danno base</u>. Al contrario, sbloccano <strong>passive speciali</strong> che premiano l’uso intelligente delle meccaniche del personaggio. Questo mantiene il gioco bilanciato e strategico.</p> <h4>Effetti generali</h4> <ul> <li>L’evoluzione dura per il resto della partita.</li> <li>Ogni personaggio ottiene un <strong>vantaggio unico</strong>, coerente con il suo ruolo.</li> <li>Le evoluzioni premiano precisione, timing e gestione dei nemici.</li> </ul> <h4>⚙️ Evoluzioni attuali</h4> <p><strong>🔫 Jimmy – Predatore Evoluto</strong><br/> Jimmy carica la <strong>Super più velocemente (+25%)</strong> e il <strong>cooldown dell’attacco base è ridotto del 15%</strong>.</p>
-<p><strong>🐱 Rooney – Impatto Brutale</strong><br/> Il <strong>primo colpo</strong> inflitto a ogni nemico infligge <strong>+50% danni</strong>.</p>
-<p><strong>🗡️ Jeff – Rigenerazione da Combattimento</strong><br/> Ogni nemico ucciso cura Jeff di <strong>5 HP</strong>.</p> <p><em>Nota:</em> i personaggi sbloccabili avanzati potrebbero ottenere evoluzioni dedicate in futuro.</p> <h4> Consigli strategici</h4> <ul> <li>Sfrutta l’evoluzione per cambiare approccio: da difensivo a aggressivo (o viceversa).</li> <li>Dopo l’evoluzione, eliminare i nemici velocemente diventa ancora più importante per massimizzare punteggio e controllo.</li> <li>Le evoluzioni non rendono invincibili: il posizionamento resta fondamentale.</li> </ul> <p><strong>Le evoluzioni sono il momento in cui Jeff’s Chronicles premia davvero la padronanza del personaggio.</strong></p>
+<p>rappresentano una fase avanzata del combattimento e si attivano automaticamente durante la partita. Non sono potenziamenti temporanei, ma un vero e proprio cambiamento nello stile di gioco del personaggio.</p> <p><strong>Quando avvengono</strong>: dopo aver superato il boss del <strong>Livello 15</strong> (e da quel punto in poi), il personaggio può entrare nello stato <em>Evoluto</em> <strong>solo se</strong> il tuo <strong>RECORD</strong> con quel personaggio è <strong>superiore a 100.000</strong> (vale solo per i personaggi che dispongono di un’evoluzione). L’evoluzione viene annunciata a schermo con un banner dedicato.</p> <p><strong>Filosofia delle evoluzioni</strong>: le evoluzioni <u>aumentano gli HP massimi (+50%)</u>, ma <u>non aumentano direttamente velocità o danno base</u>. Al contrario, sbloccano <strong>passive speciali</strong> che premiano l’uso intelligente delle meccaniche del personaggio. Questo mantiene il gioco bilanciato e strategico.</p> <h4>Effetti generali</h4> <ul> <li>L’evoluzione dura per il resto della partita.</li> <li>Tutti i personaggi ottengono <strong>+50% HP massimi</strong> quando evolvono.</li> <li>Ogni personaggio ottiene un <strong>vantaggio unico</strong>, coerente con il suo ruolo.</li> <li>Le evoluzioni premiano precisione, timing e gestione dei nemici.</li> </ul> <h4>⚙️ Evoluzioni attuali</h4> <p><strong>🔫 Jimmy – Predatore Evoluto</strong><br/> La <strong>Super</strong> è disponibile ogni <strong>5 secondi</strong>. Se uccidi il bersaglio agganciato con il <strong>grapple</strong>, il <strong>prossimo grapple</strong> ha <strong>cooldown azzerato</strong>. Inoltre, il <strong>jetpack</strong> dura <strong>+1 secondo</strong>.</p>
+<p><strong>🐱 Rooney – Impatto Brutale</strong><br/>Il <strong>primo colpo</strong> inflitto a ogni nemico infligge <strong>+100% danni</strong>. Quando Rooney attiva la <strong>Super</strong> da evoluto, oltre all’area nel punto di attivazione genera <strong>3 aree aggiuntive</strong> in posizioni casuali. (totale <strong>4 aree</strong>).</p>
+<p><strong>🗡️ Jeff – Rigenerazione da Combattimento</strong><br/>Ogni nemico ucciso cura Jeff di <strong>15 HP</strong>. Se un singolo <strong>attacco base</strong> colpisce <strong>2+ nemici</strong>, quell’attacco infligge <strong>~+30% danni</strong>.</p> <p><em>Nota:</em> i personaggi sbloccabili avanzati potrebbero ottenere evoluzioni dedicate in futuro.</p> <h4> Consigli strategici</h4> <ul> <li>Sfrutta l’evoluzione per cambiare approccio: da difensivo a aggressivo (o viceversa).</li> <li>Dopo l’evoluzione, eliminare i nemici velocemente diventa ancora più importante per massimizzare punteggio e controllo.</li> <li>Le evoluzioni non rendono invincibili: il posizionamento resta fondamentale.</li> </ul> <p><strong>Le evoluzioni sono il momento in cui Jeff’s Chronicles premia davvero la padronanza del personaggio.</strong></p>
 <h3>🏁 CONCLUSIONE</h3>
 <p><strong>Jeff’s Chronicles</strong> premia abilità, strategia e conoscenza dei personaggi. Impara i loro meccanismi, sfrutta i pickup e punta al record massimo.</p>
 </div>
@@ -2396,6 +2427,34 @@ const SUPER_DAMAGE_MULT=0.8;
 const EVOLUTION_MIN_LEVEL = 15; // from this level onward
 const EVOLUTION_MIN_RECORD = 100000; // record required per character
 
+/* ===== HUD timer mode (bars vs seconds) ===== */
+const HUD_TIMER_MODE_KEY = "pf_hud_timer_mode_v1";
+function getHudTimerMode(){
+  try{
+    const v = (localStorage.getItem(HUD_TIMER_MODE_KEY)||"").toLowerCase();
+    return (v==="text") ? "text" : "bars";
+  }catch(e){ return "bars"; }
+}
+function setHudTimerMode(mode){
+  const m = (mode==="text") ? "text" : "bars";
+  try{ localStorage.setItem(HUD_TIMER_MODE_KEY, m); }catch(e){}
+}
+function syncHudTimerModeUI(){
+  const mode = getHudTimerMode();
+  const rBars = document.getElementById("hudModeBars");
+  const rText = document.getElementById("hudModeText");
+  if(rBars) rBars.checked = (mode==="bars");
+  if(rText) rText.checked = (mode==="text");
+}
+(function initHudTimerModeSetting(){
+  const rBars = document.getElementById("hudModeBars");
+  const rText = document.getElementById("hudModeText");
+  if(rBars) rBars.addEventListener("change", ()=>{ if(rBars.checked) setHudTimerMode("bars"); });
+  if(rText) rText.addEventListener("change", ()=>{ if(rText.checked) setHudTimerMode("text"); });
+  syncHudTimerModeUI();
+})();
+
+
 function characterHasEvolution(charType){
   try{ return !!(characterStats && characterStats[charType] && characterStats[charType].evolution); }
   catch(e){ return false; }
@@ -2405,7 +2464,7 @@ function getRecordForCharacter(charType){
   catch(e){ return 0; }
 }
 function isEvolutionUnlocked(charType){
-  return getRecordForCharacter(charType) >= EVOLUTION_MIN_RECORD;
+  return getRecordForCharacter(charType) > EVOLUTION_MIN_RECORD;
 }
 
 const JEFF_SUPER_RADIUS=Math.round(320*0.8);
@@ -2565,6 +2624,24 @@ bgDark.style.backgroundImage=`url('${URL_DARK}')`;
 bgDefault.style.backgroundSize=bgDark.style.backgroundSize='cover';
 bgDefault.style.backgroundPosition=bgDark.style.backgroundPosition='center';
 
+function resetMenuBackdrop(){
+  // Clear last gameplay frame and restore default background when viewing menus.
+  try{
+    if(typeof ctx!=='undefined' && typeof canvas!=='undefined' && ctx && canvas){
+      ctx.clearRect(0,0,canvas.width,canvas.height);
+    }
+  }catch(e){}
+  try{
+    if(typeof bgDefault!=='undefined' && bgDefault && typeof bgDark!=='undefined' && bgDark){
+      bgDefault.style.opacity='1';
+      bgDark.style.opacity='0';
+    }
+    if(typeof fadeOverlay!=='undefined' && fadeOverlay) fadeOverlay.style.opacity='0';
+    if(typeof _bgTier!=='undefined') _bgTier=0;
+  }catch(e){}
+}
+window.resetMenuBackdrop = resetMenuBackdrop;
+
 let gameState='start';
 let selectedCharacter=null;
 let lastSuperUseCountTs=0; // debounce conteggio super (ms)
@@ -2588,9 +2665,65 @@ function setDifficulty(mode){
 }
 
   // --- Pausa in battaglia ---
+  // Pausa "vera": quando metti in pausa, il tempo di gioco si ferma anche per bonus/cooldown (es. Mezzaluna e SUPER).
+  // Nota: il codice usa molti timestamp basati su Date.now(); al resume spostiamo in avanti i timestamp attivi
+  // di quanto è durato lo stop, così le durate non "scalano" durante la pausa.
+  let _pauseStartedAt = 0;
+
+  function _isMsTimestamp(v){
+    return (typeof v==="number" && isFinite(v) && v>1e12 && v<1e15);
+  }
+  function _shiftTimestampsInObj(obj, delta, visited){
+    if(!obj || typeof obj!=="object") return;
+    if(visited.has(obj)) return;
+    visited.add(obj);
+
+    if(Array.isArray(obj)){
+      for(const it of obj){ _shiftTimestampsInObj(it, delta, visited); }
+      return;
+    }
+
+    for(const k in obj){
+      const v=obj[k];
+      if(_isMsTimestamp(v)){
+        obj[k]=v+delta;
+      }else if(v && typeof v==="object"){
+        _shiftTimestampsInObj(v, delta, visited);
+      }
+    }
+  }
+
+  function _compensatePause(delta){
+    if(!delta || delta<=0) return;
+    const visited = new Set();
+
+    try{ _shiftTimestampsInObj(player, delta, visited); }catch(e){}
+    try{ if(typeof enemies!=="undefined") _shiftTimestampsInObj(enemies, delta, visited); }catch(e){}
+    try{ if(typeof particles!=="undefined") _shiftTimestampsInObj(particles, delta, visited); }catch(e){}
+    try{ if(typeof pickups!=="undefined") _shiftTimestampsInObj(pickups, delta, visited); }catch(e){}
+    try{ if(typeof projectiles!=="undefined") _shiftTimestampsInObj(projectiles, delta, visited); }catch(e){}
+    try{ if(typeof lasers!=="undefined") _shiftTimestampsInObj(lasers, delta, visited); }catch(e){}
+    try{ if(typeof tempBeams!=="undefined") _shiftTimestampsInObj(tempBeams, delta, visited); }catch(e){}
+    try{ if(typeof wolves!=="undefined") _shiftTimestampsInObj(wolves, delta, visited); }catch(e){}
+
+    // FX / sistemi opzionali
+    try{ if(window.cosmoMarks) _shiftTimestampsInObj(window.cosmoMarks, delta, visited); }catch(e){}
+    try{ if(window.cosmoTrails) _shiftTimestampsInObj(window.cosmoTrails, delta, visited); }catch(e){}
+
+    // Oggetti globali (se presenti)
+    try{ if(typeof hendelCrush!=="undefined") _shiftTimestampsInObj(hendelCrush, delta, visited); }catch(e){}
+    try{ if(typeof ancientColumn!=="undefined") _shiftTimestampsInObj(ancientColumn, delta, visited); }catch(e){}
+    try{ if(typeof magicZone!=="undefined") _shiftTimestampsInObj(magicZone, delta, visited); }catch(e){}
+    try{ if(typeof pdorOrbSets!=="undefined") _shiftTimestampsInObj(pdorOrbSets, delta, visited); }catch(e){}
+
+    // Timestamp standalone usati dal timer partita
+    try{ if(typeof lastSecondTick==="number" && _isMsTimestamp(lastSecondTick)) lastSecondTick += delta; }catch(e){}
+  }
+
   function openPauseMenu(){
     if(gameState!=='playing') return;
     gameState='paused';
+    _pauseStartedAt = Date.now();
     const po=document.getElementById('pauseOverlay');
     if(po) po.style.display='flex';
   }
@@ -2598,10 +2731,17 @@ function setDifficulty(mode){
     if(gameState!=='paused') return;
     const po=document.getElementById('pauseOverlay');
     if(po) po.style.display='none';
-    lastSecondTick=Date.now(); // evita "salto" del timer al resume
+    const _nowReal = Date.now();
+    if(_pauseStartedAt){
+      _compensatePause(_nowReal - _pauseStartedAt);
+    }
+    _pauseStartedAt = 0;
+    lastSecondTick=_nowReal; // evita "salto" del timer al resume
+
     gameState='playing';
   }
   function exitToMenuFromPause(){
+    _pauseStartedAt = 0;
     const po=document.getElementById('pauseOverlay');
     if(po) po.style.display='none';
     // nascondi HUD gioco
@@ -5607,10 +5747,10 @@ function markMult(enemy){
   return (enemy && enemy.salsyMarkUntil && Date.now() < enemy.salsyMarkUntil) ? 2 : 1;
 }
 function applyEnemyDamage(enemy, baseDmg){
-  // Rooney EVO passive: first hit on a given enemy deals +15% damage (doesn't change stats)
+  // Rooney EVO passive: first hit on a given enemy deals +100% damage (doesn't change stats)
   let mult=1;
   if(typeof player!=='undefined' && player && player.type==='rooney' && player.evolved && enemy && !enemy._rooneyFirstHit){
-    mult=1.5; // EVO: Rooney first hit +50% damage
+    mult=2; // EVO: Rooney first hit +100% damage
     enemy._rooneyFirstHit=true;
   }
   const _nowD=Date.now();
@@ -7327,8 +7467,11 @@ function applyPickupEffect(playerRef,type){
     try{ accountOnHeal(playerRef.hp - _before); }catch(e){}
     createParticles(playerRef.x,playerRef.y,'#2ecc71',20);
   } else if(type==='atk'){
+    const now = Date.now();
     playerRef.attackBuffMultiplier=1.6;
-    playerRef.attackBuffUntil=Date.now()+10000;
+    playerRef.attackBuffStart = now;
+    playerRef.attackBuffDuration = 10000;
+    playerRef.attackBuffUntil=now+10000;
     createParticles(playerRef.x,playerRef.y,'#e74c3c',20);
   } else if(type==='super'){
     playerRef.lastSuper=Date.now()-playerRef.superCooldown-100;
@@ -7339,25 +7482,35 @@ function applyPickupEffect(playerRef,type){
     playerRef.hp = Math.min(playerRef.maxHP, playerRef.hp + 100);
     try{ accountOnHeal(playerRef.hp - _beforeHp); }catch(e){}
     playerRef.speed = playerRef._baseSpeed * 1.25;
+    playerRef.speedBuffStart = Date.now();
+    playerRef.speedBuffDuration = 3000;
     playerRef.speedBuffUntil = Date.now() + 3000;
     playerRef.stellarGlowUntil = Date.now() + 1000;
     createParticles(playerRef.x, playerRef.y, '#000000', 36, 5);
   } else if(type==='gold'){
+    const now = Date.now();
     const _beforeHp = playerRef.hp;
     playerRef.hp=playerRef.maxHP;
     try{ accountOnHeal(playerRef.hp - _beforeHp); }catch(e){}
     playerRef.attackBuffMultiplier=2.0;
-    playerRef.attackBuffUntil=Date.now()+15000;
-    playerRef.lastSuper=Date.now()-playerRef.superCooldown-100;
+    playerRef.attackBuffStart = now;
+    playerRef.attackBuffDuration = 15000;
+    playerRef.attackBuffUntil=now+15000;
+    playerRef.lastSuper=now-playerRef.superCooldown-100;
     createParticles(playerRef.x,playerRef.y,'gold',40);
     for(let i=0;i<8;i++) createParticles(playerRef.x+(Math.random()-0.5)*40,playerRef.y+(Math.random()-0.5)*40,'#fff176',6);
   } else if(type==='speed'){
+    const now = Date.now();
     playerRef.speed=playerRef._baseSpeed*1.5;
-    playerRef.speedBuffUntil=Date.now()+7000;
+    playerRef.speedBuffStart = now;
+    playerRef.speedBuffDuration = 7000;
+    playerRef.speedBuffUntil=now+7000;
     createParticles(playerRef.x,playerRef.y,'#3498db',20);
   } else if(type==='ira'){
     // IRA: 6s — -75% cooldown colpo (cooldown * 0.25) +25% speed
     const now=Date.now();
+    playerRef.iraStart = now;
+    playerRef.iraDuration = 6000;
     playerRef.iraUntil = now + 6000;
 
     // speed: do not downgrade other buffs (keep the max)
@@ -7375,6 +7528,8 @@ function applyPickupEffect(playerRef,type){
   } else if(type==='letteraAmore'){
     // LETTERA D'AMORE -> ESTASI: 15s lifesteal 7%
     const now = Date.now();
+    playerRef.estasiStart = now;
+    playerRef.estasiDuration = 15000;
     playerRef.estasiUntil = now + 15000;
     // feedback visivo (marrone cioccolato)
     createParticles(playerRef.x+playerRef.width/2, playerRef.y+playerRef.height/2, 'chocolate', 34, 5);
@@ -7391,14 +7546,20 @@ function applyPickupEffect(playerRef,type){
     createParticles(playerRef.x+playerRef.width/2, playerRef.y+playerRef.height/2, '#90caf9', 46, 6);
 
   } else if(type==='shieldPickup'){
-    playerRef.pickupShieldUntil=Date.now()+6000;
+    const now = Date.now();
+    playerRef.pickupShieldStart = now;
+    playerRef.pickupShieldDuration = 6000;
+    playerRef.pickupShieldUntil=now+6000;
     playerRef.invulnerable=true;
     createParticles(playerRef.x,playerRef.y,'#7fdbff',30);
 
     } else if(type==='furia'){
     // Cura nel tempo: +10 HP/s per 10s
-    playerRef.furiaHealUntil = Date.now()+10000;
-    playerRef.furiaLastHeal = Date.now();
+    const now = Date.now();
+    playerRef.furiaHealStart = now;
+    playerRef.furiaHealDuration = 10000;
+    playerRef.furiaHealUntil = now+10000;
+    playerRef.furiaLastHeal = now;
 
     // Onde di danno (3 aree visibili che si allargano)
     const cx = playerRef.x + playerRef.width/2;
@@ -7421,8 +7582,11 @@ function applyPickupEffect(playerRef,type){
     activateArcoAntico(playerRef);
     createParticles(playerRef.x+playerRef.width/2, playerRef.y+playerRef.height/2, '#c0c0c0', 24, 5);
   } else if(type==='malus'){
-    playerRef.poisonUntil=Date.now()+10000;
-    playerRef.poisonTickLast=Date.now();
+    const now = Date.now();
+    playerRef.poisonStart = now;
+    playerRef.poisonDuration = 10000;
+    playerRef.poisonUntil=now+10000;
+    playerRef.poisonTickLast=now;
     playerRef.poisonTickDamage=1;
     createParticles(playerRef.x,playerRef.y,'#8b0000',30);
   }
@@ -7504,8 +7668,31 @@ class Player{
   evolve(){
     if(this.evolved) return;
     this.evolved=true;
-    this._evoFxUntil=Date.now()+650;
-    // passive is enabled by this.evolved flag, no stat changes
+    const now=Date.now();
+    this._evoFxUntil=now+650;
+
+    // ===== EVOLUTION BASE BONUS (tutti i personaggi) =====
+    // +50% HP massimi (permanente per la run)
+    try{
+      const oldMax = Number(this.maxHP)||0;
+      const newMax = Math.max(1, Math.round(oldMax*1.5));
+      const delta  = Math.max(0, newMax-oldMax);
+      this.maxHP = newMax;
+      this.hp = Math.min(newMax, (Number(this.hp)||0) + delta);
+    }catch(e){}
+
+    // ===== EVO SPECIFICHE =====
+    // Jimmy: SUPER ogni 5s + jetpack dura +1s
+    if(this.type==='jimmy'){
+      this.superCooldown = 5000;
+      try{
+        this.jetpackDuration = Math.max(0, (Number(this.jetpackDuration)||0) + 1000);
+        // se il jetpack è già attivo, estendi la durata residua di +1s
+        if(this.isJetpacking && this.speedBuffUntil && this.speedBuffUntil>now){
+          this.speedBuffUntil += 1000;
+        }
+      }catch(e){}
+    }
   }
 
 
@@ -7724,8 +7911,24 @@ class Player{
       this.aimY=moveY/len;
     }
 
-    // Kaerith (J) - Attacco continuo a ventaglio stretto (30°) con danno progressivo per bersaglio
+    // Kaerith (J) - Fiammata continua (VFX più ricco + afterglow)
+    // - Danno SOLO mentre tieni premuto J
+    // - Quando rilasci J, resta un breve afterglow visivo (senza danno) per farla sembrare una fiammata continua
     if(this.type==='kaerith'){
+      const _aimToNearest = ()=>{
+        if(typeof enemies!=='undefined' && enemies && enemies.length){
+          const pcx=this.x+this.width/2, pcy=this.y+this.height/2;
+          let best=null, bestD=1e18;
+          for(const e of enemies){
+            const ex=e.x+e.width/2, ey=e.y+e.height/2;
+            const d=(ex-pcx)*(ex-pcx)+(ey-pcy)*(ey-pcy);
+            if(d<bestD){bestD=d; best={x:ex,y:ey};}
+          }
+          if(best) return Math.atan2(best.y-pcy, best.x-pcx);
+        }
+        return Math.atan2(this.aimY||0, this.aimX||1);
+      };
+
       if(keys['j'] && !this.isDoingSuper){
         if(!this._kaerithFlame){
           this._kaerithFlame={
@@ -7734,13 +7937,44 @@ class Player{
             pulseMs: 90,
             range: (characterStats?.[this.type]?.range ?? 206),                 // range ridotto (-30%)
             angle: Math.PI/6,           // 30°
-            dir:(()=>{  if(typeof enemies!=='undefined' && enemies && enemies.length){    const pcx=this.x+this.width/2, pcy=this.y+this.height/2;    let best=null, bestD=1e18;    for(const e of enemies){      const ex=e.x+e.width/2, ey=e.y+e.height/2;      const d=(ex-pcx)*(ex-pcx)+(ey-pcy)*(ey-pcy);      if(d<bestD){bestD=d; best={x:ex,y:ey};}    }    if(best) return Math.atan2(best.y-pcy, best.x-pcx);  }  return Math.atan2(this.aimY||0, this.aimX||1);})()
+            dir: _aimToNearest(),
+            damageActive: true,
+            releasedAt: 0,
+            fadeMs: 320
           };
         } else {
-          this._kaerithFlame.dir = (()=>{  if(typeof enemies!=='undefined' && enemies && enemies.length){    const pcx=this.x+this.width/2, pcy=this.y+this.height/2;    let best=null, bestD=1e18;    for(const e of enemies){      const ex=e.x+e.width/2, ey=e.y+e.height/2;      const d=(ex-pcx)*(ex-pcx)+(ey-pcy)*(ey-pcy);      if(d<bestD){bestD=d; best={x:ex,y:ey};}    }    if(best) return Math.atan2(best.y-pcy, best.x-pcx);  }  return Math.atan2(this.aimY||0, this.aimX||1);})();
+          // riattiva se era in fade-out
+          if(!this._kaerithFlame.damageActive){
+            this._kaerithFlame.start = now;
+            this._kaerithFlame.lastPulse = 0;
+            this._kaerithFlame.damageActive = true;
+            this._kaerithFlame.releasedAt = 0;
+          }
+          this._kaerithFlame.dir = _aimToNearest();
         }
       } else {
-        this._kaerithFlame=null;
+        // stop danno immediato, ma tieni un breve afterglow VFX
+        if(this._kaerithFlame){
+          if(this._kaerithFlame.damageActive){
+            this._kaerithFlame.damageActive = false;
+            this._kaerithFlame.releasedAt = now;
+
+            // reset ramp per bersaglio: la progressione vale solo durante la stessa emissione
+            try{
+              if(typeof enemies!=='undefined' && enemies){
+                for(const e of enemies){
+                  if(!e) continue;
+                  e._kaerithLastInside=0;
+                  e._kaerithInsideSince=0;
+                }
+              }
+            }catch(e){}
+          } else {
+            if(this._kaerithFlame.releasedAt && (now - this._kaerithFlame.releasedAt) > (this._kaerithFlame.fadeMs||320)){
+              this._kaerithFlame = null;
+            }
+          }
+        }
       }
     }
 
@@ -7871,8 +8105,8 @@ class Player{
             }
           }
 
-          // Jimmy EVO passive: next grapple has -20% cooldown after a grappled target dies
-          if(this.type==='jimmy' && this.evolved && killedGrappleTarget){ this._jimmyNextGrappleCdMult=0.8; }
+          // Jimmy EVO passive: after killing the grapple target, the NEXT grapple has -100% cooldown (ready subito)
+          if(this.type==='jimmy' && this.evolved && killedGrappleTarget){ this._jimmyNextGrappleCdMult=0; }
 
           this.isGrappling=false;this.grappleTarget=null;this.vx=0;this.vy=0;this.grappleStartTime=0;
         }
@@ -7889,66 +8123,92 @@ class Player{
           this._superHitDone=true;
           if(this.type==='rooney'){
             // Rooney SUPER (rework):
-            // - Area QUADRATA centrata su Rooney.
-            // - Danno totale massimo: 300 (senza buff) distribuito tra TUTTI i nemici nell'area.
+            // - Area QUADRATA.
+            // - Danno totale massimo: ~300 (senza buff) distribuito tra TUTTI i nemici nell'area.
             // - Falloff: più un nemico è lontano dal centro, meno danno subisce.
+            // EVO: se Rooney è evoluto, oltre all'area base ne genera altre 3 in posizioni casuali (totale 4 aree).
             const half=320; // mezzo lato del quadrato (lato=640) [60% più grande]
-            const px=this.x+this.width/2, py=this.y+this.height/2;
-            // VISUAL: show the super area on screen
-            try{ addRooneyAreaFX(px, py, half); }catch(e){}
-            const hits=[];
-            // 3 fasce (come in UI): centro (rosso) > medio (arancione) > esterno (giallo)
-            // Usiamo la distanza "Chebyshev" (max(|dx|,|dy|)) per ottenere quadri concentrici.
-            const innerHalf = half * 0.55; // fascia centrale
-            const midHalf   = half * 0.80; // fascia intermedia
+            const baseX=this.x+this.width/2, baseY=this.y+this.height/2;
 
-            for(const enemy of enemies){
-              const ex=enemy.x+enemy.width/2, ey=enemy.y+enemy.height/2;
-              const dx=ex-px, dy=ey-py;
-              if(Math.abs(dx)<=half && Math.abs(dy)<=half){
-                const d = Math.max(Math.abs(dx), Math.abs(dy)); // quadri concentrici
-                let w = 0.25; // fascia esterna (gialla) - danno minimo ma sempre presente
-                if(d <= innerHalf) w = 1.00;        // centro (rosso)
-                else if(d <= midHalf) w = 0.55;     // medio (arancione)
-                hits.push({enemy,w, dist:d});
+            const centers=[{x:baseX,y:baseY}];
+            if(this.evolved){
+              try{
+                const B=getPlayBounds();
+                const minX=B.left + half + 18;
+                const maxX=B.right - half - 18;
+                const minY=B.top + half + 18;
+                const maxY=B.bottom - half - 18;
+                for(let n=0;n<3;n++){
+                  const cx = (maxX>minX) ? (minX + Math.random()*(maxX-minX)) : baseX;
+                  const cy = (maxY>minY) ? (minY + Math.random()*(maxY-minY)) : baseY;
+                  centers.push({x:cx,y:cy});
+                }
+              }catch(e){
+                for(let n=0;n<3;n++) centers.push({x:baseX,y:baseY});
               }
             }
 
-            if(hits.length>0){
-              // Compensiamo SUPER_DAMAGE_MULT così che la SOMMA dei danni (senza buff) sia 300.
-              const totalBase=Math.round(350 / SUPER_DAMAGE_MULT);
-              const sumW=hits.reduce((a,h)=>a+h.w,0) || 1;
+            const doArea=(px,py)=>{
+              // VISUAL: show the super area on screen
+              try{ addRooneyAreaFX(px, py, half); }catch(e){}
+              const hits=[];
+              // 3 fasce (come in UI): centro (rosso) > medio (arancione) > esterno (giallo)
+              // Usiamo la distanza "Chebyshev" (max(|dx|,|dy|)) per ottenere quadri concentrici.
+              const innerHalf = half * 0.55; // fascia centrale
+              const midHalf   = half * 0.80; // fascia intermedia
 
-              for(const h of hits){
-                const share=h.w/sumW;
-                const raw=totalBase*share;
-                const dmg=Math.max(6, Math.round(raw * SUPER_DAMAGE_MULT * this.attackBuffMultiplier * 1.12));
-                const _final=applyEnemyDamage(h.enemy, dmg);
-
-                // Hit FX
-                createParticles(h.enemy.x,h.enemy.y,'#f39c12',22,6);
-                showDamageNumber(h.enemy.x,h.enemy.y, _final);
-              }
-
-              // Ground-break FX (debris + dust) nell'area quadrata
-              createParticles(px,py,'#795548',55,8);
-              for(let k=0;k<12;k++){
-                const rx=px + (Math.random()*2-1)*half;
-                const ry=py + (Math.random()*2-1)*half;
-                createParticles(rx,ry,'#6d4c41',14,6);
-                createParticles(rx,ry,'#b0bec5',8,4);
-              }
-
-              // rimuovi i morti (e assegna score) subito, come per le altre super
-              for(let i=enemies.length-1;i>=0;i--){
-                if(enemies[i].hp<=0){
-                  createParticles(enemies[i].x,enemies[i].y,'#fff176',30,6);
-                  dropStellarBonusAtIndexIfNeeded(i);
-                  enemies.splice(i,1);
-                  applyScore(100*currentLevel);
-                addKill(); this._baneSuperOnKill();
+              for(const enemy of enemies){
+                const ex=enemy.x+enemy.width/2, ey=enemy.y+enemy.height/2;
+                const dx=ex-px, dy=ey-py;
+                if(Math.abs(dx)<=half && Math.abs(dy)<=half){
+                  const d = Math.max(Math.abs(dx), Math.abs(dy)); // quadri concentrici
+                  let w = 0.25; // fascia esterna (gialla) - danno minimo ma sempre presente
+                  if(d <= innerHalf) w = 1.00;        // centro (rosso)
+                  else if(d <= midHalf) w = 0.55;     // medio (arancione)
+                  hits.push({enemy,w, dist:d});
                 }
               }
+
+              if(hits.length>0){
+                // Compensiamo SUPER_DAMAGE_MULT così che la SOMMA dei danni (senza buff) sia ~300.
+                const totalBase=Math.round(350 / SUPER_DAMAGE_MULT);
+                const sumW=hits.reduce((a,h)=>a+h.w,0) || 1;
+
+                for(const h of hits){
+                  const share=h.w/sumW;
+                  const raw=totalBase*share;
+                  const dmg=Math.max(6, Math.round(raw * SUPER_DAMAGE_MULT * this.attackBuffMultiplier * 1.12));
+                  const _final=applyEnemyDamage(h.enemy, dmg);
+
+                  // Hit FX
+                  createParticles(h.enemy.x,h.enemy.y,'#f39c12',22,6);
+                  showDamageNumber(h.enemy.x,h.enemy.y, _final);
+                }
+
+                // Ground-break FX (debris + dust) nell'area quadrata
+                createParticles(px,py,'#795548',55,8);
+                for(let k=0;k<12;k++){
+                  const rx=px + (Math.random()*2-1)*half;
+                  const ry=py + (Math.random()*2-1)*half;
+                  createParticles(rx,ry,'#6d4c41',14,6);
+                  createParticles(rx,ry,'#b0bec5',8,4);
+                }
+
+                // rimuovi i morti (e assegna score) subito, come per le altre super
+                for(let i=enemies.length-1;i>=0;i--){
+                  if(enemies[i].hp<=0){
+                    createParticles(enemies[i].x,enemies[i].y,'#fff176',30,6);
+                    dropStellarBonusAtIndexIfNeeded(i);
+                    enemies.splice(i,1);
+                    applyScore(100*currentLevel);
+                    addKill(); this._baneSuperOnKill();
+                  }
+                }
+              }
+            };
+
+            for(const c of centers){
+              doArea(c.x,c.y);
             }
           } else {
             enemies.forEach((enemy,idx)=>{
@@ -7963,7 +8223,7 @@ class Player{
                 showDamageNumber(enemy.x,enemy.y, _final);
                 if(enemy.hp<=0){
   if(player && player.type==='jeff' && player.evolved){
-    player.hp = Math.min(Number(player.maxHP)||0, (Number(player.hp)||0) + 5);
+    player.hp = Math.min(Number(player.maxHP)||0, (Number(player.hp)||0) + 15);
 }
                   createParticles(enemy.x,enemy.y,'#fff176',30,6);
                   // IRA kill special FX (Bane SUPER)
@@ -8103,7 +8363,7 @@ class Player{
                 showDamageNumber(enemy.x,enemy.y, _final);
                 if(enemy.hp<=0){
   if(player && player.type==='jeff' && player.evolved){
-    player.hp = Math.min(Number(player.maxHP)||0, (Number(player.hp)||0) + 5);
+    player.hp = Math.min(Number(player.maxHP)||0, (Number(player.hp)||0) + 15);
 }
                   createParticles(enemy.x,enemy.y,'#fff176',30,6);
                   dropStellarBonusAtIndexIfNeeded(idx);
@@ -8192,7 +8452,7 @@ class Player{
     
 
     // handle Kaerith continuous fan attack (per-target progressive damage, max 90)
-    if(this.type==='kaerith' && this._kaerithFlame){
+    if(this.type==='kaerith' && this._kaerithFlame && this._kaerithFlame.damageActive){
       const F=this._kaerithFlame;
       const now2=Date.now();
 
@@ -8473,7 +8733,7 @@ if(this.type==='kaerith' && this._kaerithFireUntil && Date.now() < this._kaerith
     const now=Date.now();
     // Allow Cosmo to keep using base attack (J) even while SUPER is active
     if(now-this.lastAttack<this.cooldown || (this.isDoingSuper && this.type!=='cosmo')) return false;
-    // Jimmy EVO passive: if unlocked, the next grapple gets -20% cooldown (only for that next grapple)
+    // Jimmy EVO passive: after killing the grapple target, the next grapple has -100% cooldown (only for that next grapple)
     if(this.type==='jimmy' && this.evolved && this.attackType==='grapple' && this._jimmyNextGrappleCdMult && this._jimmyNextGrappleCdMult<1){
       const mult=this._jimmyNextGrappleCdMult;
       this.lastAttack = now - Math.round(this.cooldown*(1-mult));
@@ -8744,7 +9004,7 @@ for(let i=0;i<3;i++){
             showDamageNumber(enemy.x,enemy.y,dmg);
             if(enemy.hp<=0){
   if(player && player.type==='jeff' && player.evolved){
-    player.hp = Math.min(Number(player.maxHP)||0, (Number(player.hp)||0) + 5);
+    player.hp = Math.min(Number(player.maxHP)||0, (Number(player.hp)||0) + 15);
 }
               createParticles(enemy.x,enemy.y,'#fff176',30,6);
               dropStellarBonusAtIndexIfNeeded(enemies.indexOf(enemy));
@@ -8885,7 +9145,8 @@ for(let i=0;i<3;i++){
 
     } else if(this.attackType==='sword'){
       const attackAngle=this.facingRight?0:Math.PI;const arcWidth=Math.PI*1.6;
-      let __jeffHitCount=0;
+
+      const __hitList=[];
       enemies.forEach(enemy=>{
         const dx=enemy.x-this.x;const dy=enemy.y-this.y;const dist=Math.hypot(dx,dy);
         const angle=Math.atan2(dy,dx);
@@ -8893,28 +9154,29 @@ for(let i=0;i<3;i++){
         while(angleDiff>Math.PI)angleDiff-=Math.PI*2;
         while(angleDiff<-Math.PI)angleDiff+=Math.PI*2;
         if(dist<this.range&&Math.abs(angleDiff)<arcWidth/2+0.2){
-          const dmg=Math.round(this.damage*this.attackBuffMultiplier*(this.baneSuperAttackMult||1));
-          const _dmg=dmg; const _final=applyEnemyDamage(enemy,_dmg);
-          createParticles(enemy.x,enemy.y,'#9b59b6',10,4);
-          showDamageNumber(enemy.x,enemy.y, _final);
-          if(enemy.hp<=0){
-  if(player && player.type==='jeff' && player.evolved){
-    player.hp = Math.min(Number(player.maxHP)||0, (Number(player.hp)||0) + 5);
-}
-            createParticles(enemy.x,enemy.y,'#fff176',30,6);
-            dropStellarBonusAtIndexIfNeeded(enemies.indexOf(enemy));
-            enemies.splice(enemies.indexOf(enemy),1);
-            applyScore(100*currentLevel);addKill(); this._baneSuperOnKill();
-                }
+          __hitList.push(enemy);
         }
       });
-      // Jeff EVO passive: if a single attack hits 2+ enemies, heal 1% max HP
-      if(this.type==='jeff' && this.evolved && __jeffHitCount>=2){
-        const heal = Math.max(1, Math.round(this.maxHP*0.01));
-        const _beforeHp = this.hp;
-        this.hp = Math.min(this.maxHP, this.hp + heal);
-        try{ accountOnHeal(this.hp - _beforeHp); }catch(e){}
-        createParticles(this.x+this.width/2,this.y+this.height/2,'#2ecc71',10,4);
+
+      const __multiBoost = (this.type==='jeff' && this.evolved && __hitList.length>=2) ? 1.30 : 1.00;
+      const __dmgBase = Math.round(this.damage*__multiBoost*this.attackBuffMultiplier*(this.baneSuperAttackMult||1));
+
+      for(const enemy of __hitList){
+        const _dmg=__dmgBase; const _final=applyEnemyDamage(enemy,_dmg);
+        createParticles(enemy.x,enemy.y,'#9b59b6',10,4);
+        showDamageNumber(enemy.x,enemy.y, _final);
+        if(enemy.hp<=0){
+          if(player && player.type==='jeff' && player.evolved){
+            player.hp = Math.min(Number(player.maxHP)||0, (Number(player.hp)||0) + 15);
+          }
+          createParticles(enemy.x,enemy.y,'#fff176',30,6);
+          const idx=enemies.indexOf(enemy);
+          if(idx>=0){
+            dropStellarBonusAtIndexIfNeeded(idx);
+            enemies.splice(idx,1);
+          }
+          applyScore(100*currentLevel);addKill(); this._baneSuperOnKill();
+        }
       }
       if(assistTarget){
         const distAssist=Math.hypot((assistTarget.x-this.x),(assistTarget.y-this.y));
@@ -8924,6 +9186,9 @@ for(let i=0;i<3;i++){
           createParticles(assistTarget.x,assistTarget.y,'#9b59b6',10,4);
           showDamageNumber(assistTarget.x,assistTarget.y, _final);
           if(assistTarget.hp<=0){
+            if(player && player.type==='jeff' && player.evolved){
+              player.hp = Math.min(Number(player.maxHP)||0, (Number(player.hp)||0) + 15);
+            }
             createParticles(assistTarget.x,assistTarget.y,'#fff176',30,6);
             dropStellarBonusAtIndexIfNeeded(enemies.indexOf(assistTarget));
             enemies.splice(enemies.indexOf(assistTarget),1);
@@ -9180,6 +9445,8 @@ else if(this.attackType==='magic'){
       this.lastSuper = now;
 
       const dur = (this.superDuration!=null)?this.superDuration:10000;
+      this.baneSuperStart = now;
+      this.baneSuperDuration = dur;
       this.baneSuperUntil = now + dur;
 
       // speed boost (do not downgrade other speed buffs)
@@ -9682,35 +9949,107 @@ ctx.fill();
 
 
 
-    // Kaerith VFX (fan stretto e lungo)
+    // Kaerith VFX (fiammata continua): cono con nucleo caldo + flicker e lingue di fuoco
     if(this.type==='kaerith' && this._kaerithFlame){
       const F=this._kaerithFlame;
       const now=Date.now();
-      const t=Math.max(0, Math.min(1, (now - F.start)/160)); // fade-in veloce
-      const cx=this.x+this.width/2, cy=this.y+this.height/2;
-      const a0=F.dir - F.angle/2;
-      const a1=F.dir + F.angle/2;
 
-      ctx.save();
-      ctx.globalAlpha = 0.16 + 0.26*t;
-      ctx.fillStyle='rgba(255,120,0,0.95)';
-      ctx.beginPath();
-      ctx.moveTo(cx,cy);
-      ctx.arc(cx,cy,F.range,a0,a1,false);
-      ctx.closePath();
-      
-ctx.shadowColor = '#000000';
-ctx.shadowBlur = 25;
+      const fading = (!F.damageActive && F.releasedAt);
+      const fadeMs = (F.fadeMs||320);
+      const fade = fading ? Math.max(0, 1 - (now - F.releasedAt)/fadeMs) : 1;
 
-ctx.fill();
+      if(fade>0){
+        const tIn=Math.max(0, Math.min(1, (now - (F.start||now))/220));
+        const cx=this.x+this.width/2, cy=this.y+this.height/2;
+        const a0=F.dir - F.angle/2;
+        const a1=F.dir + F.angle/2;
 
-      ctx.globalAlpha = 0.10 + 0.18*t;
-      ctx.strokeStyle='rgba(255,60,0,0.95)';
-      ctx.lineWidth=4;
-      ctx.beginPath();
-      ctx.arc(cx,cy,F.range,a0,a1,false);
-      ctx.stroke();
-      ctx.restore();
+        const pulse = 0.5 + 0.5*Math.sin(now/55);
+        const r = F.range;
+
+        ctx.save();
+
+        // Clip nel settore per "riempire" solo il cono
+        ctx.beginPath();
+        ctx.moveTo(cx,cy);
+        ctx.arc(cx,cy,r,a0,a1,false);
+        ctx.closePath();
+        ctx.clip();
+
+        ctx.globalCompositeOperation='lighter';
+
+        // Base glow (mantello esterno)
+        ctx.globalAlpha = (0.10 + 0.12*tIn) * fade;
+        ctx.fillStyle='rgba(255,90,0,0.85)';
+        ctx.beginPath();
+        ctx.moveTo(cx,cy);
+        ctx.arc(cx,cy,r,a0,a1,false);
+        ctx.closePath();
+        ctx.fill();
+
+        // Nucleo più brillante (più stretto) per dare l'idea di fiammata "continua"
+        const coreArc = (F.angle||0) * 0.60;
+        const c0 = F.dir - coreArc/2;
+        const c1 = F.dir + coreArc/2;
+        ctx.globalAlpha = (0.16 + 0.18*pulse) * fade;
+        ctx.fillStyle='rgba(255,245,200,0.95)';
+        ctx.beginPath();
+        ctx.moveTo(cx,cy);
+        ctx.arc(cx,cy,r*0.88,c0,c1,false);
+        ctx.closePath();
+        ctx.fill();
+
+        // Lingue di fuoco (procedurali, ogni frame)
+        const cosD=Math.cos(F.dir), sinD=Math.sin(F.dir);
+        const cosP=Math.cos(F.dir+Math.PI/2), sinP=Math.sin(F.dir+Math.PI/2);
+
+        const tongues = 26;
+        for(let i=0;i<tongues;i++){
+          const u = Math.random(); // 0..1 lungo il cono
+          const dist = (0.18 + u*0.82) * r;
+          const widthAt = Math.tan((F.angle||0)/2) * dist;
+          const off = (Math.random()*2-1) * widthAt * 0.75;
+
+          const x = cx + cosD*dist + cosP*off;
+          const y = cy + sinD*dist + sinP*off;
+
+          const size = (14 + Math.random()*18) * (1 - u*0.55);
+          const alpha = (0.10 + 0.22*(1-u)) * (0.75 + 0.5*pulse) * fade;
+
+          ctx.globalAlpha = alpha;
+          if(u < 0.30) ctx.fillStyle='rgba(255,245,200,0.95)';
+          else if(u < 0.65) ctx.fillStyle='rgba(255,170,60,0.95)';
+          else ctx.fillStyle='rgba(255,60,0,0.95)';
+
+          ctx.beginPath();
+          ctx.arc(x,y,size,0,Math.PI*2);
+          ctx.fill();
+        }
+
+        // Scintille/embers dentro il cono
+        ctx.globalAlpha = (0.12 + 0.10*pulse) * fade;
+        ctx.fillStyle='rgba(255,235,160,0.9)';
+        for(let i=0;i<18;i++){
+          const u = Math.random();
+          const dist = (0.10 + u*0.90) * r;
+          const widthAt = Math.tan((F.angle||0)/2) * dist;
+          const off = (Math.random()*2-1) * widthAt;
+          const x = cx + cosD*dist + cosP*off;
+          const y = cy + sinD*dist + sinP*off;
+          ctx.fillRect(x,y,2,2);
+        }
+
+        // Outline morbido
+        ctx.globalCompositeOperation='source-over';
+        ctx.globalAlpha = (0.18 + 0.20*tIn) * fade;
+        ctx.strokeStyle='rgba(255,80,0,0.75)';
+        ctx.lineWidth = 5 + 2*pulse;
+        ctx.beginPath();
+        ctx.arc(cx,cy,r,a0,a1,false);
+        ctx.stroke();
+
+        ctx.restore();
+      }
     }
 
 
@@ -10084,13 +10423,16 @@ this.speed=cfg.enemySpeed;
       this.vx=(Math.random()-0.5)*this.speed;
       this.vy=(Math.random()-0.5)*this.speed;
 
-      this.attackCooldown=1100;
       this.fanRange=260;
       this.fanHalfAngle=Math.PI/2; // 180° total
       this.swingUntil=0;
       this.swingAngle=0;
-          this.ringEvery=2000;
-      this.nextRingAt=Date.now()+600;
+
+      // Level 20 tuning: +25% cooldown (fan attack + ring wave)
+      const boss4CdMult = (level===20) ? 1.25 : 1;
+      this.attackCooldown=Math.round(1100*boss4CdMult);
+      this.ringEvery=Math.round(2000*boss4CdMult);
+      this.nextRingAt=Date.now()+Math.round(600*boss4CdMult);
     }
 }
   update(player){
@@ -10264,7 +10606,10 @@ this.speed=cfg.enemySpeed;
           player.takeDamage(15, this);
           // apply poison only if not already poisoned (non-stackable)
           if(!player.poisonUntil || now >= player.poisonUntil){
-            player.poisonUntil = now + (this.poisonDuration||6000);
+            const dur = (this.poisonDuration||6000);
+            player.poisonStart = now;
+            player.poisonDuration = dur;
+            player.poisonUntil = now + dur;
             player.poisonTickLast = now;
             player.poisonTickDamage = this.poisonTickDamage||2;
             createParticles(player.x,player.y,'#00b894',26,4);
@@ -11834,7 +12179,7 @@ return;
     if(!levelAdvanceLock){
       levelAdvanceLock=true;
 
-      // Evolution trigger: from Level 15 onward, only for characters with evolution enabled and RECORD >= 100.000
+      // Evolution trigger: from Level 15 onward, only for characters with evolution enabled and RECORD > 100.000
       const canEvolve = player && characterHasEvolution(player.type);
       const evoUnlocked = player && isEvolutionUnlocked(player.type);
       if(gameState==='playing' && currentLevel>=EVOLUTION_MIN_LEVEL && canEvolve && evoUnlocked && !player.evolved){
@@ -11920,52 +12265,108 @@ return;
   const kEl=document.getElementById('killsDisplay'); if(kEl) kEl.textContent=`Kill: ${kills}`;
   document.getElementById('timerDisplay').textContent=timer;
   document.getElementById('levelDisplay').textContent=`Level ${currentLevel}`;
-  const superReady=(Date.now()-player.lastSuper>=player.superCooldown)?'Ready':Math.ceil((player.superCooldown-(Date.now()-player.lastSuper))/1000)+'s';
-  document.getElementById('superCooldown').textContent=`Super: ${superReady}`;
+  // ===== SUPER HUD (barre o secondi) =====
+const scEl = document.getElementById('superCooldown');
+const scFillEl = document.getElementById('superBarFill');
+const scBarWrap = document.getElementById('superBarWrap');
+const scTextEl = document.getElementById('superCooldownText');
+if(scEl){
+  const mode = (typeof getHudTimerMode==='function') ? getHudTimerMode() : 'bars';
+  const useBars = (mode !== 'text');
+  if(scBarWrap) scBarWrap.style.display = useBars ? 'block' : 'none';
+  if(scTextEl) scTextEl.style.display = useBars ? 'none' : 'inline-block';
 
-// ===== BONUS TIMER HUD (dentro interfaccia di gioco) =====
+  const nowS = Date.now();
+  const sc = (player.superCooldown!=null)?player.superCooldown:25000;
+  const elapsed = nowS - (player.lastSuper||0);
+  const ready = (elapsed >= sc);
+
+  if(useBars && scFillEl){
+    const pct = Math.max(0, Math.min(1, elapsed / Math.max(1, sc)));
+    scFillEl.style.width = Math.round(pct*100) + '%';
+  }
+  if(!useBars && scTextEl){
+    if(ready) scTextEl.textContent = 'READY';
+    else scTextEl.textContent = Math.max(0, Math.ceil((sc - elapsed)/1000)) + ' sec';
+  }
+
+  if(ready){
+    scEl.classList.add('ready');
+    if(useBars && scFillEl) scFillEl.style.width = '100%';
+  }else{
+    scEl.classList.remove('ready');
+  }
+}
+
+// ===== BONUS TIMER HUD (barre o secondi) =====
 const bonusBox=document.getElementById('bonusTimers');
 if(bonusBox){
+  const modeB = (typeof getHudTimerMode==='function') ? getHudTimerMode() : 'bars';
+  const useBarsB = (modeB !== 'text');
   const nowT=Date.now();
   const rows=[];
+  const clamp01 = (v)=>Math.max(0,Math.min(1,v));
+  const secLeft = (until)=>Math.max(0, Math.ceil((until-nowT)/1000));
 
-  const add=(label,until,color)=>{
+  const addItem=(labelHtml, until, color, startHint, fallbackDur)=>{
     if(until && until>nowT){
-      const t=Math.ceil((until-nowT)/1000);
-      rows.push('<span style="color:'+color+'">'+label+': '+t+'s</span>');
+      if(useBarsB){
+        let st = startHint;
+        if(!(typeof st==='number' && st>0 && st<until)){
+          const fd = (typeof fallbackDur==='number' && fallbackDur>0) ? fallbackDur : 1000;
+          st = until - fd;
+        }
+        let dur = until - st;
+        if(!(dur>0)) dur = (typeof fallbackDur==='number' && fallbackDur>0) ? fallbackDur : 1000;
+        const rem = clamp01((until-nowT)/dur);
+        const pct = Math.round(rem*100);
+
+        rows.push(
+          '<div class="bonus-row">'
+            + '<span class="bonus-label" style="color:'+color+'">'+labelHtml+'</span>'
+            + '<div class="bonus-bar"><div class="bonus-fill" style="background:'+color+';width:'+pct+'%"></div></div>'
+          + '</div>'
+        );
+      }else{
+        rows.push(
+          '<div class="bonus-row">'
+            + '<span class="bonus-label" style="color:'+color+'">'+labelHtml+'</span>'
+            + '<span class="bonus-secs">'+secLeft(until)+' sec</span>'
+          + '</div>'
+        );
+      }
     }
   };
 
-  add('SCUDO', player.pickupShieldUntil, '#7fdfff');   // azzurro chiaro
-  add('SPEED', player.speedBuffUntil, '#3498db');      // blu
-  // IRA pickup (bonus): mostra come gli altri bonus
-  add('IRA', player.iraUntil, '#8A0C00');              // rosso scuro richiesto
-  // ESTASI (LETTERA D'AMORE): marrone cioccolato
-  add('ESTASI', player.estasiUntil, 'chocolate');
+  addItem('SCUDO',  player.pickupShieldUntil, '#7fdfff', player.pickupShieldStart,  player.pickupShieldDuration||6000);
+  addItem('SPEED',  player.speedBuffUntil,   '#3498db', player.speedBuffStart,      player.speedBuffDuration||7000);
+  addItem('IRA',    player.iraUntil,         '#8A0C00', player.iraStart,            player.iraDuration||6000);
+  addItem('ESTASI', player.estasiUntil,      'chocolate', player.estasiStart,       player.estasiDuration||15000);
 
-  // MEZZALUNA: ciclo lunare (mostra fase)
+  // MEZZALUNA
   if(player.mezzalunaUntil && player.mezzalunaUntil>nowT){
-    const ph = (typeof _mezzalunaPhase==='function') ? _mezzalunaPhase(nowT, player) : 1;
-    const name = (ph===1)?'LUNA CRESCENTE':(ph===2)?'LUNA PIENA':'LUNA CALANTE';
-    add('MEZZALUNA', player.mezzalunaUntil, '#90caf9');
+    addItem('MEZZALUNA', player.mezzalunaUntil, '#90caf9', player.mezzalunaStart, 12000);
   }
 
-  // Bane SUPER: mantieni indicazione separata per evitare doppio "IRA" quando Bane raccoglie il bonus
+  // Bane SUPER (indicazione separata)
   if(player.type==='bane'){
-    add('<span class="ira-glow">IRA SUPER</span>', player.baneSuperUntil, '#ff9800'); // arancione (Bane)
+    const dur = (player.superDuration!=null)?player.superDuration:10000;
+    addItem('<span class="ira-glow">IRA SUPER</span>', player.baneSuperUntil, '#ff9800', player.baneSuperStart, player.baneSuperDuration||dur);
   }
-  add('FURIA', player.furiaHealUntil, '#ff00ff');      // fucsia
-  add('ATK', player.attackBuffUntil, '#ff3b3b');       // rosso
-  add('POISON', player.poisonUntil, '#4b0082');        // viola scuro
+
+  addItem('FURIA',  player.furiaHealUntil,   '#ff00ff', player.furiaHealStart, player.furiaHealDuration||10000);
+  addItem('ATK',    player.attackBuffUntil,  '#ff3b3b', player.attackBuffStart, player.attackBuffDuration||10000);
+  addItem('POISON', player.poisonUntil,      '#4b0082', player.poisonStart, player.poisonDuration||6000);
 
   // Arco Antico (durata colonna)
   if(typeof ancientColumn!=='undefined' && ancientColumn && ancientColumn.hp>0){
-    add('ARCO ANTICO', ancientColumn.endsAt, '#c0c0c0');
+    const st = ancientColumn.created || (ancientColumn.endsAt - 12000);
+    addItem('ARCO ANTICO', ancientColumn.endsAt, '#c0c0c0', st, (ancientColumn.endsAt - st));
   }
 
   if(rows.length){
     bonusBox.style.display='block';
-    bonusBox.innerHTML=rows.join('<br>');
+    bonusBox.innerHTML=rows.join('');
   }else{
     bonusBox.style.display='none';
     bonusBox.innerHTML='';
@@ -11987,8 +12388,9 @@ if(moonPhaseEl){
   }
 }
 
-  if(player.attackBuffUntil) document.getElementById('atkBuffDisplay').textContent=Math.max(0,Math.ceil((player.attackBuffUntil-Date.now())/1000))+'s';
-  else document.getElementById('atkBuffDisplay').textContent='0s';
+// ATK buff legacy element (se presente). Il timer numerico non è più usato: ora c'è la barra nel riquadro BONUS.
+const atkEl = document.getElementById('atkBuffDisplay');
+if(atkEl){ atkEl.textContent = ''; }
 }
 
 
@@ -12146,6 +12548,7 @@ function updateMenuStatsDisplay(char){
     gameState='start';
   }
   function goToMenu(mode){
+    try{ if(window.resetMenuBackdrop) window.resetMenuBackdrop(); }catch(e){}
     setDifficulty(mode);
     if(startScreen) startScreen.style.display='none';
     if(mainMenu) mainMenu.style.display='block';
@@ -12174,6 +12577,7 @@ function updateMenuStatsDisplay(char){
 
   if(backBtn){
     backBtn.addEventListener('click', ()=>{
+      try{ if(window.resetMenuBackdrop) window.resetMenuBackdrop(); }catch(e){}
       // close small popups if open
       try{
         const lockBox=document.getElementById('lockMessage');
@@ -12194,6 +12598,7 @@ function updateMenuStatsDisplay(char){
   function showSettings(){
     if(!modal) return;
     modal.style.display='flex';
+    try{ if(typeof syncHudTimerModeUI==='function') syncHudTimerModeUI(); }catch(e){}
     modal.classList.add('show');
     modal.setAttribute('aria-hidden','false');
     if(closeBtn) closeBtn.focus();
@@ -12248,6 +12653,7 @@ document.getElementById('restartBtn').addEventListener('click',()=>{
   startGame();
 });
 document.getElementById('menuBtn').addEventListener('click',()=>{
+  try{ if(window.resetMenuBackdrop) window.resetMenuBackdrop(); }catch(e){}
   const kd=document.getElementById('killsDisplay'); if(kd) kd.style.display='none';
 
   // chiudi end screen subito (ma resta la fly anim sopra)
